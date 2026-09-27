@@ -24,7 +24,8 @@ function Assert-File([string]$Path) {
 
 function Assert-VersionInfo([string]$Path, [string]$TextVersion, [int[]]$Numbers) {
     $info = (Get-Item -LiteralPath $Path).VersionInfo
-    Assert-Equal "$Path ProductVersion" $info.ProductVersion $TextVersion
+    # Inno Setup pads its version-resource text fields with spaces.
+    Assert-Equal "$Path ProductVersion" $info.ProductVersion.TrimEnd() $TextVersion
     $actualNumbers = @($info.ProductMajorPart, $info.ProductMinorPart,
                        $info.ProductBuildPart, $info.ProductPrivatePart)
     Assert-Equal "$Path numeric ProductVersion" ($actualNumbers -join '.') ($Numbers -join '.')
