@@ -13,7 +13,7 @@ beta does not bundle add-ons; they are maintained in separate repositories.
   `pkg-config.exe`
 - Inno Setup 6 for installer generation
 
-The checked Windows build used Qt 6.8.3, GStreamer 1.28.2, MSVC 19.43, and
+The checked Windows build used Qt 6.8.3, GStreamer 1.28.5, MSVC 19.43, and
 Inno Setup 6.7.3. The package script also reads the matching VC++ runtime
 from the installed Visual Studio toolchain. Use the same Qt and GStreamer
 installations for compilation and packaging.
