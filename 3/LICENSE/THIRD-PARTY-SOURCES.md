@@ -14,7 +14,7 @@
 
 ## バイナリ配布時のソース提供
 
-下表は対応ソースの上流取得先です。LGPL 2.1 第4項のダウンロード配布方式に合わせ、公開時には GStreamer / FFmpeg 等の対応ソースを、バイナリの配布場所から別ダウンロードでも取得できるようにします。本体ソースと第三者ソースの最終配布先は `release-source.json` に記録します。この開発候補では本体の公開先・公開コミットが未確定のため、その記録はまだありません。
+下表は対応ソースの上流取得先です。GStreamer / FFmpeg 等の対応ソースは、[Windows版の配布場所にあるソースZIP](https://pondashi.com/vtr-pon/download/files/VTR-PON-3.0.0-beta.1-third-party-sources.zip)からも取得できます。[本体ソース](https://github.com/pondashicom/vtr-pon/tree/main/3)と[ビルド手順](https://github.com/pondashicom/vtr-pon/blob/main/3/BUILDING.md)のURL、および配布版に対応するコミットは、梱包時に同梱する `release-source.json` に記録します。
 
 公開ソースに含める `scripts/prepare-third-party-sources.py` で、下表のハッシュを照合して取得できます。`--archive` を指定すると、ソースだけの別 ZIP を作成します。Cerbero の修正・ビルドスクリプトを含む元アーカイブを未改変で格納し、インストーラーの容量は増やしません。
 

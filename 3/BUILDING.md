@@ -1,8 +1,8 @@
 # Building VTR-PON3 on Windows
 
-This source tree builds the Windows 11 x64 application and its installer. The
-first beta does not bundle add-ons. Add-on implementations are maintained in
-separate repositories.
+This [`3/` source tree](https://github.com/pondashicom/vtr-pon/tree/main/3)
+builds the Windows 11 x64 application, ZIP package, and installer. The first
+beta does not bundle add-ons; they are maintained in separate repositories.
 
 ## Prerequisites
 
@@ -49,7 +49,7 @@ The test results check code paths and build dependencies. They do not establish
 visible output, physical audio, device compatibility, or the installed app's
 behavior on a PC without development tools.
 
-## Create and inspect the installer candidate
+## Create and inspect the Windows packages
 
 Keep the same prompt and environment. The package script gathers audited Qt,
 GStreamer, and VC++ runtime files from the installed toolchains:
@@ -60,15 +60,17 @@ py -3 scripts\verify-windows-package.py
 py -3 scripts\build-windows-installer.py
 ```
 
-The package staging directory, ZIP, and installer are under
-`build/distribution/`. After acceptance and publication, the two Windows
-downloads are `VTR-PON-<version>-windows-x64.zip` and
+The staging directory, ZIP, and installer are under `build/distribution/`.
+Their names are `VTR-PON-<version>-windows-x64.zip` and
 `VTR-PON-<version>-windows-x64-setup.exe`. The ZIP runs after full extraction;
 it does not register the virtual camera or carry settings with it. Generated
 files are outside source control. Check both SHA-256 values before transferring
-the candidates to the separate acceptance PC. The version comes from
+the packages to a separate acceptance PC. The version comes from
 `release/version.json`.
 
-`releaseReady: false` denotes an unpublished candidate. The `Package` and
-`Published` stages of `check-release-version.ps1` are for the later release
-workflow after the public source commit and download locations are final.
+The published package must include `LICENSE/release-source.json` with the
+matching source commit and the source URLs. The project source and these build
+instructions are at [GitHub](https://github.com/pondashicom/vtr-pon/tree/main/3);
+the [official download page](https://pondashi.com/vtr-pon/download/windows/)
+provides the matching third-party source archive. Package and Published checks
+in `scripts/check-release-version.ps1` verify the release records and downloads.

@@ -1,15 +1,14 @@
 # VTR-PON
 
-VTR-PON3 is the current Windows application. Its source, build instructions,
-installation guide, and license notices are in [`3/`](3/README.md).
-The [license scope and third-party notices](3/LICENSE/README.md) describe the
-different terms for the application, test patterns, and dependencies.
+VTR-PON3 is the Windows 11 x64 application in this repository. Its source,
+[installation guide](3/INSTALL.ja.md), [build instructions](3/BUILDING.md),
+[release notes](3/RELEASE_NOTES.md), and [license notices](3/LICENSE/README.md)
+are in [`3/`](3/README.md).
 
-The first public beta is being prepared. There is no published download yet.
-When released, the Windows edition will offer an installer and a ZIP package
-through [the official Windows download page](https://pondashi.com/vtr-pon/download/windows/).
+The [official Windows download page](https://pondashi.com/vtr-pon/download/windows/)
+provides installer and ZIP editions. VTR-PON3 cannot import VTR-PON2 settings
+or playlists. The initial beta does not include ATEM, NDI, or VST3 add-ons;
+these are distributed separately.
 
-This repository keeps each major generation in its own directory so an older
-generation can be maintained while a newer one is developed. The repository's
-The [Issues](https://github.com/pondashicom/vtr-pon/issues) and Releases cover all generations; include the generation and version
-when reporting a problem.
+Use [GitHub Issues](https://github.com/pondashicom/vtr-pon/issues) for bug
+reports and feature requests. Include the generation and version.
