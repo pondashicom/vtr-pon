@@ -59,6 +59,8 @@ en.CameraInstallError=Virtual camera registration failed (Windows result %1). Cl
 ja.CameraInstallError=仮想カメラの登録に失敗しました（Windowsの終了コード: %1）。カメラを使用しているアプリを閉じて、インストールを再試行してください。
 en.CameraUninstallError=Virtual camera removal failed (Windows result %1). Close camera clients and retry uninstallation.
 ja.CameraUninstallError=仮想カメラの登録解除に失敗しました（Windowsの終了コード: %1）。カメラを使用しているアプリを閉じて、アンインストールを再試行してください。
+en.DesktopShortcut=Add a desktop shortcut
+ja.DesktopShortcut=デスクトップにショートカットを追加
 
 ; These are installer-owned runtime trees. Clearing them before replacement
 ; prevents a removed plug-in from surviving an update or downgrade.
@@ -79,9 +81,42 @@ Source: "{#VtrPonPayloadDir}\*"; DestDir: "{app}"; Flags: ignoreversion recurses
 Name: "{autoprograms}\VTR-PON3\VTR-PON"; Filename: "{app}\vtr-pon.exe"; IconFilename: "{app}\vtr-pon.exe"
 Name: "{autoprograms}\VTR-PON3\Licenses and source code"; Filename: "{app}\LICENSE\README.html"
 
+[UninstallDelete]
+Type: files; Name: "{userdesktop}\VTR-PON.lnk"
+
 [Code]
 var
   CameraRegistrationFailed: Boolean;
+  DesktopShortcutCheckBox: TNewCheckBox;
+
+procedure InitializeWizard;
+begin
+  DesktopShortcutCheckBox := TNewCheckBox.Create(WizardForm);
+  DesktopShortcutCheckBox.Parent := WizardForm.FinishedPage;
+  DesktopShortcutCheckBox.Caption := CustomMessage('DesktopShortcut');
+  DesktopShortcutCheckBox.Checked := True;
+  DesktopShortcutCheckBox.Height := ScaleY(24);
+end;
+
+procedure CurPageChanged(CurPageID: Integer);
+begin
+  if CurPageID = wpFinished then
+  begin
+    DesktopShortcutCheckBox.Left := WizardForm.FinishedLabel.Left;
+    DesktopShortcutCheckBox.Top := WizardForm.FinishedLabel.Top +
+      WizardForm.FinishedLabel.Height + ScaleY(16);
+    DesktopShortcutCheckBox.Width := WizardForm.FinishedLabel.Width;
+  end;
+end;
+
+function NextButtonClick(CurPageID: Integer): Boolean;
+begin
+  Result := True;
+  if (CurPageID = wpFinished) and DesktopShortcutCheckBox.Checked then
+    CreateShellLink(ExpandConstant('{userdesktop}\VTR-PON.lnk'), 'VTR-PON',
+      ExpandConstant('{app}\vtr-pon.exe'), '', ExpandConstant('{app}'),
+      ExpandConstant('{app}\vtr-pon.exe'), 0, SW_SHOWNORMAL);
+end;
 
 function InitializeSetup: Boolean;
 begin
