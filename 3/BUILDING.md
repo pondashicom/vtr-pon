@@ -54,8 +54,14 @@ behavior on a PC without development tools.
 Keep the same prompt and environment. The package script gathers audited Qt,
 GStreamer, and VC++ runtime files from the installed toolchains:
 
+Set `SOURCE_URL` to the verified HTTPS URL of the matching third-party source
+archive and `SOURCE_SHA256` to its verified 64-character SHA-256 before running
+these commands. The package script writes the source record into the payload;
+it does not add that record to this source tree.
+
 ```bat
-py -3 scripts\build-windows-package.py
+for /f %H in ('git rev-parse HEAD') do set "SOURCE_COMMIT=%H"
+py -3 scripts\build-windows-package.py --source-commit "%SOURCE_COMMIT%" --third-party-source-url "%SOURCE_URL%" --third-party-source-sha256 "%SOURCE_SHA256%"
 py -3 scripts\verify-windows-package.py
 py -3 scripts\build-windows-installer.py
 ```
