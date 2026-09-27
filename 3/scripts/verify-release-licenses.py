@@ -10,6 +10,8 @@ import re
 import sys
 from urllib.parse import urlparse
 
+from release_source import validate as validate_release_source
+
 
 def read_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
@@ -22,7 +24,7 @@ def child(root: Path, name: str) -> Path:
     return path
 
 
-def verify(stage: Path, *, require_public_source: bool = False) -> tuple[int, int]:
+def verify(stage: Path, *, require_source_record: bool = False) -> tuple[int, int]:
     licenses = stage / "LICENSE"
     inventory = read_json(licenses / "third-party-components.json")
     source_entries = read_json(licenses / "third-party-sources.json")["sources"]
@@ -65,27 +67,19 @@ def verify(stage: Path, *, require_public_source: bool = False) -> tuple[int, in
         if not (licenses / name).is_file():
             raise RuntimeError(f"Missing recipient guide: {name}")
 
-    if require_public_source:
-        # This record is created only once public-source preparation has finished.
-        # A private candidate may be checked before that step; it must not pass
-        # the public-release gate by merely having upstream homepage links.
+    if require_source_record:
         record = read_json(licenses / "release-source.json")
-        for key in ("projectSourceUrl", "thirdPartySourceUrl", "buildInstructionsUrl"):
-            if urlparse(record.get(key, "")).scheme != "https":
-                raise RuntimeError(f"Public source URL not finalized: {key}")
-        if not re.fullmatch(r"[0-9a-f]{40}", record.get("projectCommit", "")):
-            raise RuntimeError("Public source commit not finalized")
-        if record.get("version") != inventory["payloadVersion"] or record.get("verifiedAvailable") is not True:
-            raise RuntimeError("Public source availability/version not verified")
+        validate_release_source(record, inventory["payloadVersion"])
     return len(expected), len(receipts)
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--stage", type=Path, required=True)
-    parser.add_argument("--require-public-source", action="store_true")
+    parser.add_argument("--require-source-record", action="store_true",
+                        help="Require a complete source record; does not claim anonymous access")
     args = parser.parse_args()
-    binaries, notices = verify(args.stage.resolve(), require_public_source=args.require_public_source)
+    binaries, notices = verify(args.stage.resolve(), require_source_record=args.require_source_record)
     print(f"License coverage verified: {binaries} third-party binaries, {notices} notice files")
     return 0
 

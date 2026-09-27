@@ -55,6 +55,8 @@ $windowsVersion = $numbers -join '.'
 $tag = "v$version"
 $packageName = "VTR-PON-$version-windows-x64.zip"
 $installerName = "VTR-PON-$version-windows-x64-setup.exe"
+$checksumName = "VTR-PON-$version-SHA256SUMS.txt"
+$officialBase = 'https://pondashi.com/vtr-pon/download/files/'
 
 $cache = Join-Path $BuildDir 'CMakeCache.txt'
 Assert-File $cache
@@ -109,6 +111,35 @@ if ($Stage -ne 'Build') {
     }
     finally { $archive.Dispose() }
     Assert-Equal 'packaged EXE SHA-256' $insideHash (Get-FileHash -LiteralPath $exe -Algorithm SHA256).Hash.ToLowerInvariant()
+
+    $sourceRecordPath = Join-Path $DistributionDir "VTR-PON-$version-windows-x64/LICENSE/release-source.json"
+    Assert-File $sourceRecordPath
+    $sourceRecord = Get-Content -LiteralPath $sourceRecordPath -Raw | ConvertFrom-Json
+    Assert-Equal 'source record version' $sourceRecord.version $version
+    Assert-Equal 'source record commit' $sourceRecord.projectCommit (& git -C $root rev-parse HEAD)
+    & py -3 (Join-Path $root 'scripts/verify-release-licenses.py') --stage (Join-Path $DistributionDir "VTR-PON-$version-windows-x64") --require-source-record
+    if ($LASTEXITCODE -ne 0) { throw 'Source preparation record or license verification failed.' }
+    & py -3 (Join-Path $root 'scripts/verify-windows-package.py') --distribution-dir $DistributionDir
+    if ($LASTEXITCODE -ne 0) { throw 'Payload and ZIP verification failed.' }
+    $authenticatedEvidencePath = Join-Path $DistributionDir "VTR-PON-$version-source-access-authenticated.json"
+    Assert-File $authenticatedEvidencePath
+    $authenticatedEvidence = Get-Content -LiteralPath $authenticatedEvidencePath -Raw | ConvertFrom-Json
+    Assert-Equal 'source preparation evidence schema' $authenticatedEvidence.schemaVersion '1'
+    Assert-Equal 'source preparation access mode' $authenticatedEvidence.mode 'authenticated'
+    Assert-Equal 'source preparation result' $authenticatedEvidence.result 'retrieved-and-checked'
+    Assert-Equal 'source preparation version' $authenticatedEvidence.version $version
+    Assert-Equal 'source preparation commit' $authenticatedEvidence.projectCommit $sourceRecord.projectCommit
+    Assert-Equal 'third-party source URL' $authenticatedEvidence.thirdPartySourceAccessUrl $sourceRecord.thirdPartySourceUrl
+    Assert-Equal 'third-party source SHA-256' $authenticatedEvidence.thirdPartySourceSha256 $sourceRecord.thirdPartySourceSha256
+    Assert-Equal 'authenticated project source URL' $authenticatedEvidence.projectSourceAccessUrl "https://api.github.com/repos/pondashicom/vtr-pon/zipball/$($sourceRecord.projectCommit)"
+    Assert-Equal 'authenticated build instructions URL' $authenticatedEvidence.buildInstructionsAccessUrl "https://api.github.com/repos/pondashicom/vtr-pon/contents/3/BUILDING.md?ref=$($sourceRecord.projectCommit)"
+    if ($authenticatedEvidence.projectSourceSha256 -notmatch '^[0-9a-f]{64}$') {
+        throw 'Source preparation evidence lacks the downloaded project ZIP SHA-256.'
+    }
+    $checkedAt = [datetimeoffset]::MinValue
+    if (-not [datetimeoffset]::TryParse($authenticatedEvidence.checkedAtUtc, [ref]$checkedAt)) {
+        throw 'Source preparation evidence has no valid check time.'
+    }
 }
 
 if ($Stage -eq 'Published') {
@@ -122,7 +153,7 @@ if ($Stage -eq 'Published') {
     if ($LASTEXITCODE -ne 0 -or -not $remoteTag) { throw "Missing remote annotated tag: $tag" }
     Assert-Equal 'remote Git tag commit' (($remoteTag -split '\s+')[0]) $headCommit
 
-    $releaseJson = & gh release view $tag --json tagName,name,isDraft,isPrerelease,assets
+    $releaseJson = & gh release view $tag --json tagName,name,isDraft,isPrerelease,body
     if ($LASTEXITCODE -ne 0) { throw "Cannot read GitHub Release $tag" }
     $release = $releaseJson | ConvertFrom-Json
     Assert-Equal 'GitHub Release tag' $release.tagName $tag
@@ -131,10 +162,36 @@ if ($Stage -eq 'Published') {
     if ($release.isPrerelease -ne [bool]$phase) {
         throw 'GitHub Release prerelease flag does not match the version.'
     }
-    $assetNames = @($release.assets | ForEach-Object { $_.name })
-    foreach ($name in @($packageName, $installerName)) {
-        if ($name -cnotin $assetNames) { throw "GitHub Release is missing asset $name" }
+    foreach ($name in @($packageName, $installerName, $checksumName)) {
+        if (-not $release.body.Contains("$officialBase$name")) {
+            throw "GitHub Release does not link to the official file $name"
+        }
     }
+    $checksum = Join-Path $DistributionDir $checksumName
+    Assert-File $checksum
+    $expected = @{}
+    foreach ($name in @($packageName, $installerName)) {
+        $expected[$name] = (Get-FileHash -LiteralPath (Join-Path $DistributionDir $name) -Algorithm SHA256).Hash.ToLowerInvariant()
+        if (-not ((Get-Content -LiteralPath $checksum) -ccontains "$($expected[$name])  $name")) {
+            throw "Local checksum list does not match $name"
+        }
+    }
+    $downloadDir = Join-Path ([System.IO.Path]::GetTempPath()) ([System.IO.Path]::GetRandomFileName())
+    New-Item -ItemType Directory -Path $downloadDir | Out-Null
+    try {
+        foreach ($name in @($packageName, $installerName, $checksumName)) {
+            $download = Join-Path $downloadDir $name
+            Invoke-WebRequest -Uri "$officialBase$name" -OutFile $download -UseBasicParsing
+            if ($name -eq $checksumName) {
+                Assert-Equal 'official checksum list' (Get-Content -LiteralPath $download -Raw) (Get-Content -LiteralPath $checksum -Raw)
+            } else {
+                Assert-Equal "official $name SHA-256" (Get-FileHash -LiteralPath $download -Algorithm SHA256).Hash.ToLowerInvariant() $expected[$name]
+            }
+        }
+    }
+    finally { Remove-Item -LiteralPath $downloadDir -Recurse -Force }
+    & py -3 (Join-Path $root 'scripts/check-release-source-access.py') --record $sourceRecordPath --mode anonymous --evidence (Join-Path $DistributionDir "VTR-PON-$version-source-access-anonymous.json")
+    if ($LASTEXITCODE -ne 0) { throw 'Anonymous source retrieval failed.' }
 }
 
 Write-Host "Version check passed: $version ($windowsVersion), $tag, stage $Stage"

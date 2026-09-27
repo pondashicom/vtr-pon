@@ -29,7 +29,7 @@ def main() -> int:
     license_args = [sys.executable, str(ROOT / "scripts/verify-release-licenses.py"),
                     "--stage", str(stage)]
     if json.loads((ROOT / "release/version.json").read_text(encoding="utf-8")).get("releaseReady"):
-        license_args.append("--require-public-source")
+        license_args.append("--require-source-record")
     subprocess.run(license_args, check=True)
     if manifest["version"] != version or manifest["profile"] != "VTR-PON3":
         raise RuntimeError("Manifest version/profile mismatch")

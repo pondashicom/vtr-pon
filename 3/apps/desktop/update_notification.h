@@ -4,6 +4,7 @@
 
 #include <QNetworkAccessManager>
 #include <QPointer>
+#include <QUrl>
 #include <QWidget>
 
 #include <functional>
@@ -24,11 +25,14 @@ public:
                                         std::optional<UpdateRelease>)>;
   UpdateChecker(const QString &currentVersion, Completion completion,
                 QObject *parent = nullptr);
+  UpdateChecker(const QString &currentVersion, Completion completion,
+                const QUrl &updatesUrl, QObject *parent = nullptr);
   void check(bool manual);
 
 private:
   void sendActivityNoticeIfDue();
   QString currentVersion_;
+  QUrl updatesUrl_;
   Completion completion_;
   QNetworkAccessManager network_;
   QPointer<QNetworkReply> reply_;

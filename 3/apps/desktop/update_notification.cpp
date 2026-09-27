@@ -33,7 +33,13 @@ namespace vtrpon {
 
 UpdateChecker::UpdateChecker(const QString &currentVersion,
                              Completion completion, QObject *parent)
+    : UpdateChecker(currentVersion, std::move(completion), kUpdatesUrl, parent) {}
+
+UpdateChecker::UpdateChecker(const QString &currentVersion,
+                             Completion completion, const QUrl &updatesUrl,
+                             QObject *parent)
     : QObject(parent), currentVersion_(currentVersion),
+      updatesUrl_(updatesUrl),
       completion_(std::move(completion)) {}
 
 void UpdateChecker::check(bool manual) {
@@ -46,7 +52,7 @@ void UpdateChecker::check(bool manual) {
     return;
   }
   manualPending_ = manual;
-  QNetworkRequest request(kUpdatesUrl);
+  QNetworkRequest request(updatesUrl_);
   request.setAttribute(QNetworkRequest::RedirectPolicyAttribute,
                        QNetworkRequest::ManualRedirectPolicy);
   request.setAttribute(QNetworkRequest::CacheLoadControlAttribute,

@@ -14,6 +14,8 @@ import sys
 import tempfile
 import zipfile
 
+from release_source import create as create_release_source
+
 
 ROOT = Path(__file__).resolve().parents[1]
 APP_FILES = (
@@ -170,6 +172,9 @@ def main() -> int:
                         default=ROOT / "build" / "distribution")
     parser.add_argument("--smoke-media", type=Path, action="append", default=[],
                         help="Additional local media to discover with the packaged runtime")
+    parser.add_argument("--source-commit", help="Final public source commit for releaseReady builds")
+    parser.add_argument("--third-party-source-url", help="HTTPS URL of the matching source archive")
+    parser.add_argument("--third-party-source-sha256", help="SHA-256 of the matching source archive")
     args = parser.parse_args()
     missing_required = set(REQUIRED_ELEMENTS) - set(GST_ELEMENTS)
     if missing_required:
@@ -180,6 +185,21 @@ def main() -> int:
         encoding="utf-8"))["version"]
     if cache_value(build / "CMakeCache.txt", "VTRPON_APP_VERSION") != version:
         raise RuntimeError("Build version differs from release/version.json")
+    release_ready = json.loads((ROOT / "release/version.json").read_text(
+        encoding="utf-8")).get("releaseReady")
+    if release_ready:
+        if not args.source_commit or not args.third_party_source_url or not args.third_party_source_sha256:
+            raise RuntimeError("releaseReady requires --source-commit and third-party source URL/SHA-256")
+        if (ROOT / "LICENSE/release-source.json").exists():
+            raise RuntimeError("Generate LICENSE/release-source.json only in the payload, not the source checkout")
+        head = run(["git", "-C", str(ROOT), "rev-parse", "HEAD"], os.environ.copy()).strip()
+        if head != args.source_commit:
+            raise RuntimeError("--source-commit must match the source checkout HEAD")
+        if run(["git", "-C", str(ROOT), "status", "--porcelain"], os.environ.copy()).strip():
+            raise RuntimeError("releaseReady packaging requires a clean source checkout")
+        source_record = create_release_source(version, args.source_commit,
+                                              args.third_party_source_url,
+                                              args.third_party_source_sha256)
     base = f"VTR-PON-{version}-windows-x64"
     stage = distribution / base
     archive = distribution / f"{base}.zip"
@@ -222,6 +242,9 @@ def main() -> int:
          stage / "virtual-camera/install.ps1")
     shutil.copytree(ROOT / "assets/testpatterns", stage / "assets/testpatterns")
     shutil.copytree(ROOT / "LICENSE", stage / "LICENSE")
+    if release_ready:
+        (stage / "LICENSE/release-source.json").write_text(
+            json.dumps(source_record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     license_version = json.loads((stage / "LICENSE/third-party-components.json").read_text(
         encoding="utf-8"))["payloadVersion"]
     if license_version != version:
@@ -293,8 +316,8 @@ def main() -> int:
 
     license_args = [sys.executable, str(ROOT / "scripts/verify-release-licenses.py"),
                     "--stage", str(stage)]
-    if json.loads((ROOT / "release/version.json").read_text(encoding="utf-8")).get("releaseReady"):
-        license_args.append("--require-public-source")
+    if release_ready:
+        license_args.append("--require-source-record")
     run(license_args, env)
     pe_files_verified = verify_pe_imports(stage, dumpbin, env)
     verify_packaged_gstreamer(stage, gst_inspect, gst_discoverer, gst_launch,
