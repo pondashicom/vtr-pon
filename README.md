@@ -11,5 +11,5 @@ through [the official Windows download page](https://pondashi.com/vtr-pon/downlo
 
 This repository keeps each major generation in its own directory so an older
 generation can be maintained while a newer one is developed. The repository's
-Issues and Releases cover all generations; include the generation and version
+The [Issues](https://github.com/pondashicom/vtr-pon/issues) and Releases cover all generations; include the generation and version
 when reporting a problem.

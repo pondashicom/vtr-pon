@@ -23,6 +23,6 @@ The first beta does not include add-ons. Their implementations are maintained in
 
 ## Reports and licenses
 
-After the public repository opens, report bugs and request features through its GitHub Issues. Include the application version, Windows 11 version, reproduction steps, and expected and actual results. Do not attach private data or licensed media to a public issue. The public issue address and a private reporting route will be added when verified.
+Report bugs and request features through [VTR-PON GitHub Issues](https://github.com/pondashicom/vtr-pon/issues). Include the application version, Windows 11 version, reproduction steps, and expected and actual results. Do not attach private data or licensed media to a public issue. For reports that should not be public, email [info@pondashi.com](mailto:info@pondashi.com).
 
 The original application code is [MPL 2.0](LICENSE/MPL-2.0.txt); bundled self-created test patterns are [CC0 1.0](LICENSE/CC0-1.0.txt). Add-on licenses are provided in their separate repositories. See the [license scope and third-party notices](LICENSE/README.md).
