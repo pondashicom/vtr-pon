@@ -14,7 +14,9 @@
 
 ## バイナリ配布時のソース提供
 
-下表は対応ソースの版固定の上流取得先です。配布DLLに対応する版・SHA-256と、必要なCerberoのレシピ・修正を示します。取得先が利用できない場合は、製品名と版を添えて `info@pondashi.com` に連絡してください。[本体ソース](https://github.com/pondashicom/vtr-pon/tree/main/3)と[ビルド手順](https://github.com/pondashicom/vtr-pon/blob/main/3/BUILDING.md)のURL、および配布版に対応するコミットは、梱包時に同梱する `release-source.json` に記録します。
+下表は対応ソースの版固定の上流取得先です。配布DLLに対応する版・SHA-256と、必要なCerberoのレシピ・修正を示します。[本体ソース](https://github.com/pondashicom/vtr-pon/tree/main/3)と[ビルド手順](https://github.com/pondashicom/vtr-pon/blob/main/3/BUILDING.md)のURL、および配布版に対応するコミットは、梱包時に同梱する `release-source.json` に記録します。
+
+配布した版の第三者ライブラリについて、対応するソースと適用した修正を請求に応じて提供します。この申し出はその版の最終配布日から少なくとも3年間有効です。製品名・版・必要なライブラリ名を添えて `info@pondashi.com` へご連絡ください。電子的な提供は無償とし、物理媒体での提供を求められた場合も提供実費を超える料金は請求しません。上流の取得先が利用できなくなった場合も、この窓口から請求できます。
 
 公開ソースに含める `scripts/prepare-third-party-sources.py` で、下表のハッシュを照合して取得できます。`--archive` は必要な場合にだけローカルの集約ZIPを作成します。Cerbero の修正・ビルドスクリプトは上流の元アーカイブに含まれます。
 
