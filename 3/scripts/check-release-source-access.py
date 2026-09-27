@@ -7,14 +7,12 @@ The resulting evidence is kept outside the distribution payload.
 from __future__ import annotations
 
 import argparse
-import base64
 from datetime import datetime, timezone
 import hashlib
 import json
 import os
 from pathlib import Path
 import tempfile
-from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 import zipfile
 
@@ -39,15 +37,24 @@ def fetch(url: str, authorization: str | None, destination: Path) -> str:
     return digest.hexdigest()
 
 
-def verify_project_zip(path: Path, version: str) -> None:
+def verify_project_zip(path: Path, version: str, source_index_sha256: str) -> None:
     with zipfile.ZipFile(path) as archive:
         matches = [name for name in archive.namelist() if name.endswith("/3/release/version.json")]
         instructions = [name for name in archive.namelist() if name.endswith("/3/BUILDING.md")]
-        if len(matches) != 1 or len(instructions) != 1:
-            raise ValueError("Source ZIP lacks exactly one 3/release/version.json and 3/BUILDING.md")
+        source_indices = [name for name in archive.namelist() if name.endswith("/3/LICENSE/THIRD-PARTY-SOURCES.md")]
+        source_lists = [name for name in archive.namelist() if name.endswith("/3/LICENSE/third-party-sources.json")]
+        if any(len(names) != 1 for names in (matches, instructions, source_indices, source_lists)):
+            raise ValueError("Source ZIP lacks the version, build instructions or third-party source index")
         source_version = json.loads(archive.read(matches[0]))
         if source_version.get("version") != version or source_version.get("releaseReady") is not True:
             raise ValueError("Downloaded source version is not release ready or differs from the payload")
+        index = archive.read(source_indices[0])
+        if hashlib.sha256(index).hexdigest() != source_index_sha256:
+            raise ValueError("Source ZIP contains a different third-party source index")
+        sources = json.loads(archive.read(source_lists[0]))["sources"]
+        if not sources or any(entry["url"].encode() not in index or
+                              entry["sha256"].encode() not in index for entry in sources):
+            raise ValueError("Third-party source index does not identify all pinned sources")
 
 
 def main() -> None:
@@ -59,15 +66,12 @@ def main() -> None:
     record = json.loads(args.record.read_text(encoding="utf-8"))
     validate(record, record["version"])
     expected = record["thirdPartySourceSha256"]
-    source_auth = site_auth = None
+    source_auth = None
     if args.mode == "authenticated":
         token = os.environ.get("GH_TOKEN")
-        password = os.environ.get("VTR_PON_BASIC_PASSWORD")
-        if not token or not password:
-            raise ValueError("GH_TOKEN and VTR_PON_BASIC_PASSWORD are required for authenticated checks")
+        if not token:
+            raise ValueError("GH_TOKEN is required for authenticated checks")
         source_auth = f"Bearer {token}"
-        if urlparse(record["thirdPartySourceUrl"]).hostname == "pondashi.com":
-            site_auth = "Basic " + base64.b64encode(f"preview:{password}".encode()).decode("ascii")
         # GitHub's authenticated source API works while the repository is private.
         # The payload retains the final public archive/blob URLs for recipients.
         source_url = f"https://api.github.com/repos/pondashicom/vtr-pon/zipball/{record['projectCommit']}"
@@ -79,11 +83,11 @@ def main() -> None:
     with tempfile.TemporaryDirectory(prefix="vtr-pon-source-check-") as scratch:
         folder = Path(scratch)
         project_hash = fetch(source_url, source_auth, folder / "project.zip")
-        verify_project_zip(folder / "project.zip", record["version"])
+        verify_project_zip(folder / "project.zip", record["version"], expected)
         fetch(instructions_url, source_auth, folder / "BUILDING.response")
-        third_party_hash = fetch(record["thirdPartySourceUrl"], site_auth, folder / "third-party.zip")
-        if third_party_hash != expected or not zipfile.is_zipfile(folder / "third-party.zip"):
-            raise ValueError("Third-party source archive hash/format mismatch")
+        third_party_hash = fetch(record["thirdPartySourceUrl"], source_auth, folder / "THIRD-PARTY-SOURCES.md")
+        if third_party_hash != expected:
+            raise ValueError("Third-party source index hash mismatch")
     evidence = {
         "schemaVersion": 1,
         "mode": args.mode,

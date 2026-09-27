@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 import re
@@ -11,6 +12,7 @@ from urllib.parse import urlparse
 
 COMMIT = re.compile(r"[0-9a-f]{40}\Z")
 SHA256 = re.compile(r"[0-9a-f]{64}\Z")
+SOURCE_INDEX = Path(__file__).resolve().parents[1] / "LICENSE/THIRD-PARTY-SOURCES.md"
 
 
 def https_url(value: object, label: str) -> str:
@@ -30,25 +32,25 @@ def validate(record: dict, version: str) -> None:
         raise ValueError("Source record needs a 40-character commit")
     source = https_url(record.get("projectSourceUrl"), "projectSourceUrl")
     instructions = https_url(record.get("buildInstructionsUrl"), "buildInstructionsUrl")
-    https_url(record.get("thirdPartySourceUrl"), "thirdPartySourceUrl")
+    third_party = https_url(record.get("thirdPartySourceUrl"), "thirdPartySourceUrl")
     if not isinstance(record.get("thirdPartySourceSha256"), str) or not SHA256.fullmatch(record["thirdPartySourceSha256"]):
         raise ValueError("Third-party source SHA-256 is missing or invalid")
-    if commit not in source or commit not in instructions:
-        raise ValueError("Project source and build instruction URLs must pin the commit")
+    if any(commit not in url for url in (source, instructions, third_party)):
+        raise ValueError("All source URLs must pin the commit")
     if "verifiedAvailable" in record or "anonymousVerified" in record:
         raise ValueError("Availability claims belong in live check results, not the payload")
 
 
-def create(version: str, commit: str, third_party_source_url: str,
-           third_party_source_sha256: str) -> dict:
+def create(version: str, commit: str) -> dict:
     record = {
         "schemaVersion": 1,
         "version": version,
         "projectCommit": commit,
         "projectSourceUrl": f"https://github.com/pondashicom/vtr-pon/archive/{commit}.zip",
         "buildInstructionsUrl": f"https://github.com/pondashicom/vtr-pon/blob/{commit}/3/BUILDING.md",
-        "thirdPartySourceUrl": third_party_source_url,
-        "thirdPartySourceSha256": third_party_source_sha256,
+        "thirdPartySourceUrl": (f"https://raw.githubusercontent.com/pondashicom/vtr-pon/"
+                                f"{commit}/3/LICENSE/THIRD-PARTY-SOURCES.md"),
+        "thirdPartySourceSha256": hashlib.sha256(SOURCE_INDEX.read_bytes()).hexdigest(),
     }
     validate(record, version)
     return record
@@ -58,12 +60,9 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--version", required=True)
     parser.add_argument("--source-commit", required=True)
-    parser.add_argument("--third-party-source-url", required=True)
-    parser.add_argument("--third-party-source-sha256", required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
-    record = create(args.version, args.source_commit, args.third_party_source_url,
-                    args.third_party_source_sha256)
+    record = create(args.version, args.source_commit)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 

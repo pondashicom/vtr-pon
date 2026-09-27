@@ -12,10 +12,9 @@ from release_source import create, validate  # noqa: E402
 class ReleaseSourceTests(unittest.TestCase):
     def test_record_is_pinned_without_availability_claim(self):
         commit = "a" * 40
-        record = create("3.0.0-beta.1", commit,
-                        "https://pondashi.com/vtr-pon/download/files/sources.zip",
-                        "b" * 64)
+        record = create("3.0.0-beta.1", commit)
         self.assertIn(commit, record["projectSourceUrl"])
+        self.assertIn(commit, record["thirdPartySourceUrl"])
         self.assertNotIn("verifiedAvailable", record)
         validate(record, "3.0.0-beta.1")
         record["verifiedAvailable"] = True
@@ -24,9 +23,10 @@ class ReleaseSourceTests(unittest.TestCase):
 
     def test_rejects_unpinned_or_unverified_source(self):
         with self.assertRaises(ValueError):
-            create("3.0.0-beta.1", "a" * 40, "http://example.test/source.zip", "b" * 64)
+            validate({**create("3.0.0-beta.1", "a" * 40),
+                      "thirdPartySourceUrl": "http://example.test/source.md"}, "3.0.0-beta.1")
         with self.assertRaises(ValueError):
-            create("3.0.0-beta.1", "a" * 39, "https://example.test/source.zip", "b" * 64)
+            create("3.0.0-beta.1", "a" * 39)
 
 
 if __name__ == "__main__":

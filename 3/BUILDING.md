@@ -54,14 +54,13 @@ behavior on a PC without development tools.
 Keep the same prompt and environment. The package script gathers audited Qt,
 GStreamer, and VC++ runtime files from the installed toolchains:
 
-Set `SOURCE_URL` to the verified HTTPS URL of the matching third-party source
-archive and `SOURCE_SHA256` to its verified 64-character SHA-256 before running
-these commands. The package script writes the source record into the payload;
-it does not add that record to this source tree.
+The package script pins the third-party source index from this commit and writes
+its SHA-256 into the payload source record. It does not add that record to this
+source tree.
 
 ```bat
 for /f %H in ('git rev-parse HEAD') do set "SOURCE_COMMIT=%H"
-py -3 scripts\build-windows-package.py --source-commit "%SOURCE_COMMIT%" --third-party-source-url "%SOURCE_URL%" --third-party-source-sha256 "%SOURCE_SHA256%"
+py -3 scripts\build-windows-package.py --source-commit "%SOURCE_COMMIT%"
 py -3 scripts\verify-windows-package.py
 py -3 scripts\build-windows-installer.py
 ```
@@ -77,6 +76,6 @@ the packages to a separate acceptance PC. The version comes from
 The published package must include `LICENSE/release-source.json` with the
 matching source commit and the source URLs. The project source and these build
 instructions are at [GitHub](https://github.com/pondashicom/vtr-pon/tree/main/3);
-the [official download page](https://pondashi.com/vtr-pon/download/windows/)
-provides the matching third-party source archive. Package and Published checks
+the [third-party source index](LICENSE/THIRD-PARTY-SOURCES.md)
+provides version-pinned upstream source URLs and build patches. Package and Published checks
 in `scripts/check-release-version.ps1` verify the release records and downloads.

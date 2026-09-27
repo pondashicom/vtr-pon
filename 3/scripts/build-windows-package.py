@@ -173,8 +173,6 @@ def main() -> int:
     parser.add_argument("--smoke-media", type=Path, action="append", default=[],
                         help="Additional local media to discover with the packaged runtime")
     parser.add_argument("--source-commit", help="Final public source commit for releaseReady builds")
-    parser.add_argument("--third-party-source-url", help="HTTPS URL of the matching source archive")
-    parser.add_argument("--third-party-source-sha256", help="SHA-256 of the matching source archive")
     args = parser.parse_args()
     missing_required = set(REQUIRED_ELEMENTS) - set(GST_ELEMENTS)
     if missing_required:
@@ -188,8 +186,8 @@ def main() -> int:
     release_ready = json.loads((ROOT / "release/version.json").read_text(
         encoding="utf-8")).get("releaseReady")
     if release_ready:
-        if not args.source_commit or not args.third_party_source_url or not args.third_party_source_sha256:
-            raise RuntimeError("releaseReady requires --source-commit and third-party source URL/SHA-256")
+        if not args.source_commit:
+            raise RuntimeError("releaseReady requires --source-commit")
         if (ROOT / "LICENSE/release-source.json").exists():
             raise RuntimeError("Generate LICENSE/release-source.json only in the payload, not the source checkout")
         head = run(["git", "-C", str(ROOT), "rev-parse", "HEAD"], os.environ.copy()).strip()
@@ -197,9 +195,7 @@ def main() -> int:
             raise RuntimeError("--source-commit must match the source checkout HEAD")
         if run(["git", "-C", str(ROOT), "status", "--porcelain"], os.environ.copy()).strip():
             raise RuntimeError("releaseReady packaging requires a clean source checkout")
-        source_record = create_release_source(version, args.source_commit,
-                                              args.third_party_source_url,
-                                              args.third_party_source_sha256)
+        source_record = create_release_source(version, args.source_commit)
     base = f"VTR-PON-{version}-windows-x64"
     stage = distribution / base
     archive = distribution / f"{base}.zip"
