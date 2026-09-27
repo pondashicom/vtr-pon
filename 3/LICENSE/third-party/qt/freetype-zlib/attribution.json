@@ -1,0 +1,15 @@
+{
+  "Id": "freetype-zlib",
+  "Name": "Freetype 2 - zlib",
+  "QDocModule": "qtgui",
+  "QtUsage": "Optionally used in Qt GUI and platform plugins. Configure with -no-freetype, or -system-freetype to avoid.",
+  "Path": "src/gzip",
+  "Description": "FreeType is a freely available software library to render fonts.",
+  "Homepage": "http://www.freetype.org",
+  "License": "zlib License",
+  "LicenseId": "Zlib",
+  "LicenseFile": "ZLIB-LICENSE.txt",
+  "Copyright": "Copyright (C) 1995-2023 Jean-loup Gailly and Mark Adler",
+  "sourceModule": "qtbase",
+  "attributionFile": "src/3rdparty/freetype/qt_attribution.json"
+}

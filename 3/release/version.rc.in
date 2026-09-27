@@ -1,0 +1,31 @@
+#include <winver.h>
+
+1 ICON "@VTRPON_WINDOWS_ICON@"
+
+1 VERSIONINFO
+ FILEVERSION @VTRPON_WINDOWS_VERSION_COMMAS@
+ PRODUCTVERSION @VTRPON_WINDOWS_VERSION_COMMAS@
+ FILEFLAGSMASK 0x3fL
+ FILEFLAGS @VTRPON_WINDOWS_FILE_FLAGS@
+ FILEOS VOS_NT_WINDOWS32
+ FILETYPE VFT_APP
+ FILESUBTYPE VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "CompanyName", "Pondashi"
+            VALUE "FileDescription", "VTR-PON"
+            VALUE "FileVersion", "@VTRPON_APP_VERSION@"
+            VALUE "InternalName", "vtr-pon"
+            VALUE "OriginalFilename", "vtr-pon.exe"
+            VALUE "ProductName", "VTR-PON"
+            VALUE "ProductVersion", "@VTRPON_APP_VERSION@"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0409, 1200
+    END
+END

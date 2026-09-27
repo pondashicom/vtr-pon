@@ -1,0 +1,311 @@
+/* Settings uses VTR-PON Clasic appearance regardless of the Controller skin.
+ * Control colors/states follow skins/vtr-pon-clasic/controller.qss; the
+ * settings-specific layout, semantic roles and text-size support stay here.
+ * All selectors stay within controllerSettingsDialog. New standard controls
+ * need no object-name registration. Use setSettingsRole() for semantic roles:
+ * page, card, title, pageTitle, fieldLabel, description, status, warning, error,
+ * connection, primaryButton, preview, emptyState.
+ * Runtime status properties (error / ready / enabled) must be repolished when
+ * changed. Keep page-specific colors and setStyleSheet() out of page code.
+ */
+QDialog#controllerSettingsDialog {
+    background: #292828;
+    color: #FFFFFF;
+}
+QDialog#controllerSettingsDialog QWidget {
+    color: #FFFFFF;
+    font-size: 12px;
+}
+QDialog#controllerSettingsDialog QWidget#settingsNavigationPane {
+    background: #2E2E2E;
+    border-right: 1px solid #555555;
+}
+QDialog#controllerSettingsDialog QWidget#settingsContentPane,
+QDialog#controllerSettingsDialog QWidget[settingsRole="page"] {
+    background: #292828;
+}
+QDialog#controllerSettingsDialog QWidget[settingsRole="card"] {
+    background: #383838;
+    border: 1px solid #555555;
+    border-radius: 8px;
+}
+QDialog#controllerSettingsDialog QLabel {
+    background: transparent;
+    border: none;
+}
+QDialog#controllerSettingsDialog QLabel[settingsRole="title"] {
+    font-size: 17px;
+    font-weight: 600;
+}
+QDialog#controllerSettingsDialog QLabel[settingsRole="pageTitle"] {
+    font-size: 20px;
+    font-weight: 600;
+}
+QDialog#controllerSettingsDialog QLabel[settingsRole="fieldLabel"] {
+    font-weight: 500;
+}
+QDialog#controllerSettingsDialog QLabel[settingsRole="description"],
+QDialog#controllerSettingsDialog QLabel[settingsRole="status"] {
+    color: #BBBBBB;
+    font-size: 11px;
+}
+QDialog#controllerSettingsDialog QLabel[settingsRole="status"][error="true"],
+QDialog#controllerSettingsDialog QLabel[settingsRole="error"] {
+    color: #f28b82;
+}
+QDialog#controllerSettingsDialog QLabel[settingsRole="warning"] {
+    color: #fdd663;
+    font-weight: 500;
+}
+QDialog#controllerSettingsDialog QLabel[settingsRole="connection"] {
+    color: #f28b82;
+    font-weight: 600;
+}
+QDialog#controllerSettingsDialog QLabel[settingsRole="connection"][ready="true"] {
+    color: #81c995;
+}
+QDialog#controllerSettingsDialog QLabel[settingsRole="connection"][enabled="false"] {
+    color: #777777;
+}
+QDialog#controllerSettingsDialog QLabel[settingsRole="emptyState"] {
+    color: #BBBBBB;
+    padding: 12px;
+}
+QDialog#controllerSettingsDialog QLabel[settingsRole="preview"] {
+    background: #444444;
+    border: 1px solid #555555;
+    border-radius: 8px;
+    padding: 20px;
+    font-size: 14px;
+}
+QDialog#controllerSettingsDialog QGroupBox {
+    background: #383838;
+    border: 1px solid #555555;
+    border-radius: 8px;
+    margin-top: 12px;
+    padding: 16px 12px 12px;
+}
+QDialog#controllerSettingsDialog QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 12px;
+    padding: 0 4px;
+    color: #FFFFFF;
+    font-weight: 600;
+}
+
+/* Inputs, including new/unnamed controls and editable combo/spin editors. */
+QDialog#controllerSettingsDialog QComboBox,
+QDialog#controllerSettingsDialog QAbstractSpinBox,
+QDialog#controllerSettingsDialog QLineEdit {
+    min-height: 20px;
+    background: #2E2E2E;
+    color: #FFFFFF;
+    border: 1px solid #444444;
+    border-radius: 5px;
+    padding: 3px 7px;
+    selection-background-color: #2964A3;
+    selection-color: #ffffff;
+}
+QDialog#controllerSettingsDialog QAbstractSpinBox {
+    padding-left: 3px;
+    padding-right: 20px;
+}
+QDialog#controllerSettingsDialog QComboBox {
+    padding-right: 24px;
+}
+QDialog#controllerSettingsDialog QComboBox:hover,
+QDialog#controllerSettingsDialog QAbstractSpinBox:hover,
+QDialog#controllerSettingsDialog QLineEdit:hover {
+    border-color: #777777;
+}
+QDialog#controllerSettingsDialog QComboBox:focus,
+QDialog#controllerSettingsDialog QAbstractSpinBox:focus,
+QDialog#controllerSettingsDialog QLineEdit:focus {
+    border: 2px solid #007BFF;
+}
+QDialog#controllerSettingsDialog QComboBox QLineEdit,
+QDialog#controllerSettingsDialog QAbstractSpinBox QLineEdit {
+    min-height: 0;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    background: transparent;
+}
+QDialog#controllerSettingsDialog QComboBox QAbstractItemView {
+    background: #383838;
+    color: #FFFFFF;
+    border: 1px solid #555555;
+    selection-background-color: #2964A3;
+    selection-color: #ffffff;
+    outline: none;
+}
+QDialog#controllerSettingsDialog QComboBox::drop-down {
+    background: #444444;
+    border: none;
+    border-left: 1px solid #555555;
+    width: 20px;
+}
+QDialog#controllerSettingsDialog QComboBox::down-arrow {
+    width: 10px;
+    height: 6px;
+    image: url(:/vtrpon/apps/desktop/skins/material-dark/chevron_down.svg);
+}
+/* Match the Clasic stacked step buttons used by Controller spin controls. */
+QDialog#controllerSettingsDialog QAbstractSpinBox::up-button,
+QDialog#controllerSettingsDialog QAbstractSpinBox::down-button {
+    subcontrol-origin: border;
+    width: 18px;
+    background: #444444;
+    border: 1px solid #555555;
+    border-radius: 2px;
+}
+QDialog#controllerSettingsDialog QAbstractSpinBox::up-button {
+    subcontrol-position: top right;
+}
+QDialog#controllerSettingsDialog QAbstractSpinBox::down-button {
+    subcontrol-position: bottom right;
+}
+QDialog#controllerSettingsDialog QAbstractSpinBox::up-arrow {
+    width: 8px;
+    height: 4px;
+    image: url(:/vtrpon/apps/desktop/skins/vtr-pon-clasic/spin_up.svg);
+}
+QDialog#controllerSettingsDialog QAbstractSpinBox::down-arrow {
+    width: 8px;
+    height: 4px;
+    image: url(:/vtrpon/apps/desktop/skins/vtr-pon-clasic/spin_down.svg);
+}
+QDialog#controllerSettingsDialog QAbstractSpinBox::up-button:hover,
+QDialog#controllerSettingsDialog QAbstractSpinBox::down-button:hover {
+    background: #5A5A5A;
+    border-color: #777777;
+}
+QDialog#controllerSettingsDialog QAbstractSpinBox::up-button:pressed,
+QDialog#controllerSettingsDialog QAbstractSpinBox::down-button:pressed {
+    background: #2E2E2E;
+    border-color: #007BFF;
+}
+QDialog#controllerSettingsDialog QAbstractSpinBox::up-button:disabled,
+QDialog#controllerSettingsDialog QAbstractSpinBox::down-button:disabled {
+    background: #444444;
+    border-color: #383838;
+}
+QDialog#controllerSettingsDialog QCheckBox {
+    spacing: 8px;
+}
+QDialog#controllerSettingsDialog QCheckBox::indicator {
+    width: 15px;
+    height: 15px;
+    background: #2E2E2E;
+    border: 1px solid #777777;
+    border-radius: 3px;
+}
+QDialog#controllerSettingsDialog QCheckBox::indicator:hover {
+    border-color: #007BFF;
+}
+QDialog#controllerSettingsDialog QCheckBox::indicator:checked {
+    background: #66CD66;
+    border-color: #238B23;
+    image: url(:/vtrpon/apps/desktop/skins/material-dark/check.svg);
+}
+QDialog#controllerSettingsDialog QCheckBox:focus {
+    color: #FFFFFF;
+}
+QDialog#controllerSettingsDialog QPushButton {
+    min-height: 32px;
+    background: #D9D9D9;
+    color: #141414;
+    border: 1px solid #696969;
+    border-radius: 5px;
+    padding: 1px 8px;
+    font-weight: bold;
+}
+QDialog#controllerSettingsDialog QPushButton:hover {
+    background: #A6A6A6;
+    color: #141414;
+    border-color: #838383;
+}
+QDialog#controllerSettingsDialog QPushButton:pressed {
+    background: #8E8E8E;
+    color: #101010;
+    border-color: #007BFF;
+}
+QDialog#controllerSettingsDialog QPushButton:focus {
+    border: 2px solid #007BFF;
+}
+QDialog#controllerSettingsDialog QPushButton[settingsRole="primaryButton"] {
+    min-width: 76px;
+    min-height: 34px;
+    padding: 0 16px;
+    font-size: 11px;
+}
+QDialog#controllerSettingsDialog QPushButton:disabled,
+QDialog#controllerSettingsDialog QPushButton[settingsRole="primaryButton"]:disabled {
+    background: #555555;
+    border-color: #444444;
+    color: #B0B0B0;
+}
+QDialog#controllerSettingsDialog QComboBox:disabled,
+QDialog#controllerSettingsDialog QAbstractSpinBox:disabled,
+QDialog#controllerSettingsDialog QLineEdit:disabled {
+    background: #2E2E2E;
+    border-color: #444444;
+    color: #8A8A8A;
+}
+QDialog#controllerSettingsDialog QCheckBox:disabled {
+    color: #8A8A8A;
+}
+QDialog#controllerSettingsDialog QCheckBox::indicator:disabled {
+    background: #2E2E2E;
+    border-color: #555555;
+}
+
+/* Lists and tables share selection and text rules; navigation adds its marker. */
+QDialog#controllerSettingsDialog QAbstractItemView {
+    background: #383838;
+    color: #FFFFFF;
+    border: 1px solid #555555;
+    selection-background-color: #2964A3;
+    selection-color: #ffffff;
+    outline: none;
+}
+QDialog#controllerSettingsDialog QTableWidget {
+    gridline-color: #555555;
+}
+QDialog#controllerSettingsDialog QHeaderView::section {
+    background: #2E2E2E;
+    color: #FFFFFF;
+    padding: 6px;
+}
+QDialog#controllerSettingsDialog QKeySequenceEdit,
+QDialog#controllerSettingsDialog QKeySequenceEdit QLineEdit {
+    min-height: 0;
+    background: #2E2E2E;
+    color: #FFFFFF;
+    border: none;
+    padding: 0;
+}
+QDialog#controllerSettingsDialog QScrollArea,
+QDialog#controllerSettingsDialog QWidget#uvcAudioMappingRows {
+    background: transparent;
+    border: none;
+}
+QDialog#controllerSettingsDialog QListWidget#settingsNavigationList {
+    background: transparent;
+    color: #BBBBBB;
+    border: none;
+}
+QDialog#controllerSettingsDialog QListWidget#settingsNavigationList::item {
+    border-left: 3px solid transparent;
+    margin: 1px;
+    padding: 9px 12px;
+}
+QDialog#controllerSettingsDialog QListWidget#settingsNavigationList::item:selected {
+    background: #383838;
+    color: #FFFFFF;
+    border-left-color: #007BFF;
+}
+QDialog#controllerSettingsDialog QAbstractItemView:focus,
+QDialog#controllerSettingsDialog QListWidget#settingsNavigationList:focus {
+    border: 1px solid #007BFF;
+}

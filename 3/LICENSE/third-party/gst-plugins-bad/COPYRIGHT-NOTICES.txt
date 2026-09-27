@@ -1,0 +1,1131 @@
+Copyright statements in the corresponding upstream source areas.
+Some files have platform or feature guards; this is an attribution index, not a list of linked object files.
+
+ext/openh264/gstopenh264dec.cpp
+Copyright (c) 2014, Ericsson AB. All rights reserved.
+
+ext/openh264/gstopenh264dec.h
+Copyright (c) 2014, Ericsson AB. All rights reserved.
+
+ext/openh264/gstopenh264elements.h
+Copyright (C) <2020> The GStreamer Contributors.
+
+ext/openh264/gstopenh264enc.cpp
+Copyright (c) 2014, Ericsson AB. All rights reserved.
+
+ext/openh264/gstopenh264enc.h
+Copyright (c) 2014, Ericsson AB. All rights reserved.
+
+ext/openh264/gstopenh264plugin.c
+Copyright (c) 2014, Ericsson AB. All rights reserved.
+
+gst/videoparsers/gstav1parse.c
+Copyright (C) 2020 He Junyan <junyan.he@intel.com>
+
+gst/videoparsers/gstav1parse.h
+Copyright (C) 2020 He Junyan <junyan.he@intel.com>
+
+gst/videoparsers/gstdiracparse.c
+Copyright (C) 2010 David Schleef <ds@schleef.org>
+
+gst/videoparsers/gstdiracparse.h
+Copyright (C) 2010 REAL_NAME <EMAIL_ADDRESS>
+
+gst/videoparsers/gsth263parse.c
+Copyright (C) <2010> Arun Raghavan <arun.raghavan@collabora.co.uk>
+Copyright (C) <2010> Edward Hervey <edward.hervey@collabora.co.uk>
+Copyright (C) <2010> Collabora Multimedia
+Copyright (C) <2010> Nokia Corporation
+
+gst/videoparsers/gsth263parse.h
+Copyright (C) <2010> Arun Raghavan <arun.raghavan@collabora.co.uk>
+Copyright (C) <2010> Edward Hervey <edward.hervey@collabora.co.uk>
+Copyright (C) <2010> Collabora Multimedia
+Copyright (C) <2010> Nokia Corporation
+
+gst/videoparsers/gsth264parse.c
+Copyright (C) <2010> Collabora ltd
+Copyright (C) <2010> Nokia Corporation
+Copyright (C) <2011> Intel Corporation
+Copyright (C) <2010> Mark Nauwelaerts <mark.nauwelaerts@collabora.co.uk>
+Copyright (C) <2011> Thibault Saunier <thibault.saunier@collabora.com>
+
+gst/videoparsers/gsth264parse.h
+Copyright (C) <2010> Collabora ltd
+Copyright (C) <2010> Nokia Corporation
+Copyright (C) <2011> Intel Corporation
+Copyright (C) <2010> Mark Nauwelaerts <mark.nauwelaerts@collabora.co.uk>
+Copyright (C) <2011> Thibault Saunier <thibault.saunier@collabora.com>
+
+gst/videoparsers/gsth265parse.c
+Copyright (C) 2013 Intel Corporation
+
+gst/videoparsers/gsth265parse.h
+Copyright (C) 2013 Intel Corporation
+
+gst/videoparsers/gsth266parse.c
+Copyright (C) 2024 Intel Corporation
+
+gst/videoparsers/gsth266parse.h
+Copyright (C) 2024 Intel Corporation
+
+gst/videoparsers/gstjpeg2000parse.c
+Copyright (C) <2016-2017> Grok Image Compression Inc.
+
+gst/videoparsers/gstjpeg2000parse.h
+Copyright (C) <2016-2017> Grok Image Compression Inc.
+
+gst/videoparsers/gstmpeg4videoparse.c
+Copyright (C) <2008> Mindfruit B.V.
+Copyright (C) <2007> Julien Moutte <julien@fluendo.com>
+Copyright (C) <2011> Mark Nauwelaerts <mark.nauwelaerts@collabora.co.uk>
+Copyright (C) <2011> Nokia Corporation
+Copyright (C) <2011> Intel
+Copyright (C) <2011> Collabora Ltd.
+Copyright (C) <2011> Thibault Saunier <thibault.saunier@collabora.com>
+
+gst/videoparsers/gstmpeg4videoparse.h
+Copyright (C) <2007> Julien Moutte <julien@fluendo.com>
+
+gst/videoparsers/gstmpegvideoparse.c
+Copyright (C) <2007> Jan Schmidt <thaytan@mad.scientist.com>
+Copyright (C) <2011> Mark Nauwelaerts <mark.nauwelaerts@collabora.co.uk>
+Copyright (C) <2011> Thibault Saunier <thibault.saunier@collabora.com>
+Copyright (C) <2011> Collabora ltd
+Copyright (C) <2011> Nokia Corporation
+Copyright (C) <2011> Intel Corporation
+
+gst/videoparsers/gstmpegvideoparse.h
+Copyright (C) <2007> Jan Schmidt <thaytan@mad.scientist.com>
+Copyright (C) <2011> Mark Nauwelaerts <mark.nauwelaerts@collabora.co.uk>
+Copyright (C) <2011> Thibault Saunier <thibault.saunier@collabora.com>
+Copyright (C) <2011> Collabora ltd
+Copyright (C) <2011> Nokia Corporation
+Copyright (C) <2011> Intel Corporation
+
+gst/videoparsers/gstpngparse.c
+Copyright (C) <2013> Collabora Ltd
+
+gst/videoparsers/gstpngparse.h
+Copyright (C) <2013> Collabora Ltd
+
+gst/videoparsers/gstvc1parse.c
+Copyright (C) 2011, Hewlett-Packard Development Company, L.P.
+
+gst/videoparsers/gstvc1parse.h
+Copyright (C) 2011, Hewlett-Packard Development Company, L.P.
+
+gst/videoparsers/gstvideoparserselement.c
+Copyright (C) 2011 Mark Nauwelaerts <mark.nauwelaerts@collabora.co.uk>
+Copyright (C) 2009 Tim-Philipp Müller <tim centricular net>
+
+gst/videoparsers/gstvideoparserselements.h
+Copyright (C) 2020 Huawei Technologies Co., Ltd.
+
+gst/videoparsers/gstvideoparseutils.h
+Copyright (C) <2019> Aaron Boxer <aaron.boxer@collabora.com>
+Copyright (C) <2019> Collabora Ltd.
+
+gst/videoparsers/gstvp9parse.c
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+gst/videoparsers/gstvp9parse.h
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+gst/videoparsers/h263parse.c
+Copyright (C) <2010> Arun Raghavan <arun.raghavan@collabora.co.uk>
+Copyright (C) <2010> Edward Hervey <edward.hervey@collabora.co.uk>
+Copyright (C) <2010> Collabora Multimedia
+Copyright (C) <2010> Nokia Corporation
+
+gst/videoparsers/h263parse.h
+Copyright (C) <2010> Arun Raghavan <arun.raghavan@collabora.co.uk>
+Copyright (C) <2010> Edward Hervey <edward.hervey@collabora.co.uk>
+Copyright (C) <2010> Collabora Multimedia
+Copyright (C) <2010> Nokia Corporation
+
+gst/videoparsers/plugin.c
+Copyright (C) 2011 Mark Nauwelaerts <mark.nauwelaerts@collabora.co.uk>
+Copyright (C) 2009 Tim-Philipp Müller <tim centricular net>
+
+gst-libs/gst/codecparsers/codecparsers-prelude.h
+Copyright (C) 2018 GStreamer developers
+
+gst-libs/gst/codecparsers/dboolhuff.c
+Copyright (c) 2010 The WebM project authors. All Rights Reserved.
+
+gst-libs/gst/codecparsers/dboolhuff.h
+Copyright (c) 2010 The WebM project authors. All Rights Reserved.
+
+gst-libs/gst/codecparsers/gstav1bitwriter.c
+Copyright (C) 2022 Intel Corporation
+
+gst-libs/gst/codecparsers/gstav1bitwriter.h
+Copyright (C) 2022 Intel Corporation
+
+gst-libs/gst/codecparsers/gstav1parser.c
+Copyright (C) 2018 Georg Ottinger
+Copyright (C) 2019-2020 Intel Corporation
+
+gst-libs/gst/codecparsers/gstav1parser.h
+Copyright (C) 2018 Georg Ottinger
+Copyright (C) 2019-2020 Intel Corporation
+
+gst-libs/gst/codecparsers/gsth264bitwriter.c
+Copyright (C) 2020 Intel Corporation
+
+gst-libs/gst/codecparsers/gsth264bitwriter.h
+Copyright (C) 2020 Intel Corporation
+
+gst-libs/gst/codecparsers/gsth264parser.c
+Copyright (C) <2011> Intel Corporation
+Copyright (C) <2011> Collabora Ltd.
+Copyright (C) <2011> Thibault Saunier <thibault.saunier@collabora.com>
+Copyright (C) <2010> Mark Nauwelaerts <mark.nauwelaerts@collabora.co.uk>
+Copyright (C) <2010> Collabora Multimedia
+Copyright (C) <2010> Nokia Corporation
+
+gst-libs/gst/codecparsers/gsth264parser.h
+Copyright (C) <2011> Intel Corporation
+Copyright (C) <2011> Collabora Ltd.
+Copyright (C) <2011> Thibault Saunier <thibault.saunier@collabora.com>
+Copyright (C) <2010> Mark Nauwelaerts <mark.nauwelaerts@collabora.co.uk>
+Copyright (C) <2010> Collabora Multimedia
+Copyright (C) <2010> Nokia Corporation
+
+gst-libs/gst/codecparsers/gsth265bitwriter.c
+Copyright (C) 2021 Intel Corporation
+
+gst-libs/gst/codecparsers/gsth265bitwriter.h
+Copyright (C) 2021 Intel Corporation
+
+gst-libs/gst/codecparsers/gsth265parser.c
+Copyright (C) 2012 Intel Corporation
+Copyright (C) 2013 Sreerenj Balachandran <sreerenj.balachandran@intel.com>
+
+gst-libs/gst/codecparsers/gsth265parser.h
+Copyright (C) 2013 Intel Corporation
+Copyright (C) 2013 Sreerenj Balachandran <sreerenj.balachandran@intel.com>
+
+gst-libs/gst/codecparsers/gsth266parser.c
+Copyright (C) 2023 Intel Corporation
+
+gst-libs/gst/codecparsers/gsth266parser.h
+Copyright (C) 2023 Intel Corporation
+
+gst-libs/gst/codecparsers/gstjpeg2000sampling.c
+Copyright (C) <2016> Grok Image Compression Inc.
+
+gst-libs/gst/codecparsers/gstjpeg2000sampling.h
+Copyright (C) <2016> Grok Image Compression Inc.
+
+gst-libs/gst/codecparsers/gstjpegbitwriter.c
+Copyright (C) 2024 Intel Corporation
+
+gst-libs/gst/codecparsers/gstjpegbitwriter.h
+Copyright (C) 2024 Intel Corporation
+
+gst-libs/gst/codecparsers/gstjpegparser.c
+Copyright (C) 2011-2012 Intel Corporation
+Copyright (C) 2015 Tim-Philipp Müller <tim@centricular.com>
+
+gst-libs/gst/codecparsers/gstjpegparser.h
+Copyright (C) 2011-2012 Intel Corporation
+Copyright (C) 2015 Tim-Philipp Müller <tim@centricular.com>
+
+gst-libs/gst/codecparsers/gstlcevcmeta.c
+Copyright (C) <2024> V-Nova International Limited
+
+gst-libs/gst/codecparsers/gstlcevcmeta.h
+Copyright (C) <2024> V-Nova International Limited
+
+gst-libs/gst/codecparsers/gstmpeg4parser.c
+Copyright (C) <2011> Intel
+Copyright (C) <2011> Collabora Ltd.
+Copyright (C) <2011> Thibault Saunier <thibault.saunier@collabora.com>
+
+gst-libs/gst/codecparsers/gstmpeg4parser.h
+Copyright (C) 2009 Carl-Anton Ingmarsson <ca.ingmarsson@gmail.com>
+
+gst-libs/gst/codecparsers/gstmpegvideometa.c
+Copyright (C) 2012 Edward Hervey <edward@collabora.com>
+
+gst-libs/gst/codecparsers/gstmpegvideometa.h
+Copyright (C) <2012> Edward Hervey <edward@collabora.com>
+
+gst-libs/gst/codecparsers/gstmpegvideoparser.c
+Copyright (C) <2011> Intel Corporation
+Copyright (C) <2011> Collabora Ltd.
+Copyright (C) <2011> Thibault Saunier <thibault.saunier@collabora.com>
+Copyright (C) <2007> Jan Schmidt <thaytan@mad.scientist.com>
+Copyright (C) <2009> Carl-Anton Ingmarsson <ca.ingmarsson@gmail.com>
+
+gst-libs/gst/codecparsers/gstmpegvideoparser.h
+Copyright (C) <2011> Intel Corporation
+Copyright (C) <2011> Collabora Ltd.
+Copyright (C) <2011> Thibault Saunier <thibault.saunier@collabora.com>
+Copyright (C) <2007> Jan Schmidt <thaytan@mad.scientist.com>
+Copyright (C) <2009> Carl-Anton Ingmarsson <ca.ingmarsson@gmail.com>
+
+gst-libs/gst/codecparsers/gstvc1parser.c
+Copyright (C) <2011> Intel
+Copyright (C) <2011> Collabora Ltd.
+Copyright (C) <2011> Thibault Saunier <thibault.saunier@collabora.com>
+
+gst-libs/gst/codecparsers/gstvc1parser.h
+Copyright (C) <2011> Intel
+Copyright (C) <2011> Collabora Ltd.
+Copyright (C) <2011> Thibault Saunier <thibault.saunier@collabora.com>
+
+gst-libs/gst/codecparsers/gstvp8parser.c
+Copyright (C) 2013-2014 Intel Corporation
+
+gst-libs/gst/codecparsers/gstvp8parser.h
+Copyright (C) 2013-2014 Intel Corporation
+
+gst-libs/gst/codecparsers/gstvp8rangedecoder.h
+Copyright (C) 2014 Intel Corporation
+
+gst-libs/gst/codecparsers/gstvp9bitwriter.c
+Copyright (C) 2022 Intel Corporation
+
+gst-libs/gst/codecparsers/gstvp9bitwriter.h
+Copyright (C) 2022 Intel Corporation
+
+gst-libs/gst/codecparsers/gstvp9parser.c
+Copyright (C) 2013-2014 Intel Corporation
+Copyright (C) 2015 Intel Corporation
+
+gst-libs/gst/codecparsers/gstvp9parser.h
+Copyright (C) 2013-2014 Intel Corporation
+Copyright (C) 2015 Intel Corporation
+
+gst-libs/gst/codecparsers/nalutils.c
+Copyright (C) <2011> Intel Corporation
+Copyright (C) <2011> Collabora Ltd.
+Copyright (C) <2011> Thibault Saunier <thibault.saunier@collabora.com>
+Copyright (C) <2010> Mark Nauwelaerts <mark.nauwelaerts@collabora.co.uk>
+Copyright (C) <2010> Collabora Multimedia
+Copyright (C) <2010> Nokia Corporation
+
+gst-libs/gst/codecparsers/nalutils.h
+Copyright (C) <2011> Intel Corporation
+Copyright (C) <2011> Collabora Ltd.
+Copyright (C) <2011> Thibault Saunier <thibault.saunier@collabora.com>
+Copyright (C) <2010> Mark Nauwelaerts <mark.nauwelaerts@collabora.co.uk>
+Copyright (C) <2010> Collabora Multimedia
+Copyright (C) <2010> Nokia Corporation
+
+gst-libs/gst/codecparsers/parserutils.c
+Copyright (C) <2011> Intel Corporation
+Copyright (C) <2011> Collabora Ltd.
+Copyright (C) <2011> Thibault Saunier <thibault.saunier@collabora.com>
+
+gst-libs/gst/codecparsers/parserutils.h
+Copyright (C) <2011> Intel
+Copyright (C) <2011> Collabora Ltd.
+Copyright (C) <2011> Thibault Saunier <thibault.saunier@collabora.com>
+
+gst-libs/gst/codecparsers/vp8utils.h
+Copyright (C) 2013-2014 Intel Corporation
+
+gst-libs/gst/codecparsers/vp9utils.c
+Copyright (c) 2010 The WebM project authors. All Rights Reserved.
+
+gst-libs/gst/codecparsers/vp9utils.h
+Copyright (c) 2010 The WebM project authors. All Rights Reserved.
+
+gst-libs/gst/codecs/codecs-prelude.h
+Copyright (C) 2020 GStreamer developers
+
+gst-libs/gst/codecs/gstav1decoder.c
+Copyright (C) 2020 He Junyan <junyan.he@intel.com>
+
+gst-libs/gst/codecs/gstav1decoder.h
+Copyright (C) 2020 He Junyan <junyan.he@intel.com>
+
+gst-libs/gst/codecs/gstav1picture.c
+Copyright (C) 2020 He Junyan <junyan.he@intel.com>
+
+gst-libs/gst/codecs/gstav1picture.h
+Copyright (C) 2020 He Junyan <junyan.he@intel.com>
+
+gst-libs/gst/codecs/gstcodecpicture-private.h
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/codecs/gstcodecpicture.c
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/codecs/gstcodecpicture.h
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/codecs/gsth264decoder.c
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+Copyright 2015 The Chromium Authors. All rights reserved.
+
+gst-libs/gst/codecs/gsth264decoder.h
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+
+gst-libs/gst/codecs/gsth264picture-private.h
+Copyright (C) <2023> The GStreamer Contributors.
+
+gst-libs/gst/codecs/gsth264picture.c
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+
+gst-libs/gst/codecs/gsth264picture.h
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+
+gst-libs/gst/codecs/gsth265decoder.c
+Copyright (C) 2015 Intel Corporation
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+
+gst-libs/gst/codecs/gsth265decoder.h
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+
+gst-libs/gst/codecs/gsth265picture.c
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+
+gst-libs/gst/codecs/gsth265picture.h
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+
+gst-libs/gst/codecs/gsth266decoder.c
+Copyright (C) 2023 He Junyan <junyan.he@intel.com>
+
+gst-libs/gst/codecs/gsth266decoder.h
+Copyright (C) 2023 He Junyan <junyan.he@intel.com>
+
+gst-libs/gst/codecs/gsth266picture.c
+Copyright (C) 2023 He Junyan <junyan.he@intel.com>
+
+gst-libs/gst/codecs/gsth266picture.h
+Copyright (C) 2023 He Junyan <junyan.he@intel.com>
+
+gst-libs/gst/codecs/gstmpeg2decoder.c
+Copyright (C) 2020 Intel Corporation
+
+gst-libs/gst/codecs/gstmpeg2decoder.h
+Copyright (C) 2020 Intel Corporation
+
+gst-libs/gst/codecs/gstmpeg2picture.c
+Copyright (C) 2020 Intel Corporation
+
+gst-libs/gst/codecs/gstmpeg2picture.h
+Copyright (C) 2020 Intel Corporation
+
+gst-libs/gst/codecs/gstvp8decoder.c
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/codecs/gstvp8decoder.h
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/codecs/gstvp8picture.c
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/codecs/gstvp8picture.h
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/codecs/gstvp9decoder.c
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+Copyright 2015 The Chromium Authors. All rights reserved.
+
+gst-libs/gst/codecs/gstvp9decoder.h
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+
+gst-libs/gst/codecs/gstvp9picture.c
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+
+gst-libs/gst/codecs/gstvp9picture.h
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+
+gst-libs/gst/codecs/gstvp9statefulparser.c
+Copyright (C) 2021 Seungha Yang <seungha@centricular.com>
+Copyright (c) 2010 The WebM project authors. All Rights Reserved.
+
+gst-libs/gst/codecs/gstvp9statefulparser.h
+Copyright (C) 2021 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3d11/d3d11-prelude.h
+Copyright (C) 2020 GStreamer developers
+
+gst-libs/gst/d3d11/gstd3d11-private.h
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3d11/gstd3d11.h
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3d11/gstd3d11_fwd.h
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3d11/gstd3d11bufferpool.cpp
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3d11/gstd3d11bufferpool.h
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3d11/gstd3d11compile.cpp
+Copyright (C) 2022 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3d11/gstd3d11compile.h
+Copyright (C) 2022 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3d11/gstd3d11converter-builder.cpp
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3d11/gstd3d11converter-builder.h
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3d11/gstd3d11converter-helper.cpp
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3d11/gstd3d11converter-helper.h
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3d11/gstd3d11converter-private.h
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3d11/gstd3d11converter.cpp
+Copyright (C) <2019> Seungha Yang <seungha.yang@navercorp.com>
+Copyright (C) <2019> Jeongki Kim <jeongki.kim@jeongki.kim>
+Copyright (C) <2022> Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3d11/gstd3d11converter.h
+Copyright (C) <2019> Seungha Yang <seungha.yang@navercorp.com>
+Copyright (C) <2022> Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3d11/gstd3d11device-private.h
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3d11/gstd3d11device.cpp
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3d11/gstd3d11device.h
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3d11/gstd3d11format.cpp
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3d11/gstd3d11format.h
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+
+gst-libs/gst/d3d11/gstd3d11memory-private.h
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3d11/gstd3d11memory.cpp
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3d11/gstd3d11memory.h
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3d11/gstd3d11shadercache.cpp
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3d11/gstd3d11shadercache.h
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3d11/gstd3d11utils.cpp
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3d11/gstd3d11utils.h
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3dshader/converter-hlsl/hlsl.h
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3dshader/d3dshader-prelude.h
+Copyright (C) 2024 GStreamer developers
+
+gst-libs/gst/d3dshader/gstd3dcompile.cpp
+Copyright (C) 2024 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3dshader/gstd3dcompile.h
+Copyright (C) 2024 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3dshader/gstd3dshader.h
+Copyright (C) 2024 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3dshader/gstd3dshadercache.cpp
+Copyright (C) 2024 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3dshader/gstd3dshadercache.h
+Copyright (C) 2024 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/d3dshader/plugin-hlsl/hlsl.h
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/dxva/dxva-prelude.h
+Copyright (C) 2023 GStreamer developers
+
+gst-libs/gst/dxva/gstdxva.h
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/dxva/gstdxvaav1decoder.cpp
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/dxva/gstdxvaav1decoder.h
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/dxva/gstdxvah264decoder.cpp
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/dxva/gstdxvah264decoder.h
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/dxva/gstdxvah265decoder.cpp
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/dxva/gstdxvah265decoder.h
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/dxva/gstdxvampeg2decoder.cpp
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/dxva/gstdxvampeg2decoder.h
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/dxva/gstdxvatypedef.h
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/dxva/gstdxvatypes.h
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/dxva/gstdxvautils.cpp
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/dxva/gstdxvautils.h
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/dxva/gstdxvavp8decoder.cpp
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/dxva/gstdxvavp8decoder.h
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/dxva/gstdxvavp9decoder.cpp
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/dxva/gstdxvavp9decoder.h
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/winrt/gstwinrt.h
+Copyright (C) 2021 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/winrt/gstwinrtdevicewatcher.cpp
+Copyright (C) 2021 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/winrt/gstwinrtdevicewatcher.h
+Copyright (C) 2021 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/winrt/winrt-prelude.h
+Copyright (C) 2021 GStreamer developers
+
+sys/d3d11/gstd3d11av1dec.cpp
+Copyright (C) 2021 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11av1dec.h
+Copyright (C) 2021 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11basefilter.cpp
+Copyright (C) <2019> Seungha Yang <seungha.yang@navercorp.com>
+
+sys/d3d11/gstd3d11basefilter.h
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+
+sys/d3d11/gstd3d11compositor.cpp
+Copyright (C) 2004, 2008 Wim Taymans <wim@fluendo.com>
+Copyright (C) 2010 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+Copyright (C) 2014 Mathieu Duponchelle <mathieu.duponchelle@opencreed.com>
+Copyright (C) 2014 Thibault Saunier <tsaunier@gnome.org>
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11compositor.h
+Copyright (C) 2022 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11convert.cpp
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2005-2012 David Schleef <ds@schleef.org>
+Copyright (C) 2012-2014 Matthew Waters <ystree00@gmail.com>
+Copyright (C) <2019> Seungha Yang <seungha.yang@navercorp.com>
+Copyright (C) <2019> Jeongki Kim <jeongki.kim@jeongki.kim>
+Copyright (C) 2020 Thibault Saunier <tsaunier@igalia.com>
+
+sys/d3d11/gstd3d11convert.h
+Copyright (C) <2019> Seungha Yang <seungha.yang@navercorp.com>
+
+sys/d3d11/gstd3d11decoder.cpp
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+Copyright 2015 The Chromium Authors. All rights reserved.
+
+sys/d3d11/gstd3d11decoder.h
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+
+sys/d3d11/gstd3d11deinterlace.cpp
+Copyright (C) 2021 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11deinterlace.h
+Copyright (C) 2021 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11download.cpp
+Copyright (C) <2019> Seungha Yang <seungha.yang@navercorp.com>
+
+sys/d3d11/gstd3d11download.h
+Copyright (C) <2019> Seungha Yang <seungha.yang@navercorp.com>
+
+sys/d3d11/gstd3d11dxgicapture.cpp
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+Copyright (c) Microsoft Corporation
+
+sys/d3d11/gstd3d11dxgicapture.h
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11h264dec.cpp
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+
+sys/d3d11/gstd3d11h264dec.h
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+
+sys/d3d11/gstd3d11h265dec.cpp
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+
+sys/d3d11/gstd3d11h265dec.h
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+
+sys/d3d11/gstd3d11ipc.cpp
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11ipc.h
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11ipcclient.cpp
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11ipcclient.h
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11ipcserver.cpp
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11ipcserver.h
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11ipcsink.cpp
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11ipcsink.h
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11ipcsrc.cpp
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11ipcsrc.h
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11mpeg2dec.cpp
+Copyright (C) 2021 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11mpeg2dec.h
+Copyright (C) 2021 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11overlay.cpp
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11overlay.h
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11overlaycompositor.cpp
+Copyright (C) <2019> Seungha Yang <seungha.yang@navercorp.com>
+
+sys/d3d11/gstd3d11overlaycompositor.h
+Copyright (C) <2019> Seungha Yang <seungha.yang@navercorp.com>
+
+sys/d3d11/gstd3d11pluginutils.cpp
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11pluginutils.h
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11screencapture.cpp
+Copyright (C) 2022 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11screencapture.h
+Copyright (C) 2022 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11screencapturedevice.cpp
+Copyright (C) 2021 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11screencapturedevice.h
+Copyright (C) 2021 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11screencapturesrc.cpp
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11screencapturesrc.h
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11testsrc.cpp
+Copyright (C) 2022 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11testsrc.h
+Copyright (C) 2022 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11upload.cpp
+Copyright (C) <2019> Seungha Yang <seungha.yang@navercorp.com>
+
+sys/d3d11/gstd3d11upload.h
+Copyright (C) <2019> Seungha Yang <seungha.yang@navercorp.com>
+
+sys/d3d11/gstd3d11videosink.cpp
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11videosink.h
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11vp8dec.cpp
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11vp8dec.h
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11vp9dec.cpp
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+
+sys/d3d11/gstd3d11vp9dec.h
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+
+sys/d3d11/gstd3d11window.cpp
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+
+sys/d3d11/gstd3d11window.h
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+
+sys/d3d11/gstd3d11window_corewindow.cpp
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+
+sys/d3d11/gstd3d11window_corewindow.h
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+
+sys/d3d11/gstd3d11window_dummy.cpp
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11window_dummy.h
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11window_swapchainpanel.cpp
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+
+sys/d3d11/gstd3d11window_swapchainpanel.h
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+
+sys/d3d11/gstd3d11window_win32.cpp
+Copyright (C) 2008 Julien Isorce <julien.isorce@gmail.com>
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+
+sys/d3d11/gstd3d11window_win32.h
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+
+sys/d3d11/gstd3d11winrtcapture.cpp
+Copyright (C) 2022 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/gstd3d11winrtcapture.h
+Copyright (C) 2022 Seungha Yang <seungha@centricular.com>
+
+sys/d3d11/plugin.cpp
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+
+sys/mediafoundation/AsyncOperations.h
+Copyright (c) 2016 Microsoft Corporation
+
+sys/mediafoundation/gstmfaacdec.cpp
+Copyright (C) 2022 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfaacdec.h
+Copyright (C) 2022 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfaacenc.cpp
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfaacenc.h
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfaudiodecoder.cpp
+Copyright (C) 2022 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfaudiodecoder.h
+Copyright (C) 2022 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfaudioencoder.cpp
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfaudioencoder.h
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfcapturedshow.cpp
+Copyright (C) 2022 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfcapturedshow.h
+Copyright (C) 2022 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfcapturewinrt.cpp
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfcapturewinrt.h
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfdevice.cpp
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfdevice.h
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfh264enc.cpp
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfh264enc.h
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfh265enc.cpp
+Copyright (C) 2020 Seungha Yang <seungha.yang@navercorp.com>
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfh265enc.h
+Copyright (C) 2020 Seungha Yang <seungha.yang@navercorp.com>
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfmp3dec.cpp
+Copyright (C) 2022 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfmp3dec.h
+Copyright (C) 2022 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfmp3enc.cpp
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfmp3enc.h
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfplatloader.cpp
+Copyright (C) 2021 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfplatloader.h
+Copyright (C) 2021 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfsourceobject.cpp
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfsourceobject.h
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfsourcereader.cpp
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfsourcereader.h
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmftransform.cpp
+Copyright (C) 2020 Seungha Yang <seungha.yang@navercorp.com>
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmftransform.h
+Copyright (C) 2020 Seungha Yang <seungha.yang@navercorp.com>
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfutils.cpp
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfutils.h
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfvideobuffer.cpp
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfvideobuffer.h
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfvideoencoder.cpp
+Copyright (C) 2020 Seungha Yang <seungha.yang@navercorp.com>
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfvideoencoder.h
+Copyright (C) 2020 Seungha Yang <seungha.yang@navercorp.com>
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfvideosrc.cpp
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfvideosrc.h
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfvp9enc.cpp
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstmfvp9enc.h
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gststrmif.h
+Copyright (C) 2020 Seungha Yang <seungha.yang@navercorp.com>
+
+sys/mediafoundation/gstwin32devicewatcher.cpp
+Copyright (C) 2021 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/gstwin32devicewatcher.h
+Copyright (C) 2021 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/mediacapturewrapper.cpp
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/mediacapturewrapper.h
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/mediafoundation/plugin.cpp
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/wasapi/gstmmdeviceenumerator.cpp
+Copyright (C) 2021 Seungha Yang <seungha@centricular.com>
+
+sys/wasapi/gstmmdeviceenumerator.h
+Copyright (C) 2021 Seungha Yang <seungha@centricular.com>
+
+sys/wasapi/gstwasapi.c
+Copyright (C) 2008 Ole André Vadla Ravnås <ole.andre.ravnas@tandberg.com>
+Copyright (C) 2018 Centricular Ltd.
+
+sys/wasapi/gstwasapidevice.c
+Copyright (C) 2018 Nirbheek Chauhan <nirbheek@centricular.com>
+Copyright (C) 2021 Seungha Yang <seungha@centricular.com>
+
+sys/wasapi/gstwasapidevice.h
+Copyright (C) 2018 Nirbheek Chauhan <nirbheek@centricular.com>
+
+sys/wasapi/gstwasapisink.c
+Copyright (C) 2008 Ole André Vadla Ravnås <ole.andre.ravnas@tandberg.com>
+Copyright (C) 2013 Collabora Ltd.
+Copyright (C) 2018 Centricular Ltd.
+
+sys/wasapi/gstwasapisink.h
+Copyright (C) 2008 Ole André Vadla Ravnås <ole.andre.ravnas@tandberg.com>
+
+sys/wasapi/gstwasapisrc.c
+Copyright (C) 2008 Ole André Vadla Ravnås <ole.andre.ravnas@tandberg.com>
+Copyright (C) 2018 Centricular Ltd.
+
+sys/wasapi/gstwasapisrc.h
+Copyright (C) 2008 Ole André Vadla Ravnås <ole.andre.ravnas@tandberg.com>
+
+sys/wasapi/gstwasapiutil.c
+Copyright (C) 2008 Ole André Vadla Ravnås <ole.andre.ravnas@tandberg.com>
+Copyright (C) 2018 Centricular Ltd.
+
+sys/wasapi/gstwasapiutil.h
+Copyright (C) 2008 Ole André Vadla Ravnås <ole.andre.ravnas@tandberg.com>
+
+sys/wasapi2/gstwasapi2activator.cpp
+Copyright (C) 2025 Seungha Yang <seungha@centricular.com>
+
+sys/wasapi2/gstwasapi2activator.h
+Copyright (C) 2025 Seungha Yang <seungha@centricular.com>
+
+sys/wasapi2/gstwasapi2device.cpp
+Copyright (C) 2018 Nirbheek Chauhan <nirbheek@centricular.com>
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/wasapi2/gstwasapi2device.h
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/wasapi2/gstwasapi2enumerator.cpp
+Copyright (C) 2025 Seungha Yang <seungha@centricular.com>
+
+sys/wasapi2/gstwasapi2enumerator.h
+Copyright (C) 2025 Seungha Yang <seungha@centricular.com>
+
+sys/wasapi2/gstwasapi2rbuf.cpp
+Copyright (C) 2025 Seungha Yang <seungha@centricular.com>
+
+sys/wasapi2/gstwasapi2rbuf.h
+Copyright (C) 2025 Seungha Yang <seungha@centricular.com>
+
+sys/wasapi2/gstwasapi2sink.cpp
+Copyright (C) 2008 Ole André Vadla Ravnås <ole.andre.ravnas@tandberg.com>
+Copyright (C) 2013 Collabora Ltd.
+Copyright (C) 2018 Centricular Ltd.
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/wasapi2/gstwasapi2sink.h
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/wasapi2/gstwasapi2src.cpp
+Copyright (C) 2008 Ole André Vadla Ravnås <ole.andre.ravnas@tandberg.com>
+Copyright (C) 2018 Centricular Ltd.
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/wasapi2/gstwasapi2src.h
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/wasapi2/gstwasapi2util.cpp
+Copyright (C) 2008 Ole André Vadla Ravnås <ole.andre.ravnas@tandberg.com>
+Copyright (C) 2018 Centricular Ltd.
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/wasapi2/gstwasapi2util.h
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/wasapi2/plugin.cpp
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+sys/winks/gstksclock.c
+Copyright (C) 2008 Ole André Vadla Ravnås <ole.andre.ravnas@tandberg.com>
+
+sys/winks/gstksclock.h
+Copyright (C) 2008 Ole André Vadla Ravnås <ole.andre.ravnas@tandberg.com>
+
+sys/winks/gstksvideodevice.c
+Copyright (C) 2008 Ole André Vadla Ravnås <ole.andre.ravnas@tandberg.com>
+
+sys/winks/gstksvideodevice.h
+Copyright (C) 2008 Ole André Vadla Ravnås <ole.andre.ravnas@tandberg.com>
+
+sys/winks/gstksvideosrc.c
+Copyright (C) 2008 Ole André Vadla Ravnås <ole.andre.ravnas@tandberg.com>
+
+sys/winks/gstksvideosrc.h
+Copyright (C) 2008 Ole André Vadla Ravnås <ole.andre.ravnas@tandberg.com>
+
+sys/winks/ksdeviceprovider.c
+Copyright (C) 2015 Руслан Ижбулатов <lrn1986@gmail.com>
+
+sys/winks/ksdeviceprovider.h
+Copyright (C) 2015 Руслан Ижбулатов <lrn1986@gmail.com>
+
+sys/winks/kshelpers.c
+Copyright (C) 2008 Ole André Vadla Ravnås <ole.andre.ravnas@tandberg.com>
+
+sys/winks/kshelpers.h
+Copyright (C) 2008 Ole André Vadla Ravnås <ole.andre.ravnas@tandberg.com>
+
+sys/winks/ksvideohelpers.c
+Copyright (C) 2007 Haakon Sporsheim <hakon.sporsheim@tandberg.com>
+
+sys/winks/ksvideohelpers.h
+Copyright (C) 2007 Haakon Sporsheim <hakon.sporsheim@tandberg.com>

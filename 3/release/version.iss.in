@@ -1,0 +1,5 @@
+; Generated to build/release/version.iss from release/version.json.
+; The installer created in step 08 must include this file and use these values.
+#define VtrPonVersion "@VTRPON_APP_VERSION@"
+#define VtrPonWindowsVersion "@VTRPON_WINDOWS_VERSION@"
+#define VtrPonInstallerBaseName "@VTRPON_INSTALLER_BASENAME@"

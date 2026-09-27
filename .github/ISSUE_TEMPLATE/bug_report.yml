@@ -1,0 +1,50 @@
+name: 不具合報告 / Bug report
+description: VTR-PON3 の再現できる不具合を報告する
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        公開 Issue に個人情報、秘密情報、権利のある素材を添付しないでください。送出に影響する問題は、回避策の有無も記してください。
+  - type: input
+    id: version
+    attributes:
+      label: VTR-PON3 の版
+      description: ヘルプの版表示または配布ファイル名を記入してください。
+      placeholder: 3.0.0-beta.1
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Windows と関連機器
+      description: Windows 11 の版、映像・音声機器、関連アドオンを記入してください。
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 再現手順
+      description: 使用した入力形式と操作を順に記入してください。
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期待した結果
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: 実際の結果
+      description: 発生頻度、送出や保存への影響、回避策があれば記入してください。
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: ログ・補足情報
+      description: 個人情報や素材のパスを除いて貼り付けてください。
+    validations:
+      required: false

@@ -1,0 +1,18 @@
+{
+  "Id": "freetype-bdf",
+  "Name": "Freetype 2 - Bitmap Distribution Format (BDF) support",
+  "QDocModule": "qtgui",
+  "QtUsage": "Optionally used in Qt GUI and platform plugins. Configure with -no-freetype, or -system-freetype to avoid.",
+  "Path": "src/bdf",
+  "Description": "FreeType is a freely available software library to render fonts.",
+  "Homepage": "http://www.freetype.org",
+  "License": "MIT License",
+  "LicenseId": "MIT",
+  "LicenseFile": "BDF-LICENSE.txt",
+  "Copyright": [
+    "Copyright (c) 2000 Computing Research Labs, New Mexico State University",
+    "Copyright (c) 2001-2014 Francesco Zappa Nardelli"
+  ],
+  "sourceModule": "qtbase",
+  "attributionFile": "src/3rdparty/freetype/qt_attribution.json"
+}

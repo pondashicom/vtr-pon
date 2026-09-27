@@ -1,0 +1,7 @@
+build/
+__pycache__/
+samples/
+AGENTS.md
+
+# Website files are managed in the private vtr-pon-site repository.
+/site/

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="24"
+     viewBox="0 0 256 24">
+  <defs>
+    <linearGradient id="woodBase" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#704b2f"/>
+      <stop offset="0.22" stop-color="#5b3a24"/>
+      <stop offset="0.55" stop-color="#674329"/>
+      <stop offset="0.78" stop-color="#4a2d1b"/>
+      <stop offset="1" stop-color="#352015"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="256" height="24" fill="url(#woodBase)"/>
+
+  <g fill="none" stroke-linecap="round">
+    <path d="M-14 3 C20 1, 45 5, 78 3 S142 2, 178 4 S229 2, 270 3"
+          stroke="#bb895a" stroke-width="0.8" opacity="0.28"/>
+    <path d="M-9 6 C24 8, 49 4, 90 6 S161 8, 202 5 S237 7, 268 6"
+          stroke="#2a160d" stroke-width="1.1" opacity="0.46"/>
+    <path d="M-12 9 C26 7, 57 11, 97 9 S153 8, 190 10 S235 8, 269 9"
+          stroke="#9c6b43" stroke-width="0.7" opacity="0.34"/>
+    <path d="M-18 13 C15 10, 35 16, 70 13 S121 11, 154 14 S221 11, 274 13"
+          stroke="#26140d" stroke-width="1.2" opacity="0.50"/>
+    <path d="M-10 17 C28 19, 54 15, 88 17 S151 20, 184 17 S227 18, 268 17"
+          stroke="#b47f50" stroke-width="0.8" opacity="0.26"/>
+    <path d="M-8 21 C24 19, 53 23, 90 21 S154 20, 191 22 S232 20, 268 21"
+          stroke="#24130c" stroke-width="1.1" opacity="0.52"/>
+  </g>
+
+  <g fill="none" opacity="0.45">
+    <ellipse cx="61" cy="13" rx="14" ry="3.5"
+             stroke="#2b170e" stroke-width="1"/>
+    <ellipse cx="61" cy="13" rx="7" ry="1.7"
+             stroke="#ae784a" stroke-width="0.7" opacity="0.65"/>
+    <ellipse cx="191" cy="6" rx="10" ry="2.4"
+             stroke="#2b170e" stroke-width="0.8"/>
+  </g>
+
+  <rect y="1" width="256" height="1" fill="#d0a06d" opacity="0.16"/>
+  <rect y="23" width="256" height="1" fill="#160c08" opacity="0.58"/>
+</svg>

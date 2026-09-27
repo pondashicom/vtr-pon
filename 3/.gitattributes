@@ -1,0 +1,2 @@
+# Preserve upstream notice bytes; the provenance manifest verifies SHA-256.
+LICENSE/third-party/** -text -whitespace

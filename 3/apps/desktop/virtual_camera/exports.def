@@ -1,0 +1,4 @@
+LIBRARY vtr-pon-virtual-camera
+EXPORTS
+    DllGetClassObject PRIVATE
+    DllCanUnloadNow PRIVATE

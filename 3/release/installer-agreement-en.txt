@@ -1,0 +1,13 @@
+VTR-PON license terms and usage notice
+
+By accepting below, you agree to the VTR-PON license terms and to sending the usage notice described here. Both are covered by one acceptance in the installer.
+
+LICENSES
+The original VTR-PON application code is offered under the Mozilla Public License, version 2.0 (MPL-2.0), reproduced below. Original add-on code and test patterns have separate terms. Third-party components have their own licenses. Their scope, notices and license texts are available after installation in LICENSE/README.html.
+
+USAGE NOTICE
+When enabled, VTR-PON sends its version to pondashi.com during automatic or manual update checks, at most once per UTC day. It sends no installation ID or media information. The activity database stores only daily counts by version; the web host may retain standard access logs.
+
+The notice is enabled for a new installation after you accept. If you previously turned it off, an update preserves that choice. You can turn the notice off later in Settings > Updates and notices. Automatic update checks can be turned off separately on the same page. Manual update checks remain available.
+
+MOZILLA PUBLIC LICENSE 2.0

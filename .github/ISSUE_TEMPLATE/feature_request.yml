@@ -1,0 +1,28 @@
+name: 機能提案 / Feature request
+description: VTR-PON3 の機能や操作の改善を提案する
+title: "[Feature] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        提案は採用や実装時期を約束するものではありません。公開 Issue に個人情報や秘密情報を書かないでください。
+  - type: textarea
+    id: problem
+    attributes:
+      label: 困っている操作・目的
+      description: 現在の操作と、何を達成したいかを記入してください。
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 提案する動作
+      description: 操作の流れや期待する結果を記入してください。
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 現在の回避策・補足
+    validations:
+      required: false

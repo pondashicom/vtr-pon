@@ -1,0 +1,1921 @@
+Copyright statements in the corresponding upstream source areas.
+Some files have platform or feature guards; this is an attribution index, not a list of linked object files.
+
+ext/ogg/gstoggaviparse.c
+Copyright (C) 2006 Wim Taymans <wim@fluendo.com>
+
+ext/ogg/gstoggdemux.c
+Copyright (C) 2004 Wim Taymans <wim@fluendo.com>
+
+ext/ogg/gstoggdemux.h
+Copyright (C) 2004 Wim Taymans <wim@fluendo.com>
+
+ext/ogg/gstoggelements.h
+Copyright (C) 2020 Huawei Technologies Co., Ltd.
+
+ext/ogg/gstoggmux.c
+Copyright (C) 2004 Wim Taymans <wim@fluendo.com>
+Copyright (C) 2006 Thomas Vander Stichele <thomas at apestaart dot org>
+
+ext/ogg/gstoggmux.h
+Copyright (C) 2004 Wim Taymans <wim@fluendo.com>
+Copyright (C) 2006 Thomas Vander Stichele <thomas at apestaart dot org>
+
+ext/ogg/gstoggparse.c
+Copyright (C) 2005 Michael Smith <msmith@fluendo.com>
+
+ext/ogg/gstoggplugin.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+ext/ogg/gstoggstream.c
+Copyright (C) 2006 Tim-Philipp Müller <tim centricular net>
+Copyright (C) 2009 David Schleef <ds@schleef.org>
+
+ext/ogg/gstoggstream.h
+Copyright (C) 2009 David Schleef <ds@schleef.org>
+
+ext/ogg/gstogmparse.c
+Copyright (C) 2004 Ronald Bultje <rbultje@ronald.bitfreak.net>
+Copyright (C) 2006 Tim-Philipp Müller <tim centricular net>
+
+ext/ogg/vorbis_parse.c
+Copyright (C) 2003 Commonwealth Scientific and Industrial Research
+
+ext/ogg/vorbis_parse.h
+Copyright (C) 2004 Wim Taymans <wim@fluendo.com>
+
+ext/opus/gstopus.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) <2008> Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+ext/opus/gstopuscommon.c
+Copyright (C) 2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+ext/opus/gstopuscommon.h
+Copyright (C) 2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+ext/opus/gstopusdec.c
+Copyright (C) 2004 Wim Taymans <wim@fluendo.com>
+Copyright (C) 2006 Tim-Philipp Müller <tim centricular net>
+Copyright (C) 2008 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+Copyright (C) 2011-2012 Vincent Penquerc'h <vincent.penquerch@collabora.co.uk>
+
+ext/opus/gstopusdec.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) <2008> Sebastian Dröge <sebastian.droege@collabora.co.uk>
+Copyright (C) <2011-2012> Vincent Penquerc'h <vincent.penquerch@collabora.co.uk>
+
+ext/opus/gstopuselement.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) <2008> Sebastian Dröge <sebastian.droege@collabora.co.uk>
+Copyright (C) 2020 Huawei Technologies Co., Ltd.
+
+ext/opus/gstopuselements.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) <2008> Sebastian Dröge <sebastian.droege@collabora.co.uk>
+Copyright (C) 2020 Huawei Technologies Co., Ltd.
+
+ext/opus/gstopusenc.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) <2008> Sebastian Dröge <sebastian.droege@collabora.co.uk>
+Copyright (C) <2011> Vincent Penquerc'h <vincent.penquerch@collabora.co.uk>
+
+ext/opus/gstopusenc.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) <2008> Sebastian Dröge <sebastian.droege@collabora.co.uk>
+Copyright (C) <2011-2012> Vincent Penquerc'h <vincent.penquerch@collabora.co.uk>
+
+ext/opus/gstopusheader.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) <2008> Sebastian Dröge <sebastian.droege@collabora.co.uk>
+Copyright (C) <2011> Vincent Penquerc'h <vincent.penquerch@collabora.co.uk>
+
+ext/opus/gstopusheader.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) <2008> Sebastian Dröge <sebastian.droege@collabora.co.uk>
+Copyright (C) <2011-2012> Vincent Penquerc'h <vincent.penquerch@collabora.co.uk>
+
+ext/vorbis/gstivorbisdec.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+ext/vorbis/gstvorbis.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+ext/vorbis/gstvorbiscommon.c
+Copyright (C) 2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+ext/vorbis/gstvorbiscommon.h
+Copyright (C) 2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+ext/vorbis/gstvorbisdec.c
+Copyright (C) 2004 Benjamin Otte <in7y118@public.uni-hamburg.de>
+
+ext/vorbis/gstvorbisdec.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+ext/vorbis/gstvorbisdeclib.c
+Copyright (C) 2010 Mark Nauwelaerts <mark.nauwelaerts@collabora.co.uk>
+Copyright (C) 2010 Nokia Corporation. All rights reserved.
+
+ext/vorbis/gstvorbisdeclib.h
+Copyright (C) 2010 Mark Nauwelaerts <mark.nauwelaerts@collabora.co.uk>
+Copyright (C) 2010 Nokia Corporation. All rights reserved.
+
+ext/vorbis/gstvorbiselement.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2020 Huawei Technologies Co., Ltd.
+
+ext/vorbis/gstvorbiselements.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2020 Huawei Technologies Co., Ltd.
+
+ext/vorbis/gstvorbisenc.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+ext/vorbis/gstvorbisenc.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+ext/vorbis/gstvorbisparse.c
+Copyright (C) <2004> Thomas Vander Stichele <thomas at apestaart dot org>
+Copyright (C) 2006 Andy Wingo <wingo@pobox.com>
+
+ext/vorbis/gstvorbisparse.h
+Copyright (C) <2004> Thomas Vander Stichele <thomas at apestaart dot org>
+
+ext/vorbis/gstvorbistag.c
+Copyright (C) 2006 James Livingston <doclivingston@gmail.com>
+
+ext/vorbis/gstvorbistag.h
+Copyright (C) <2006> James Livingston <doclivingston@gmail.com>
+
+gst/app/gstapp.c
+Copyright (C) 2007 David Schleef <ds@schleef.org>
+
+gst/app/gstappelements.h
+Copyright (C) 2007 David Schleef <ds@schleef.org>
+Copyright (C) 2020 Huawei Technologies Co., Ltd.
+
+gst/app/gstappsink.c
+Copyright (C) 2007 David Schleef <ds@schleef.org>
+
+gst/app/gstappsrc.c
+Copyright (C) 2007 David Schleef <ds@schleef.org>
+
+gst/audioconvert/gstaudioconvert.c
+Copyright (C) 2003 Benjamin Otte <in7y118@public.uni-hamburg.de>
+Copyright (C) 2005 Thomas Vander Stichele <thomas at apestaart dot org>
+Copyright (C) 2011 Wim Taymans <wim.taymans at gmail dot com>
+
+gst/audioconvert/gstaudioconvert.h
+Copyright (C) 2005 Wim Taymans <wim at fluendo dot com>
+
+gst/audioconvert/plugin.c
+Copyright (C) 2004 Andy Wingo <wingo at pobox.com>
+
+gst/audiomixer/gstaudiointerleave.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/audiomixer/gstaudiointerleave.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2013      Sebastian Dröge <slomo@circular-chaos.org>
+
+gst/audiomixer/gstaudiomixer.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/audiomixer/gstaudiomixer.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2013      Sebastian Dröge <slomo@circular-chaos.org>
+
+gst/audiomixer/gstaudiomixerelement.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2020 Huawei Technologies Co., Ltd.
+
+gst/audiomixer/gstaudiomixerelements.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2020 Huawei Technologies Co., Ltd.
+
+gst/audiomixer/gstaudiomixerplugin.c
+Copyright (C) 2020 Huawei Technologies Co., Ltd.
+
+gst/audiomixer/gstliveadder.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2020 Huawei Technologies Co., Ltd.
+
+gst/audioresample/gstaudioresample.c
+Copyright (C) 1999 Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2003,2004 David A. Schleef <ds@schleef.org>
+Copyright (C) 2007-2008 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/audioresample/gstaudioresample.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) <2007-2008> Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/compositor/blend.c
+Copyright (C) 2004 Wim Taymans <wim@fluendo.com>
+Copyright (C) 2006 Mindfruit Bv.
+Copyright (C) 2009 Alex Ugarte <augarte@vicomtech.org>
+Copyright (C) 2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/compositor/blend.h
+Copyright (C) 2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/compositor/compositor.c
+Copyright (C) 2004, 2008 Wim Taymans <wim@fluendo.com>
+Copyright (C) 2010 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+Copyright (C) 2014 Mathieu Duponchelle <mathieu.duponchelle@opencreed.com>
+Copyright (C) 2014 Thibault Saunier <tsaunier@gnome.org>
+
+gst/compositor/compositor.h
+Copyright (C) 2008 Wim Taymans <wim@fluendo.com>
+Copyright (C) 2010 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/playback/gstdecodebin2.c
+Copyright (C) <2006> Edward Hervey <edward@fluendo.com>
+Copyright (C) <2009> Sebastian Dröge <sebastian.droege@collabora.co.uk>
+Copyright (C) <2011> Hewlett-Packard Development Company, L.P.
+Copyright (C) <2013> Collabora Ltd.
+
+gst/playback/gstdecodebin3.c
+Copyright (C) <2015> Centricular Ltd
+
+gst/playback/gstparsebin.c
+Copyright (C) <2006> Edward Hervey <edward@fluendo.com>
+Copyright (C) <2009> Sebastian Dröge <sebastian.droege@collabora.co.uk>
+Copyright (C) <2011> Hewlett-Packard Development Company, L.P.
+Copyright (C) <2013> Collabora Ltd.
+Copyright (C) <2015-2016> Centricular Ltd
+
+gst/playback/gstplay-enum.c
+Copyright (C) <2007> Wim Taymans <wim.taymans@gmail.com>
+
+gst/playback/gstplay-enum.h
+Copyright (C) <2007> Wim Taymans <wim.taymans@gmail.com>
+
+gst/playback/gstplaybackelement.c
+Copyright (C) <2007> Wim Taymans <wim.taymans@gmail.com>
+Copyright (C) 2020 Huawei Technologies Co., Ltd.
+
+gst/playback/gstplaybackelements.h
+Copyright (C) <2007> Wim Taymans <wim.taymans@gmail.com>
+Copyright (C) 2020 Huawei Technologies Co., Ltd.
+
+gst/playback/gstplaybackplugin.c
+Copyright (C) <2007> Wim Taymans <wim.taymans@gmail.com>
+
+gst/playback/gstplaybackutils.c
+Copyright (C) <2014> Intel Corporation
+Copyright (C) <2014> Sreerenj Balachandran <sreerenj.balachandran@intel.com>
+
+gst/playback/gstplaybackutils.h
+Copyright (C) <2014> Intel Corporation
+Copyright (C) <2014> Sreerenj Balachandran <sreerenj.balachandran@intel.com>
+
+gst/playback/gstplaybin2.c
+Copyright (C) <2007> Wim Taymans <wim.taymans@gmail.com>
+Copyright (C) <2011> Sebastian Dröge <sebastian.droege@collabora.co.uk>
+Copyright (C) <2013> Collabora Ltd.
+
+gst/playback/gstplaybin3.c
+Copyright (C) <2007> Wim Taymans <wim.taymans@gmail.com>
+Copyright (C) <2011> Sebastian Dröge <sebastian.droege@collabora.co.uk>
+Copyright (C) <2013> Collabora Ltd.
+Copyright (C) <2015> Jan Schmidt <jan@centricular.com>
+
+gst/playback/gstplaysink.c
+Copyright (C) <2007> Wim Taymans <wim.taymans@gmail.com>
+Copyright (C) <2011> Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/playback/gstplaysink.h
+Copyright (C) <2007> Wim Taymans <wim.taymans@gmail.com>
+
+gst/playback/gstplaysinkaudioconvert.c
+Copyright (C) <2011> Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/playback/gstplaysinkaudioconvert.h
+Copyright (C) <2011> Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/playback/gstplaysinkconvertbin.c
+Copyright (C) <2011> Sebastian Dröge <sebastian.droege@collabora.co.uk>
+Copyright (C) <2011> Vincent Penquerch <vincent.penquerch@collabora.co.uk>
+
+gst/playback/gstplaysinkconvertbin.h
+Copyright (C) <2011> Sebastian Dröge <sebastian.droege@collabora.co.uk>
+Copyright (C) <2011> Vincent Penquerc'h <vincent.penquerch@collabora.co.uk>
+
+gst/playback/gstplaysinkvideoconvert.c
+Copyright (C) <2011> Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/playback/gstplaysinkvideoconvert.h
+Copyright (C) <2011> Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/playback/gstrawcaps.h
+Copyright (C) <2009> Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/playback/gststreamsynchronizer.c
+Copyright (C) 2010 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/playback/gststreamsynchronizer.h
+Copyright (C) 2010 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/playback/gstsubtitleoverlay.c
+Copyright (C) 2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/playback/gstsubtitleoverlay.h
+Copyright (C) 2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/playback/gsturidecodebin.c
+Copyright (C) <2007> Wim Taymans <wim.taymans@gmail.com>
+
+gst/playback/gsturidecodebin3.c
+Copyright (C) <2007> Wim Taymans <wim.taymans@gmail.com>
+
+gst/playback/gsturisourcebin.c
+Copyright (C) <2015> Jan Schmidt <jan@centricular.com>
+Copyright (C) <2007> Wim Taymans <wim.taymans@gmail.com>
+
+gst/typefind/gsttypefindfunctions.c
+Copyright (C) 2003 Benjamin Otte <in7y118@public.uni-hamburg.de>
+Copyright (C) 2005-2009 Tim-Philipp Müller <tim centricular net>
+Copyright (C) 2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/typefind/gsttypefindfunctionsdata.c
+Copyright (C) 2003 Benjamin Otte <in7y118@public.uni-hamburg.de>
+Copyright (C) 2005-2009 Tim-Philipp Müller <tim centricular net>
+Copyright (C) 2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+Copyright (C) 2020 Huawei Technologies Co., Ltd.
+
+gst/typefind/gsttypefindfunctionsdata.h
+Copyright (C) 2003 Benjamin Otte <in7y118@public.uni-hamburg.de>
+Copyright (C) 2005-2009 Tim-Philipp Müller <tim centricular net>
+Copyright (C) 2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+Copyright (C) 2020 Huawei Technologies Co., Ltd.
+
+gst/typefind/gsttypefindfunctionsplugin.c
+Copyright (C) 2003 Benjamin Otte <in7y118@public.uni-hamburg.de>
+Copyright (C) 2005-2009 Tim-Philipp Müller <tim centricular net>
+Copyright (C) 2020 Huawei Technologies Co., Ltd.
+
+gst/typefind/gsttypefindfunctionsplugin.h
+Copyright (C) 2003 Benjamin Otte <in7y118@public.uni-hamburg.de>
+Copyright (C) 2005-2009 Tim-Philipp Müller <tim centricular net>
+Copyright (C) 2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+Copyright (C) 2020 Huawei Technologies Co., Ltd.
+
+gst/typefind/gsttypefindfunctionsriff.c
+Copyright (C) 2003 Benjamin Otte <in7y118@public.uni-hamburg.de>
+Copyright (C) 2005-2009 Tim-Philipp Müller <tim centricular net>
+Copyright (C) 2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+Copyright (C) 2020 Huawei Technologies Co., Ltd.
+
+gst/typefind/gsttypefindfunctionsstartwith.c
+Copyright (C) 2003 Benjamin Otte <in7y118@public.uni-hamburg.de>
+Copyright (C) 2005-2009 Tim-Philipp Müller <tim centricular net>
+Copyright (C) 2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+Copyright (C) 2020 Huawei Technologies Co., Ltd.
+
+gst/videoconvertscale/gstvideoconvert.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2003 Ronald Bultje <rbultje@ronald.bitfreak.net>
+Copyright (C) 2010 David Schleef <ds@schleef.org>
+
+gst/videoconvertscale/gstvideoconvert.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2003 Ronald Bultje <rbultje@ronald.bitfreak.net>
+
+gst/videoconvertscale/gstvideoconvertscale.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2003 Ronald Bultje <rbultje@ronald.bitfreak.net>
+Copyright (C) 2005-2012 David Schleef <ds@schleef.org>
+Copyright (C) 2022 Thibault Saunier <tsaunier@igalia.com>
+
+gst/videoconvertscale/gstvideoconvertscale.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2020 Thibault Saunier <tsaunier@igalia.com>
+
+gst/videoconvertscale/gstvideoconvertscaleplugin.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/videoconvertscale/gstvideoscale.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2005-2012 David Schleef <ds@schleef.org>
+
+gst/videoconvertscale/gstvideoscale.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/videorate/gstvideorate.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/videorate/gstvideorate.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/videotestsrc/gstvideotestsrc.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) <2002> David A. Schleef <ds@schleef.org>
+
+gst/videotestsrc/gstvideotestsrc.h
+Copyright (C) <2002> David A. Schleef <ds@schleef.org>
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/videotestsrc/videotestsrc.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/videotestsrc/videotestsrc.h
+Copyright (C) <2003> David A. Schleef <ds@schleef.org>
+
+gst/volume/gstvolume.c
+Copyright (C) 1999-2001 Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2005 Andy Wingo <wingo@pobox.com>
+Copyright (C) 2010 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/volume/gstvolume.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2010 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst-libs/gst/allocators/allocators-prelude.h
+Copyright (C) 2018 GStreamer developers
+
+gst-libs/gst/allocators/allocators.h
+Copyright (C) 2012 GStreamer developers
+
+gst-libs/gst/allocators/gstdmabuf.c
+Copyright (C) 2013 Linaro SA
+
+gst-libs/gst/allocators/gstdmabuf.h
+Copyright (C) 2013 Linaro SA
+
+gst-libs/gst/allocators/gstdrmdumb.c
+Copyright (C) 2023 Collabora
+Copyright (C) 2016 Igalia
+
+gst-libs/gst/allocators/gstdrmdumb.h
+Copyright (C) 2016 Igalia
+Copyright (C) 2023 Collabora
+
+gst-libs/gst/allocators/gstfdmemory.c
+Copyright (C) 2013 Linaro SA
+
+gst-libs/gst/allocators/gstfdmemory.h
+Copyright (C) 2013 Linaro SA
+
+gst-libs/gst/allocators/gstphysmemory.c
+Copyright (C) 2017 Sebastian Dröge <sebastian@centricular.com>
+
+gst-libs/gst/allocators/gstphysmemory.h
+Copyright (C) 2017 Sebastian Dröge <sebastian@centricular.com>
+
+gst-libs/gst/allocators/gstshmallocator.c
+Copyright (C) 2012 Intel Corporation
+Copyright (C) 2012 Sreerenj Balachandran <sreerenj.balachandran@intel.com>
+Copyright (C) 2023 Netflix Inc.
+
+gst-libs/gst/allocators/gstshmallocator.h
+Copyright (C) 2012 Intel Corporation
+Copyright (C) 2012 Sreerenj Balachandran <sreerenj.balachandran@intel.com>
+Copyright (C) 2023 Netflix Inc.
+
+gst-libs/gst/allocators/gstudmabufallocator.c
+Copyright (C) 2025 Collabora Ltd.
+
+gst-libs/gst/allocators/gstudmabufallocator.h
+Copyright (C) 2025 Collabora Ltd.
+
+gst-libs/gst/app/app-prelude.h
+Copyright (C) 2018 GStreamer developers
+
+gst-libs/gst/app/app.h
+Copyright (C) 2012 GStreamer developers
+
+gst-libs/gst/app/gstappsink.c
+Copyright (C) 2007 David Schleef <ds@schleef.org>
+
+gst-libs/gst/app/gstappsink.h
+Copyright (C) 2007 David Schleef <ds@schleef.org>
+
+gst-libs/gst/app/gstappsrc.c
+Copyright (C) 2007 David Schleef <ds@schleef.org>
+
+gst-libs/gst/app/gstappsrc.h
+Copyright (C) 2007 David Schleef <ds@schleef.org>
+
+gst-libs/gst/audio/audio-buffer.c
+Copyright (C) <2018> Collabora Ltd.
+
+gst-libs/gst/audio/audio-buffer.h
+Copyright (C) <2018> Collabora Ltd.
+
+gst-libs/gst/audio/audio-channel-mixer.c
+Copyright (C) 2004 Ronald Bultje <rbultje@ronald.bitfreak.net>
+Copyright (C) 2008 Sebastian Dröge <slomo@circular-chaos.org>
+
+gst-libs/gst/audio/audio-channel-mixer.h
+Copyright (C) 2004 Ronald Bultje <rbultje@ronald.bitfreak.net>
+
+gst-libs/gst/audio/audio-channels.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+gst-libs/gst/audio/audio-channels.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+gst-libs/gst/audio/audio-converter.c
+Copyright (C) 2005 Wim Taymans <wim at fluendo dot com>
+
+gst-libs/gst/audio/audio-converter.h
+Copyright (C) 2004 Ronald Bultje <rbultje@ronald.bitfreak.net>
+
+gst-libs/gst/audio/audio-format.c
+Copyright (C) <2012> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/audio/audio-format.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+gst-libs/gst/audio/audio-info.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+gst-libs/gst/audio/audio-info.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+gst-libs/gst/audio/audio-prelude.h
+Copyright (C) 2018 GStreamer developers
+
+gst-libs/gst/audio/audio-quantize.c
+Copyright (C) 2007 Sebastian Dröge <slomo@circular-chaos.org>
+
+gst-libs/gst/audio/audio-quantize.h
+Copyright (C) 2007 Sebastian Dröge <slomo@circular-chaos.org>
+
+gst-libs/gst/audio/audio-resampler-macros.h
+Copyright (C) <2015> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/audio/audio-resampler-neon.h
+Copyright (C) <2016> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/audio/audio-resampler-private.h
+Copyright (C) <2015> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/audio/audio-resampler-x86-sse.c
+Copyright (C) <2016> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/audio/audio-resampler-x86-sse.h
+Copyright (C) <2016> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/audio/audio-resampler-x86-sse2.c
+Copyright (C) <2016> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/audio/audio-resampler-x86-sse2.h
+Copyright (C) <2016> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/audio/audio-resampler-x86-sse41.c
+Copyright (C) <2016> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/audio/audio-resampler-x86-sse41.h
+Copyright (C) <2016> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/audio/audio-resampler-x86.h
+Copyright (C) <2016> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/audio/audio-resampler.c
+Copyright (C) <2015> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/audio/audio-resampler.h
+Copyright (C) <2015> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/audio/audio.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+gst-libs/gst/audio/audio.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+gst-libs/gst/audio/dbesi0.c
+Copyright(C) 1996 Takuya OOURA
+
+gst-libs/gst/audio/gstaudioaggregator.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst-libs/gst/audio/gstaudioaggregator.h
+Copyright (C) 2014 Collabora
+
+gst-libs/gst/audio/gstaudiobasesink.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst-libs/gst/audio/gstaudiobasesink.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst-libs/gst/audio/gstaudiobasesrc.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst-libs/gst/audio/gstaudiobasesrc.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst-libs/gst/audio/gstaudiocdsrc.c
+Copyright (C) 2005 Tim-Philipp Müller <tim centricular net>
+
+gst-libs/gst/audio/gstaudiocdsrc.h
+Copyright (C) 2005 Tim-Philipp Müller <tim centricular net>
+
+gst-libs/gst/audio/gstaudioclock.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst-libs/gst/audio/gstaudioclock.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst-libs/gst/audio/gstaudiodecoder.c
+Copyright (C) 2009 Igalia S.L.
+Copyright (C) 2011 Mark Nauwelaerts <mark.nauwelaerts@collabora.co.uk>.
+Copyright (C) 2011 Nokia Corporation. All rights reserved.
+
+gst-libs/gst/audio/gstaudiodecoder.h
+Copyright (C) 2009 Igalia S.L.
+Copyright (C) 2011 Mark Nauwelaerts <mark.nauwelaerts@collabora.co.uk>.
+Copyright (C) 2011 Nokia Corporation. All rights reserved.
+
+gst-libs/gst/audio/gstaudioencoder.c
+Copyright (C) 2011 Mark Nauwelaerts <mark.nauwelaerts@collabora.co.uk>.
+Copyright (C) 2011 Nokia Corporation. All rights reserved.
+
+gst-libs/gst/audio/gstaudioencoder.h
+Copyright (C) 2011 Mark Nauwelaerts <mark.nauwelaerts@collabora.co.uk>.
+Copyright (C) 2011 Nokia Corporation. All rights reserved.
+
+gst-libs/gst/audio/gstaudiofilter.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) <2003> David Schleef <ds@schleef.org>
+Copyright (C) <2007> Tim-Philipp Müller <tim centricular net>
+
+gst-libs/gst/audio/gstaudiofilter.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+gst-libs/gst/audio/gstaudiometa.c
+Copyright (C) <2011> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/audio/gstaudiometa.h
+Copyright (C) <2011> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/audio/gstaudioringbuffer.c
+Copyright (C) 2005 Wim Taymans <wim@fluendo.com>
+
+gst-libs/gst/audio/gstaudioringbuffer.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst-libs/gst/audio/gstaudiosink.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst-libs/gst/audio/gstaudiosink.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst-libs/gst/audio/gstaudiosrc.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst-libs/gst/audio/gstaudiosrc.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst-libs/gst/audio/gstaudiostreamalign.c
+Copyright (C) 2017 Sebastian Dröge <sebastian@centricular.com>
+
+gst-libs/gst/audio/gstaudiostreamalign.h
+Copyright (C) 2017 Sebastian Dröge <sebastian@centricular.com>
+
+gst-libs/gst/audio/gstaudioutilsprivate.c
+Copyright (C) 2011 Mark Nauwelaerts <mark.nauwelaerts@collabora.co.uk>.
+Copyright (C) 2011 Nokia Corporation. All rights reserved.
+
+gst-libs/gst/audio/gstaudioutilsprivate.h
+Copyright (C) 2011 Mark Nauwelaerts <mark.nauwelaerts@collabora.co.uk>.
+Copyright (C) 2011 Nokia Corporation. All rights reserved.
+
+gst-libs/gst/audio/gstdsd.c
+Copyright (C) 2023 Carlos Rafael Giani <crg7475@mailbox.org>
+
+gst-libs/gst/audio/gstdsd.h
+Copyright (C) 2023 Carlos Rafael Giani <crg7475@mailbox.org>
+
+gst-libs/gst/audio/gstdsdformat.c
+Copyright (C) 2023 Carlos Rafael Giani <crg7475@mailbox.org>
+
+gst-libs/gst/audio/gstdsdformat.h
+Copyright (C) 2023 Carlos Rafael Giani <crg7475@mailbox.org>
+
+gst-libs/gst/audio/streamvolume.c
+Copyright (C) 2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst-libs/gst/audio/streamvolume.h
+Copyright (C) 2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst-libs/gst/fft/_kiss_fft_guts_f32.h
+Copyright (c) 2003-2010, Mark Borgerding. All rights reserved.
+
+gst-libs/gst/fft/_kiss_fft_guts_f64.h
+Copyright (c) 2003-2010, Mark Borgerding. All rights reserved.
+
+gst-libs/gst/fft/_kiss_fft_guts_s16.h
+Copyright (c) 2003-2010, Mark Borgerding. All rights reserved.
+
+gst-libs/gst/fft/_kiss_fft_guts_s32.h
+Copyright (c) 2003-2010, Mark Borgerding. All rights reserved.
+
+gst-libs/gst/fft/fft-prelude.h
+Copyright (C) 2018 GStreamer developers
+
+gst-libs/gst/fft/fft.h
+Copyright (C) 2012 GStreamer developers
+
+gst-libs/gst/fft/gstfft.c
+Copyright (C) <2007> Sebastian Dröge <slomo@circular-chaos.org>
+
+gst-libs/gst/fft/gstfft.h
+Copyright (C) <2007> Sebastian Dröge <slomo@circular-chaos.org>
+
+gst-libs/gst/fft/gstfftf32.c
+Copyright (C) <2007> Sebastian Dröge <slomo@circular-chaos.org>
+
+gst-libs/gst/fft/gstfftf32.h
+Copyright (C) <2007> Sebastian Dröge <slomo@circular-chaos.org>
+
+gst-libs/gst/fft/gstfftf64.c
+Copyright (C) <2007> Sebastian Dröge <slomo@circular-chaos.org>
+
+gst-libs/gst/fft/gstfftf64.h
+Copyright (C) <2007> Sebastian Dröge <slomo@circular-chaos.org>
+
+gst-libs/gst/fft/gstffts16.c
+Copyright (C) <2007> Sebastian Dröge <slomo@circular-chaos.org>
+
+gst-libs/gst/fft/gstffts16.h
+Copyright (C) <2007> Sebastian Dröge <slomo@circular-chaos.org>
+
+gst-libs/gst/fft/gstffts32.c
+Copyright (C) <2007> Sebastian Dröge <slomo@circular-chaos.org>
+
+gst-libs/gst/fft/gstffts32.h
+Copyright (C) <2007> Sebastian Dröge <slomo@circular-chaos.org>
+
+gst-libs/gst/fft/kiss_fft_f32.c
+Copyright (c) 2003-2010, Mark Borgerding. All rights reserved.
+
+gst-libs/gst/fft/kiss_fft_f32.h
+Copyright (c) 2003-2010, Mark Borgerding. All rights reserved.
+
+gst-libs/gst/fft/kiss_fft_f64.c
+Copyright (c) 2003-2010, Mark Borgerding. All rights reserved.
+
+gst-libs/gst/fft/kiss_fft_f64.h
+Copyright (c) 2003-2010, Mark Borgerding. All rights reserved.
+
+gst-libs/gst/fft/kiss_fft_s16.c
+Copyright (c) 2003-2010, Mark Borgerding. All rights reserved.
+
+gst-libs/gst/fft/kiss_fft_s16.h
+Copyright (c) 2003-2010, Mark Borgerding. All rights reserved.
+
+gst-libs/gst/fft/kiss_fft_s32.c
+Copyright (c) 2003-2010, Mark Borgerding. All rights reserved.
+
+gst-libs/gst/fft/kiss_fft_s32.h
+Copyright (c) 2003-2010, Mark Borgerding. All rights reserved.
+
+gst-libs/gst/fft/kiss_fftr_f32.c
+Copyright (c) 2003-2004, Mark Borgerding. All rights reserved.
+
+gst-libs/gst/fft/kiss_fftr_f32.h
+Copyright (c) 2003-2004, Mark Borgerding. All rights reserved.
+
+gst-libs/gst/fft/kiss_fftr_f64.c
+Copyright (c) 2003-2004, Mark Borgerding. All rights reserved.
+
+gst-libs/gst/fft/kiss_fftr_f64.h
+Copyright (c) 2003-2004, Mark Borgerding. All rights reserved.
+
+gst-libs/gst/fft/kiss_fftr_s16.c
+Copyright (c) 2003-2004, Mark Borgerding. All rights reserved.
+
+gst-libs/gst/fft/kiss_fftr_s16.h
+Copyright (c) 2003-2004, Mark Borgerding. All rights reserved.
+
+gst-libs/gst/fft/kiss_fftr_s32.c
+Copyright (c) 2003-2004, Mark Borgerding. All rights reserved.
+
+gst-libs/gst/fft/kiss_fftr_s32.h
+Copyright (c) 2003-2004, Mark Borgerding. All rights reserved.
+
+gst-libs/gst/gl/android/gstglwindow_android_egl.c
+Copyright (C) 2008 Julien Isorce <julien.isorce@gmail.com>
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+Copyright (C) 2013 Sebastian Dröge <slomo@circular-chaos.org>
+
+gst-libs/gst/gl/android/gstglwindow_android_egl.h
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+Copyright (C) 2013 Sebastian Dröge <slomo@circular-chaos.org>
+
+gst-libs/gst/gl/cocoa/gstgl_cocoa_private.h
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/cocoa/gstglcaopengllayer.h
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/cocoa/gstglcontext_cocoa.h
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/cocoa/gstgldisplay_cocoa.h
+Copyright (C) 2015 Julien Isorce <julien.isorce@gmail.com>
+
+gst-libs/gst/gl/cocoa/gstglwindow_cocoa.h
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/dispmanx/gstglwindow_dispmanx_egl.c
+Copyright (C) 2013 Julien Isorce <julien.isorce@collabora.co.uk>
+
+gst-libs/gst/gl/dispmanx/gstglwindow_dispmanx_egl.h
+Copyright (C) 2013 Julien Isorce <julien.isorce@collabora.co.uk>
+
+gst-libs/gst/gl/eagl/gstglcontext_eagl.h
+Copyright (C) 2014 Sebastian Dröge <sebastian@centricular.com>
+
+gst-libs/gst/gl/eagl/gstglios_utils.h
+Copyright (C) 2020 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/eagl/gstglwindow_eagl.h
+Copyright (C) 2014 Sebastian Dröge <sebastian@centricular.com>
+
+gst-libs/gst/gl/egl/egl.h
+Copyright (C) 2020 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/egl/gstegl.c
+Copyright (C) 2016 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/egl/gstegl.h
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/egl/gsteglimage.c
+Copyright (C) 2012 Collabora Ltd.
+Copyright (C) 2014 Julien Isorce <julien.isorce@gmail.com>
+Copyright (C) 2016 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/egl/gsteglimage.h
+Copyright (C) 2012 Collabora Ltd.
+Copyright (C) 2014 Julien Isorce <julien.isorce@gmail.com>
+
+gst-libs/gst/gl/egl/gsteglimage_private.h
+Copyright (C) 2020 Igalia S.L.
+
+gst-libs/gst/gl/egl/gsteglimagecache.c
+Copyright (C) 2024 Pengutronix, Philipp Zabel <graphics@pengutronix.de>
+
+gst-libs/gst/gl/egl/gsteglimagecache.h
+Copyright (C) 2024 Pengutronix, Philipp Zabel <graphics@pengutronix.de>
+
+gst-libs/gst/gl/egl/gstglcontext_egl.c
+Copyright (C) 2013 Sebastian Dröge <slomo@circular-chaos.org>
+
+gst-libs/gst/gl/egl/gstglcontext_egl_private.h
+Copyright (C) 2013 Sebastian Dröge <slomo@circular-chaos.org>
+
+gst-libs/gst/gl/egl/gstgldisplay_egl.c
+Copyright (C) 2014 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/egl/gstgldisplay_egl.h
+Copyright (C) 2014 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/egl/gstgldisplay_egl_device.c
+Copyright (C) 2014 Matthew Waters <ystreet00@gmail.com>
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+
+gst-libs/gst/gl/egl/gstgldisplay_egl_device.h
+Copyright (C) 2014 Matthew Waters <ystreet00@gmail.com>
+Copyright (C) 2019 Seungha Yang <seungha.yang@navercorp.com>
+
+gst-libs/gst/gl/egl/gstglmemoryegl.c
+Copyright (C) 2012 Collabora Ltd.
+Copyright (C) 2014 Julien Isorce <julien.isorce@gmail.com>
+Copyright (C) 2015 Igalia
+
+gst-libs/gst/gl/egl/gstglmemoryegl.h
+Copyright (C) 2012 Collabora Ltd.
+Copyright (C) 2014 Julien Isorce <julien.isorce@gmail.com>
+
+gst-libs/gst/gl/gbm/gstgl_gbm_utils.c
+Copyright (C) 2018 Carlos Rafael Giani <dv@pseudoterminal.org>
+
+gst-libs/gst/gl/gbm/gstgl_gbm_utils.h
+Copyright (C) 2018 Carlos Rafael Giani <dv@pseudoterminal.org>
+
+gst-libs/gst/gl/gbm/gstgldisplay_gbm.c
+Copyright (C) 2018 Carlos Rafael Giani <dv@pseudoterminal.org>
+
+gst-libs/gst/gl/gbm/gstgldisplay_gbm.h
+Copyright (C) 2018 Carlos Rafael Giani <dv@pseudoterminal.org>
+
+gst-libs/gst/gl/gbm/gstglwindow_gbm_egl.c
+Copyright (C) 2018 Carlos Rafael Giani <dv@pseudoterminal.org>
+
+gst-libs/gst/gl/gbm/gstglwindow_gbm_egl.h
+Copyright (C) 2018 Carlos Rafael Giani <dv@pseudoterminal.org>
+
+gst-libs/gst/gl/gl-prelude.h
+Copyright (C) 2018 GStreamer developers
+
+gst-libs/gst/gl/gl.h
+Copyright (C) 2013 Julien Isorce <julien.isorce@gmail.com>
+
+gst-libs/gst/gl/glprototypes/all_functions.h
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/glprototypes/base.h
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+Copyright (C) 2009, 2011 Intel Corporation.
+
+gst-libs/gst/gl/glprototypes/blending.h
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+Copyright (C) 2009, 2011 Intel Corporation.
+
+gst-libs/gst/gl/glprototypes/buffer_storage.h
+Copyright (C) 2021 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/glprototypes/buffers.h
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/glprototypes/debug.h
+Copyright (C) 2014 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/glprototypes/eglimage.h
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+Copyright (C) 2009, 2011 Intel Corporation.
+
+gst-libs/gst/gl/glprototypes/fbo.h
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+Copyright (C) 2009, 2011 Intel Corporation.
+
+gst-libs/gst/gl/glprototypes/fixedfunction.h
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+Copyright (C) 2009, 2011 Intel Corporation.
+
+gst-libs/gst/gl/glprototypes/gles.h
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+Copyright (C) 2009, 2011 Intel Corporation.
+
+gst-libs/gst/gl/glprototypes/gstgl_compat.h
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/glprototypes/gstgl_gles2compat.h
+Copyright (C) 2009 Julien Isorce <julien.isorce@gmail.com>
+
+gst-libs/gst/gl/glprototypes/invalidate_subdata.h
+Copyright (C) 2024 Andreas Wittmann <andreas.wittmann@zeiss.com>
+
+gst-libs/gst/gl/glprototypes/opengl.h
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+Copyright (C) 2009, 2011 Intel Corporation.
+
+gst-libs/gst/gl/glprototypes/query.h
+Copyright (C) 2016 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/glprototypes/shaders.h
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+Copyright (C) 2009, 2011 Intel Corporation.
+
+gst-libs/gst/gl/glprototypes/sync.h
+Copyright (C) 2014-2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/glprototypes/vao.h
+Copyright (C) 2014 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstgl_enums.h
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstgl_fwd.h
+Copyright (C) 2013 Julien Isorce <julien.isorce@gmail.com>
+
+gst-libs/gst/gl/gstglapi.c
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/gstglapi.h
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/gstglbasefilter.c
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstglbasefilter.h
+Copyright (C) 2007 David Schleef <ds@schleef.org>
+Copyright (C) 2008 Julien Isorce <julien.isorce@gmail.com>
+Copyright (C) 2008 Filippo Argiolas <filippo.argiolas@gmail.com>
+
+gst-libs/gst/gl/gstglbasememory.c
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstglbasememory.h
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstglbasemixer.c
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstglbasemixer.h
+Copyright (C) 2009 Julien Isorce <julien.isorce@gmail.com>
+
+gst-libs/gst/gl/gstglbasesrc.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2002,2007 David A. Schleef <ds@schleef.org>
+Copyright (C) 2008 Julien Isorce <julien.isorce@gmail.com>
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+Copyright (C) 2019 Philippe Normand <philn@igalia.com>
+
+gst-libs/gst/gl/gstglbasesrc.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2002,2007 David A. Schleef <ds@schleef.org>
+Copyright (C) 2008 Julien Isorce <julien.isorce@gmail.com>
+Copyright (C) 2019 Philippe Normand <philn@igalia.com>
+
+gst-libs/gst/gl/gstglbuffer.c
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstglbuffer.h
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstglbufferpool.c
+Copyright (C) 2012 Matthew Waters <>
+
+gst-libs/gst/gl/gstglbufferpool.h
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/gstglcolorconvert.c
+Copyright (C) 2012-2014 Matthew Waters <ystree00@gmail.com>
+
+gst-libs/gst/gl/gstglcolorconvert.h
+Copyright (C) 2012 Matthew Waters <ystree00@gmail.com>
+
+gst-libs/gst/gl/gstglcontext.c
+Copyright (C) 2013 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/gstglcontext.h
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/gstglcontext_private.h
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/gstglcontextconfig.c
+Copyright (C) 2020 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstglcontextconfig.h
+Copyright (C) 2020 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstglcontextquirks.c
+Copyright (C) 2022 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstgldebug.c
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstgldebug.h
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstgldisplay.c
+Copyright (C) 2007 David A. Schleef <ds@schleef.org>
+Copyright (C) 2008 Julien Isorce <julien.isorce@gmail.com>
+Copyright (C) 2008 Filippo Argiolas <filippo.argiolas@gmail.com>
+Copyright (C) 2013 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/gstgldisplay.h
+Copyright (C) 2007 David A. Schleef <ds@schleef.org>
+Copyright (C) 2008 Julien Isorce <julien.isorce@gmail.com>
+Copyright (C) 2008 Filippo Argiolas <filippo.argiolas@gmail.com>
+Copyright (C) 2013 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/gstglfeature.c
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/gstglfeature.h
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+Copyright (C) 2009 Intel Corporation.
+
+gst-libs/gst/gl/gstglfeature_private.h
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+Copyright (C) 2009 Intel Corporation.
+
+gst-libs/gst/gl/gstglfilter.c
+Copyright (C) 2007 David Schleef <ds@schleef.org>
+Copyright (C) 2008 Julien Isorce <julien.isorce@gmail.com>
+Copyright (C) 2008 Filippo Argiolas <filippo.argiolas@gmail.com>
+
+gst-libs/gst/gl/gstglfilter.h
+Copyright (C) 2007 David Schleef <ds@schleef.org>
+Copyright (C) 2008 Julien Isorce <julien.isorce@gmail.com>
+Copyright (C) 2008 Filippo Argiolas <filippo.argiolas@gmail.com>
+
+gst-libs/gst/gl/gstglformat.c
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstglformat.h
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstglframebuffer.c
+Copyright (C) 2013 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/gstglframebuffer.h
+Copyright (C) 2013 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/gstglfuncs.h
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/gstglmemory.c
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstglmemory.h
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstglmemorypbo.c
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstglmemorypbo.h
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstglmixer.c
+Copyright (C) 2009 Julien Isorce <julien.isorce@gmail.com>
+
+gst-libs/gst/gl/gstglmixer.h
+Copyright (C) 2009 Julien Isorce <julien.isorce@gmail.com>
+
+gst-libs/gst/gl/gstgloverlaycompositor.c
+Copyright (C) 2015 Lubosz Sarnecki <lubosz.sarnecki@collabora.co.uk>
+
+gst-libs/gst/gl/gstgloverlaycompositor.h
+Copyright (C) 2015 Lubosz Sarnecki <lubosz.sarnecki@collabora.co.uk>
+
+gst-libs/gst/gl/gstglpixelformat.c
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstglquery.c
+Copyright (C) 2016 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstglquery.h
+Copyright (C) 2016 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstglrenderbuffer.c
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstglrenderbuffer.h
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstglshader.c
+Copyright (C) 2008 Filippo Argiolas <filippo.argiolas@gmail.com>
+Copyright (C) 2014 Julien Isorce <julien.isorce@collabora.co.uk>
+
+gst-libs/gst/gl/gstglshader.h
+Copyright (C) 2008 Filippo Argiolas <filippo.argiolas@gmail.com>
+Copyright (C) 2014 Julien Isorce <julien.isorce@collabora.co.uk>
+
+gst-libs/gst/gl/gstglshaderstrings.c
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstglshaderstrings.h
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstglsl.c
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstglsl.h
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstglsl_private.h
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstglslstage.c
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstglslstage.h
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstglsyncmeta.c
+Copyright (C) 2014 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstglsyncmeta.h
+Copyright (C) 2014 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstglupload.c
+Copyright (C) 2012-2014 Matthew Waters <ystree00@gmail.com>
+Copyright (C) 2017 Sebastian Dröge <sebastian@centricular.com>
+
+gst-libs/gst/gl/gstglupload.h
+Copyright (C) 2012 Matthew Waters <ystree00@gmail.com>
+
+gst-libs/gst/gl/gstglutils.c
+Copyright (C) 2013 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/gstglutils.h
+Copyright (C) 2013 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/gstglutils_private.h
+Copyright (C) 2017 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstglviewconvert.c
+Copyright (C) 2009 Julien Isorce <julien.isorce@mail.com>
+Copyright (C) 2014 Jan Schmidt <jan@centricular.com>
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstglviewconvert.h
+Copyright (C) 2014 Jan Schmidt <jan@centricular.com>
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/gstglwindow.c
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/gstglwindow.h
+Copyright (C) 2008 Julien Isorce <julien.isorce@gmail.com>
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/gstglwindow_private.h
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/utils/gles_versions.h
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/utils/opengl_versions.h
+Copyright (C) 2015 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/viv-fb/gstgldisplay_viv_fb.c
+Copyright (C) 2014 Matthew Waters <ystreet00@gmail.com>
+Copyright (C) 2015 Freescale Semiconductor <b55597@freescale.com>
+Copyright (C) 2017 Sebastian Dröge <sebastian@centricular.com>
+
+gst-libs/gst/gl/viv-fb/gstgldisplay_viv_fb.h
+Copyright (C) 2014 Matthew Waters <ystreet00@gmail.com>
+Copyright (C) 2015 Freescale Semiconductor <b55597@freescale.com>
+
+gst-libs/gst/gl/viv-fb/gstglviv-fb.h
+Copyright (C) 2023 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/viv-fb/gstglwindow_viv_fb_egl.c
+Copyright (C) 2008 Julien Isorce <julien.isorce@gmail.com>
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+Copyright (C) 2015 Freescale Semiconductor <b55597@freescale.com>
+Copyright (C) 2017 Sebastian Dröge <sebastian@centricular.com>
+
+gst-libs/gst/gl/viv-fb/gstglwindow_viv_fb_egl.h
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+Copyright (C) 2015 Freescale Semiconductor <b55597@freescale.com>
+
+gst-libs/gst/gl/wayland/gstgldisplay_wayland.c
+Copyright (C) 2013 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/wayland/gstgldisplay_wayland.h
+Copyright (C) 2013 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/wayland/gstglwindow_wayland_egl.c
+Copyright (C) 2008 Julien Isorce <julien.isorce@gmail.com>
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/wayland/gstglwindow_wayland_egl.h
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/wayland/wayland.h
+Copyright (C) 2020 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/wayland/wayland_event_source.c
+Copyright (C) 2010  Intel Corporation.
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/wayland/wayland_event_source.h
+Copyright (C) 2011  Intel Corporation.
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/wgl/gstglcontext_wgl.c
+Copyright (C) 2008 Julien Isorce <julien.isorce@gmail.com>
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/wgl/gstglcontext_wgl.h
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/win32/gstglwindow_win32.c
+Copyright (C) 2008 Julien Isorce <julien.isorce@gmail.com>
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/win32/gstglwindow_win32.h
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/winrt/gstglwindow_winrt_egl.cpp
+Copyright (C) 2019 Nirbheek Chauhan <nirbheek@centricular.com>
+Copyright (C) 2020 Seungha Yang <seungha@centricular.com>
+
+gst-libs/gst/gl/winrt/gstglwindow_winrt_egl.h
+Copyright (C) 2019 Nirbheek Chauhan <nirbheek@centricular.com>
+
+gst-libs/gst/gl/x11/gstglcontext_glx.c
+Copyright (C) 2008 Julien Isorce <julien.isorce@gmail.com>
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/x11/gstglcontext_glx_private.h
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/x11/gstgldisplay_x11.c
+Copyright (C) 2013 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/x11/gstgldisplay_x11.h
+Copyright (C) 2013 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/x11/gstglwindow_x11.c
+Copyright (C) 2008 Julien Isorce <julien.isorce@gmail.com>
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/x11/gstglwindow_x11.h
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/x11/x11.h
+Copyright (C) 2020 Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/gl/x11/xcb_event_source.c
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/gl/x11/xcb_event_source.h
+Copyright (C) 2012 Matthew Waters <ystreet00@gmail.com>
+
+gst-libs/gst/glib-compat-private.h
+Copyright 2005 David Schleef <ds@schleef.org>
+
+gst-libs/gst/pbutils/codec-utils.c
+Copyright (C) 2010 Arun Raghavan <arun.raghavan@collabora.co.uk>
+
+gst-libs/gst/pbutils/codec-utils.h
+Copyright (C) 2010 Arun Raghavan <arun.raghavan@collabora.co.uk>
+
+gst-libs/gst/pbutils/descriptions.c
+Copyright (C) 2006 Tim-Philipp Müller <tim centricular net>
+
+gst-libs/gst/pbutils/descriptions.h
+Copyright (C) 2006 Tim-Philipp Müller <tim centricular net>
+
+gst-libs/gst/pbutils/encoding-profile.c
+Copyright (C) 2009-2010 Edward Hervey <edward.hervey@collabora.co.uk>
+
+gst-libs/gst/pbutils/encoding-profile.h
+Copyright (C) 2009-2010 Edward Hervey <edward.hervey@collabora.co.uk>
+
+gst-libs/gst/pbutils/encoding-target.c
+Copyright (C) 2010 Edward Hervey <edward.hervey@collabora.co.uk>
+
+gst-libs/gst/pbutils/encoding-target.h
+Copyright (C) 2010 Edward Hervey <edward.hervey@collabora.co.uk>
+
+gst-libs/gst/pbutils/gstaudiovisualizer.c
+Copyright (C) <2011> Stefan Kost <ensonic@users.sf.net>
+Copyright (C) <2015> Luis de Bethencourt <luis@debethencourt.com>
+
+gst-libs/gst/pbutils/gstaudiovisualizer.h
+Copyright (C) <2011> Stefan Kost <ensonic@users.sf.net>
+Copyright (C) <2015> Luis de Bethencourt <luis@debethencourt.com>
+
+gst-libs/gst/pbutils/gstdiscoverer-types.c
+Copyright (C) 2010 Collabora Multimedia
+
+gst-libs/gst/pbutils/gstdiscoverer.c
+Copyright (C) 2009 Edward Hervey <edward.hervey@collabora.co.uk>
+
+gst-libs/gst/pbutils/gstdiscoverer.h
+Copyright (C) 2009 Edward Hervey <edward.hervey@collabora.co.uk>
+
+gst-libs/gst/pbutils/gstpluginsbaseversion.c
+Copyright (C) 2010 Tim-Philipp Müller <tim centricular net>
+
+gst-libs/gst/pbutils/install-plugins.c
+Copyright (C) 2007 Tim-Philipp Müller <tim centricular net>
+Copyright (C) 2006 Ryan Lortie <desrt desrt ca>
+
+gst-libs/gst/pbutils/install-plugins.h
+Copyright (C) 2007 Tim-Philipp Müller <tim centricular net>
+Copyright (C) 2006 Ryan Lortie <desrt desrt ca>
+
+gst-libs/gst/pbutils/missing-plugins.c
+Copyright (C) 2006 Tim-Philipp Müller <tim centricular net>
+
+gst-libs/gst/pbutils/missing-plugins.h
+Copyright (C) 2006 Tim-Philipp Müller <tim centricular net>
+
+gst-libs/gst/pbutils/pbutils-prelude.h
+Copyright (C) 2018 GStreamer developers
+
+gst-libs/gst/pbutils/pbutils-private.h
+Copyright (C) 2010 Edward Hervey <edward.hervey@collabora.co.uk>
+
+gst-libs/gst/pbutils/pbutils.c
+Copyright (C) 2006 Tim-Philipp Müller <tim centricular net>
+
+gst-libs/gst/pbutils/pbutils.h
+Copyright (C) 2006 Tim-Philipp Müller <tim centricular net>
+
+gst-libs/gst/riff/riff-ids.h
+Copyright (C) 2003 Ronald Bultje <rbultje@ronald.bitfreak.net>
+
+gst-libs/gst/riff/riff-media.c
+Copyright (C) 2003 Ronald Bultje <rbultje@ronald.bitfreak.net>
+
+gst-libs/gst/riff/riff-media.h
+Copyright (C) 2003 Ronald Bultje <rbultje@ronald.bitfreak.net>
+
+gst-libs/gst/riff/riff-prelude.h
+Copyright (C) 2018 GStreamer developers
+
+gst-libs/gst/riff/riff-read.c
+Copyright (C) 2003 Ronald Bultje <rbultje@ronald.bitfreak.net>
+
+gst-libs/gst/riff/riff-read.h
+Copyright (C) 2003 Ronald Bultje <rbultje@ronald.bitfreak.net>
+
+gst-libs/gst/riff/riff.c
+Copyright (C) 2003 Ronald Bultje <rbultje@ronald.bitfreak.net>
+
+gst-libs/gst/riff/riff.h
+Copyright (C) 2012 GStreamer developers
+
+gst-libs/gst/rtp/gstrtcpbuffer.c
+Copyright (C) <2007> Wim Taymans <wim@fluendo.com>
+
+gst-libs/gst/rtp/gstrtcpbuffer.h
+Copyright (C) <2007> Wim Taymans <wim@fluendo.com>
+
+gst-libs/gst/rtp/gstrtpbaseaudiopayload.c
+Copyright (C) <2006> Philippe Khalaf <philippe.kalaf@collabora.co.uk>
+
+gst-libs/gst/rtp/gstrtpbaseaudiopayload.h
+Copyright (C) <2006> Philippe Khalaf <philippe.kalaf@collabora.co.uk>
+
+gst-libs/gst/rtp/gstrtpbasedepayload.c
+Copyright (C) <2005> Philippe Khalaf <burger@speedy.org>
+Copyright (C) <2005> Nokia Corporation <kai.vehmanen@nokia.com>
+
+gst-libs/gst/rtp/gstrtpbasedepayload.h
+Copyright (C) <2005> Philippe Khalaf <burger@speedy.org>
+
+gst-libs/gst/rtp/gstrtpbasepayload.c
+Copyright (C) <2005> Wim Taymans <wim@fluendo.com>
+
+gst-libs/gst/rtp/gstrtpbasepayload.h
+Copyright (C) <2005> Wim Taymans <wim@fluendo.com>
+
+gst-libs/gst/rtp/gstrtpbuffer.c
+Copyright (C) <2005> Philippe Khalaf <burger@speedy.org>
+Copyright (C) <2006> Wim Taymans <wim@fluendo.com>
+
+gst-libs/gst/rtp/gstrtpbuffer.h
+Copyright (C) <2005> Philippe Khalaf <burger@speedy.org>
+
+gst-libs/gst/rtp/gstrtpdefs.h
+Copyright (C) <2005> Philippe Khalaf <burger@speedy.org>
+
+gst-libs/gst/rtp/gstrtphdrext.c
+Copyright (C) <2012> Wim Taymans <wim.taymans@gmail.com>
+Copyright (C) <2020> Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/rtp/gstrtphdrext.h
+Copyright (C) <2012> Wim Taymans <wim.taymans@gmail.com>
+Copyright (C) <2020> Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/rtp/gstrtpmeta.c
+Copyright (C) <2016> Stian Selnes <stian@pexip.com>
+
+gst-libs/gst/rtp/gstrtpmeta.h
+Copyright (C) <2016> Stian Selnes <stian@pexip.com>
+
+gst-libs/gst/rtp/gstrtppayloads.c
+Copyright (C) <2007> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/rtp/gstrtppayloads.h
+Copyright (C) <2007> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/rtp/rtp-prelude.h
+Copyright (C) 2018 GStreamer developers
+
+gst-libs/gst/rtp/rtp.h
+Copyright (C) 2012 GStreamer developers
+
+gst-libs/gst/rtsp/gstrtsp.h
+Copyright (C) 2007 Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/rtsp/gstrtspconnection.c
+Copyright (C) <2005-2009> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/rtsp/gstrtspconnection.h
+Copyright (C) <2005,2009> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/rtsp/gstrtspdefs.c
+Copyright (C) <2005,2006> Wim Taymans <wim@fluendo.com>
+
+gst-libs/gst/rtsp/gstrtspdefs.h
+Copyright (C) <2005,2006> Wim Taymans <wim@fluendo.com>
+
+gst-libs/gst/rtsp/gstrtspextension.c
+Copyright (C) 2007 Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/rtsp/gstrtspextension.h
+Copyright (C) 2007 Wim Taymans <wim@fluendo.com>
+
+gst-libs/gst/rtsp/gstrtspmessage.c
+Copyright (C) <2005,2006> Wim Taymans <wim@fluendo.com>
+
+gst-libs/gst/rtsp/gstrtspmessage.h
+Copyright (C) <2005,2006> Wim Taymans <wim@fluendo.com>
+
+gst-libs/gst/rtsp/gstrtsprange.c
+Copyright (C) <2005,2006> Wim Taymans <wim@fluendo.com>
+
+gst-libs/gst/rtsp/gstrtsprange.h
+Copyright (C) <2005,2006> Wim Taymans <wim@fluendo.com>
+
+gst-libs/gst/rtsp/gstrtsptransport.c
+Copyright (C) <2005,2006,2007> Wim Taymans <wim@fluendo.com>
+
+gst-libs/gst/rtsp/gstrtsptransport.h
+Copyright (C) <2005,2006> Wim Taymans <wim@fluendo.com>
+
+gst-libs/gst/rtsp/gstrtspurl.c
+Copyright (C) <2005,2006> Wim Taymans <wim@fluendo.com>
+
+gst-libs/gst/rtsp/gstrtspurl.h
+Copyright (C) <2005,2006> Wim Taymans <wim@fluendo.com>
+
+gst-libs/gst/rtsp/rtsp-prelude.h
+Copyright (C) 2018 GStreamer developers
+
+gst-libs/gst/rtsp/rtsp.h
+Copyright (C) 2012 GStreamer developers
+
+gst-libs/gst/sdp/gstmikey.c
+Copyright (C) <2014> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/sdp/gstmikey.h
+Copyright (C) <2014> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/sdp/gstsdp.h
+Copyright (C) <2005,2006> Wim Taymans <wim@fluendo.com>
+
+gst-libs/gst/sdp/gstsdpmessage.c
+Copyright (C) <2005,2006> Wim Taymans <wim@fluendo.com>
+
+gst-libs/gst/sdp/gstsdpmessage.h
+Copyright (C) <2005,2006> Wim Taymans <wim@fluendo.com>
+
+gst-libs/gst/sdp/sdp-prelude.h
+Copyright (C) 2018 GStreamer developers
+
+gst-libs/gst/sdp/sdp.h
+Copyright (C) 2012 GStreamer developers
+
+gst-libs/gst/tag/gstexiftag.c
+Copyright (C) 2010 Thiago Santos <thiago.sousa.santos@collabora.co.uk>
+#define EXIF_TAG_COPYRIGHT 0x8298
+
+gst-libs/gst/tag/gstid3tag.c
+Copyright (C) 2003 Benjamin Otte <in7y118@public.uni-hamburg.de>
+
+gst-libs/gst/tag/gsttagdemux.c
+Copyright (C) 2005 Jan Schmidt <thaytan@mad.scientist.com>
+Copyright (C) 2006-2007 Tim-Philipp Müller <tim centricular net>
+
+gst-libs/gst/tag/gsttagdemux.h
+Copyright (C) 2005  Jan Schmidt <thaytan@mad.scientist.com>
+Copyright (C) 2006  Tim-Philipp Müller <tim centricular net>
+
+gst-libs/gst/tag/gsttageditingprivate.c
+Copyright (C) 2010 Thiago Santos <thiago.sousa.santos@collabora.co.uk>
+
+gst-libs/gst/tag/gsttageditingprivate.h
+Copyright (C) 2003 Benjamin Otte <in7y118@public.uni-hamburg.de>
+
+gst-libs/gst/tag/gsttagmux.c
+Copyright (C) 2006 Christophe Fergeau  <teuf@gnome.org>
+Copyright (C) 2006 Tim-Philipp Müller <tim centricular net>
+Copyright (C) 2006 Sebastian Dröge <slomo@circular-chaos.org>
+Copyright (C) 2009 Pioneers of the Inevitable <songbird@songbirdnest.com>
+
+gst-libs/gst/tag/gsttagmux.h
+Copyright (C) 2006 Christophe Fergeau  <teuf@gnome.org>
+Copyright (C) 2006,2011 Tim-Philipp Müller <tim centricular net>
+Copyright (C) 2009 Pioneers of the Inevitable <songbird@songbirdnest.com>
+
+gst-libs/gst/tag/gstvorbistag.c
+Copyright (C) 2003 Benjamin Otte <in7y118@public.uni-hamburg.de>
+
+gst-libs/gst/tag/gstxmptag.c
+Copyright (C) 2010 Stefan Kost <stefan.kost@nokia.com>
+Copyright (C) 2010 Thiago Santos <thiago.sousa.santos@collabora.co.uk>
+
+gst-libs/gst/tag/id3v2.c
+Copyright 2005 Jan Schmidt <thaytan@mad.scientist.com>
+Copyright 2002,2003 Scott Wheeler <wheeler@kde.org> (portions from taglib)
+
+gst-libs/gst/tag/id3v2.h
+Copyright 2005 Jan Schmidt <thaytan@mad.scientist.com>
+
+gst-libs/gst/tag/id3v2frames.c
+Copyright 2006-2008 Tim-Philipp Müller <tim centricular net>
+Copyright 2005 Jan Schmidt <thaytan@mad.scientist.com>
+Copyright 2002,2003 Scott Wheeler <wheeler@kde.org> (portions from taglib)
+
+gst-libs/gst/tag/lang.c
+Copyright (C) 2009 Tim-Philipp Müller <tim centricular net>
+
+gst-libs/gst/tag/licenses.c
+Copyright (C) 2011 Tim-Philipp Müller <tim centricular net>
+
+gst-libs/gst/tag/mklangtables.c
+Copyright (C) 2009 Tim-Philipp Müller <tim centricular net>
+
+gst-libs/gst/tag/mklicensestables.c
+Copyright (C) 2011 Tim-Philipp Müller <tim centricular net>
+
+gst-libs/gst/tag/tag-prelude.h
+Copyright (C) 2018 GStreamer developers
+
+gst-libs/gst/tag/tag.h
+Copyright (C) 2003 Benjamin Otte <in7y118@public.uni-hamburg.de>
+Copyright (C) 2006-2011 Tim-Philipp Müller <tim centricular net>
+
+gst-libs/gst/tag/tags.c
+Copyright (C) 2005 Ross Burton <ross@burtonini.com>
+Copyright (C) 2006-2008 Tim-Philipp Müller <tim centricular net>
+
+gst-libs/gst/tag/xmpwriter.c
+Copyright (C) 2010 Thiago Santos <thiago.sousa.santos@collabora.co.uk>
+
+gst-libs/gst/tag/xmpwriter.h
+Copyright (C) 2011 Thiago Santos <thiago.sousa.santos@collabora.co.uk>
+
+gst-libs/gst/video/colorbalance.c
+Copyright (C) 2003 Ronald Bultje <rbultje@ronald.bitfreak.net>
+
+gst-libs/gst/video/colorbalance.h
+Copyright (C) 2003 Ronald Bultje <rbultje@ronald.bitfreak.net>
+
+gst-libs/gst/video/colorbalancechannel.c
+Copyright (C) 2003 Ronald Bultje <rbultje@ronald.bitfreak.net>
+
+gst-libs/gst/video/colorbalancechannel.h
+Copyright (C) 2003 Ronald Bultje <rbultje@ronald.bitfreak.net>
+
+gst-libs/gst/video/convertframe.c
+Copyright (C) 2005 Tim-Philipp Müller <tim centricular net>
+Copyright (C) 2010 Brandon Lewis <brandon.lewis@collabora.co.uk>
+Copyright (C) 2010 Edward Hervey <edward.hervey@collabora.co.uk>
+
+gst-libs/gst/video/ext/drm_fourcc.h
+Copyright 2011 Intel Corporation
+
+gst-libs/gst/video/gstvideoaffinetransformationmeta.c
+Copyright (C) <2014> Collabora Ltd.
+Copyright (C) 2015, Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/video/gstvideoaffinetransformationmeta.h
+Copyright (C) Collabora Ltd.
+Copyright (C) 2015, Matthew Waters <matthew@centricular.com>
+
+gst-libs/gst/video/gstvideoaggregator.c
+Copyright (C) 2004, 2008 Wim Taymans <wim@fluendo.com>
+Copyright (C) 2010 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst-libs/gst/video/gstvideoaggregator.h
+Copyright (C) 2008 Wim Taymans <wim@fluendo.com>
+Copyright (C) 2010 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst-libs/gst/video/gstvideocodecalphameta.c
+Copyright (C) 2021 Collabora Ltd.
+
+gst-libs/gst/video/gstvideocodecalphameta.h
+Copyright (C) 2021 Collabora Ltd.
+
+gst-libs/gst/video/gstvideodecoder.c
+Copyright (C) 2008 David Schleef <ds@schleef.org>
+Copyright (C) 2011 Mark Nauwelaerts <mark.nauwelaerts@collabora.co.uk>.
+Copyright (C) 2011 Nokia Corporation. All rights reserved.
+Copyright (C) 2012 Collabora Ltd.
+
+gst-libs/gst/video/gstvideodecoder.h
+Copyright (C) 2008 David Schleef <ds@schleef.org>
+Copyright (C) 2011 Mark Nauwelaerts <mark.nauwelaerts@collabora.co.uk>.
+Copyright (C) 2011 Nokia Corporation. All rights reserved.
+Copyright (C) 2012 Collabora Ltd.
+
+gst-libs/gst/video/gstvideodmabufpool.c
+Copyright (C) 2025 Collabora Ltd.
+
+gst-libs/gst/video/gstvideodmabufpool.h
+Copyright (C) 2025 Collabora Ltd.
+
+gst-libs/gst/video/gstvideoencoder.c
+Copyright (C) 2008 David Schleef <ds@schleef.org>
+Copyright (C) 2011 Mark Nauwelaerts <mark.nauwelaerts@collabora.co.uk>.
+Copyright (C) 2011 Nokia Corporation. All rights reserved.
+Copyright (C) 2012 Collabora Ltd.
+
+gst-libs/gst/video/gstvideoencoder.h
+Copyright (C) 2008 David Schleef <ds@schleef.org>
+Copyright (C) 2011 Mark Nauwelaerts <mark.nauwelaerts@collabora.co.uk>.
+Copyright (C) 2011 Nokia Corporation. All rights reserved.
+Copyright (C) 2012 Collabora Ltd.
+
+gst-libs/gst/video/gstvideofilter.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) <2003> David Schleef <ds@schleef.org>
+
+gst-libs/gst/video/gstvideofilter.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+gst-libs/gst/video/gstvideometa.c
+Copyright (C) <2011> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/video/gstvideometa.h
+Copyright (C) <2011> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/video/gstvideopool.c
+Copyright (C) <2011> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/video/gstvideopool.h
+Copyright (C) <2011> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/video/gstvideosink.c
+Copyright (C) <2003> Julien Moutte <julien@moutte.net>
+Copyright (C) <2009> Tim-Philipp Müller <tim centricular net>
+
+gst-libs/gst/video/gstvideosink.h
+Copyright (C) <2003> Julien Moutte <julien@moutte.net>
+Copyright (C) <2009> Tim-Philipp Müller <tim centricular net>
+
+gst-libs/gst/video/gstvideotimecode.c
+Copyright (C) <2016> Vivia Nikolaidou <vivia@toolsonair.com>
+
+gst-libs/gst/video/gstvideotimecode.h
+Copyright (C) <2016> Vivia Nikolaidou <vivia@toolsonair.com>
+
+gst-libs/gst/video/gstvideoutils.c
+Copyright (C) 2008 David Schleef <ds@schleef.org>
+Copyright (C) 2012 Collabora Ltd.
+
+gst-libs/gst/video/gstvideoutils.h
+Copyright (C) 2008 David Schleef <ds@schleef.org>
+Copyright (C) 2012 Collabora Ltd.
+
+gst-libs/gst/video/gstvideoutilsprivate.c
+Copyright (C) 2008 David Schleef <ds@schleef.org>
+Copyright (C) 2012 Collabora Ltd.
+
+gst-libs/gst/video/gstvideoutilsprivate.h
+Copyright (C) 2008 David Schleef <ds@schleef.org>
+Copyright (C) 2012 Collabora Ltd.
+
+gst-libs/gst/video/navigation.c
+Copyright (C) 2003 Ronald Bultje <rbultje@ronald.bitfreak.net>
+Copyright (C) 2007-2009 Jan Schmidt <thaytan@noraisin.net>
+
+gst-libs/gst/video/navigation.h
+Copyright (C) 2003 Ronald Bultje <rbultje@ronald.bitfreak.net>
+Copyright (C) 2003 David A. Schleef <ds@schleef.org>
+
+gst-libs/gst/video/video-anc.c
+Copyright (C) 2018 Edward Hervey <edward@centricular.com>
+Copyright (C) 2018 Sebastian Dröge <sebastian@centricular.com>
+
+gst-libs/gst/video/video-anc.h
+Copyright (C) <2018> Edward Hervey <edward@centricular.com>
+
+gst-libs/gst/video/video-blend.c
+Copyright (C) 2010 David Schleef <ds@schleef.org>
+Copyright (C) 2010 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+Copyright (C) <2011> Intel Corporation
+Copyright (C) <2011> Collabora Ltd.
+Copyright (C) <2011> Thibault Saunier <thibault.saunier@collabora.com>
+
+gst-libs/gst/video/video-blend.h
+Copyright (C) <2011> Intel Corporation
+Copyright (C) <2011> Collabora Ltd.
+Copyright (C) <2011> Thibault Saunier <thibault.saunier@collabora.com>
+
+gst-libs/gst/video/video-chroma.c
+Copyright (C) 2013 Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/video/video-chroma.h
+Copyright (C) <2013> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/video/video-color.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2007 David A. Schleef <ds@schleef.org>
+
+gst-libs/gst/video/video-color.h
+Copyright (C) <2011> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/video/video-converter.c
+Copyright (C) 2010 David Schleef <ds@schleef.org>
+Copyright (C) 2010 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst-libs/gst/video/video-converter.h
+Copyright (C) 2014 Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/video/video-dither.c
+Copyright (C) <2014> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/video/video-dither.h
+Copyright (C) <2014> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/video/video-event.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2007 David A. Schleef <ds@schleef.org>
+
+gst-libs/gst/video/video-event.h
+Copyright (C) <2011> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/video/video-format.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2007 David A. Schleef <ds@schleef.org>
+
+gst-libs/gst/video/video-format.h
+Copyright (C) <2011> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/video/video-frame.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2007 David A. Schleef <ds@schleef.org>
+
+gst-libs/gst/video/video-frame.h
+Copyright (C) <2011> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/video/video-hdr.c
+Copyright (C) <2018-2019> Seungha Yang <seungha.yang@navercorp.com>
+
+gst-libs/gst/video/video-hdr.h
+Copyright (C) <2018-2019> Seungha Yang <seungha.yang@navercorp.com>
+
+gst-libs/gst/video/video-info-dma.c
+Copyright (C) 2022 Intel Corporation
+
+gst-libs/gst/video/video-info-dma.h
+Copyright (C) 2022 Intel Corporation
+
+gst-libs/gst/video/video-info.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2007 David A. Schleef <ds@schleef.org>
+
+gst-libs/gst/video/video-info.h
+Copyright (C) <2011> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/video/video-multiview.c
+Copyright (C) <2015> Jan Schmidt <jan@centricular.com>
+
+gst-libs/gst/video/video-multiview.h
+Copyright (C) <2015> Jan Schmidt <jan@centricular.com>
+
+gst-libs/gst/video/video-overlay-composition.c
+Copyright (C) 2011 Intel Corporation
+Copyright (C) 2011 Collabora Ltd.
+Copyright (C) 2011 Tim-Philipp Müller <tim centricular net>
+
+gst-libs/gst/video/video-overlay-composition.h
+Copyright (C) 2011 Intel Corporation
+Copyright (C) 2011 Collabora Ltd.
+Copyright (C) 2011 Tim-Philipp Müller <tim centricular net>
+
+gst-libs/gst/video/video-prelude.h
+Copyright (C) 2018 GStreamer developers
+
+gst-libs/gst/video/video-resampler.c
+Copyright (C) <2014> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/video/video-resampler.h
+Copyright (C) <2014> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/video/video-scaler.c
+Copyright (C) <2014> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/video/video-scaler.h
+Copyright (C) <2014> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/video/video-sei.c
+Copyright (C) 2021 Fluendo S.A. <support@fluendo.com>
+
+gst-libs/gst/video/video-sei.h
+Copyright (C) <2021> Fluendo S.A. <contact@fluendo.com>
+
+gst-libs/gst/video/video-tile.c
+Copyright (C) <2013> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/video/video-tile.h
+Copyright (C) <2013> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/video/video.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2007 David A. Schleef <ds@schleef.org>
+
+gst-libs/gst/video/video.h
+Copyright (C) <2011> Wim Taymans <wim.taymans@gmail.com>
+
+gst-libs/gst/video/videodirection.c
+Copyright (C) 2016 Igalia <calvaris@igalia.com>
+
+gst-libs/gst/video/videodirection.h
+Copyright (C) 2016 Igalia <calvaris@igalia.com>
+
+gst-libs/gst/video/videoorientation.c
+Copyright (C) 2006 Nokia <stefan.kost@nokia.com>
+
+gst-libs/gst/video/videoorientation.h
+Copyright (C) 2006 Nokia <stefan.kost@nokia.com
+
+gst-libs/gst/video/videooverlay.c
+Copyright (C) 2003 Ronald Bultje <rbultje@ronald.bitfreak.net>
+Copyright (C) 2011 Tim-Philipp Müller <tim@centricular.net>
+
+gst-libs/gst/video/videooverlay.h
+Copyright (C) 2003 Ronald Bultje <rbultje@ronald.bitfreak.net>
+Copyright (C) 2003 Julien Moutte <julien@moutte.net>
+Copyright (C) 2011 Tim-Philipp Müller <tim@centricular.net>
