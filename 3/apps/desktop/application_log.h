@@ -5,7 +5,6 @@
 
 class BackgroundIoQueue;
 class QMenu;
-class QMenuBar;
 class QWidget;
 namespace vtrpon {
 class UiLanguageManager;
@@ -25,6 +24,6 @@ void writeApplicationLog(const QString &level, const QString &source,
 QStringList applicationLogSnapshot();
 QString applicationLogDirectory();
 QString applicationLogError();
-QMenu *installToolsMenu(QMenuBar *menuBar, QWidget *window,
-                        UiLanguageManager *languageManager, BackgroundIoQueue *fileIo = nullptr);
+void installLogViewer(QMenu *menu, QWidget *window,
+                      UiLanguageManager *languageManager, BackgroundIoQueue *fileIo = nullptr);
 } // namespace vtrpon

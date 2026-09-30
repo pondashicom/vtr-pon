@@ -808,6 +808,30 @@
         <source>Checking for Updates…</source>
         <translation>Checking for Updates…</translation>
     </message>
+    <message id="menu.help.about">
+        <source>About VTR-PON</source>
+        <translation>About VTR-PON</translation>
+    </message>
+    <message id="about.version">
+        <source>Version %1</source>
+        <translation>Version %1</translation>
+    </message>
+    <message id="about.license">
+        <source>License</source>
+        <translation>License</translation>
+    </message>
+    <message id="about.notices">
+        <source>Notices</source>
+        <translation>Notices</translation>
+    </message>
+    <message id="about.website">
+        <source>Official Website</source>
+        <translation>Official Website</translation>
+    </message>
+    <message id="about.open_failed">
+        <source>Could not open: %1</source>
+        <translation>Could not open: %1</translation>
+    </message>
     <message id="menu.view">
         <location filename="../language_text.cpp" line="1276"/>
         <source>&amp;View</source>

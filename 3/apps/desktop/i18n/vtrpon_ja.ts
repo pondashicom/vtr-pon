@@ -808,6 +808,30 @@
         <source>Checking for Updates…</source>
         <translation>更新を確認中…</translation>
     </message>
+    <message id="menu.help.about">
+        <source>About VTR-PON</source>
+        <translation>VTR-PONについて</translation>
+    </message>
+    <message id="about.version">
+        <source>Version %1</source>
+        <translation>バージョン %1</translation>
+    </message>
+    <message id="about.license">
+        <source>License</source>
+        <translation>ライセンス</translation>
+    </message>
+    <message id="about.notices">
+        <source>Notices</source>
+        <translation>通知</translation>
+    </message>
+    <message id="about.website">
+        <source>Official Website</source>
+        <translation>公式サイト</translation>
+    </message>
+    <message id="about.open_failed">
+        <source>Could not open: %1</source>
+        <translation>開けませんでした: %1</translation>
+    </message>
     <message id="menu.view">
         <location filename="../language_text.cpp" line="1276"/>
         <source>&amp;View</source>

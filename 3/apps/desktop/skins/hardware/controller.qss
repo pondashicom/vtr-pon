@@ -5,6 +5,76 @@ QDialog[itemEqWindow="true"] {
     background-color: #3d4143;
 }
 
+QDialog#aboutWindow {
+    background-color: #3d4143;
+}
+
+QWidget#aboutHero {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:1,
+                                stop:0 #26383d, stop:0.55 #17262b,
+                                stop:1 #0d171b);
+    border-top: 2px solid #697c80;
+    border-left: 2px solid #536a6f;
+    border-right: 2px solid #17292d;
+    border-bottom: 2px solid #101f23;
+    border-radius: 5px;
+}
+
+QWidget#aboutFooter {
+    background: #2a2e31;
+    border-top: 1px solid #697276;
+}
+
+QDialog#aboutWindow QLabel {
+    color: #e4e7e8;
+    background: transparent;
+    border: none;
+}
+
+QDialog#aboutWindow QLabel#aboutProductName {
+    color: #f0e8df;
+}
+
+QDialog#aboutWindow QLabel#aboutCopyright {
+    color: #aeb8b9;
+}
+
+QDialog#aboutWindow QLabel#aboutStatus {
+    color: #ffd398;
+}
+
+QPushButton[aboutLink="true"] {
+    color: #e4e7e8;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #667378, stop:0.18 #4b575b,
+                                stop:1 #232a2d);
+    border-top: 1px solid #879397;
+    border-left: 1px solid #737f83;
+    border-right: 1px solid #1c2326;
+    border-bottom: 1px solid #101416;
+    border-radius: 4px;
+    padding: 5px 13px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+QPushButton[aboutLink="true"]:hover {
+    color: #ffffff;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #7c898d, stop:1 #30383c);
+    border-top-color: #a0aaad;
+}
+
+QPushButton[aboutLink="true"]:pressed {
+    background: #20292d;
+    border-top-color: #283438;
+    border-left-color: #283438;
+}
+
+QPushButton[aboutLink="true"]:focus {
+    border: 2px solid #90caf9;
+}
+
 QDialog#operatorTimerSettingsDialog QLabel,
 QDialog#programMasterEqWindow QLabel,
 QDialog[itemEqWindow="true"] QLabel {

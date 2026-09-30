@@ -104,10 +104,14 @@ int main(int argc, char **argv) {
   }
   QWidget window;
   auto *menu = new QMenuBar(&window);
-  vtrpon::installToolsMenu(menu, &window, nullptr);
+  auto *helpMenu = menu->addMenu("Help");
+  vtrpon::installLogViewer(helpMenu, &window, nullptr);
   auto *show = menu->findChild<QAction *>("showLogAction");
   auto *debug = menu->findChild<QAction *>("debugModeAction");
-  check(show && debug, "Tools actions missing");
+  check(show && debug, "Help log actions missing");
+  check(helpMenu->actions().size() == 2 && helpMenu->actions()[0] == show &&
+            helpMenu->actions()[1] == debug,
+        "Help log actions out of order");
   if (show && debug) {
     debug->setChecked(true);
     check(vtrpon::diagnosticLogging(), "Debug did not enable");

@@ -783,6 +783,18 @@ constexpr auto kUiTextIds = std::to_array<const char *>({
     QT_TRID_NOOP("menu.help.check_updates"),
     //% "Checking for Updates…"
     QT_TRID_NOOP("menu.help.checking"),
+    //% "About VTR-PON"
+    QT_TRID_NOOP("menu.help.about"),
+    //% "Version %1"
+    QT_TRID_NOOP("about.version"),
+    //% "License"
+    QT_TRID_NOOP("about.license"),
+    //% "Notices"
+    QT_TRID_NOOP("about.notices"),
+    //% "Official Website"
+    QT_TRID_NOOP("about.website"),
+    //% "Could not open: %1"
+    QT_TRID_NOOP("about.open_failed"),
 
     //% "SYSTEM"
     QT_TRID_NOOP("info.source.system"),

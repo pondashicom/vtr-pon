@@ -15,7 +15,6 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QMenu>
-#include <QMenuBar>
 #include <QPlainTextEdit>
 #include <QPushButton>
 #include <QSaveFile>
@@ -26,10 +25,8 @@
 #include <memory>
 
 namespace vtrpon {
-QMenu *installToolsMenu(QMenuBar *menuBar, QWidget *window,
-                        UiLanguageManager *languageManager, BackgroundIoQueue *fileIo) {
-  auto *menu = menuBar->addMenu(QString());
-  menu->setObjectName("toolsMenu");
+void installLogViewer(QMenu *menu, QWidget *window,
+                      UiLanguageManager *languageManager, BackgroundIoQueue *fileIo) {
   auto *show = menu->addAction(QString());
   show->setObjectName("showLogAction");
   auto *debug = menu->addAction(QString());
@@ -155,7 +152,6 @@ QMenu *installToolsMenu(QMenuBar *menuBar, QWidget *window,
     })) save->setEnabled(true);
   });
   const auto translate = [=] {
-    menu->setTitle(uiText("menu.tools"));
     show->setText(uiText("logs.show"));
     debug->setText(uiText("logs.debug"));
     viewer->setWindowTitle(uiText("logs.show"));
@@ -171,6 +167,5 @@ QMenu *installToolsMenu(QMenuBar *menuBar, QWidget *window,
   if (languageManager)
     QObject::connect(languageManager, &UiLanguageManager::languageChanged,
                      viewer, translate);
-  return menu;
 }
 } // namespace vtrpon

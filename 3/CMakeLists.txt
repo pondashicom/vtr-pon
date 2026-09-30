@@ -160,6 +160,8 @@ if(WIN32)
 endif()
 
 qt_add_executable(vtr-pon WIN32
+  apps/desktop/about_window.cpp
+  apps/desktop/about_window.h
   apps/desktop/controller_window_scaling.cpp
   apps/desktop/controller_window_scaling.h
   apps/desktop/application_log.cpp

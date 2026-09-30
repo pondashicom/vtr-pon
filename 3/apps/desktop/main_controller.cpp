@@ -6,6 +6,7 @@
 #include "macro_runner.h"
 #include "vst_service.h"
 #include "application_log.h"
+#include "about_window.h"
 #include "application_shutdown_deadline.h"
 #include "background_io_queue.h"
 #include "media_thumbnailer.h"
@@ -288,21 +289,23 @@ public:
           vtrpon::LocalizedText{"operator_monitor.unavailable"});
     });
     retranslateUi();
-    auto *toolsMenu =
-        vtrpon::installToolsMenu(menuBar, controlWindow, languageManager_, fileIo_);
+    toolsMenu_ = menuBar->addMenu(QString());
+    toolsMenu_->setObjectName(QStringLiteral("toolsMenu"));
+    auto *toolsMenu = toolsMenu_;
     initializeMacros();
-    toolsMenu->addSeparator();
     operatorTimerSettingsAction_ = toolsMenu->addAction(vtrpon::uiText("operator_timer.settings"));
     operatorTimerSettingsAction_->setObjectName(QStringLiteral("operatorTimerSettingsAction"));
-    const auto updateTimerSettingsVisibility = [this](const QJsonObject &state) {
-      operatorTimerSettingsAction_->setVisible(state.value(QStringLiteral("enabled")).toBool());
+    auto *operatorTimerSeparator = toolsMenu->addSeparator();
+    const auto updateTimerSettingsVisibility = [this, operatorTimerSeparator](const QJsonObject &state) {
+      const bool visible = state.value(QStringLiteral("enabled")).toBool();
+      operatorTimerSettingsAction_->setVisible(visible);
+      operatorTimerSeparator->setVisible(visible);
     };
     connect(viewMenuController_, &vtrpon::ViewMenuController::operatorTimerChanged,
             this, updateTimerSettingsVisibility);
     updateTimerSettingsVisibility(viewMenuController_->operatorTimerPresentation());
     connect(operatorTimerSettingsAction_, &QAction::triggered,
             this, [this] { (void)operations_->executeFrom("Menu", ControllerOperations::Action::OperatorTimerSettings); });
-    toolsMenu->addSeparator();
     testPatternMenu_ = toolsMenu->addMenu(vtrpon::uiText("menu.tools.test_pattern"));
     testPatternMenu_->setObjectName(QStringLiteral("testPatternMenu"));
     rebuildTestPatternMenu();
@@ -342,12 +345,22 @@ public:
 
     helpMenu_ = menuBar->addMenu(QString());
     helpMenu_->setObjectName(QStringLiteral("helpMenu"));
+    vtrpon::installLogViewer(helpMenu_, controlWindow, languageManager_, fileIo_);
     checkUpdatesAction_ = helpMenu_->addAction(QString());
     checkUpdatesAction_->setObjectName(QStringLiteral("checkUpdatesAction"));
     connect(checkUpdatesAction_, &QAction::triggered, this, [this] {
       checkUpdatesAction_->setEnabled(false);
       checkUpdatesAction_->setText(vtrpon::uiText("menu.help.checking"));
       updateChecker_->check(true);
+    });
+    aboutAction_ = helpMenu_->addAction(QString());
+    aboutAction_->setObjectName(QStringLiteral("aboutAction"));
+    connect(aboutAction_, &QAction::triggered, this, [this] {
+      if (!aboutWindow_) aboutWindow_ = new vtrpon::AboutWindow(controlWindow_);
+      aboutWindow_->retranslate();
+      aboutWindow_->show();
+      aboutWindow_->raise();
+      aboutWindow_->activateWindow();
     });
     updateChecker_ = new vtrpon::UpdateChecker(
         QCoreApplication::applicationVersion(),
@@ -994,7 +1007,10 @@ private:
       return;
     }
     fileMenu_->setTitle(vtrpon::uiText("menu.file"));
+    if (toolsMenu_) toolsMenu_->setTitle(vtrpon::uiText("menu.tools"));
     if (helpMenu_) helpMenu_->setTitle(vtrpon::uiText("menu.help"));
+    if (aboutAction_) aboutAction_->setText(vtrpon::uiText("menu.help.about"));
+    if (aboutWindow_) aboutWindow_->retranslate();
     if (checkUpdatesAction_)
       checkUpdatesAction_->setText(vtrpon::uiText(
           checkUpdatesAction_->isEnabled() ? "menu.help.check_updates"
@@ -2122,8 +2138,11 @@ private:
   bool closeReady_ = false;
   vtrpon::UiLanguageManager *languageManager_ = nullptr;
   QMenu *fileMenu_ = nullptr;
+  QMenu *toolsMenu_ = nullptr;
   QMenu *helpMenu_ = nullptr;
   QAction *checkUpdatesAction_ = nullptr;
+  QAction *aboutAction_ = nullptr;
+  QPointer<vtrpon::AboutWindow> aboutWindow_;
   vtrpon::UpdateChecker *updateChecker_ = nullptr;
   QPointer<vtrpon::UpdateWindow> updateWindow_;
   std::optional<std::pair<vtrpon::UpdateCheckStatus,

@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width">
-<title>VTR-PON — ライセンスとソースコード</title>
+<title>VTR-PON - ライセンスとソースコード</title>
 <style>body{font:16px/1.6 system-ui,sans-serif;max-width:1000px;margin:40px auto;padding:0 20px;color:#222}a{color:#165ca1}h2{margin-top:2em}li{margin:.3em 0}code{overflow-wrap:anywhere}details{margin:12px 0;border:1px solid #ddd;padding:10px}summary{cursor:pointer}</style>
 <h1>VTR-PON のライセンスとソースコード</h1>
 <p>Copyright (c) 2026 Tetsu Suzuki</p>
@@ -8,7 +8,7 @@
 <li>同梱の自作テストパターン: <a href="CC0-1.0.txt">CC0-1.0</a></li></ul>
 <p>適用範囲は <a href="README.md">README</a>、第三者コードの範囲は <a href="THIRD-PARTY-NOTICES.md">第三者通知</a> を参照してください。</p>
 <p>Qt、GStreamer 等の共有ライブラリを使用します。互換の改変版への交換、およびその改変のデバッグに必要なリバースエンジニアリングを VTR-PON の条件で制限しません。アプリを終了してから、Qt は EXE 横と各プラグインディレクトリ、GStreamer は gstreamer/bin と gstreamer/lib/gstreamer-1.0 の DLL を交換してください。</p>
-<p>This software uses libraries from the FFmpeg project under the LGPLv2.1 or later. This software is based in part on the work of the Independent JPEG Group. Parts of this software are copyright © The FreeType Project (www.freetype.org). All rights reserved.</p>
+<p>This software uses libraries from the FFmpeg project under the LGPLv2.1 or later. This software is based in part on the work of the Independent JPEG Group. Parts of this software are copyright (c) The FreeType Project (www.freetype.org). All rights reserved.</p>
 <h2>ソースコード</h2>
 <p>ソースはインストーラーとは別に取得できます。<a href="THIRD-PARTY-SOURCES.md">版ごとのソースと修正の案内</a>。本体の公開ソースと公開コミットは、この開発候補ではまだ確定していません。</p>
 <details><summary>bzip2 1.0.8</summary><a href="https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz">bzip2-1.0.8.tar.gz</a><br>SHA-256: <code>ab5a03176ee106d3f0fa90e381da478ddae405918153cca248e682cd0c4a2269</code></details>
@@ -39,7 +39,7 @@
 <details><summary>qtwebengine 6.8.3</summary><a href="https://download.qt.io/archive/qt/6.8/6.8.3/submodules/qtwebengine-everywhere-src-6.8.3.tar.xz">qtwebengine-everywhere-src-6.8.3.tar.xz</a><br>SHA-256: <code>df4e19ba2b3a540551b6f998d62597377ffa688c1cff564589b7da2e2bf87337</code></details>
 <details><summary>zlib 1.3.1</summary><a href="https://zlib.net/fossils/zlib-1.3.1.tar.gz">zlib-1.3.1.tar.gz</a><br>SHA-256: <code>9a93b2b7dfdac77ceba5a558a580e74667dd6fede4585b91eefb60f03b72df23</code></details>
 <h2>第三者の著作権表示・許諾原文</h2>
-<details><summary>qtbase 6.8.3 — LGPL-3.0-only</summary><ul>
+<details><summary>qtbase 6.8.3 - LGPL-3.0-only</summary><ul>
 <li><a href="third-party/qt/ATTRIBUTIONS.md">third-party/qt/ATTRIBUTIONS.md</a></li>
 <li><a href="third-party/qt/BSD-3-Clause.txt">third-party/qt/BSD-3-Clause.txt</a></li>
 <li><a href="third-party/qt/GPL-3.0-only.txt">third-party/qt/GPL-3.0-only.txt</a></li>
@@ -133,7 +133,7 @@
 <li><a href="third-party/qt/zlib/LICENSE">third-party/qt/zlib/LICENSE</a></li>
 <li><a href="third-party/qt/zlib/attribution.json">third-party/qt/zlib/attribution.json</a></li>
 </ul></details>
-<details><summary>qtsvg 6.8.3 — LGPL-3.0-only</summary><ul>
+<details><summary>qtsvg 6.8.3 - LGPL-3.0-only</summary><ul>
 <li><a href="third-party/qt/ATTRIBUTIONS.md">third-party/qt/ATTRIBUTIONS.md</a></li>
 <li><a href="third-party/qt/BSD-3-Clause.txt">third-party/qt/BSD-3-Clause.txt</a></li>
 <li><a href="third-party/qt/GPL-3.0-only.txt">third-party/qt/GPL-3.0-only.txt</a></li>
@@ -227,7 +227,7 @@
 <li><a href="third-party/qt/zlib/LICENSE">third-party/qt/zlib/LICENSE</a></li>
 <li><a href="third-party/qt/zlib/attribution.json">third-party/qt/zlib/attribution.json</a></li>
 </ul></details>
-<details><summary>qtwebengine 6.8.3 — LGPL-3.0-only</summary><ul>
+<details><summary>qtwebengine 6.8.3 - LGPL-3.0-only</summary><ul>
 <li><a href="third-party/qt/ATTRIBUTIONS.md">third-party/qt/ATTRIBUTIONS.md</a></li>
 <li><a href="third-party/qt/BSD-3-Clause.txt">third-party/qt/BSD-3-Clause.txt</a></li>
 <li><a href="third-party/qt/GPL-3.0-only.txt">third-party/qt/GPL-3.0-only.txt</a></li>
@@ -331,7 +331,7 @@
 <li><a href="third-party/qtpdf/the-chromium-project.txt">third-party/qtpdf/the-chromium-project.txt</a></li>
 <li><a href="third-party/qtpdf/zlib.txt">third-party/qtpdf/zlib.txt</a></li>
 </ul></details>
-<details><summary>gstreamer 1.28.5 — LGPL-2.1-or-later</summary><ul>
+<details><summary>gstreamer 1.28.5 - LGPL-2.1-or-later</summary><ul>
 <li><a href="third-party/gstreamer-distribution/gst-plugins-bad-1.0/LGPL-2.0-or-later.txt">third-party/gstreamer-distribution/gst-plugins-bad-1.0/LGPL-2.0-or-later.txt</a></li>
 <li><a href="third-party/gstreamer-distribution/gst-plugins-bad-1.0/README-LICENSE-INFO.txt">third-party/gstreamer-distribution/gst-plugins-bad-1.0/README-LICENSE-INFO.txt</a></li>
 <li><a href="third-party/gstreamer-distribution/gst-plugins-base-1.0/LGPL-2.0-or-later.txt">third-party/gstreamer-distribution/gst-plugins-base-1.0/LGPL-2.0-or-later.txt</a></li>
@@ -341,7 +341,7 @@
 <li><a href="third-party/gstreamer/COPYING">third-party/gstreamer/COPYING</a></li>
 <li><a href="third-party/gstreamer/COPYRIGHT-NOTICES.txt">third-party/gstreamer/COPYRIGHT-NOTICES.txt</a></li>
 </ul></details>
-<details><summary>gst-plugins-base 1.28.5 — LGPL-2.1-or-later</summary><ul>
+<details><summary>gst-plugins-base 1.28.5 - LGPL-2.1-or-later</summary><ul>
 <li><a href="third-party/gst-plugins-base/COPYING">third-party/gst-plugins-base/COPYING</a></li>
 <li><a href="third-party/gst-plugins-base/COPYRIGHT-NOTICES.txt">third-party/gst-plugins-base/COPYRIGHT-NOTICES.txt</a></li>
 <li><a href="third-party/gstreamer-distribution/gst-plugins-bad-1.0/LGPL-2.0-or-later.txt">third-party/gstreamer-distribution/gst-plugins-bad-1.0/LGPL-2.0-or-later.txt</a></li>
@@ -351,7 +351,7 @@
 <li><a href="third-party/gstreamer-distribution/gstreamer-1.0/LGPL-2.0-or-later.txt">third-party/gstreamer-distribution/gstreamer-1.0/LGPL-2.0-or-later.txt</a></li>
 <li><a href="third-party/gstreamer-distribution/gstreamer-1.0/README-LICENSE-INFO.txt">third-party/gstreamer-distribution/gstreamer-1.0/README-LICENSE-INFO.txt</a></li>
 </ul></details>
-<details><summary>gst-plugins-good 1.28.5 — LGPL-2.1-or-later</summary><ul>
+<details><summary>gst-plugins-good 1.28.5 - LGPL-2.1-or-later</summary><ul>
 <li><a href="third-party/gst-plugins-good/COPYING">third-party/gst-plugins-good/COPYING</a></li>
 <li><a href="third-party/gst-plugins-good/COPYRIGHT-NOTICES.txt">third-party/gst-plugins-good/COPYRIGHT-NOTICES.txt</a></li>
 <li><a href="third-party/gstreamer-distribution/gst-plugins-bad-1.0/LGPL-2.0-or-later.txt">third-party/gstreamer-distribution/gst-plugins-bad-1.0/LGPL-2.0-or-later.txt</a></li>
@@ -361,7 +361,7 @@
 <li><a href="third-party/gstreamer-distribution/gstreamer-1.0/LGPL-2.0-or-later.txt">third-party/gstreamer-distribution/gstreamer-1.0/LGPL-2.0-or-later.txt</a></li>
 <li><a href="third-party/gstreamer-distribution/gstreamer-1.0/README-LICENSE-INFO.txt">third-party/gstreamer-distribution/gstreamer-1.0/README-LICENSE-INFO.txt</a></li>
 </ul></details>
-<details><summary>gst-plugins-bad 1.28.5 — LGPL-2.1-or-later</summary><ul>
+<details><summary>gst-plugins-bad 1.28.5 - LGPL-2.1-or-later</summary><ul>
 <li><a href="third-party/gst-plugins-bad/COPYING">third-party/gst-plugins-bad/COPYING</a></li>
 <li><a href="third-party/gst-plugins-bad/COPYRIGHT-NOTICES.txt">third-party/gst-plugins-bad/COPYRIGHT-NOTICES.txt</a></li>
 <li><a href="third-party/gst-plugins-bad/gst-libs/gst/codecparsers/dboolhuff.AUTHORS">third-party/gst-plugins-bad/gst-libs/gst/codecparsers/dboolhuff.AUTHORS</a></li>
@@ -373,7 +373,7 @@
 <li><a href="third-party/gstreamer-distribution/gstreamer-1.0/LGPL-2.0-or-later.txt">third-party/gstreamer-distribution/gstreamer-1.0/LGPL-2.0-or-later.txt</a></li>
 <li><a href="third-party/gstreamer-distribution/gstreamer-1.0/README-LICENSE-INFO.txt">third-party/gstreamer-distribution/gstreamer-1.0/README-LICENSE-INFO.txt</a></li>
 </ul></details>
-<details><summary>gst-libav 1.28.5 — LGPL-2.1-or-later</summary><ul>
+<details><summary>gst-libav 1.28.5 - LGPL-2.1-or-later</summary><ul>
 <li><a href="third-party/gst-libav/COPYING">third-party/gst-libav/COPYING</a></li>
 <li><a href="third-party/gst-libav/COPYRIGHT-NOTICES.txt">third-party/gst-libav/COPYRIGHT-NOTICES.txt</a></li>
 <li><a href="third-party/gstreamer-distribution/gst-plugins-bad-1.0/LGPL-2.0-or-later.txt">third-party/gstreamer-distribution/gst-plugins-bad-1.0/LGPL-2.0-or-later.txt</a></li>
@@ -383,91 +383,91 @@
 <li><a href="third-party/gstreamer-distribution/gstreamer-1.0/LGPL-2.0-or-later.txt">third-party/gstreamer-distribution/gstreamer-1.0/LGPL-2.0-or-later.txt</a></li>
 <li><a href="third-party/gstreamer-distribution/gstreamer-1.0/README-LICENSE-INFO.txt">third-party/gstreamer-distribution/gstreamer-1.0/README-LICENSE-INFO.txt</a></li>
 </ul></details>
-<details><summary>bzip2 1.0.8 — bzip2-1.0.6</summary><ul>
+<details><summary>bzip2 1.0.8 - bzip2-1.0.6</summary><ul>
 <li><a href="third-party/bzip2/LICENSE">third-party/bzip2/LICENSE</a></li>
 </ul></details>
-<details><summary>ffmpeg 7.1 — LGPL-2.1-or-later</summary><ul>
+<details><summary>ffmpeg 7.1 - LGPL-2.1-or-later</summary><ul>
 <li><a href="third-party/ffmpeg/COPYING.LGPLv2.1">third-party/ffmpeg/COPYING.LGPLv2.1</a></li>
 <li><a href="third-party/ffmpeg/COPYRIGHT-NOTICES.txt">third-party/ffmpeg/COPYRIGHT-NOTICES.txt</a></li>
 <li><a href="third-party/ffmpeg/LICENSE.md">third-party/ffmpeg/LICENSE.md</a></li>
 <li><a href="third-party/ffmpeg/doc/authors.texi">third-party/ffmpeg/doc/authors.texi</a></li>
 </ul></details>
-<details><summary>glib 2.82.4 — LGPL-2.1-or-later</summary><ul>
+<details><summary>glib 2.82.4 - LGPL-2.1-or-later</summary><ul>
 <li><a href="third-party/glib/COPYRIGHT-NOTICES.txt">third-party/glib/COPYRIGHT-NOTICES.txt</a></li>
 <li><a href="third-party/glib/LICENSES/LGPL-2.1-or-later.txt">third-party/glib/LICENSES/LGPL-2.1-or-later.txt</a></li>
 <li><a href="third-party/glib/docs/reference/AUTHORS">third-party/glib/docs/reference/AUTHORS</a></li>
 <li><a href="third-party/glib/subprojects/gvdb/COPYING">third-party/glib/subprojects/gvdb/COPYING</a></li>
 </ul></details>
-<details><summary>libffi 3.2.9999.5 — MIT</summary><ul>
+<details><summary>libffi 3.2.9999.5 - MIT</summary><ul>
 <li><a href="third-party/libffi/LICENSE">third-party/libffi/LICENSE</a></li>
 </ul></details>
-<details><summary>proxy-libintl 0.5 — LGPL-2.1-or-later</summary><ul>
+<details><summary>proxy-libintl 0.5 - LGPL-2.1-or-later</summary><ul>
 <li><a href="third-party/proxy-libintl/COPYING">third-party/proxy-libintl/COPYING</a></li>
 <li><a href="third-party/proxy-libintl/COPYRIGHT-NOTICES.txt">third-party/proxy-libintl/COPYRIGHT-NOTICES.txt</a></li>
 </ul></details>
-<details><summary>libjpeg-turbo 3.1.0 — IJG AND BSD-3-Clause AND Zlib</summary><ul>
+<details><summary>libjpeg-turbo 3.1.0 - IJG AND BSD-3-Clause AND Zlib</summary><ul>
 <li><a href="third-party/libjpeg-turbo/LICENSE.md">third-party/libjpeg-turbo/LICENSE.md</a></li>
 <li><a href="third-party/libjpeg-turbo/README.ijg">third-party/libjpeg-turbo/README.ijg</a></li>
 </ul></details>
-<details><summary>libogg 1.3.5 — BSD-3-Clause</summary><ul>
+<details><summary>libogg 1.3.5 - BSD-3-Clause</summary><ul>
 <li><a href="third-party/libogg/AUTHORS">third-party/libogg/AUTHORS</a></li>
 <li><a href="third-party/libogg/COPYING">third-party/libogg/COPYING</a></li>
 </ul></details>
-<details><summary>libpng 1.6.56 — libpng-2.0</summary><ul>
+<details><summary>libpng 1.6.56 - libpng-2.0</summary><ul>
 <li><a href="third-party/libpng/AUTHORS">third-party/libpng/AUTHORS</a></li>
 <li><a href="third-party/libpng/LICENSE">third-party/libpng/LICENSE</a></li>
 </ul></details>
-<details><summary>libvorbis 1.3.7 — BSD-3-Clause</summary><ul>
+<details><summary>libvorbis 1.3.7 - BSD-3-Clause</summary><ul>
 <li><a href="third-party/libvorbis/AUTHORS">third-party/libvorbis/AUTHORS</a></li>
 <li><a href="third-party/libvorbis/COPYING">third-party/libvorbis/COPYING</a></li>
 </ul></details>
-<details><summary>mpg123 1.32.7 — LGPL-2.1-or-later</summary><ul>
+<details><summary>mpg123 1.32.7 - LGPL-2.1-or-later</summary><ul>
 <li><a href="third-party/mpg123/AUTHORS">third-party/mpg123/AUTHORS</a></li>
 <li><a href="third-party/mpg123/COPYING">third-party/mpg123/COPYING</a></li>
 </ul></details>
-<details><summary>openh264 2.6.0 — BSD-2-Clause</summary><ul>
+<details><summary>openh264 2.6.0 - BSD-2-Clause</summary><ul>
 <li><a href="third-party/openh264/LICENSE">third-party/openh264/LICENSE</a></li>
 </ul></details>
-<details><summary>opus 1.5.2 — BSD-3-Clause</summary><ul>
+<details><summary>opus 1.5.2 - BSD-3-Clause</summary><ul>
 <li><a href="third-party/opus/AUTHORS">third-party/opus/AUTHORS</a></li>
 <li><a href="third-party/opus/COPYING">third-party/opus/COPYING</a></li>
 </ul></details>
-<details><summary>orc 0.4.42 — BSD-2-Clause AND BSD-3-Clause</summary><ul>
+<details><summary>orc 0.4.42 - BSD-2-Clause AND BSD-3-Clause</summary><ul>
 <li><a href="third-party/orc/COPYING">third-party/orc/COPYING</a></li>
 </ul></details>
-<details><summary>pcre2 10.42 — BSD-3-Clause WITH PCRE2-exception</summary><ul>
+<details><summary>pcre2 10.42 - BSD-3-Clause WITH PCRE2-exception</summary><ul>
 <li><a href="third-party/pcre2/AUTHORS">third-party/pcre2/AUTHORS</a></li>
 <li><a href="third-party/pcre2/COPYING">third-party/pcre2/COPYING</a></li>
 <li><a href="third-party/pcre2/LICENCE">third-party/pcre2/LICENCE</a></li>
 </ul></details>
-<details><summary>zlib 1.3.1 — Zlib</summary><ul>
+<details><summary>zlib 1.3.1 - Zlib</summary><ul>
 <li><a href="third-party/zlib/LICENSE">third-party/zlib/LICENSE</a></li>
 </ul></details>
-<details><summary>flac 1.4.3 — BSD-3-Clause</summary><ul>
+<details><summary>flac 1.4.3 - BSD-3-Clause</summary><ul>
 <li><a href="third-party/flac/AUTHORS">third-party/flac/AUTHORS</a></li>
 <li><a href="third-party/flac/COPYING.Xiph">third-party/flac/COPYING.Xiph</a></li>
 </ul></details>
-<details><summary>mesa 11.2.2 / LLVM 3.6.2 — MIT AND NCSA</summary><ul>
+<details><summary>mesa 11.2.2 / LLVM 3.6.2 - MIT AND NCSA</summary><ul>
 <li><a href="third-party/llvm/LICENSE.TXT">third-party/llvm/LICENSE.TXT</a></li>
 <li><a href="third-party/llvm/include/llvm/Support/LICENSE.TXT">third-party/llvm/include/llvm/Support/LICENSE.TXT</a></li>
 <li><a href="third-party/llvm/lib/Support/COPYRIGHT.regex">third-party/llvm/lib/Support/COPYRIGHT.regex</a></li>
 <li><a href="third-party/mesa/NOTICE-HEADERS.txt">third-party/mesa/NOTICE-HEADERS.txt</a></li>
 <li><a href="third-party/mesa/docs/license.html">third-party/mesa/docs/license.html</a></li>
 </ul></details>
-<details><summary>msvc 14.42.34438.0 — Microsoft Visual Studio redistribution terms</summary><ul>
+<details><summary>msvc 14.42.34438.0 - Microsoft Visual Studio redistribution terms</summary><ul>
 <li><a href="third-party/microsoft/Visual-Studio-2022-Community-License-EN.docx">third-party/microsoft/Visual-Studio-2022-Community-License-EN.docx</a></li>
 </ul></details>
-<details><summary>d3dcompiler 6.3.9600.16384 — Microsoft Windows 8.1 SDK redistribution terms</summary><ul>
+<details><summary>d3dcompiler 6.3.9600.16384 - Microsoft Windows 8.1 SDK redistribution terms</summary><ul>
 <li><a href="third-party/microsoft/DirectXShaderCompiler-NOTICES.txt">third-party/microsoft/DirectXShaderCompiler-NOTICES.txt</a></li>
 <li><a href="third-party/microsoft/Windows 8.1 SDK License.rtf">third-party/microsoft/Windows 8.1 SDK License.rtf</a></li>
 <li><a href="third-party/microsoft/Windows-10-SDK-license.rtf">third-party/microsoft/Windows-10-SDK-license.rtf</a></li>
 </ul></details>
-<details><summary>dxc dxcompiler 1.7.2308.16 / dxil 101.7.2308.24 — Microsoft Windows SDK redistribution terms; included LLVM/MIT notices</summary><ul>
+<details><summary>dxc dxcompiler 1.7.2308.16 / dxil 101.7.2308.24 - Microsoft Windows SDK redistribution terms; included LLVM/MIT notices</summary><ul>
 <li><a href="third-party/microsoft/DirectXShaderCompiler-NOTICES.txt">third-party/microsoft/DirectXShaderCompiler-NOTICES.txt</a></li>
 <li><a href="third-party/microsoft/Windows 8.1 SDK License.rtf">third-party/microsoft/Windows 8.1 SDK License.rtf</a></li>
 <li><a href="third-party/microsoft/Windows-10-SDK-license.rtf">third-party/microsoft/Windows-10-SDK-license.rtf</a></li>
 </ul></details>
-<details><summary>inno-setup 6.7.3 — Inno Setup License</summary><ul>
+<details><summary>inno-setup 6.7.3 - Inno Setup License</summary><ul>
 <li><a href="third-party/inno-setup/LICENSE.txt">third-party/inno-setup/LICENSE.txt</a></li>
 </ul></details>
 </html>
