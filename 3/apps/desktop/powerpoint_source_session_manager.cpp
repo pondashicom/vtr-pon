@@ -2467,14 +2467,18 @@ QString validatePowerPointSource(const QString &filePath) {
   if (!fileError.isEmpty()) {
     return fileError;
   }
-  CLSID classId{};
-  const HRESULT result =
-      CLSIDFromProgID(L"PowerPoint.Application", &classId);
-  if (FAILED(result)) {
+  if (!powerPointComRegistered()) {
     return QStringLiteral(
         "Microsoft PowerPoint is not installed or its COM registration is unavailable.");
   }
   return {};
+}
+
+bool powerPointComRegistered() {
+  CLSID classId{};
+  const HRESULT result =
+      CLSIDFromProgID(L"PowerPoint.Application", &classId);
+  return SUCCEEDED(result);
 }
 
 QImage generatePowerPointThumbnail(const QString &filePath,

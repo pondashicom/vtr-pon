@@ -102,6 +102,7 @@ bool isPowerPointInteropInProgressOnCurrentThread();
 bool isPowerPointNativeSourceActiveError(const QString &errorDetail);
 
 QString validatePowerPointSource(const QString &filePath);
+bool powerPointComRegistered();
 
 PowerPointSlideExportResult exportPowerPointSlides(
     const QString &filePath, const QString &outputDirectory,

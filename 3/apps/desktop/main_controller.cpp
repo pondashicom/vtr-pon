@@ -176,6 +176,7 @@ public:
     documentImports_ = new DocumentImportQueue(
         playlistModel_, programController_, userInfoCenter_, fileIo_, this);
 #ifdef _WIN32
+    powerPointComRegistered_ = powerPointComRegistered();
     connect(documentImports_, &DocumentImportQueue::powerPointSettingsRemembered,
             this, [this](const PowerPointAddSettings &settings) {
       rememberedPowerPointAddSettings_ = settings;
@@ -959,7 +960,7 @@ private:
         const auto paths = QFileDialog::getOpenFileNames(macroEditor_,
             vtrpon::uiText("file_dialog.add_files.title"),
             vtrpon::makeControllerSettings().value("fileDialog/lastMediaDirectory").toString(),
-            vtrpon::uiText("file_dialog.media.filter"));
+            playlistMediaFileFilter());
         if (!paths.isEmpty() && !macroRunner_->isActive()) registerPlaylistPathsImpl(paths, true, playlist);
       });
     }
@@ -1637,10 +1638,18 @@ private:
     const QStringList paths = QFileDialog::getOpenFileNames(
         controlWindow_, vtrpon::uiText("file_dialog.add_files.title"),
         initialDirectory,
-        vtrpon::uiText("file_dialog.media.filter"));
+        playlistMediaFileFilter());
     if (!paths.isEmpty()) {
       registerPlaylistPaths(paths);
     }
+  }
+
+  QString playlistMediaFileFilter() const {
+#ifdef _WIN32
+    if (powerPointComRegistered_)
+      return vtrpon::uiText("file_dialog.media.filter");
+#endif
+    return vtrpon::uiText("file_dialog.media.filter_without_powerpoint");
   }
 
   void exportPlaylist() {
@@ -2200,6 +2209,7 @@ private:
   std::unique_ptr<ControllerShortcuts> shortcuts_;
   std::optional<ImageAddSettings> rememberedImageAddSettings_ = std::nullopt;
 #ifdef _WIN32
+  bool powerPointComRegistered_ = false;
   std::optional<PowerPointAddSettings> rememberedPowerPointAddSettings_;
   std::optional<PdfAddSettings> rememberedPdfAddSettings_;
 #endif

@@ -847,6 +847,8 @@ constexpr auto kUiTextIds = std::to_array<const char *>({
     QT_TRID_NOOP("file_dialog.add_files.title"),
     //% "Media Files (*.mp4 *.mov *.webm *.mkv *.avi *.mxf *.wav *.mp3 *.flac *.m4a *.aac *.png *.jpg *.jpeg *.bmp *.tif *.tiff *.webp *.gif *.pptx *.pdf);;PowerPoint Files (*.pptx);;PDF Files (*.pdf);;All Files (*.*)"
     QT_TRID_NOOP("file_dialog.media.filter"),
+    //% "Media Files (*.mp4 *.mov *.webm *.mkv *.avi *.mxf *.wav *.mp3 *.flac *.m4a *.aac *.png *.jpg *.jpeg *.bmp *.tif *.tiff *.webp *.gif *.pdf);;PDF Files (*.pdf)"
+    QT_TRID_NOOP("file_dialog.media.filter_without_powerpoint"),
     //% "Export Playlist"
     QT_TRID_NOOP("file_dialog.export_playlist.title"),
     //% "Import Playlist"

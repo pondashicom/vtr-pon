@@ -982,6 +982,10 @@
         <oldsource>Media Files (*.mp4 *.mov *.webm *.mkv *.avi *.mxf *.wav *.mp3 *.flac *.m4a *.aac *.png *.jpg *.jpeg *.bmp *.tif *.tiff *.webp *.gif *.pptx);;PowerPoint Files (*.pptx);;All Files (*.*)</oldsource>
         <translation>Media Files (*.mp4 *.mov *.webm *.mkv *.avi *.mxf *.wav *.mp3 *.flac *.m4a *.aac *.png *.jpg *.jpeg *.bmp *.tif *.tiff *.webp *.gif *.pptx *.pdf);;PowerPoint Files (*.pptx);;PDF Files (*.pdf);;All Files (*.*)</translation>
     </message>
+    <message id="file_dialog.media.filter_without_powerpoint">
+        <source>Media Files (*.mp4 *.mov *.webm *.mkv *.avi *.mxf *.wav *.mp3 *.flac *.m4a *.aac *.png *.jpg *.jpeg *.bmp *.tif *.tiff *.webp *.gif *.pdf);;PDF Files (*.pdf)</source>
+        <translation>Media Files (*.mp4 *.mov *.webm *.mkv *.avi *.mxf *.wav *.mp3 *.flac *.m4a *.aac *.png *.jpg *.jpeg *.bmp *.tif *.tiff *.webp *.gif *.pdf);;PDF Files (*.pdf)</translation>
+    </message>
     <message id="file_dialog.export_playlist.title">
         <location filename="../language_text.cpp" line="109"/>
         <source>Export Playlist</source>
