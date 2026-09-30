@@ -66,6 +66,8 @@ const QString kPlaylistEditActivationModeKey =
     QStringLiteral("playlist/editActivationMode");
 const QString kAutoSelectNextItemAfterOnAirKey =
     QStringLiteral("playlist/autoSelectNextItemAfterOnAir");
+const QString kPreferAudioAlbumArtKey =
+    QStringLiteral("playlist/preferAudioAlbumArt");
 const QString kAllowSameItemOnAirRetakeKey =
     QStringLiteral("onAir/allowSameItemRetake");
 const QString kShowPlaybackRateControlsKey =
@@ -188,13 +190,19 @@ bool loadAutoSelectNextItemAfterOnAir(const QSettings &settings) {
   return settings.value(kAutoSelectNextItemAfterOnAirKey, false).toBool();
 }
 
+bool loadPreferAudioAlbumArt(const QSettings &settings) {
+  return settings.value(kPreferAudioAlbumArtKey, false).toBool();
+}
+
 bool savePlaylistSettings(QSettings &settings,
                           PlaylistEditActivationMode editActivationMode,
-                          bool autoSelectNextItemAfterOnAir) {
+                           bool autoSelectNextItemAfterOnAir,
+                           bool preferAudioAlbumArt) {
   settings.setValue(kPlaylistEditActivationModeKey,
                     static_cast<int>(editActivationMode));
   settings.setValue(kAutoSelectNextItemAfterOnAirKey,
                     autoSelectNextItemAfterOnAir);
+  settings.setValue(kPreferAudioAlbumArtKey, preferAudioAlbumArt);
   settings.sync();
   return settings.status() == QSettings::NoError;
 }
@@ -528,6 +536,19 @@ ControllerSettingsDialog::ControllerSettingsDialog(
   autoSelectNextItemCheckBox_->setChecked(
       savedAutoSelectNextItemAfterOnAir());
   playlistCardLayout->addWidget(autoSelectNextItemCheckBox_);
+  playlistAudioThumbnailFieldLabel_ = new QLabel(playlistCard);
+  playlistAudioThumbnailFieldLabel_->setObjectName(
+      QStringLiteral("playlistAudioThumbnailFieldLabel"));
+  vtrpon::setSettingsRole(playlistAudioThumbnailFieldLabel_, "fieldLabel");
+  playlistCardLayout->addWidget(playlistAudioThumbnailFieldLabel_);
+  playlistAudioThumbnailComboBox_ = new QComboBox(playlistCard);
+  playlistAudioThumbnailComboBox_->setObjectName(
+      QStringLiteral("playlistAudioThumbnailComboBox"));
+  playlistAudioThumbnailComboBox_->addItem(QString(), false);
+  playlistAudioThumbnailComboBox_->addItem(QString(), true);
+  playlistAudioThumbnailComboBox_->setCurrentIndex(
+      playlistAudioThumbnailComboBox_->findData(savedPreferAudioAlbumArt()));
+  playlistCardLayout->addWidget(playlistAudioThumbnailComboBox_);
   playlistStatusLabel_ = new QLabel(playlistCard);
   playlistStatusLabel_->setObjectName(QStringLiteral("playlistStatusLabel"));
   vtrpon::setSettingsRole(playlistStatusLabel_, "status");
@@ -1247,7 +1268,8 @@ ControllerSettingsDialog::ControllerSettingsDialog(
 
   setTabOrder(navigationList_, playlistEditModeComboBox_);
   setTabOrder(playlistEditModeComboBox_, autoSelectNextItemCheckBox_);
-  setTabOrder(autoSelectNextItemCheckBox_,
+  setTabOrder(autoSelectNextItemCheckBox_, playlistAudioThumbnailComboBox_);
+  setTabOrder(playlistAudioThumbnailComboBox_,
               allowSameItemOnAirRetakeCheckBox_);
   setTabOrder(allowSameItemOnAirRetakeCheckBox_, onAirToggleModeCheckBox_);
   setTabOrder(onAirToggleModeCheckBox_,
@@ -1297,6 +1319,9 @@ ControllerSettingsDialog::ControllerSettingsDialog(
           qOverload<int>(&QComboBox::currentIndexChanged), this,
           &ControllerSettingsDialog::savePlaylistSettings);
   connect(autoSelectNextItemCheckBox_, &QCheckBox::toggled, this,
+          &ControllerSettingsDialog::savePlaylistSettings);
+  connect(playlistAudioThumbnailComboBox_,
+          qOverload<int>(&QComboBox::currentIndexChanged), this,
           &ControllerSettingsDialog::savePlaylistSettings);
   connect(allowSameItemOnAirRetakeCheckBox_, &QCheckBox::toggled, this,
           [this](bool checked) {
@@ -1571,6 +1596,18 @@ void ControllerSettingsDialog::retranslateUi() {
       vtrpon::uiText("settings.playlist.auto_select_next"));
   autoSelectNextItemCheckBox_->setAccessibleDescription(
       vtrpon::uiText("settings.playlist.auto_select_next.description"));
+  playlistAudioThumbnailFieldLabel_->setText(
+      vtrpon::uiText("settings.playlist.audio_thumbnail.field"));
+  playlistAudioThumbnailComboBox_->setAccessibleName(
+      vtrpon::uiText("settings.playlist.audio_thumbnail.field"));
+  playlistAudioThumbnailComboBox_->setAccessibleDescription(
+      vtrpon::uiText("settings.playlist.audio_thumbnail.description"));
+  playlistAudioThumbnailComboBox_->setItemText(
+      playlistAudioThumbnailComboBox_->findData(false),
+      vtrpon::uiText("settings.playlist.audio_thumbnail.waveform"));
+  playlistAudioThumbnailComboBox_->setItemText(
+      playlistAudioThumbnailComboBox_->findData(true),
+      vtrpon::uiText("settings.playlist.audio_thumbnail.album_art"));
   playlistStatusLabel_->setAccessibleName(
       vtrpon::uiText("settings.playlist.status_accessible"));
   playlistStatusLabel_->setText(
@@ -1715,6 +1752,11 @@ bool ControllerSettingsDialog::savedAutoSelectNextItemAfterOnAir() {
   return vtrpon::loadAutoSelectNextItemAfterOnAir(settings);
 }
 
+bool ControllerSettingsDialog::savedPreferAudioAlbumArt() {
+  const QSettings settings = controllerSettings();
+  return vtrpon::loadPreferAudioAlbumArt(settings);
+}
+
 bool ControllerSettingsDialog::savedAllowSameItemOnAirRetake() {
   const QSettings settings = controllerSettings();
   return vtrpon::loadAllowSameItemOnAirRetake(settings);
@@ -1759,6 +1801,11 @@ ControllerSettingsDialog::playlistEditActivationMode() const {
 
 bool ControllerSettingsDialog::autoSelectNextItemAfterOnAir() const {
   return autoSelectNextItemCheckBox_ && autoSelectNextItemCheckBox_->isChecked();
+}
+
+bool ControllerSettingsDialog::preferAudioAlbumArt() const {
+  return playlistAudioThumbnailComboBox_ &&
+         playlistAudioThumbnailComboBox_->currentData().toBool();
 }
 
 bool ControllerSettingsDialog::allowSameItemOnAirRetake() const {
@@ -1815,7 +1862,8 @@ ControllerSettingsDialog::switcherControlSettings() const {
 void ControllerSettingsDialog::savePlaylistSettings() {
   QSettings settings = controllerSettings();
   const bool error = !vtrpon::savePlaylistSettings(
-      settings, playlistEditActivationMode(), autoSelectNextItemAfterOnAir());
+      settings, playlistEditActivationMode(), autoSelectNextItemAfterOnAir(),
+      preferAudioAlbumArt());
   playlistStatusLabel_->setProperty("error", error);
   playlistStatusLabel_->setText(vtrpon::uiText(
       error ? "settings.playlist.save_failed"
@@ -1823,6 +1871,7 @@ void ControllerSettingsDialog::savePlaylistSettings() {
   playlistStatusLabel_->style()->unpolish(playlistStatusLabel_);
   playlistStatusLabel_->style()->polish(playlistStatusLabel_);
   playlistStatusLabel_->update();
+  if (!error) emit audioThumbnailPreferenceChanged(preferAudioAlbumArt());
 }
 
 void ControllerSettingsDialog::saveOnAirSettings() {
@@ -2318,6 +2367,8 @@ void ControllerSettingsDialog::reloadSavedSettings() {
     languageComboBox_->setCurrentIndex(languageComboBox_->findData(static_cast<int>(languageManager_->currentLanguage())));
   playlistEditModeComboBox_->setCurrentIndex(playlistEditModeComboBox_->findData(static_cast<int>(savedPlaylistEditActivationMode())));
   autoSelectNextItemCheckBox_->setChecked(savedAutoSelectNextItemAfterOnAir());
+  playlistAudioThumbnailComboBox_->setCurrentIndex(
+      playlistAudioThumbnailComboBox_->findData(savedPreferAudioAlbumArt()));
   onAirToggleModeCheckBox_->setChecked(savedOnAirToggleMode());
   allowSameItemOnAirRetakeCheckBox_->setChecked(savedAllowSameItemOnAirRetake());
   showPlaybackRateControlsCheckBox_->setChecked(savedShowPlaybackRateControls());

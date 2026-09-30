@@ -36,9 +36,11 @@ class UiLanguageManager;
 PlaylistEditActivationMode
 loadPlaylistEditActivationMode(const QSettings &settings);
 bool loadAutoSelectNextItemAfterOnAir(const QSettings &settings);
+bool loadPreferAudioAlbumArt(const QSettings &settings);
 bool savePlaylistSettings(QSettings &settings,
                           PlaylistEditActivationMode editActivationMode,
-                          bool autoSelectNextItemAfterOnAir);
+                          bool autoSelectNextItemAfterOnAir,
+                          bool preferAudioAlbumArt);
 bool loadAllowSameItemOnAirRetake(const QSettings &settings);
 bool loadOnAirToggleMode(const QSettings &settings);
 bool loadShowPlaybackRateControls(const QSettings &settings);
@@ -67,6 +69,7 @@ public:
 
   static PlaylistEditActivationMode savedPlaylistEditActivationMode();
   static bool savedAutoSelectNextItemAfterOnAir();
+  static bool savedPreferAudioAlbumArt();
   static bool savedAllowSameItemOnAirRetake();
   static bool savedOnAirToggleMode();
   bool onAirToggleMode() const;
@@ -77,6 +80,7 @@ public:
   static vtrpon::SwitcherControlSettings savedSwitcherControlSettings();
   PlaylistEditActivationMode playlistEditActivationMode() const;
   bool autoSelectNextItemAfterOnAir() const;
+  bool preferAudioAlbumArt() const;
   bool allowSameItemOnAirRetake() const;
   bool showPlaybackRateControls() const;
   bool disableFtbButton() const;
@@ -102,6 +106,7 @@ signals:
   void exportSettingsRequested();
   void importSettingsRequested();
   void showBgmPlayerControlsChanged(bool visible);
+  void audioThumbnailPreferenceChanged(bool preferAudioAlbumArt);
   void programOutputDeviceChanged(const QString &id);
   void editPflOutputDeviceChanged(const QString &id);
   void switcherControlSettingsChanged(
@@ -248,6 +253,8 @@ private:
   QLabel *playlistEditModeFieldLabel_ = nullptr;
   QComboBox *playlistEditModeComboBox_ = nullptr;
   QCheckBox *autoSelectNextItemCheckBox_ = nullptr;
+  QLabel *playlistAudioThumbnailFieldLabel_ = nullptr;
+  QComboBox *playlistAudioThumbnailComboBox_ = nullptr;
   QLabel *playlistStatusLabel_ = nullptr;
   QLabel *onAirPageTitle_ = nullptr;
   QLabel *onAirPageDescription_ = nullptr;

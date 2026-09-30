@@ -1440,17 +1440,19 @@ int main(int argc, char *argv[]) {
   CHECK(vtrpon::loadPlaylistEditActivationMode(isolatedSettings) ==
         PlaylistEditActivationMode::EditButton);
   CHECK(!vtrpon::loadAutoSelectNextItemAfterOnAir(isolatedSettings));
+  CHECK(!vtrpon::loadPreferAudioAlbumArt(isolatedSettings));
   CHECK(!vtrpon::loadAllowSameItemOnAirRetake(isolatedSettings));
   CHECK(vtrpon::loadShowPlaybackRateControls(isolatedSettings));
   CHECK(!vtrpon::loadDisableFtbButton(isolatedSettings));
   CHECK(!vtrpon::loadShowBgmPlayerControls(isolatedSettings));
   CHECK(vtrpon::savePlaylistSettings(
-      isolatedSettings, PlaylistEditActivationMode::Selection, true));
+      isolatedSettings, PlaylistEditActivationMode::Selection, true, true));
   CHECK(vtrpon::saveOnAirSettings(isolatedSettings, true, false, true));
   CHECK(vtrpon::saveAudioSettings(isolatedSettings, true));
   CHECK(vtrpon::loadPlaylistEditActivationMode(isolatedSettings) ==
         PlaylistEditActivationMode::Selection);
   CHECK(vtrpon::loadAutoSelectNextItemAfterOnAir(isolatedSettings));
+  CHECK(vtrpon::loadPreferAudioAlbumArt(isolatedSettings));
   CHECK(vtrpon::loadAllowSameItemOnAirRetake(isolatedSettings));
   CHECK(!vtrpon::loadShowPlaybackRateControls(isolatedSettings));
   CHECK(vtrpon::loadDisableFtbButton(isolatedSettings));
@@ -1499,6 +1501,7 @@ int main(int argc, char *argv[]) {
     CHECK(!isolatedSettings.contains("player/fadeToBackground"));
     CHECK(vtrpon::controllerSettingsSnapshot(isolatedSettings) == snapshot);
     CHECK(snapshot.value("video/programOutput4k").toBool());
+    CHECK(snapshot.value("playlist/preferAudioAlbumArt").toBool());
     CHECK(snapshot.value("virtualCamera/enabled").toBool());
     CHECK(snapshot.value("testPatterns/entries").toArray().size() == 2);
     const QString exportPath = settingsDirectory.filePath(QStringLiteral("settings.json"));
@@ -1521,6 +1524,7 @@ int main(int argc, char *argv[]) {
     CHECK(vtrpon::importControllerSettings(isolatedSettings, exportPath));
     QSettings reopened(isolatedSettings.fileName(), QSettings::IniFormat);
     CHECK(vtrpon::controllerSettingsSnapshot(reopened) == snapshot);
+    CHECK(vtrpon::loadPreferAudioAlbumArt(reopened));
     CHECK(reopened.value("testPatterns/entries").toStringList() == patternEntries);
     auto emptyPatterns = snapshot;
     emptyPatterns.insert("testPatterns/entries", QJsonArray{});
@@ -1761,6 +1765,8 @@ int main(int argc, char *argv[]) {
         QStringLiteral("playlistEditModeComboBox"));
     auto *autoSelectNext = settingsDialog.findChild<QCheckBox *>(
         QStringLiteral("playlistAutoSelectNextItemCheckBox"));
+    auto *audioThumbnailCombo = settingsDialog.findChild<QComboBox *>(
+        QStringLiteral("playlistAudioThumbnailComboBox"));
     auto *allowSameItemRetake = settingsDialog.findChild<QCheckBox *>(
         QStringLiteral("allowSameItemOnAirRetakeCheckBox"));
     auto *showPlaybackRateControls = settingsDialog.findChild<QCheckBox *>(
@@ -2226,6 +2232,7 @@ int main(int argc, char *argv[]) {
     CHECK(settingsPages->currentWidget()->isAncestorOf(pflDeviceCombo));
     CHECK(editModeCombo != nullptr);
     CHECK(autoSelectNext != nullptr);
+    CHECK(audioThumbnailCombo != nullptr);
     CHECK(allowSameItemRetake != nullptr);
     CHECK(showPlaybackRateControls != nullptr);
     CHECK(editModeCombo->findData(
@@ -2234,6 +2241,10 @@ int main(int argc, char *argv[]) {
               static_cast<int>(PlaylistEditActivationMode::Selection)) >= 0);
     CHECK(autoSelectNext->text() ==
           QStringLiteral("Select the next item after ON AIR ends"));
+    CHECK(audioThumbnailCombo->itemText(audioThumbnailCombo->findData(false)) ==
+          QStringLiteral("Waveform"));
+    CHECK(audioThumbnailCombo->itemText(audioThumbnailCombo->findData(true)) ==
+          QStringLiteral("Album art (waveform if unavailable)"));
     CHECK(allowSameItemRetake->text() == QStringLiteral(
         "Allow the same item to be taken ON AIR again while it is already ON AIR"));
     CHECK(showPlaybackRateControls->text() ==
@@ -2284,10 +2295,14 @@ int main(int argc, char *argv[]) {
     settingsNavigation->setCurrentRow(networkSettingsRow(14));
     CHECK(settingsPages->currentWidget()->isAncestorOf(resetButton));
     showBgmPlayerControls->setChecked(true);
+    audioThumbnailCombo->setCurrentIndex(audioThumbnailCombo->findData(true));
+    CHECK(settingsDialog.preferAudioAlbumArt());
+    CHECK(ControllerSettingsDialog::savedPreferAudioAlbumArt());
     const QByteArray switcherOverride = qgetenv("VTRPON_SWITCHER_SETTINGS_FILE");
     qunsetenv("VTRPON_SWITCHER_SETTINGS_FILE");
     resetButton->click();
     CHECK(!showBgmPlayerControls->isChecked());
+    CHECK(!audioThumbnailCombo->currentData().toBool());
     CHECK(!allowSameItemRetake->isChecked());
     CHECK(!disableFtbButton->isChecked());
     auto *toggleMode = settingsDialog.findChild<QCheckBox *>(QStringLiteral("onAirToggleModeCheckBox"));
@@ -3898,6 +3913,8 @@ int main(int argc, char *argv[]) {
         QStringLiteral("disableFtbButtonCheckBox"));
     auto *showBgmPlayerControls = settingsDialog.findChild<QCheckBox *>(
         QStringLiteral("showBgmPlayerControlsCheckBox"));
+    auto *audioThumbnailCombo = settingsDialog.findChild<QComboBox *>(
+        QStringLiteral("playlistAudioThumbnailComboBox"));
     CHECK(settingsNavigation != nullptr);
     CHECK(settingsNavigation->item(0)->text() ==
           QStringLiteral("プレイリスト設定"));
@@ -3996,6 +4013,19 @@ int main(int argc, char *argv[]) {
     CHECK(showBgmPlayerControls != nullptr);
     CHECK(showBgmPlayerControls->text() ==
           QStringLiteral("BGMプレイヤーを表示"));
+    CHECK(audioThumbnailCombo != nullptr);
+    CHECK(audioThumbnailCombo->itemText(audioThumbnailCombo->findData(false)) ==
+          QStringLiteral("波形"));
+    CHECK(audioThumbnailCombo->itemText(audioThumbnailCombo->findData(true)) ==
+          QStringLiteral("アルバムアート（取得できない場合は波形）"));
+    if (const auto screenshot = qgetenv("VTRPON_TEST_PLAYLIST_SETTINGS_SCREENSHOT");
+        !screenshot.isEmpty()) {
+      settingsNavigation->setCurrentRow(0);
+      settingsDialog.show();
+      application.processEvents();
+      CHECK(settingsDialog.grab().save(QString::fromLocal8Bit(screenshot)));
+      settingsDialog.close();
+    }
   }
 
   return 0;

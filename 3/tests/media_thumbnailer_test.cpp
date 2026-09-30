@@ -3,6 +3,7 @@
 #include "uvc_input_guard.h"
 
 #include <QColor>
+#include <QBuffer>
 #include <QDir>
 #include <QFile>
 #include <QGuiApplication>
@@ -157,6 +158,44 @@ bool createMediaFixture(const QByteArray &description,
     (void)gst_element_get_state(pipeline, nullptr, nullptr, 2 * GST_SECOND);
     gst_object_unref(pipeline);
     return succeeded;
+}
+
+bool addEmbeddedAlbumArt(const QString &audioPath, const QImage &image)
+{
+    QByteArray png;
+    QBuffer pngBuffer(&png);
+    if (!pngBuffer.open(QIODevice::WriteOnly) || !image.save(&pngBuffer, "PNG"))
+        return false;
+    QFile file(audioPath);
+    if (!file.open(QIODevice::ReadOnly)) return false;
+    const QByteArray audio = file.readAll();
+    file.close();
+    if (audio.isEmpty()) return false;
+    QByteArray picture;
+    picture.append(char(0)); // ISO-8859-1 text encoding
+    picture.append("image/png", 9);
+    picture.append(char(0));
+    picture.append(char(3)); // Front cover
+    picture.append(char(0)); // Empty description
+    picture.append(png);
+    const quint32 pictureSize = static_cast<quint32>(picture.size());
+    QByteArray frame("APIC", 4);
+    for (int shift : {24, 16, 8, 0})
+        frame.append(char((pictureSize >> shift) & 0xff));
+    frame.append(char(0));
+    frame.append(char(0));
+    frame.append(picture);
+    const quint32 tagSize = static_cast<quint32>(frame.size());
+    QByteArray tag("ID3", 3);
+    tag.append(char(3)); // ID3v2.3
+    tag.append(char(0));
+    tag.append(char(0));
+    for (int shift : {21, 14, 7, 0})
+        tag.append(char((tagSize >> shift) & 0x7f));
+    tag.append(frame);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) return false;
+    return file.write(tag) == tag.size() &&
+           file.write(audio) == audio.size();
 }
 
 bool createPdfFixture(const QString &outputPath)
@@ -315,6 +354,7 @@ int main(int argc, char *argv[])
     const QString blackHeadVideoPath =
         fixtureDirectory.filePath("black-head-long-gop.mp4");
     const QString audioPath = fixtureDirectory.filePath("audio.wav");
+    const QString albumAudioPath = fixtureDirectory.filePath("album.mp3");
     const QString imagePath = fixtureDirectory.filePath("image.png");
     const QString pdfPath = fixtureDirectory.filePath("document.pdf");
 
@@ -348,6 +388,20 @@ int main(int argc, char *argv[])
         qCritical() << "Audio fixture failed:" << fixtureError;
         return 1;
     }
+    if (!createMediaFixture(
+            "audiotestsrc wave=sine freq=3000 volume=0.5 num-buffers=100 ! "
+            "audio/x-raw,rate=44100 ! audioconvert ! lamemp3enc ! "
+            "filesink name=output",
+            albumAudioPath, fixtureError)) {
+        qCritical() << "MP3 fixture failed:" << fixtureError;
+        return 1;
+    }
+    QImage albumImage(64, 64, QImage::Format_RGB32);
+    albumImage.fill(QColor(QStringLiteral("#d84ac8")));
+    if (!addEmbeddedAlbumArt(albumAudioPath, albumImage)) {
+        qCritical() << "Embedded album art fixture failed";
+        return 1;
+    }
 
     QImage sourceImage(200, 320, QImage::Format_RGBA8888);
     sourceImage.fill(QColor(QStringLiteral("#246bce")));
@@ -370,6 +424,8 @@ int main(int argc, char *argv[])
     const MediaDurationProbeResult blackHeadVideoProbe =
         probeMediaDuration(blackHeadVideoPath);
     const MediaDurationProbeResult audioProbe = probeMediaDuration(audioPath);
+    const MediaDurationProbeResult albumAudioProbe =
+        probeMediaDuration(albumAudioPath);
     const MediaDurationProbeResult imageProbe = probeMediaDuration(imagePath);
     if (!videoProbe.succeeded
         || videoProbe.mediaType != PlaylistMediaType::Video
@@ -377,6 +433,8 @@ int main(int argc, char *argv[])
         || blackHeadVideoProbe.mediaType != PlaylistMediaType::Video
         || !audioProbe.succeeded
         || audioProbe.mediaType != PlaylistMediaType::Audio
+        || !albumAudioProbe.succeeded
+        || albumAudioProbe.mediaType != PlaylistMediaType::Audio
         || !imageProbe.succeeded
         || imageProbe.mediaType != PlaylistMediaType::StillImage) {
         qCritical() << "Media classification failed"
@@ -399,6 +457,14 @@ int main(int argc, char *argv[])
         audioPath, audioProbe.mediaType, audioProbe.durationMs);
     const MediaThumbnailResult trimmedAudio = generateMediaThumbnail(
         audioPath, audioProbe.mediaType, 1000); // Trimmed OUT is not source length.
+    const MediaThumbnailResult albumWaveform = generateMediaThumbnail(
+        albumAudioPath, PlaylistMediaType::Audio, albumAudioProbe.durationMs);
+    const MediaThumbnailResult albumArtwork = generateMediaThumbnail(
+        albumAudioPath, PlaylistMediaType::Audio, albumAudioProbe.durationMs,
+        QSize(120, 68), true);
+    const MediaThumbnailResult missingArtworkFallback = generateMediaThumbnail(
+        audioPath, PlaylistMediaType::Audio, audioProbe.durationMs,
+        QSize(120, 68), true);
     qInfo() << "Generating image thumbnail";
     const MediaThumbnailResult image = generateMediaThumbnail(
         imagePath, imageProbe.mediaType, imageProbe.durationMs);
@@ -445,6 +511,21 @@ int main(int argc, char *argv[])
     }
     if (countGreenWaveformPixels(audio.image) < 100) {
         qCritical() << "Audio thumbnail did not contain a visible waveform";
+        return 1;
+    }
+    if (!albumWaveform.succeeded || !albumArtwork.succeeded ||
+        !missingArtworkFallback.succeeded ||
+        countGreenWaveformPixels(albumWaveform.image) < 100 ||
+        countGreenWaveformPixels(albumArtwork.image) >= 20 ||
+        albumArtwork.image.pixelColor(60, 34) !=
+            QColor(QStringLiteral("#d84ac8")) ||
+        albumArtwork.image.pixelColor(0, 0) != QColor(Qt::black) ||
+        albumArtwork.sourceDurationMs != albumAudioProbe.durationMs ||
+        albumArtwork.sourceCodec.isEmpty() ||
+        missingArtworkFallback.image != audio.image) {
+        qCritical() << "Album art selection or waveform fallback failed"
+                    << albumArtwork.errorDetail << albumArtwork.sourceCodec
+                    << albumArtwork.sourceDurationMs;
         return 1;
     }
     if (countSmoothedWaveformEdgePixels(audio.image) < 20) {

@@ -69,6 +69,7 @@ public:
     bool pasteSelectedItemState();
     void setBulkUndoAvailable(bool available);
     void setEditActivationMode(PlaylistEditActivationMode mode);
+    void setPreferAudioAlbumArt(bool prefer);
     PlaylistEditActivationMode editActivationMode() const;
     bool selectNextItemAfter(quint64 itemId);
     bool allowItemAction(quint64 itemId, PlaylistItemAction action);

@@ -1467,8 +1467,8 @@
     </message>
     <message id="settings.playlist.description">
         <location filename="../language_text.cpp" line="290"/>
-        <source>Configure how playlist selection and ON AIR completion affect EDIT and selection. Changes are saved automatically.</source>
-        <translation>Configure how playlist selection and ON AIR completion affect EDIT and selection. Changes are saved automatically.</translation>
+        <source>Configure playlist selection, audio thumbnails, and what happens after ON AIR ends. Changes are saved automatically.</source>
+        <translation>Configure playlist selection, audio thumbnails, and what happens after ON AIR ends. Changes are saved automatically.</translation>
     </message>
     <message id="settings.playlist.edit_mode.field">
         <location filename="../language_text.cpp" line="292"/>
@@ -1499,6 +1499,22 @@
         <location filename="../language_text.cpp" line="302"/>
         <source>Selects the next available item after an End Mode completes or OFF AIR is pressed.</source>
         <translation>Selects the next available item after an End Mode completes or OFF AIR is pressed.</translation>
+    </message>
+    <message id="settings.playlist.audio_thumbnail.field">
+        <source>Audio file thumbnails</source>
+        <translation>Audio file thumbnails</translation>
+    </message>
+    <message id="settings.playlist.audio_thumbnail.description">
+        <source>Show embedded album art when available. Otherwise, show the waveform.</source>
+        <translation>Show embedded album art when available. Otherwise, show the waveform.</translation>
+    </message>
+    <message id="settings.playlist.audio_thumbnail.waveform">
+        <source>Waveform</source>
+        <translation>Waveform</translation>
+    </message>
+    <message id="settings.playlist.audio_thumbnail.album_art">
+        <source>Album art (waveform if unavailable)</source>
+        <translation>Album art (waveform if unavailable)</translation>
     </message>
     <message id="settings.playlist.status_accessible">
         <location filename="../language_text.cpp" line="304"/>

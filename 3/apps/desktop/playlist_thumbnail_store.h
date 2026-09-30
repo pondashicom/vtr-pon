@@ -26,6 +26,7 @@ public:
     std::optional<qint64> sourceDurationMs(quint64 itemId) const;
     QString sourceCodec(quint64 itemId) const;
     void request(quint64 itemId);
+    void setPreferAudioAlbumArt(bool prefer);
     void setThumbnail(quint64 itemId, const QImage &image,
                       const QString &errorDetail);
 
@@ -41,4 +42,5 @@ private:
     QHash<quint64, QSize> sourceSizesById_;
     QHash<quint64, qint64> sourceDurationsById_;
     QHash<quint64, QString> sourceCodecsById_;
+    bool preferAudioAlbumArt_ = false;
 };

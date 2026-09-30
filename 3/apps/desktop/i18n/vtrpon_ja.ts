@@ -1467,8 +1467,8 @@
     </message>
     <message id="settings.playlist.description">
         <location filename="../language_text.cpp" line="290"/>
-        <source>Configure how playlist selection and ON AIR completion affect EDIT and selection. Changes are saved automatically.</source>
-        <translation>プレイリストの選択とオンエア終了時の動作を設定します。変更は自動保存されます。</translation>
+        <source>Configure playlist selection, audio thumbnails, and what happens after ON AIR ends. Changes are saved automatically.</source>
+        <translation>プレイリストの選択、音声サムネイル、オンエア終了後の動作を設定します。変更は自動保存されます。</translation>
     </message>
     <message id="settings.playlist.edit_mode.field">
         <location filename="../language_text.cpp" line="292"/>
@@ -1499,6 +1499,22 @@
         <location filename="../language_text.cpp" line="302"/>
         <source>Selects the next available item after an End Mode completes or OFF AIR is pressed.</source>
         <translation>エンドモードの完了時、またはオフエアボタンを押したときに、次の利用可能なアイテムを選択します。</translation>
+    </message>
+    <message id="settings.playlist.audio_thumbnail.field">
+        <source>Audio file thumbnails</source>
+        <translation>音声ファイルのサムネイル</translation>
+    </message>
+    <message id="settings.playlist.audio_thumbnail.description">
+        <source>Show embedded album art when available. Otherwise, show the waveform.</source>
+        <translation>埋め込みアルバムアートを取得できる場合は表示し、取得できない場合は波形を表示します。</translation>
+    </message>
+    <message id="settings.playlist.audio_thumbnail.waveform">
+        <source>Waveform</source>
+        <translation>波形</translation>
+    </message>
+    <message id="settings.playlist.audio_thumbnail.album_art">
+        <source>Album art (waveform if unavailable)</source>
+        <translation>アルバムアート（取得できない場合は波形）</translation>
     </message>
     <message id="settings.playlist.status_accessible">
         <location filename="../language_text.cpp" line="304"/>

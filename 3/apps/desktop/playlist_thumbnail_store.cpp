@@ -90,7 +90,20 @@ void PlaylistThumbnailStore::request(quint64 itemId)
     const auto state = model_->itemState(itemId);
     if (state && state->sourceType != PlaylistSourceType::Uvc) {
         thumbnailer_->requestThumbnail(itemId, state->filePath, state->mediaType,
-                                       state->settings.outPointMs);
+                                       state->settings.outPointMs,
+                                       preferAudioAlbumArt_ &&
+                                           state->mediaType == PlaylistMediaType::Audio);
+    }
+}
+
+void PlaylistThumbnailStore::setPreferAudioAlbumArt(bool prefer)
+{
+    if (preferAudioAlbumArt_ == prefer) return;
+    preferAudioAlbumArt_ = prefer;
+    for (const PlaylistItemState &item : model_->snapshot().items) {
+        if (item.mediaType != PlaylistMediaType::Audio) continue;
+        invalidate(item.id);
+        emit thumbnailChanged(item.id);
     }
 }
 

@@ -10,6 +10,7 @@
 #endif
 
 #include <QElapsedTimer>
+#include <QBuffer>
 #include <QFileInfo>
 #include <QImageReader>
 #include <QMetaObject>
@@ -22,6 +23,8 @@
 
 #include <gst/app/gstappsink.h>
 #include <gst/gst.h>
+#include <gst/pbutils/descriptions.h>
+#include <gst/pbutils/gstdiscoverer.h>
 #include <gst/video/video.h>
 
 #include <algorithm>
@@ -37,6 +40,7 @@ constexpr qint64 kMaximumAudioWaveformSamples = 16 * 1000 * 1000;
 constexpr int kAudioWaveformSupersampling = 2;
 constexpr qint64 kMaximumWaveformDurationMs = 2 * 60 * 60 * 1000;
 constexpr qint64 kMaximumWaveformGenerationMs = 30000;
+constexpr gsize kMaximumArtworkBytes = 16 * 1024 * 1024;
 constexpr GstClockTime kPipelineStartupTimeout = 5 * GST_SECOND;
 constexpr GstClockTime kPipelineSampleTimeout = 5 * GST_SECOND;
 
@@ -297,6 +301,15 @@ QImage imageFromVideoSample(GstSample *sample, QString &errorDetail) {
   return image;
 }
 
+QString normalizedCodecName(QString codec) {
+  if (codec.startsWith(QStringLiteral("H.264"))) return QStringLiteral("H.264");
+  if (codec.startsWith(QStringLiteral("H.265"))) return QStringLiteral("H.265");
+  if (codec.startsWith(QStringLiteral("MPEG-4 AAC"))) return QStringLiteral("AAC");
+  if (codec.startsWith(QStringLiteral("Uncompressed")) &&
+      codec.contains(QStringLiteral("PCM"))) return QStringLiteral("PCM");
+  return codec;
+}
+
 QString sourceCodecName(GstElement *sink, const char *codecTag) {
   // The decoded caps describe raw pixels/samples, so read the source codec
   // from the stream tags retained by the existing thumbnail pipeline.
@@ -317,12 +330,118 @@ QString sourceCodecName(GstElement *sink, const char *codecTag) {
     if (!codec.isEmpty()) break;
   }
   gst_object_unref(pad);
-  if (codec.startsWith(QStringLiteral("H.264"))) return QStringLiteral("H.264");
-  if (codec.startsWith(QStringLiteral("H.265"))) return QStringLiteral("H.265");
-  if (codec.startsWith(QStringLiteral("MPEG-4 AAC"))) return QStringLiteral("AAC");
-  if (codec.startsWith(QStringLiteral("Uncompressed")) &&
-      codec.contains(QStringLiteral("PCM"))) return QStringLiteral("PCM");
-  return codec;
+  return normalizedCodecName(codec);
+}
+
+QImage artworkFromTags(const GstTagList *tags, const QSize &targetSize) {
+  if (!tags) return {};
+  for (const char *tag : {GST_TAG_IMAGE, GST_TAG_PREVIEW_IMAGE}) {
+    GstSamplePtr sample;
+    GstSample *rawSample = nullptr;
+    if (!gst_tag_list_get_sample(tags, tag, &rawSample)) continue;
+    sample.reset(rawSample);
+    GstBuffer *buffer = gst_sample_get_buffer(sample.get());
+    if (!buffer || gst_buffer_get_size(buffer) > kMaximumArtworkBytes) continue;
+    GstMapInfo map = GST_MAP_INFO_INIT;
+    if (!gst_buffer_map(buffer, &map, GST_MAP_READ)) continue;
+    const QByteArray bytes(reinterpret_cast<const char *>(map.data),
+                           static_cast<qsizetype>(map.size));
+    gst_buffer_unmap(buffer, &map);
+    QBuffer device;
+    device.setData(bytes);
+    if (!device.open(QIODevice::ReadOnly)) continue;
+    QImageReader reader(&device);
+    reader.setAutoTransform(true);
+    const QSize imageSize = reader.size();
+    if (!imageSize.isValid() || imageSize.width() > 10000 ||
+        imageSize.height() > 10000 ||
+        static_cast<qint64>(imageSize.width()) * imageSize.height() >
+            40000000) continue;
+    reader.setScaledSize(imageSize.scaled(targetSize * 2,
+                                         Qt::KeepAspectRatio));
+    const QImage source = reader.read();
+    if (source.isNull()) continue;
+    const QImage scaled = source.scaled(targetSize, Qt::KeepAspectRatio,
+                                        Qt::SmoothTransformation);
+    QImage thumbnail(targetSize, QImage::Format_RGBA8888);
+    thumbnail.fill(Qt::black);
+    QPainter painter(&thumbnail);
+    painter.drawImage((targetSize.width() - scaled.width()) / 2,
+                      (targetSize.height() - scaled.height()) / 2, scaled);
+    return thumbnail;
+  }
+  return {};
+}
+
+std::optional<MediaThumbnailResult> generateAudioArtworkThumbnail(
+    const QString &filePath, const QSize &targetSize,
+    const std::atomic_bool *cancelRequested) {
+  if (cancellationRequested(cancelRequested)) return std::nullopt;
+  GError *error = nullptr;
+  GstDiscoverer *discoverer = gst_discoverer_new(5 * GST_SECOND, &error);
+  if (error) g_clear_error(&error);
+  if (!discoverer) return std::nullopt;
+  const QByteArray uri = QUrl::fromLocalFile(filePath).toEncoded();
+  GstDiscovererInfo *info =
+      gst_discoverer_discover_uri(discoverer, uri.constData(), &error);
+  if (error) g_clear_error(&error);
+  g_object_unref(discoverer);
+  if (!info) return std::nullopt;
+  std::optional<MediaThumbnailResult> artwork;
+  if (gst_discoverer_info_get_result(info) == GST_DISCOVERER_OK &&
+      !cancellationRequested(cancelRequested)) {
+    QImage image;
+    QString codec;
+    GList *audioStreams = gst_discoverer_info_get_audio_streams(info);
+    for (GList *node = audioStreams; node; node = node->next) {
+      const auto *tags = gst_discoverer_stream_info_get_tags(
+          GST_DISCOVERER_STREAM_INFO(node->data));
+      if (image.isNull()) image = artworkFromTags(tags, targetSize);
+      gchar *value = nullptr;
+      if (codec.isEmpty() && tags &&
+          gst_tag_list_get_string(tags, GST_TAG_AUDIO_CODEC, &value)) {
+        codec = normalizedCodecName(QString::fromUtf8(value).trimmed());
+        g_free(value);
+      }
+      if (codec.isEmpty()) {
+        GstCaps *caps = gst_discoverer_stream_info_get_caps(
+            GST_DISCOVERER_STREAM_INFO(node->data));
+        if (caps) {
+          gchar *description = gst_pb_utils_get_codec_description(caps);
+          if (description) {
+            codec = normalizedCodecName(
+                QString::fromUtf8(description).trimmed());
+            g_free(description);
+          }
+          gst_caps_unref(caps);
+        }
+      }
+    }
+    gst_discoverer_stream_info_list_free(audioStreams);
+    GList *containers = gst_discoverer_info_get_container_streams(info);
+    for (GList *node = containers; node && image.isNull(); node = node->next) {
+      image = artworkFromTags(gst_discoverer_container_info_get_tags(
+          GST_DISCOVERER_CONTAINER_INFO(node->data)), targetSize);
+    }
+    gst_discoverer_stream_info_list_free(containers);
+    if (image.isNull()) {
+      image = artworkFromTags(gst_discoverer_info_get_tags(info), targetSize);
+    }
+    if (!image.isNull() && !cancellationRequested(cancelRequested)) {
+      MediaThumbnailResult result;
+      result.image = std::move(image);
+      result.mediaType = PlaylistMediaType::Audio;
+      result.succeeded = true;
+      result.sourceCodec = codec;
+      const GstClockTime duration = gst_discoverer_info_get_duration(info);
+      if (GST_CLOCK_TIME_IS_VALID(duration) && duration > 0) {
+        result.sourceDurationMs = duration / GST_MSECOND;
+      }
+      artwork = std::move(result);
+    }
+  }
+  gst_discoverer_info_unref(info);
+  return artwork;
 }
 
 MediaThumbnailResult generateVideoThumbnail(const QString &filePath,
@@ -499,7 +618,14 @@ MediaThumbnailResult generateUvcThumbnailInternal(
 
 MediaThumbnailResult generateAudioThumbnail(
     const QString &filePath, std::optional<qint64> durationMs,
-    const QSize &targetSize, const std::atomic_bool *cancelRequested) {
+    const QSize &targetSize, bool preferAudioAlbumArt,
+    const std::atomic_bool *cancelRequested) {
+  if (preferAudioAlbumArt) {
+    if (auto artwork = generateAudioArtworkThumbnail(
+            filePath, targetSize, cancelRequested)) {
+      return std::move(*artwork);
+    }
+  }
   if (durationMs && *durationMs > kMaximumWaveformDurationMs) {
     MediaThumbnailResult result;
     result.image = createTypeCard(filePath, PlaylistMediaType::Audio,
@@ -746,6 +872,7 @@ MediaThumbnailResult generateStillImageThumbnail(const QString &filePath,
 MediaThumbnailResult generateMediaThumbnailInternal(
     const QString &filePath, PlaylistMediaType mediaType,
     std::optional<qint64> durationMs, const QSize &targetSize,
+    bool preferAudioAlbumArt,
     const std::atomic_bool *cancelRequested) {
   if (filePath.isEmpty() || targetSize.width() <= 0 ||
       targetSize.height() <= 0) {
@@ -760,6 +887,7 @@ MediaThumbnailResult generateMediaThumbnailInternal(
     return generateVideoThumbnail(filePath, targetSize, cancelRequested);
   case PlaylistMediaType::Audio:
     return generateAudioThumbnail(filePath, durationMs, targetSize,
+                                  preferAudioAlbumArt,
                                   cancelRequested);
   case PlaylistMediaType::StillImage:
     return generateStillImageThumbnail(filePath, targetSize,
@@ -845,9 +973,10 @@ MediaThumbnailResult generateMediaThumbnailInternal(
 
 MediaThumbnailResult generateMediaThumbnail(
     const QString &filePath, PlaylistMediaType mediaType,
-    std::optional<qint64> durationMs, const QSize &targetSize) {
+    std::optional<qint64> durationMs, const QSize &targetSize,
+    bool preferAudioAlbumArt) {
   return generateMediaThumbnailInternal(filePath, mediaType, durationMs,
-                                        targetSize, nullptr);
+                                        targetSize, preferAudioAlbumArt, nullptr);
 }
 
 MediaThumbnailResult generateUvcThumbnail(const QString &devicePath,
@@ -873,13 +1002,14 @@ void MediaThumbnailer::requestShutdown() {
 
 void MediaThumbnailer::requestThumbnail(
     quint64 itemId, const QString &filePath, PlaylistMediaType mediaType,
-    std::optional<qint64> durationMs) {
+    std::optional<qint64> durationMs, bool preferAudioAlbumArt) {
   if (itemId == 0 || shuttingDown_.load(std::memory_order_acquire)) {
     return;
   }
   const auto pending = pendingThumbnails_.value(itemId);
   if (pending && pending->filePath == filePath &&
-      pending->mediaType == mediaType && pending->durationMs == durationMs) {
+      pending->mediaType == mediaType && pending->durationMs == durationMs &&
+      pending->preferAudioAlbumArt == preferAudioAlbumArt) {
     return;
   }
   cancelThumbnail(itemId);
@@ -887,6 +1017,7 @@ void MediaThumbnailer::requestThumbnail(
   request->filePath = filePath;
   request->mediaType = mediaType;
   request->durationMs = durationMs;
+  request->preferAudioAlbumArt = preferAudioAlbumArt;
   pendingThumbnails_.insert(itemId, request);
   workerPool_.start([this, itemId, request] {
     if (request->canceled.load(std::memory_order_acquire)) {
@@ -894,7 +1025,7 @@ void MediaThumbnailer::requestThumbnail(
     }
     MediaThumbnailResult result = generateMediaThumbnailInternal(
         request->filePath, request->mediaType, request->durationMs,
-        QSize(120, 68), &request->canceled);
+        QSize(120, 68), request->preferAudioAlbumArt, &request->canceled);
     if (request->canceled.load(std::memory_order_acquire)) {
       return;
     }

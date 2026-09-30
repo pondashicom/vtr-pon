@@ -27,7 +27,8 @@ struct MediaThumbnailResult {
 MediaThumbnailResult generateMediaThumbnail(
     const QString &filePath, PlaylistMediaType mediaType,
     std::optional<qint64> durationMs = std::nullopt,
-    const QSize &targetSize = QSize(120, 68));
+    const QSize &targetSize = QSize(120, 68),
+    bool preferAudioAlbumArt = false);
 MediaThumbnailResult generateUvcThumbnail(
     const QString &devicePath, const QSize &targetSize = QSize(120, 68));
 
@@ -43,7 +44,8 @@ public:
 
   void requestThumbnail(quint64 itemId, const QString &filePath,
                         PlaylistMediaType mediaType,
-                        std::optional<qint64> durationMs = std::nullopt);
+                        std::optional<qint64> durationMs = std::nullopt,
+                        bool preferAudioAlbumArt = false);
   void requestUvcThumbnail(quint64 requestId, const QString &devicePath);
   void cancelThumbnail(quint64 itemId);
   void cancelAllThumbnails();
@@ -59,6 +61,7 @@ private:
     QString filePath;
     PlaylistMediaType mediaType = PlaylistMediaType::Unknown;
     std::optional<qint64> durationMs;
+    bool preferAudioAlbumArt = false;
     std::atomic_bool canceled = false;
   };
 

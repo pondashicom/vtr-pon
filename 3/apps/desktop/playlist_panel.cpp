@@ -1304,6 +1304,11 @@ void PlaylistPanel::setEditActivationMode(PlaylistEditActivationMode mode)
     editButton_->setVisible(mode == PlaylistEditActivationMode::EditButton);
 }
 
+void PlaylistPanel::setPreferAudioAlbumArt(bool prefer)
+{
+    thumbnails_->setPreferAudioAlbumArt(prefer);
+}
+
 PlaylistEditActivationMode PlaylistPanel::editActivationMode() const
 {
     return editActivationMode_;

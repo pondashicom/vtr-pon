@@ -581,7 +581,8 @@ public:
 
     applyPlaylistSettings(
         ControllerSettingsDialog::savedPlaylistEditActivationMode(),
-        ControllerSettingsDialog::savedAutoSelectNextItemAfterOnAir());
+        ControllerSettingsDialog::savedAutoSelectNextItemAfterOnAir(),
+        ControllerSettingsDialog::savedPreferAudioAlbumArt());
     applyOnAirSettings(
         ControllerSettingsDialog::savedAllowSameItemOnAirRetake(),
         ControllerSettingsDialog::savedShowPlaybackRateControls(),
@@ -1132,7 +1133,8 @@ private:
     const bool skinApplied = vtrpon::applyControllerSkin(*qApp, vtrpon::configuredControllerSkinKey(), &error);
     const bool languageApplied = !languageManager_ || languageManager_->initialize(&error);
     applyPlaylistSettings(ControllerSettingsDialog::savedPlaylistEditActivationMode(),
-                          ControllerSettingsDialog::savedAutoSelectNextItemAfterOnAir());
+                           ControllerSettingsDialog::savedAutoSelectNextItemAfterOnAir(),
+                           ControllerSettingsDialog::savedPreferAudioAlbumArt());
     applyOnAirSettings(ControllerSettingsDialog::savedAllowSameItemOnAirRetake(),
                        ControllerSettingsDialog::savedShowPlaybackRateControls(),
                        ControllerSettingsDialog::savedDisableFtbButton(),
@@ -1202,6 +1204,9 @@ private:
             &ControllerSettingsDialog::showBgmPlayerControlsChanged,
             this, [this](bool visible) { applyAudioSettings(visible); });
     connect(&dialog,
+            &ControllerSettingsDialog::audioThumbnailPreferenceChanged,
+            playlistPanel_, &PlaylistPanel::setPreferAudioAlbumArt);
+    connect(&dialog,
             &ControllerSettingsDialog::switcherControlSettingsChanged,
             this, [this](const vtrpon::SwitcherControlSettings &settings) {
               applySwitcherSettings(settings);
@@ -1210,7 +1215,8 @@ private:
     (void)dialog.exec();
     activeSettingsDialog_.clear();
     applyPlaylistSettings(dialog.playlistEditActivationMode(),
-                          dialog.autoSelectNextItemAfterOnAir());
+                           dialog.autoSelectNextItemAfterOnAir(),
+                           dialog.preferAudioAlbumArt());
     applyOnAirSettings(dialog.allowSameItemOnAirRetake(),
                        dialog.showPlaybackRateControls(),
                        dialog.disableFtbButton(), dialog.onAirToggleMode());
@@ -1220,9 +1226,11 @@ private:
   }
 
   void applyPlaylistSettings(PlaylistEditActivationMode editActivationMode,
-                             bool autoSelectNextItemAfterOnAir) {
+                              bool autoSelectNextItemAfterOnAir,
+                              bool preferAudioAlbumArt) {
     if (playlistPanel_) {
       playlistPanel_->setEditActivationMode(editActivationMode);
+      playlistPanel_->setPreferAudioAlbumArt(preferAudioAlbumArt);
     }
     if (programController_) {
       programController_->setAutoSelectNextItemAfterOnAir(

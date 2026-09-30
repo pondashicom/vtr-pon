@@ -1053,7 +1053,7 @@ constexpr auto kUiTextIds = std::to_array<const char *>({
     QT_TRID_NOOP("settings.appearance.skin.vtrpon_clasic"),
     //% "Playlist"
     QT_TRID_NOOP("settings.playlist.title"),
-    //% "Configure how playlist selection and ON AIR completion affect EDIT and selection. Changes are saved automatically."
+    //% "Configure playlist selection, audio thumbnails, and what happens after ON AIR ends. Changes are saved automatically."
     QT_TRID_NOOP("settings.playlist.description"),
     //% "Open items in EDIT"
     QT_TRID_NOOP("settings.playlist.edit_mode.field"),
@@ -1067,6 +1067,14 @@ constexpr auto kUiTextIds = std::to_array<const char *>({
     QT_TRID_NOOP("settings.playlist.auto_select_next"),
     //% "Selects the next available item after an End Mode completes or OFF AIR is pressed."
     QT_TRID_NOOP("settings.playlist.auto_select_next.description"),
+    //% "Audio file thumbnails"
+    QT_TRID_NOOP("settings.playlist.audio_thumbnail.field"),
+    //% "Show embedded album art when available. Otherwise, show the waveform."
+    QT_TRID_NOOP("settings.playlist.audio_thumbnail.description"),
+    //% "Waveform"
+    QT_TRID_NOOP("settings.playlist.audio_thumbnail.waveform"),
+    //% "Album art (waveform if unavailable)"
+    QT_TRID_NOOP("settings.playlist.audio_thumbnail.album_art"),
     //% "Playlist settings status"
     QT_TRID_NOOP("settings.playlist.status_accessible"),
     //% "Playlist settings are saved automatically."

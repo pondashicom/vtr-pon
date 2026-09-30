@@ -57,6 +57,7 @@ const QJsonObject &defaults() {
       {"player/backgroundColor", "#000000"},
       {"playlist/editActivationMode", 0},
       {"playlist/autoSelectNextItemAfterOnAir", false},
+      {"playlist/preferAudioAlbumArt", false},
       {"onAir/allowSameItemRetake", false},
       {"onAir/toggleMode", false},
       {"onAir/showPlaybackRateControls", true},
