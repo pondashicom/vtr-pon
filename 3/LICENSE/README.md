@@ -13,6 +13,14 @@ Copyright (c) 2026 Tetsu Suzuki
 
 CC0 は権利者が保有する権利について適用する。SMPTE 等の規格名、商標、フォント、コーデック、使用ツールや第三者が持つ権利まで放棄するものではない。利用者が追加した素材や VST3 プラグインにも適用しない。
 
+## 別配布アドオン
+
+ATEM・NDI・VST3・DeckLink は本体と別配布する。初回ベータの本体配布物には、各アドオンとその SDK／ベンダー Runtime を含めない。アドオンの自作部分は MIT、SDK 由来部分や依存ライブラリには各権利者の条件を適用し、各パッケージの文書で範囲を案内する。
+
+DeckLink アドオンの利用には、[Blackmagic Design 公式の Desktop Video](https://www.blackmagicdesign.com/jp/developer/products/capture-and-playback/sdk-and-software) Windows x64 版を別途インストールする。現行実装は Desktop Video API 16.0 以上を要求する。DeckLink SDK はアドオンの開発時だけ必要で、本体のビルドと通常の利用には不要。本体やアドオンの導入・削除は、Desktop Video の導入・削除を代行しない。
+
+DeckLink アドオンの自作コードと MIT 本文は[独立リポジトリ](https://github.com/pondashicom/vtr-pon-decklink-addon)で管理する。公開する各パッケージに記載された対応本体版、Desktop Video の検証版、ライセンス・通知を確認する。Blackmagic Design および DeckLink の名称・商標は各権利者に帰属する。
+
 ## Windows 配布物の第三者コード
 
 - [第三者通知と適用範囲](THIRD-PARTY-NOTICES.md)

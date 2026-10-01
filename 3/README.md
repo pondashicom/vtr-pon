@@ -19,7 +19,9 @@ The [official Windows download page](https://pondashi.com/vtr-pon/download/windo
 
 VTR-PON3 is a separate product from VTR-PON2. VTR-PON2 settings and playlists cannot be imported or migrated. Keep VTR-PON2 installed if you need its existing projects.
 
-The first beta does not include add-ons. ATEM control, NDI input/output, and VST3 audio effects are distributed separately when compatible packages are ready.
+The first beta does not include add-ons. ATEM control, NDI input/output, VST3 audio effects, and DeckLink video/audio input/output are distributed separately when compatible packages are ready. Check each package's supported VTR-PON version before installation.
+
+The DeckLink add-on requires the official [Blackmagic Desktop Video](https://www.blackmagicdesign.com/developer/products/capture-and-playback/sdk-and-software) Windows x64 installation, including its drivers and API runtime. The current add-on requires Desktop Video API 16.0 or newer. Desktop Video Setup is included for device configuration; install Desktop Video and restart Windows if requested. The DeckLink SDK is needed only to build the separate add-on. VTR-PON and its add-on package do not bundle or install Desktop Video. See the [installation guide](INSTALL.ja.md) and [separate add-on license scope](LICENSE/README.md#別配布アドオン).
 
 ## Reports and licenses
 

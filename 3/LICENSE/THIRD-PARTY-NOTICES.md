@@ -41,4 +41,4 @@ Microsoft の SDK・開発ツール向け原文は、再頒布の根拠を示す
 
 [ブラウザー用一覧](README.html)から、各コンポーネントの原文を直接開けます。共有ライブラリの交換方法は [README.md](README.md)、対応ソースは [THIRD-PARTY-SOURCES.md](THIRD-PARTY-SOURCES.md)を参照してください。
 
-初回ベータに ATEM / NDI / VST3 アドオン、これらの SDK / Runtime、利用者のプラグインは含みません。後日配布するアドオンには、その配布版固有の通知を添付します。
+初回ベータに ATEM / NDI / VST3 / DeckLink アドオン、これらの SDK / ベンダー Runtime、利用者のプラグインは含みません。後日別配布するアドオンには、その配布版固有の通知を添付します。DeckLink の利用には Blackmagic Desktop Video Windows x64 版を利用者が別途導入します。SDK・ドライバーはこの本体配布物に含まれず、本体の MPL やアドオンの自作部分の MIT で再許諾されません。[別配布アドオンの案内](README.md#別配布アドオン)を参照してください。

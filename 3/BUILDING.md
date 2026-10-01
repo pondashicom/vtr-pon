@@ -2,7 +2,9 @@
 
 This [`3/` source tree](https://github.com/pondashicom/vtr-pon/tree/main/3)
 builds the Windows 11 x64 application, ZIP package, and installer. The first
-beta does not bundle add-ons; they are maintained in separate repositories.
+beta does not bundle add-ons; ATEM, NDI, VST3, and DeckLink are maintained and
+distributed from separate repositories. The host's DeckLink interface and tests
+do not require the DeckLink SDK or the separate add-on source tree.
 
 ## Prerequisites
 
@@ -17,6 +19,16 @@ The checked Windows build used Qt 6.8.3, GStreamer 1.28.5, MSVC 19.43, and
 Inno Setup 6.7.3. The package script also reads the matching VC++ runtime
 from the installed Visual Studio toolchain. Use the same Qt and GStreamer
 installations for compilation and packaging.
+
+To use the separate DeckLink add-on, install the official
+[Blackmagic Desktop Video](https://www.blackmagicdesign.com/developer/products/capture-and-playback/sdk-and-software)
+Windows x64 drivers and API runtime; the current add-on requires API 16.0 or
+newer. This is a device-use requirement, not a host build prerequisite. The
+DeckLink SDK is required only when building the
+[separate add-on](https://github.com/pondashicom/vtr-pon-decklink-addon).
+Do not copy the SDK, generated headers, samples, or Desktop Video installer into
+the host package. Add-on source and dependency conditions are described in the
+[license scope](LICENSE/README.md#別配布アドオン).
 
 ## Build and test
 
