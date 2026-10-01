@@ -35,8 +35,8 @@
 #include <QVBoxLayout>
 
 namespace {
-const QUrl kCatalog(QStringLiteral("https://pondashi.com/vtrpon/addon/download/catalog.json"));
-const QUrl kBase(QStringLiteral("https://pondashi.com/vtrpon/addon/download/"));
+const QUrl kCatalog(QStringLiteral("https://pondashi.com/vtr-pon/addon/download/catalog.json"));
+const QUrl kBase(QStringLiteral("https://pondashi.com/vtr-pon/addon/download/"));
 
 bool validVersion(const QString &value) {
   static const QRegularExpression re(QStringLiteral("^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"));
@@ -270,7 +270,7 @@ void AddonManagementPage::refreshCatalog() {
       valid = catalog.size() == 2 &&
               catalog.value(QStringLiteral("formatVersion")).toInt(-1) == 1 &&
               catalog.value(QStringLiteral("packages")).isArray() &&
-              entries.size() <= 3;
+              entries.size() <= vtrpon::addons::ids().size();
       QSet<QString> seen;
       for (const auto &item : entries) {
         const auto object = item.toObject();
