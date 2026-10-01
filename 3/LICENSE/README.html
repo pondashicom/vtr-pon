@@ -6,12 +6,22 @@
 <p>Copyright (c) 2026 Tetsu Suzuki</p>
 <ul><li>本体の自作部分: <a href="MPL-2.0.txt">MPL-2.0</a></li>
 <li>同梱の自作テストパターン: <a href="CC0-1.0.txt">CC0-1.0</a></li></ul>
-<p>適用範囲は <a href="README.md">README</a>、第三者コードの範囲は <a href="THIRD-PARTY-NOTICES.md">第三者通知</a> を参照してください。</p>
-<p>ATEM・NDI・VST3・DeckLink は別配布アドオンで、初回ベータの本体配布物には含みません。自作部分は MIT、SDK 由来部分は各権利者の条件に従います。DeckLink の利用には <a href="https://www.blackmagicdesign.com/jp/developer/products/capture-and-playback/sdk-and-software">Blackmagic Desktop Video</a> Windows x64 版（現行実装は API 16.0 以上）が別途必要です。SDK はアドオンの開発時だけ必要です。詳細は <a href="README.md#別配布アドオン">別配布アドオンの案内</a>と各パッケージの文書を参照してください。</p>
+<p>適用範囲は <a href="README.md">README</a>、第三者コードの範囲は <a href="THIRD-PARTY-NOTICES.md">第三者通知</a> を参照してください。別配布アドオンの自作部分のMIT本文は各パッケージに収録されています。</p>
+<p>ATEM・NDI・VST3・DeckLink は本体と別配布する。初回の本体 <strong>3.0.0-beta.1</strong> と同時に、それぞれ <strong>0.3.0</strong> を別配布する。本体配布物には、各アドオンとその SDK／ベンダー Runtime を含めない。アドオンの自作部分は MIT、SDK 由来部分や依存ライブラリには各権利者の条件を適用し、各パッケージの文書で範囲を案内する。</p>
+<p><a href="https://pondashi.com/vtr-pon/addon/">VTR-PON3公式アドオン案内</a>で対応版と必要ソフトを確認し、本体の「設定 → アドオン」から導入する。導入時には、パッケージに収録された利用条件・通知を確認して同意する。各0.3.0のソース・MIT本文・版固有の配布条件は、次のリポジトリで案内する。</p>
+<table>
+<tr><th>アドオン</th><th>ソース・README</th><th>配布条件・第三者通知</th></tr>
+<tr><td>ATEM 0.3.0</td><td><a href="https://github.com/pondashicom/vtr-pon-atem-addon/tree/v0.3.0">ソース</a></td><td><a href="https://github.com/pondashicom/vtr-pon-atem-addon/blob/v0.3.0/LICENSE/DISTRIBUTION.md">配布条件</a></td></tr>
+<tr><td>Network Video（NDI®対応）0.3.0</td><td><a href="https://github.com/pondashicom/vtr-pon-network-video-addon/tree/v0.3.0">ソース</a></td><td><a href="https://github.com/pondashicom/vtr-pon-network-video-addon/blob/v0.3.0/LICENSE/DISTRIBUTION.md">配布条件</a></td></tr>
+<tr><td>VST3 0.3.0</td><td><a href="https://github.com/pondashicom/vtr-pon-vst3-addon/tree/v0.3.0">ソース</a></td><td><a href="https://github.com/pondashicom/vtr-pon-vst3-addon/blob/v0.3.0/LICENSE/DISTRIBUTION.md">配布条件</a></td></tr>
+<tr><td>DeckLink 0.3.0</td><td><a href="https://github.com/pondashicom/vtr-pon-decklink-addon/tree/v0.3.0">ソース</a></td><td><a href="https://github.com/pondashicom/vtr-pon-decklink-addon/blob/v0.3.0/LICENSE/DISTRIBUTION.md">配布条件</a></td></tr>
+</table>
+<p>DeckLink アドオンの利用には、<a href="https://www.blackmagicdesign.com/jp/developer/products/capture-and-playback/sdk-and-software">Blackmagic Design 公式の Desktop Video</a> Windows x64 版を別途インストールする。現行実装は Desktop Video API 16.0 以上を要求する。DeckLink SDK はアドオンの開発時だけ必要で、本体のビルドと通常の利用には不要。本体やアドオンの導入・削除は、Desktop Video の導入・削除を代行しない。</p>
+<p>DeckLink アドオンの自作コードと MIT 本文は<a href="https://github.com/pondashicom/vtr-pon-decklink-addon">独立リポジトリ</a>で管理する。公開する各パッケージに記載された対応本体版、Desktop Video の検証版、ライセンス・通知を確認する。Blackmagic Design および DeckLink の名称・商標は各権利者に帰属する。</p>
 <p>Qt、GStreamer 等の共有ライブラリを使用します。互換の改変版への交換、およびその改変のデバッグに必要なリバースエンジニアリングを VTR-PON の条件で制限しません。アプリを終了してから、Qt は EXE 横と各プラグインディレクトリ、GStreamer は gstreamer/bin と gstreamer/lib/gstreamer-1.0 の DLL を交換してください。</p>
 <p>This software uses libraries from the FFmpeg project under the LGPLv2.1 or later. This software is based in part on the work of the Independent JPEG Group. Parts of this software are copyright (c) The FreeType Project (www.freetype.org). All rights reserved.</p>
 <h2>ソースコード</h2>
-<p>ソースはインストーラーとは別に取得できます。<a href="THIRD-PARTY-SOURCES.md">版ごとのソースと修正の案内</a>。本体の公開ソースと公開コミットは、この開発候補ではまだ確定していません。</p>
+<p>対応する<a href="https://github.com/pondashicom/vtr-pon/tree/main/3">本体ソース</a>と<a href="https://github.com/pondashicom/vtr-pon/blob/main/3/BUILDING.md">ビルド手順</a>、<a href="THIRD-PARTY-SOURCES.md">第三者ソースの版固定取得先</a>を案内しています。配布版に対応する40桁のソースコミットと各URLは、梱包時に <code>release-source.json</code> へ記録して同梱します。</p>
 <details><summary>bzip2 1.0.8</summary><a href="https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz">bzip2-1.0.8.tar.gz</a><br>SHA-256: <code>ab5a03176ee106d3f0fa90e381da478ddae405918153cca248e682cd0c4a2269</code></details>
 <details><summary>cerbero 1.28.5</summary><a href="https://codeload.github.com/GStreamer/cerbero/tar.gz/refs/tags/1.28.5">cerbero-1.28.5.tar.gz</a><br>SHA-256: <code>62f3f15430548e3ca161ee28739a63debee238128cad2c92015f48d0f5c20550</code></details>
 <details><summary>ffmpeg 7.1</summary><a href="https://ffmpeg.org/releases/ffmpeg-7.1.tar.xz">ffmpeg-7.1.tar.xz</a><br>SHA-256: <code>40973d44970dbc83ef302b0609f2e74982be2d85916dd2ee7472d30678a7abe6</code></details>

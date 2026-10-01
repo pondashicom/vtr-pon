@@ -41,4 +41,4 @@ Microsoft の SDK・開発ツール向け原文は、再頒布の根拠を示す
 
 [ブラウザー用一覧](README.html)から、各コンポーネントの原文を直接開けます。共有ライブラリの交換方法は [README.md](README.md)、対応ソースは [THIRD-PARTY-SOURCES.md](THIRD-PARTY-SOURCES.md)を参照してください。
 
-初回ベータに ATEM / NDI / VST3 / DeckLink アドオン、これらの SDK / ベンダー Runtime、利用者のプラグインは含みません。後日別配布するアドオンには、その配布版固有の通知を添付します。DeckLink の利用には Blackmagic Desktop Video Windows x64 版を利用者が別途導入します。SDK・ドライバーはこの本体配布物に含まれず、本体の MPL やアドオンの自作部分の MIT で再許諾されません。[別配布アドオンの案内](README.md#別配布アドオン)を参照してください。
+初回ベータの本体配布物に ATEM / NDI / VST3 / DeckLink アドオン、これらの SDK / ベンダー Runtime、利用者のプラグインは含みません。本体 **3.0.0-beta.1** と同時に別配布する4件のアドオン **0.3.0** には、それぞれの配布版固有の利用条件・通知・ソース案内を添付します。[VTR-PON3公式アドオン案内](https://pondashi.com/vtr-pon/addon/)で対応版を確認し、本体の「設定 → アドオン」から導入してください。DeckLink の利用には Blackmagic Desktop Video Windows x64 版を利用者が別途導入します。SDK・ドライバーはこの本体配布物に含まれず、本体の MPL やアドオンの自作部分の MIT で再許諾されません。[別配布アドオンの条件・ソース案内](README.md#別配布アドオン)を参照してください。

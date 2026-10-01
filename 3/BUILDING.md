@@ -1,9 +1,11 @@
 # Building VTR-PON3 on Windows
 
 This [`3/` source tree](https://github.com/pondashicom/vtr-pon/tree/main/3)
-builds the Windows 11 x64 application, ZIP package, and installer. The first
-beta does not bundle add-ons; ATEM, NDI, VST3, and DeckLink are maintained and
-distributed from separate repositories. The host's DeckLink interface and tests
+builds the Windows 11 x64 application, ZIP package, and installer. The initial
+3.0.0-beta.1 release is accompanied by separate ATEM, NDI, VST3, and DeckLink
+0.3.0 packages. They are maintained in separate repositories and are not bundled
+with the host. See the [VTR-PON3 add-on guide](https://pondashi.com/vtr-pon/addon/)
+and install compatible packages through **Settings → Add-ons**. The host's DeckLink interface and tests
 do not require the DeckLink SDK or the separate add-on source tree.
 
 ## Prerequisites

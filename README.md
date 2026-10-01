@@ -7,8 +7,11 @@ are in [`3/`](3/README.md).
 
 The [official Windows download page](https://pondashi.com/vtr-pon/download/windows/)
 provides installer and ZIP editions. VTR-PON3 cannot import VTR-PON2 settings
-or playlists. The initial beta does not include ATEM, NDI, VST3, or DeckLink
-add-ons; these are distributed separately. DeckLink use also requires the
+or playlists. Alongside the initial **3.0.0-beta.1** release, ATEM, NDI,
+VST3, and DeckLink add-ons are distributed separately as **0.3.0** packages.
+See the [VTR-PON3 add-on guide](https://pondashi.com/vtr-pon/addon/) and
+install compatible packages through **Settings → Add-ons**. These add-ons
+are not bundled with the application. DeckLink use also requires the
 official Blackmagic Desktop Video Windows x64 installation. See the
 [installation guide](3/INSTALL.ja.md) for the requirements.
 

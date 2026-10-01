@@ -15,7 +15,16 @@ CC0 は権利者が保有する権利について適用する。SMPTE 等の規�
 
 ## 別配布アドオン
 
-ATEM・NDI・VST3・DeckLink は本体と別配布する。初回ベータの本体配布物には、各アドオンとその SDK／ベンダー Runtime を含めない。アドオンの自作部分は MIT、SDK 由来部分や依存ライブラリには各権利者の条件を適用し、各パッケージの文書で範囲を案内する。
+ATEM・NDI・VST3・DeckLink は本体と別配布する。初回の本体 **3.0.0-beta.1** と同時に、それぞれ **0.3.0** を別配布する。本体配布物には、各アドオンとその SDK／ベンダー Runtime を含めない。アドオンの自作部分は MIT、SDK 由来部分や依存ライブラリには各権利者の条件を適用し、各パッケージの文書で範囲を案内する。
+
+[VTR-PON3公式アドオン案内](https://pondashi.com/vtr-pon/addon/)で対応版と必要ソフトを確認し、本体の「設定 → アドオン」から導入する。導入時には、パッケージに収録された利用条件・通知を確認して同意する。各0.3.0のソース・MIT本文・版固有の配布条件は、次のリポジトリで案内する。
+
+| アドオン | ソース・README | 配布条件・第三者通知 |
+| --- | --- | --- |
+| ATEM 0.3.0 | [ソース](https://github.com/pondashicom/vtr-pon-atem-addon/tree/v0.3.0) | [配布条件](https://github.com/pondashicom/vtr-pon-atem-addon/blob/v0.3.0/LICENSE/DISTRIBUTION.md) |
+| Network Video（NDI®対応）0.3.0 | [ソース](https://github.com/pondashicom/vtr-pon-network-video-addon/tree/v0.3.0) | [配布条件](https://github.com/pondashicom/vtr-pon-network-video-addon/blob/v0.3.0/LICENSE/DISTRIBUTION.md) |
+| VST3 0.3.0 | [ソース](https://github.com/pondashicom/vtr-pon-vst3-addon/tree/v0.3.0) | [配布条件](https://github.com/pondashicom/vtr-pon-vst3-addon/blob/v0.3.0/LICENSE/DISTRIBUTION.md) |
+| DeckLink 0.3.0 | [ソース](https://github.com/pondashicom/vtr-pon-decklink-addon/tree/v0.3.0) | [配布条件](https://github.com/pondashicom/vtr-pon-decklink-addon/blob/v0.3.0/LICENSE/DISTRIBUTION.md) |
 
 DeckLink アドオンの利用には、[Blackmagic Design 公式の Desktop Video](https://www.blackmagicdesign.com/jp/developer/products/capture-and-playback/sdk-and-software) Windows x64 版を別途インストールする。現行実装は Desktop Video API 16.0 以上を要求する。DeckLink SDK はアドオンの開発時だけ必要で、本体のビルドと通常の利用には不要。本体やアドオンの導入・削除は、Desktop Video の導入・削除を代行しない。
 
