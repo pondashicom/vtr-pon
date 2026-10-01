@@ -4719,5 +4719,105 @@ Adjust the slider to find a comfortable text size.</translation>
     <message id="settings.addons.agreement_check"><source>I have read and agree to the agreement documents shown above.</source><translation>I have read and agree to the agreement documents shown above.</translation></message>
     <message id="settings.addons.agreement_accept"><source>Agree and install</source><translation>Agree and install</translation></message>
     <message id="settings.addons.agreement_missing"><source>This package has no supported agreement document. Ask for a new package.</source><translation>This package has no supported agreement document. Ask for a new package.</translation></message>
+    <message id="decklink.title">
+        <source>DeckLink</source>
+        <translation>DeckLink</translation>
+    </message>
+    <message id="decklink.description">
+        <source>Choose the output channel and format for Composite, Fill and Key, then enable each output. DeckLink input channels appear in the INPUT dropdown. Input format changes apply to newly added items.</source>
+        <translation>Choose the output channel and format for Composite, Fill and Key, then enable each output. DeckLink input channels appear in the INPUT dropdown. Input format changes apply to newly added items.</translation>
+    </message>
+    <message id="decklink.enable_input">
+        <source>Enable DeckLink input</source>
+        <translation>Enable DeckLink input</translation>
+    </message>
+    <message id="decklink.enable_output">
+        <source>Enable DeckLink output</source>
+        <translation>Enable DeckLink output</translation>
+    </message>
+    <message id="decklink.output_channel">
+        <source>Output channel</source>
+        <translation>Output channel</translation>
+    </message>
+    <message id="decklink.output_mode">
+        <source>Output format</source>
+        <translation>Output format</translation>
+    </message>
+    <message id="decklink.input_mode">
+        <source>Input format</source>
+        <translation>Input format</translation>
+    </message>
+    <message id="decklink.auto_mode">
+        <source>Auto (device detection)</source>
+        <translation>Auto (device detection)</translation>
+    </message>
+    <message id="decklink.select_channel">
+        <source>Select output channel</source>
+        <translation>Select output channel</translation>
+    </message>
+    <message id="decklink.saved_unavailable">
+        <source>Saved selection (currently unavailable)</source>
+        <translation>Saved selection (currently unavailable)</translation>
+    </message>
+    <message id="decklink.output_running">
+        <source>DeckLink output is running.</source>
+        <translation>DeckLink output is running.</translation>
+    </message>
+    <message id="decklink.no_devices">
+        <source>No DeckLink devices found. Connect the device and check Desktop Video Setup.</source>
+        <translation>No DeckLink devices found. Connect the device and check Desktop Video Setup.</translation>
+    </message>
+    <message id="decklink.ready">
+        <source>DeckLink devices are available.</source>
+        <translation>DeckLink devices are available.</translation>
+    </message>
+    <message id="decklink.input_error">
+        <source>A DeckLink input error occurred.</source>
+        <translation>A DeckLink input error occurred.</translation>
+    </message>
+    <message id="decklink.selected_unavailable">
+        <source>The selected DeckLink input channel is unavailable.</source>
+        <translation>The selected DeckLink input channel is unavailable.</translation>
+    </message>
+    <message id="decklink.start_failed">
+        <source>Could not start DeckLink input.</source>
+        <translation>Could not start DeckLink input.</translation>
+    </message>
+    <message id="decklink.add_failed">
+        <source>Could not add DeckLink input to the playlist.</source>
+        <translation>Could not add DeckLink input to the playlist.</translation>
+    </message>
+    <message id="decklink.live">
+        <source>DeckLink Live</source>
+        <translation>DeckLink Live</translation>
+    </message>
+    <message id="decklink.input_title">
+        <source>UVC / NDI / DeckLink Input</source>
+        <translation>UVC / NDI / DeckLink Input</translation>
+    </message>
+    <message id="decklink.input_devices">
+        <source>Select an input device or channel</source>
+        <translation>Select an input device or channel</translation>
+    </message>
+    <message id="decklink.input_add">
+        <source>Add selected input to playlist</source>
+        <translation>Add selected input to playlist</translation>
+    </message>
+    <message id="decklink.select_format">
+        <source>Select output format</source>
+        <translation>Select output format</translation>
+    </message>
+    <message id="decklink.fill_key_help">
+        <source>Assign each enabled output to a different hardware channel. Fill and Key use the same video format and source frame. FTB fades them to transparency. Audio is sent to Composite and Fill; Key is silent. Synchronized playback uses a common locked reference when required by the device.</source>
+        <translation>Assign each enabled output to a different hardware channel. Fill and Key use the same video format and source frame. FTB fades them to transparency. Audio is sent to Composite and Fill; Key is silent. Synchronized playback uses a common locked reference when required by the device.</translation>
+    </message>
+    <message id="decklink.pair_synchronized">
+        <source>Fill/Key: synchronized playback.</source>
+        <translation>Fill/Key: synchronized playback.</translation>
+    </message>
+    <message id="decklink.pair_unsynchronized">
+        <source>Fill/Key: independent playback. Hardware timing is not synchronized.</source>
+        <translation>Fill/Key: independent playback. Hardware timing is not synchronized.</translation>
+    </message>
 </context>
 </TS>

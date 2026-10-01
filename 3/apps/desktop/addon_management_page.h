@@ -40,7 +40,7 @@ private:
   bool confirmAgreement(const vtrpon::addons::Package &package);
   void setMessage(const QString &text);
 
-  std::array<Row, 3> rows_{};
+  std::array<Row, 4> rows_{};
   QLabel *title_ = nullptr;
   QLabel *description_ = nullptr;
   QLabel *catalogStatus_ = nullptr;

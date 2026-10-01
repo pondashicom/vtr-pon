@@ -22,7 +22,7 @@ class QTimer;
 class QTableWidget;
 class TestPatternSettingsPage;
 class OperatorMonitorSettingsPage;
-class NetworkVideoSettingsPage;
+class NetworkVideoSettingsPage; class DeckLinkSettingsPage;
 class QVBoxLayout;
 class UvcAudioMappingStore;
 class UvcDeviceMonitor;
@@ -177,6 +177,7 @@ private:
   QListWidget *navigationList_ = nullptr;
   QStackedWidget *pageStack_ = nullptr;
   NetworkVideoSettingsPage *networkVideoPage_ = nullptr;
+  DeckLinkSettingsPage *deckLinkPage_ = nullptr;
   vtrpon::AddonRuntimeStatusWidget *atemRuntimeStatus_ = nullptr;
   TestPatternSettingsPage *testPatternPage_ = nullptr;
   QLabel *settingsTitle_ = nullptr;

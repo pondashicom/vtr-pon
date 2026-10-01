@@ -1,3 +1,4 @@
+#include "decklink.h"
 #include "program_audio_output.h"
 #include "program_audio_bridge.h"
 #include "audio_delay.h"
@@ -197,6 +198,7 @@ bool ProgramAudioOutput::initialize(GstBusSyncHandler callback, gpointer userDat
                     if (event) gst_event_unref(event);
                     if (clock) gst_object_unref(clock);
                     vtrpon::publishNetworkAudio(buffer, timecode);
+                    vtrpon::publishDeckLinkAudio(buffer, timecode);
                     return GST_PAD_PROBE_OK;
                 }, programOutput_, nullptr);
             gst_object_unref(pad);

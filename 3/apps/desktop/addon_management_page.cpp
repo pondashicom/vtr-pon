@@ -87,7 +87,7 @@ AddonManagementPage::AddonManagementPage(QWidget *parent) : QWidget(parent) {
   catalogRow->addWidget(refreshButton_);
   layout->addLayout(catalogRow);
   const auto ids = vtrpon::addons::ids();
-  for (int i = 0; i < 3; ++i) {
+  for (int i = 0; i < int(rows_.size()); ++i) {
     auto &row = rows_[i];
     row.id = ids.at(i);
     auto *group = new QGroupBox(this);
@@ -220,9 +220,11 @@ void AddonManagementPage::retranslate() {
   rows_[0].title->setText(QStringLiteral("ATEM"));
   rows_[1].title->setText(QStringLiteral("NDI"));
   rows_[2].title->setText(QStringLiteral("VST3"));
+  rows_[3].title->setText(QStringLiteral("DeckLink"));
   rows_[0].description->setText(vtrpon::uiText("settings.addons.atem"));
   rows_[1].description->setText(vtrpon::uiText("settings.addons.ndi"));
   rows_[2].description->setText(vtrpon::uiText("settings.addons.vst3"));
+  rows_[3].description->setText(vtrpon::uiText("decklink.description"));
   for (auto &row : rows_)
     row.uninstall->setText(vtrpon::uiText("settings.addons.uninstall"));
   reload();

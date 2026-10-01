@@ -1,3 +1,4 @@
+#include "decklink.h"
 #include "program_playout_controller.h"
 #include "network_video_source.h"
 #include <QDebug>
@@ -291,7 +292,7 @@ ProgramPlayoutController::cueRequestFor(
       item.filePath,
       item.displayName,
       item.sourceType,
-      vtrpon::isNetworkVideoSource(item.filePath) ? item.filePath
+      (vtrpon::isNetworkVideoSource(item.filePath) || vtrpon::isDeckLinkSource(item.filePath)) ? item.filePath
       : item.sourceType == PlaylistSourceType::Uvc && uvcAudioMappingStore_
           ? uvcAudioMappingStore_->audioDeviceIdFor(item.filePath)
           : QString(),

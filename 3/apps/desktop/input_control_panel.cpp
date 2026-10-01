@@ -238,13 +238,13 @@ void InputControlPanel::retranslateUi() {
   }
   setAccessibleName(vtrpon::uiText("input.accessible"));
   sectionTitle_->setText(vtrpon::uiText("input.title"));
-  uvcModule_->setAccessibleName(vtrpon::uiText(networkInputEnabled_ ? "input.network.title" : "input.uvc.accessible"));
-  moduleTitle_->setText(vtrpon::uiText(networkInputEnabled_ ? "input.network.title" : "input.uvc.title"));
+  uvcModule_->setAccessibleName(vtrpon::uiText(deckLinkInputEnabled_ ? "decklink.input_title" : networkInputEnabled_ ? "input.network.title" : "input.uvc.accessible"));
+  moduleTitle_->setText(vtrpon::uiText(deckLinkInputEnabled_ ? "decklink.input_title" : networkInputEnabled_ ? "input.network.title" : "input.uvc.title"));
   uvcDeviceComboBox_->setAccessibleName(
-      vtrpon::uiText(networkInputEnabled_ ? "input.network.devices_accessible" : "input.uvc.devices_accessible"));
+      vtrpon::uiText(deckLinkInputEnabled_ ? "decklink.input_devices" : networkInputEnabled_ ? "input.network.devices_accessible" : "input.uvc.devices_accessible"));
   uvcAddButton_->setAccessibleName(
-      vtrpon::uiText(networkInputEnabled_ ? "input.network.add" : "input.uvc.add_accessible"));
-  uvcAddButton_->setToolTip(vtrpon::uiText(networkInputEnabled_ ? "input.network.add" : "input.uvc.add_tooltip"));
+      vtrpon::uiText(deckLinkInputEnabled_ ? "decklink.input_add" : networkInputEnabled_ ? "input.network.add" : "input.uvc.add_accessible"));
+  uvcAddButton_->setToolTip(vtrpon::uiText(deckLinkInputEnabled_ ? "decklink.input_add" : networkInputEnabled_ ? "input.network.add" : "input.uvc.add_tooltip"));
   if (uvcDeviceComboBox_->count() >= 1 &&
       uvcDeviceComboBox_->itemData(0).toString().isEmpty()) {
     uvcDeviceComboBox_->setItemText(0, vtrpon::uiText("input.uvc.none"));
@@ -265,6 +265,14 @@ void InputControlPanel::setNetworkVideoSources(const QList<vtrpon::NetworkVideoS
   networkInputEnabled_ = enabled;
   refreshDevices();
   retranslateUi();
+}
+
+void InputControlPanel::setDeckLinkSources(const QList<vtrpon::NetworkVideoSource> &sources, bool enabled) {
+  const auto visible = enabled ? sources : QList<vtrpon::NetworkVideoSource>{};
+  if (deckLinkSources_ == visible && deckLinkInputEnabled_ == enabled) return;
+  deckLinkSources_ = visible;
+  deckLinkInputEnabled_ = enabled;
+  refreshDevices(); retranslateUi();
 }
 
 void InputControlPanel::refreshDevices() {
@@ -305,10 +313,21 @@ void InputControlPanel::refreshDevices() {
       uvcDeviceComboBox_->setItemData(index, source.name, Qt::ToolTipRole);
     }
   }
+  if (!deckLinkSources_.isEmpty()) {
+    uvcDeviceComboBox_->insertSeparator(uvcDeviceComboBox_->count());
+    for (const auto &source : deckLinkSources_) {
+      uvcDeviceComboBox_->addItem(source.name, source.path);
+      const int index = uvcDeviceComboBox_->count() - 1;
+      uvcDeviceComboBox_->setItemData(index, source.name, Qt::UserRole + 1);
+      uvcDeviceComboBox_->setItemData(index, source.name, Qt::ToolTipRole);
+    }
+  }
+  int firstAvailable = 0;
+  while (firstAvailable < uvcDeviceComboBox_->count() && uvcDeviceComboBox_->itemData(firstAvailable).toString().isEmpty()) ++firstAvailable;
   const int previousIndex = previousPath.isEmpty() ? -1 : uvcDeviceComboBox_->findData(previousPath);
   uvcDeviceComboBox_->setCurrentIndex(previousIndex >= 0 ? previousIndex
-      : devices.isEmpty() && !networkSources_.isEmpty() ? 2 : 0);
-  const bool available = !devices.isEmpty() || !networkSources_.isEmpty();
+      : firstAvailable < uvcDeviceComboBox_->count() ? firstAvailable : 0);
+  const bool available = !devices.isEmpty() || !networkSources_.isEmpty() || !deckLinkSources_.isEmpty();
   uvcDeviceComboBox_->setEnabled(available && !uvcCaptureBusy_);
   uvcAddButton_->setEnabled(available && !uvcCaptureBusy_);
 }

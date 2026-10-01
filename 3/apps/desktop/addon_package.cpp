@@ -355,13 +355,15 @@ bool waitForRunningCopies(const QString &root, QString *error) {
 QStringList ids() {
   return {QStringLiteral("vtr-pon-atem-addon"),
           QStringLiteral("vtr-pon-network-video-addon"),
-          QStringLiteral("vtr-pon-vst3-addon")};
+          QStringLiteral("vtr-pon-vst3-addon"), QStringLiteral("vtr-pon-decklink-addon")};
 }
 QString entryPath(const QString &id) {
   if (id == QLatin1String("vtr-pon-atem-addon"))
     return QStringLiteral("switcher-addons/vtr-pon-atem-addon.dll");
   if (id == QLatin1String("vtr-pon-network-video-addon"))
     return QStringLiteral("network-video-addons/vtr-pon-network-video-addon.dll");
+  if (id == QLatin1String("vtr-pon-decklink-addon"))
+    return QStringLiteral("decklink-addons/vtr-pon-decklink-addon.dll");
   if (id == QLatin1String("vtr-pon-vst3-addon"))
     return QStringLiteral("audio-addons/vtr-pon-vst3-addon.exe");
   return {};
@@ -370,6 +372,7 @@ QString contract(const QString &id) {
   if (id == QLatin1String("vtr-pon-atem-addon")) return QStringLiteral("switcher-addon-abi-v1");
   if (id == QLatin1String("vtr-pon-network-video-addon")) return QStringLiteral("network-video-abi-v2");
   if (id == QLatin1String("vtr-pon-vst3-addon")) return QStringLiteral("vst-protocol-v2");
+  if (id == QLatin1String("vtr-pon-decklink-addon")) return QStringLiteral("decklink-media-abi-v1");
   return {};
 }
 int compareVersions(const QString &left, const QString &right) {

@@ -11,6 +11,7 @@
 #include "operator_monitor_settings_page.h"
 #include "virtual_camera/output.h"
 #include "network_video_settings_page.h"
+#include "decklink_settings_page.h"
 #include "atem_addon_switcher.h"
 #include <QTimer>
 #include <QFontComboBox>
@@ -1204,6 +1205,10 @@ ControllerSettingsDialog::ControllerSettingsDialog(
     networkVideoPage_ = new NetworkVideoSettingsPage(pageStack);
     pageStack->insertWidget(4, networkVideoPage_);
   }
+  if (vtrpon::deckLinkAddonInstalled()) {
+    deckLinkPage_ = new DeckLinkSettingsPage(pageStack);
+    pageStack->insertWidget(4, deckLinkPage_);
+  }
   const auto addNavigationItem = [this](const char *id, QWidget *page,
                                         const char *textId) {
     auto *item = new QListWidgetItem(navigationList_);
@@ -1223,6 +1228,7 @@ ControllerSettingsDialog::ControllerSettingsDialog(
     addNavigationItem("network_video", networkVideoPage_,
                       "settings.group.ndi");
   }
+  if (deckLinkPage_) addNavigationItem("decklink", deckLinkPage_, "decklink.title");
   addNavigationItem("virtual_camera", virtualCameraPage_,
                     "virtual_camera.title");
   addNavigationItem("switcher", switcherPage,
@@ -1467,6 +1473,7 @@ void ControllerSettingsDialog::retranslateUi() {
     item->setText(vtrpon::uiText(textId.constData()));
   }
   if (networkVideoPage_) networkVideoPage_->retranslate();
+  if (deckLinkPage_) deckLinkPage_->retranslate();
   addonManagementPage_->retranslate();
   virtualCameraCheckBox_->setText(vtrpon::uiText("virtual_camera.enable"));
   virtualCameraDescription_->setText(vtrpon::uiText("virtual_camera.description"));
@@ -2350,6 +2357,7 @@ void ControllerSettingsDialog::reloadSavedSettings() {
   textSizeSlider_->setValue(size);
   applyTextSize(size);
   if (networkVideoPage_) networkVideoPage_->reload();
+  if (deckLinkPage_) deckLinkPage_->reload();
   operatorMonitorPage_->reload();
   testPatternPage_->reload();
   reloadTimeSettings();

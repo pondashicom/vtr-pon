@@ -1,3 +1,4 @@
+#include "decklink.h"
 #include "uvc_source_session_manager.h"
 #include "uvc_input_guard.h"
 #include "uvc_thumbnail_mailbox.h"
@@ -108,6 +109,7 @@ public:
         GstElement *pipeline = nullptr;
         GstElement *source = nullptr;
         std::shared_ptr<vtrpon::NetworkVideoReceiver> networkReceiver;
+        std::shared_ptr<vtrpon::DeckLinkReceiver> deckLinkReceiver;
         std::array<GstElement *, 2> programValves = {};
         std::array<GstElement *, 2> programSinks = {};
         GstElement *thumbnailSink = nullptr;
@@ -199,7 +201,9 @@ public:
         if (errorDetail) {
             errorDetail->clear();
         }
-        if (!(vtrpon::isNetworkVideoSource(devicePath)
+        if (!(vtrpon::isDeckLinkSource(devicePath)
+              ? vtrpon::deckLinkInputAllowed(devicePath, errorDetail)
+              : vtrpon::isNetworkVideoSource(devicePath)
                 ? vtrpon::networkVideoInputAllowed(devicePath, errorDetail)
                 : vtrpon::uvcInputAllowed(devicePath, errorDetail))) {
             return false;
@@ -539,8 +543,11 @@ private:
                               int outputHeight, GstContext *programContext)
     {
         QString *errorDetail = &session->errorDetail;
-        const bool network = vtrpon::isNetworkVideoSource(session->devicePath);
-        const QString input = network
+        const bool deckLink = vtrpon::isDeckLinkSource(session->devicePath);
+        const bool network = deckLink || vtrpon::isNetworkVideoSource(session->devicePath);
+        const QString input = deckLink
+            ? QStringLiteral("appsrc name=%1-source is-live=true format=time do-timestamp=true block=false max-buffers=2 max-bytes=0 max-time=0 leaky-type=downstream ! videoconvert ! deinterlace mode=auto ! ")
+            : network
             ? QStringLiteral("appsrc name=%1-source is-live=true format=time do-timestamp=true block=false max-buffers=2 max-bytes=0 max-time=0 leaky-type=downstream ! ")
             : QStringLiteral("mfvideosrc name=%1-source do-timestamp=true ! decodebin ! ");
         const QString description = (input + QStringLiteral(
@@ -680,7 +687,8 @@ private:
             }
             return false;
         }
-        if (network) session->networkReceiver = std::make_shared<vtrpon::NetworkVideoReceiver>(
+        if (deckLink) session->deckLinkReceiver = std::make_shared<vtrpon::DeckLinkReceiver>(session->devicePath, session->source, false);
+        else if (network) session->networkReceiver = std::make_shared<vtrpon::NetworkVideoReceiver>(
             session->devicePath, session->source, false);
         return true;
     }
@@ -750,6 +758,7 @@ private:
     {
         Session &session = *sessionHolder;
         session.networkReceiver.reset();
+        session.deckLinkReceiver.reset();
         {
             std::scoped_lock lock(session.callbackMutex);
             session.acceptingCallbacks = false;

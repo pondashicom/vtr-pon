@@ -1,3 +1,4 @@
+#include "decklink.h"
 #include "edit_session_controller.h"
 #include "edit_pfl_output.h"
 #include "edit_pfl_protocol.h"
@@ -45,7 +46,7 @@ public:
       if (detail) *detail = QStringLiteral("EDIT audio effects are unavailable.");
       return false;
     }
-    const bool network = vtrpon::isNetworkVideoSource(audioDeviceId);
+    const bool network = (vtrpon::isNetworkVideoSource(audioDeviceId) || vtrpon::isDeckLinkSource(audioDeviceId));
     const QString input = network
         ? QStringLiteral("appsrc name=edit-live-source is-live=true format=time do-timestamp=true block=false max-buffers=0 max-bytes=0 max-time=200000000 leaky-type=downstream ! ")
         : QStringLiteral("wasapi2src name=edit-live-source do-timestamp=true provide-clock=false low-latency=true ! ");
@@ -107,7 +108,9 @@ public:
       stop();
       return false;
     }
-    if (network)
+    if (vtrpon::isDeckLinkSource(audioDeviceId))
+      deckLinkReceiver_ = std::make_shared<vtrpon::DeckLinkReceiver>(audioDeviceId, source_, true);
+    else if (network)
       networkReceiver_ = std::make_shared<vtrpon::NetworkVideoReceiver>(
           audioDeviceId, source_, true);
     feed_->setPlaying(true);
@@ -120,6 +123,7 @@ public:
     feed_->setPlaying(false);
     feed_->flush();
     networkReceiver_.reset();
+    deckLinkReceiver_.reset();
     for (auto *element : {source_, effects_, volume_, inputLevel_, outputLevel_})
       if (element) gst_object_unref(element);
     source_ = effects_ = volume_ = inputLevel_ = outputLevel_ = nullptr;
@@ -318,6 +322,7 @@ private:
   GstElement *outputLevel_ = nullptr;
   GstBus *bus_ = nullptr;
   std::shared_ptr<vtrpon::NetworkVideoReceiver> networkReceiver_;
+  std::shared_ptr<vtrpon::DeckLinkReceiver> deckLinkReceiver_;
   std::vector<std::shared_ptr<AsyncPipelineStop>> stops_;
   EditPlayer::AudioLevel input_;
   EditPlayer::AudioLevel output_;
@@ -1447,7 +1452,7 @@ void EditSessionController::updateUi() {
       liveAudioNeedsStart_ = false;
       const auto state = playlistModel_->itemState(editItemId_);
       if (state) {
-        const QString audioDeviceId = vtrpon::isNetworkVideoSource(liveDevicePath_)
+        const QString audioDeviceId = (vtrpon::isNetworkVideoSource(liveDevicePath_) || vtrpon::isDeckLinkSource(liveDevicePath_))
             ? liveDevicePath_
             : uvcAudioMappings_ ? uvcAudioMappings_->audioDeviceIdFor(liveDevicePath_)
                                 : QString();
@@ -1455,7 +1460,7 @@ void EditSessionController::updateUi() {
         if (!liveAudio_->start(audioDeviceId, state->settings, &error)) {
           panel_->setStatusToolTip(error);
           panel_->setStatus(vtrpon::LocalizedText(
-              vtrpon::isNetworkVideoSource(liveDevicePath_)
+              vtrpon::isDeckLinkSource(liveDevicePath_) ? "decklink.input_error" : vtrpon::isNetworkVideoSource(liveDevicePath_)
                   ? "network_video.input_error" : "uvc.input_error"), true);
         }
       }
@@ -1465,7 +1470,7 @@ void EditSessionController::updateUi() {
     if (!audioError.isEmpty()) {
       panel_->setStatusToolTip(audioError);
       panel_->setStatus(vtrpon::LocalizedText(
-          vtrpon::isNetworkVideoSource(liveDevicePath_)
+          vtrpon::isDeckLinkSource(liveDevicePath_) ? "decklink.input_error" : vtrpon::isNetworkVideoSource(liveDevicePath_)
               ? "network_video.input_error" : "uvc.input_error"), true);
     }
     const auto output = liveAudio_->outputLevel();

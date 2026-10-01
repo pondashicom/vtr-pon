@@ -1,3 +1,4 @@
+#include "decklink.h"
 #include "controller_settings.h"
 #include "test_pattern_store.h"
 #include "virtual_camera/output.h"
@@ -765,6 +766,7 @@ private:
     }
     uvcDeviceMonitor_->requestShutdown();
     networkVideoRuntime_.requestShutdown();
+    deckLinkRuntime_.requestShutdown();
     audioInputDeviceMonitor_->requestShutdown();
     switcherController_->requestShutdown();
     savePreviousSession();
@@ -787,6 +789,7 @@ private:
     uvcSourceSessions_->requestShutdown();
     if (!uvcSourceSessions_->shutdownComplete() || !uvcDeviceMonitor_->shutdownComplete()
         || !networkVideoRuntime_.shutdownComplete()
+        || !deckLinkRuntime_.shutdownComplete()
         || !audioInputDeviceMonitor_->shutdownComplete() || !audioOutputs_->shutdownComplete()
         || !switcherController_->isShutdownComplete() || !mediaImports_->shutdownComplete()
         || !playlistModel_->shutdownComplete() || !fileIo_->shutdownComplete()
@@ -1547,8 +1550,8 @@ private:
                   uvcSourceSessions_->latestThumbnail(devicePath);
               applyUvcThumbnail(devicePath, image, detail);
               userInfoCenter_->showError(
-                  vtrpon::isNetworkVideoSource(devicePath) ? QStringLiteral("NDI") : QStringLiteral("UVC"),
-                  vtrpon::LocalizedText(vtrpon::isNetworkVideoSource(devicePath) ? "network_video.input_error" : "uvc.input_error"), detail);
+                  vtrpon::isDeckLinkSource(devicePath) ? QStringLiteral("DeckLink") : vtrpon::isNetworkVideoSource(devicePath) ? QStringLiteral("NDI") : QStringLiteral("UVC"),
+                  vtrpon::LocalizedText(vtrpon::isDeckLinkSource(devicePath) ? "decklink.input_error" : vtrpon::isNetworkVideoSource(devicePath) ? "network_video.input_error" : "uvc.input_error"), detail);
             });
     connect(uvcSourceSessions_, &UvcSourceSessionManager::sourceAvailabilityChanged,
             playlistModel_, &PlaylistModel::setUvcDeviceAvailable);
@@ -1563,7 +1566,7 @@ private:
     connect(playlistModel_, &PlaylistModel::modelReset, this,
             [this] { refreshUvcPreviewSources(); });
     inputControlPanel_->setUvcDevices(uvcDeviceMonitor_->devices());
-    if (vtrpon::networkVideoAddonInstalled()) {
+    if (vtrpon::networkVideoAddonInstalled() || vtrpon::deckLinkAddonInstalled()) {
       auto *networkTimer = new QTimer(this);
       connect(networkTimer, &QTimer::timeout, this, [this] { if (!closing_) refreshCaptureDevices(); });
       networkTimer->start(500);
@@ -1577,6 +1580,14 @@ private:
     if (vtrpon::networkVideoAddonInstalled() && vtrpon::savedNetworkVideoSettings().inputEnabled)
       for (const auto &source : vtrpon::networkVideoState().sources)
         devices.append({source.name, source.path});
+    if (vtrpon::deckLinkAddonInstalled() && vtrpon::savedDeckLinkSettings().inputEnabled)
+      for (const auto &channel : vtrpon::deckLinkState().channels) if (channel.input) {
+        VtrPonDeckLinkStreamOptions options{};
+        if (vtrpon::deckLinkSourceOptions(channel.path, &options)) {
+          options.modeId = vtrpon::savedDeckLinkSettings().inputMode;
+          devices.append({channel.name, vtrpon::deckLinkSourcePath(options)});
+        }
+      }
     return devices;
   }
 
@@ -1585,8 +1596,24 @@ private:
       const auto state = vtrpon::networkVideoState();
       inputControlPanel_->setNetworkVideoSources(state.sources, vtrpon::savedNetworkVideoSettings().inputEnabled);
     }
+    QList<vtrpon::NetworkVideoSource> deckLinkSources;
+    for (const auto &device : availableCaptureDevices())
+      if (vtrpon::isDeckLinkSource(device.devicePath)) deckLinkSources.append({device.displayName, device.devicePath});
+    inputControlPanel_->setDeckLinkSources(deckLinkSources, vtrpon::deckLinkAddonInstalled() && vtrpon::savedDeckLinkSettings().inputEnabled);
     QSet<QString> paths;
     for (const auto &device : availableCaptureDevices()) paths.insert(device.devicePath);
+    // Saved input items retain their selected format. A changed default format
+    // does not make a still-connected channel unavailable.
+    if (vtrpon::savedDeckLinkSettings().inputEnabled) {
+      const auto channels = vtrpon::deckLinkState().channels;
+      for (const auto &item : playlistModel_->snapshot().items) {
+        VtrPonDeckLinkStreamOptions options{};
+        if (!vtrpon::deckLinkSourceOptions(item.filePath, &options)) continue;
+        options.modeId = 0;
+        const auto channelPath = vtrpon::deckLinkSourcePath(options);
+        if (std::any_of(channels.cbegin(), channels.cend(), [&](const auto &c) { return c.input && c.path == channelPath; })) paths.insert(item.filePath);
+      }
+    }
     // An empty list before the physical-device worker's first result is not
     // evidence that saved cameras were disconnected.
     if (captureDiscoveryReady_ && (force || paths != availableCapturePaths_)) {
@@ -2026,8 +2053,8 @@ private:
                     });
     if (!stillAvailable) {
       userInfoCenter_->showWarning(
-          vtrpon::isNetworkVideoSource(devicePath) ? QStringLiteral("NDI") : QStringLiteral("UVC"),
-          vtrpon::LocalizedText(vtrpon::isNetworkVideoSource(devicePath) ? "network_video.selected_unavailable" : "uvc.selected_unavailable"));
+          vtrpon::isDeckLinkSource(devicePath) ? QStringLiteral("DeckLink") : vtrpon::isNetworkVideoSource(devicePath) ? QStringLiteral("NDI") : QStringLiteral("UVC"),
+          vtrpon::LocalizedText(vtrpon::isDeckLinkSource(devicePath) ? "decklink.selected_unavailable" : vtrpon::isNetworkVideoSource(devicePath) ? "network_video.selected_unavailable" : "uvc.selected_unavailable"));
       refreshCaptureDevices();
       return;
     }
@@ -2039,8 +2066,8 @@ private:
     inputControlPanel_->setUvcCaptureBusy(false);
     if (!sourceStarted) {
       userInfoCenter_->showError(
-          vtrpon::isNetworkVideoSource(devicePath) ? QStringLiteral("NDI") : QStringLiteral("UVC"),
-          vtrpon::LocalizedText(vtrpon::isNetworkVideoSource(devicePath) ? "network_video.start_failed" : "uvc.start_failed"), errorDetail);
+          vtrpon::isDeckLinkSource(devicePath) ? QStringLiteral("DeckLink") : vtrpon::isNetworkVideoSource(devicePath) ? QStringLiteral("NDI") : QStringLiteral("UVC"),
+          vtrpon::LocalizedText(vtrpon::isDeckLinkSource(devicePath) ? "decklink.start_failed" : vtrpon::isNetworkVideoSource(devicePath) ? "network_video.start_failed" : "uvc.start_failed"), errorDetail);
       return;
     }
 
@@ -2057,8 +2084,8 @@ private:
     if (addedItemIds.size() != 1) {
       refreshUvcPreviewSources();
       userInfoCenter_->showError(
-          vtrpon::isNetworkVideoSource(devicePath) ? QStringLiteral("NDI") : QStringLiteral("UVC"),
-          vtrpon::LocalizedText(vtrpon::isNetworkVideoSource(devicePath) ? "network_video.add_failed" : "uvc.add_to_playlist_failed"));
+          vtrpon::isDeckLinkSource(devicePath) ? QStringLiteral("DeckLink") : vtrpon::isNetworkVideoSource(devicePath) ? QStringLiteral("NDI") : QStringLiteral("UVC"),
+          vtrpon::LocalizedText(vtrpon::isDeckLinkSource(devicePath) ? "decklink.add_failed" : vtrpon::isNetworkVideoSource(devicePath) ? "network_video.add_failed" : "uvc.add_to_playlist_failed"));
       return;
     }
     const QImage thumbnail =
@@ -2078,7 +2105,7 @@ private:
     QSet<QString> registeredPaths;
     for (const auto &item : playlistModel_->snapshot().items) {
       if (item.sourceType != PlaylistSourceType::Uvc) continue;
-      if (vtrpon::isNetworkVideoSource(item.filePath) && !vtrpon::networkVideoAddonInstalled()) {
+      if ((vtrpon::isNetworkVideoSource(item.filePath) && !vtrpon::networkVideoAddonInstalled()) || (vtrpon::isDeckLinkSource(item.filePath) && !vtrpon::deckLinkAddonInstalled())) {
         playlistModel_->setUvcDeviceAvailable(item.filePath, false);
         continue;
       }
@@ -2192,6 +2219,7 @@ private:
   DocumentImportQueue *documentImports_ = nullptr;
   UvcDeviceMonitor *uvcDeviceMonitor_ = nullptr;
   vtrpon::NetworkVideoRuntime networkVideoRuntime_;
+  vtrpon::DeckLinkRuntime deckLinkRuntime_;
   QSet<QString> availableCapturePaths_;
   bool captureDiscoveryReady_ = false;
   AudioInputDeviceMonitor *audioInputDeviceMonitor_ = nullptr;

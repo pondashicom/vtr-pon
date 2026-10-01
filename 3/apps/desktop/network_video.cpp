@@ -1,4 +1,5 @@
 #include "network_video.h"
+#include "media_timecode.h"
 #include "network_video_addon_api.h"
 #include "controller_settings.h"
 #include <QCoreApplication>
@@ -119,11 +120,7 @@ void sourceFound(void *value, const char *name) {
 }
 }
 qint64 networkVideoTimecode() {
-    // UTC epoch plus monotonic elapsed time: independent of source seeks and
-    // later system clock adjustments, shared by all video/audio senders.
-    static const auto start = Clock::now();
-    static const qint64 epoch = QDateTime::currentMSecsSinceEpoch() * 10000;
-    return epoch + std::chrono::duration_cast<std::chrono::nanoseconds>(Clock::now() - start).count() / 100;
+    return mediaTimecode100ns();
 }
 QString networkVideoOutputName(const NetworkVideoSettings &settings, NetworkVideoKind kind) {
     auto name = settings.outputName.trimmed();

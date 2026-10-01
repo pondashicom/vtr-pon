@@ -1418,3 +1418,70 @@ foreach(vst_consumer IN ITEMS
     target_link_libraries(${vst_consumer} PRIVATE vtrpon-vst-ui)
   endif()
 endforeach()
+
+# Separately distributed DeckLink media DLL: no vendor SDK in the host build.
+qt_add_library(vtrpon-decklink STATIC apps/desktop/decklink.cpp apps/desktop/decklink.h
+  apps/desktop/decklink_output.cpp apps/desktop/decklink_addon_api.h apps/desktop/decklink_media_api.h
+  apps/desktop/decklink_output_api.h)
+target_include_directories(vtrpon-decklink PUBLIC apps/desktop)
+target_link_libraries(vtrpon-decklink PRIVATE Qt6::Core Qt6::Gui PkgConfig::GSTREAMER PkgConfig::GSTREAMER_APP)
+target_compile_definitions(vtrpon-decklink PRIVATE NOMINMAX WIN32_LEAN_AND_MEAN)
+if(WIN32)
+  target_link_libraries(vtrpon-decklink PRIVATE d3d11)
+endif()
+if(MSVC)
+  target_compile_options(vtrpon-decklink PRIVATE /utf-8)
+endif()
+foreach(decklink_consumer IN ITEMS vtr-pon program-playout-transition-test deck-source-session-test
+    dual-deck-player-contract-test aux-playback-test playlist-panel-drag-drop-test
+    program-audio-output-test program-audio-bridge-test operator-monitor-isolation-test edit-panel-duration-control-test)
+  if(TARGET ${decklink_consumer})
+    target_link_libraries(${decklink_consumer} PRIVATE vtrpon-decklink)
+  endif()
+endforeach()
+
+if(WIN32 AND BUILD_TESTING)
+  # The fixture is SDK-free and built solely for this test, never installed.
+  add_library(decklink-host-test-addon SHARED
+    tests/decklink/mock_addon.cpp)
+  target_include_directories(decklink-host-test-addon PRIVATE
+    apps/desktop)
+  target_compile_definitions(decklink-host-test-addon PRIVATE VTRPON_DECKLINK_ADDON_BUILD NOMINMAX _CRT_SECURE_NO_WARNINGS)
+  set_target_properties(decklink-host-test-addon PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/decklink-test-only")
+  qt_add_executable(decklink-test tests/decklink_test.cpp)
+  target_link_libraries(decklink-test PRIVATE vtrpon-decklink Qt6::Core Qt6::Gui
+    PkgConfig::GSTREAMER PkgConfig::GSTREAMER_APP d3d11)
+  target_compile_definitions(decklink-test PRIVATE NOMINMAX WIN32_LEAN_AND_MEAN)
+  add_dependencies(decklink-test decklink-host-test-addon)
+  add_test(NAME decklink-media-host COMMAND decklink-test "$<TARGET_FILE:decklink-host-test-addon>")
+  set_tests_properties(decklink-media-host PROPERTIES TIMEOUT 60 RUN_SERIAL TRUE)
+endif()
+
+if(WIN32 AND CMAKE_CONFIGURATION_TYPES)
+  # Keep the established development launch path stable with VS/multi-config
+  # builds. Only host-owned runtime files are copied; add-ons stay separate.
+  add_custom_command(TARGET vtr-pon POST_BUILD
+    COMMAND "${CMAKE_COMMAND}" -E copy_if_different
+      "$<TARGET_FILE:vtr-pon>" "${CMAKE_BINARY_DIR}/vtr-pon.exe"
+    COMMAND "${CMAKE_COMMAND}" -E copy_if_different
+      "$<TARGET_FILE:vtr-pon-addon-manager>" "${CMAKE_BINARY_DIR}/vtr-pon-addon-manager.exe"
+    COMMAND "${CMAKE_COMMAND}" -E copy_if_different
+      "$<TARGET_FILE:vtr-pon-addon-runtime-probe>" "${CMAKE_BINARY_DIR}/vtr-pon-addon-runtime-probe.exe"
+    COMMAND "${CMAKE_COMMAND}" -E copy_if_different
+      "$<TARGET_FILE:vtr-pon-pfl-output>" "${CMAKE_BINARY_DIR}/vtr-pon-pfl-output.exe"
+    COMMAND "${CMAKE_COMMAND}" -E copy_if_different
+      "$<TARGET_FILE:vtr-pon-operator-monitor>" "${CMAKE_BINARY_DIR}/vtr-pon-operator-monitor.exe"
+    COMMAND "${CMAKE_COMMAND}" -E copy_if_different
+      "$<TARGET_FILE:vtr-pon-virtual-camera>" "${CMAKE_BINARY_DIR}/vtr-pon-virtual-camera.dll"
+    COMMAND "${CMAKE_COMMAND}" -E copy_if_different
+      "${VTRPON_ZLIB_RUNTIME}" "${CMAKE_BINARY_DIR}"
+    COMMAND "${CMAKE_COMMAND}" -E copy_directory
+      "$<TARGET_FILE_DIR:vtr-pon>/assets/testpatterns" "${CMAKE_BINARY_DIR}/assets/testpatterns"
+    COMMAND "${CMAKE_COMMAND}" -E copy_directory
+      "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE" "${CMAKE_BINARY_DIR}/LICENSE"
+    COMMAND "$<TARGET_FILE:Qt6::windeployqt>"
+      --no-translations --dir "${CMAKE_BINARY_DIR}" "$<TARGET_FILE:vtr-pon>"
+    COMMENT "Updating the fixed development runtime in the build root"
+    VERBATIM)
+endif()

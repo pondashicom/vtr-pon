@@ -1,3 +1,4 @@
+#include "decklink.h"
 #include "network_video_source.h"
 #include "playlist_panel.h"
 #include "controller_button_focus.h"
@@ -1679,7 +1680,7 @@ void PlaylistPanel::updateItemDisplay(quint64 itemId)
     const QString fileType = extension.isEmpty() ? unavailable : extension;
     item->setData(kItemMediaTypeRole,
                   state->sourceType == PlaylistSourceType::Uvc
-                      ? vtrpon::uiText(vtrpon::isNetworkVideoSource(state->filePath)
+                      ? vtrpon::uiText(vtrpon::isDeckLinkSource(state->filePath) ? "decklink.live" : vtrpon::isNetworkVideoSource(state->filePath)
                             ? "playlist.item.network_live" : "playlist.item.uvc_live")
                       : codec.isEmpty() ? fileType
                                         : QStringLiteral("%1 (%2)").arg(fileType, codec));

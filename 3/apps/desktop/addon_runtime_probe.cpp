@@ -1,4 +1,5 @@
 #include "addon_runtime_api.h"
+#include "decklink_media_api.h"
 #include "network_video_addon_api.h"
 #include "switcher_addon_api.h"
 #include <QCoreApplication>
@@ -31,7 +32,8 @@ int main(int argc, char **argv) {
     if (args.size() != 5 || args[1] != QLatin1StringView("--kind")
         || args[3] != QLatin1StringView("--addon-file")) return 1;
     const bool atem = args[2] == QLatin1StringView("atem");
-    if (!atem && args[2] != QLatin1StringView("network-video")) return 1;
+    const bool decklink = args[2] == QLatin1StringView("decklink");
+    if (!decklink && !atem && args[2] != QLatin1StringView("network-video")) return 1;
     if (!QFileInfo(args[4]).isFile()) return report("addon_missing");
     QLibrary library(args[4]);
     if (!library.load()) return report("addon_error", library.errorString());
@@ -41,13 +43,21 @@ int main(int argc, char **argv) {
         const auto *api = get ? get(VTRPON_SWITCHER_ADDON_ABI_VERSION) : nullptr;
         if (api && api->abiVersion == VTRPON_SWITCHER_ADDON_ABI_VERSION
             && api->structSize >= sizeof(VtrPonSwitcherAddonApiV1)) id = api->addonId;
+    } else if (decklink) {
+        const auto get = reinterpret_cast<VtrPonGetDeckLinkApi>(library.resolve("vtrpon_decklink_get_api"));
+        const auto getMedia = reinterpret_cast<VtrPonGetDeckLinkMediaApi>(library.resolve("vtrpon_decklink_get_media_api"));
+        const auto *api = get ? get(1) : nullptr; const auto *media = getMedia ? getMedia(1) : nullptr;
+        if (api && media && api->abiVersion == 1 && api->structSize >= sizeof(*api) && media->abiVersion == 1 && media->structSize >= sizeof(*media) &&
+            !api->flags && !media->flags && api->create && api->destroy && api->listDevices && api->listModes &&
+            media->listChannels && media->openInput && media->readInput && media->closeInput && media->openOutput &&
+            media->sendVideo && media->sendAudio && media->pumpOutput && media->closeOutput) id = api->addonId;
     } else {
         const auto get = reinterpret_cast<VtrPonGetNetworkVideoApi>(library.resolve("vtrpon_network_video_get_api"));
         const auto *api = get ? get(VTRPON_NETWORK_VIDEO_ABI) : nullptr;
         if (api && api->abiVersion == VTRPON_NETWORK_VIDEO_ABI
             && api->structSize >= sizeof(VtrPonNetworkVideoApi)) id = api->addonId;
     }
-    const auto expected = atem ? "vtr-pon-atem-addon" : "vtr-pon-network-video-addon";
+    const auto expected = decklink ? "vtr-pon-decklink-addon" : atem ? "vtr-pon-atem-addon" : "vtr-pon-network-video-addon";
     if (!id || QByteArray(id) != expected) return report("addon_error", QStringLiteral("Incompatible add-on interface."));
     const auto check = reinterpret_cast<VtrPonCheckAddonRuntime>(library.resolve("vtrpon_addon_runtime_status_v1"));
     if (!check) return report("check_unavailable", QStringLiteral("Update this add-on to enable runtime diagnostics."));

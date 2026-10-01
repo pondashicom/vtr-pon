@@ -10,7 +10,7 @@
 
 class ProgramGpuCompositor;
 class UvcSourceSessionManager;
-namespace vtrpon { class NetworkVideoReceiver; }
+namespace vtrpon { class NetworkVideoReceiver; class DeckLinkReceiver; }
 
 // Owns the media resources of one physical deck. PROGRAM/CUE selection,
 // compositing layers and output gains remain the player's responsibility.
@@ -157,6 +157,7 @@ private:
     GstElement *uvcAudioPipeline_ = nullptr;
     GstElement *uvcAudioSource_ = nullptr;
     std::shared_ptr<vtrpon::NetworkVideoReceiver> networkAudioReceiver_;
+    std::shared_ptr<vtrpon::DeckLinkReceiver> deckLinkAudioReceiver_;
     GstElement *uvcInputAudioLevel_ = nullptr;
     GstElement *uvcItemAudioVolume_ = nullptr;
     GstBus *uvcAudioBus_ = nullptr;

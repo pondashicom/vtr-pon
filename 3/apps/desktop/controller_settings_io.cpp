@@ -54,6 +54,19 @@ const QJsonObject &defaults() {
       {"networkVideo/keyEnabled", false},
       {"networkVideo/alphaEnabled", false},
       {"networkVideo/fillFormat", "straight"},
+      {"deckLink/inputEnabled", true},
+      {"deckLink/outputEnabled", false},
+      {"deckLink/outputChannel", ""},
+      {"deckLink/outputMode", "0"},
+      {"deckLink/inputMode", "0"},
+      {"deckLink/compositeEnabled", true},
+      {"deckLink/fillEnabled", false},
+      {"deckLink/keyEnabled", false},
+      {"deckLink/fillFormat", "straight"},
+      {"deckLink/fillChannel", ""},
+      {"deckLink/keyChannel", ""},
+      {"deckLink/fillMode", "0"},
+      {"deckLink/keyMode", "0"},
       {"player/backgroundColor", "#000000"},
       {"playlist/editActivationMode", 0},
       {"playlist/autoSelectNextItemAfterOnAir", false},
@@ -127,8 +140,12 @@ bool valid(const QJsonObject &values) {
         (!QDir::isAbsolutePath(it.value().toString()) || it.value().toString().contains(QChar::Null))) return false;
     if (it.key() == QLatin1StringView("networkVideo/outputName") &&
         (it.value().toString().size() > 200 || it.value().toString().contains(QChar::Null))) return false;
-    if (it.key() == QLatin1StringView("networkVideo/fillFormat") &&
+    if ((it.key() == QLatin1StringView("networkVideo/fillFormat") || it.key() == QLatin1StringView("deckLink/fillFormat")) &&
         !QStringList{"straight", "premultiplied"}.contains(it.value().toString())) return false;
+    if ((it.key() == QLatin1StringView("deckLink/outputMode") || it.key() == QLatin1StringView("deckLink/inputMode") || it.key() == QLatin1StringView("deckLink/fillMode") || it.key() == QLatin1StringView("deckLink/keyMode")) &&
+        (!QRegularExpression(QStringLiteral("^(0|[1-9][0-9]{0,9})$")).match(it.value().toString()).hasMatch() || it.value().toString().toULongLong() > 0xffffffffULL)) return false;
+    if ((it.key() == QLatin1StringView("deckLink/outputChannel") || it.key() == QLatin1StringView("deckLink/fillChannel") || it.key() == QLatin1StringView("deckLink/keyChannel")) && !it.value().toString().isEmpty() &&
+        !QRegularExpression(QStringLiteral("^decklink://-?[0-9]+/[0-9]+/[0-9]+/0$")).match(it.value().toString()).hasMatch()) return false;
     if (it.key() == QLatin1StringView("appearance/controllerSkin") &&
         !QStringList{"hardware", "material-dark", "vtr-pon-clasic"}.contains(it.value().toString())) return false;
     if (it.key() == QLatin1StringView("ui/language") &&

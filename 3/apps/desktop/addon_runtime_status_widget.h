@@ -16,7 +16,7 @@
 #include <QVBoxLayout>
 
 namespace vtrpon {
-enum class AddonRuntimeKind { Atem, NetworkVideo };
+enum class AddonRuntimeKind { Atem, NetworkVideo, DeckLink };
 
 // Probes run in a disposable process: a missing/broken vendor runtime must not
 // block the Controller or touch the active add-on's COM/media session.
@@ -29,7 +29,7 @@ public:
               ? QDir(QCoreApplication::applicationDirPath()).filePath(QStringLiteral("vtr-pon-addon-runtime-probe.exe"))
               : probeProgram) {
         setObjectName(kind == AddonRuntimeKind::Atem
-            ? QStringLiteral("atemRuntimeStatus") : QStringLiteral("networkVideoRuntimeStatus"));
+            ? QStringLiteral("atemRuntimeStatus") : kind == AddonRuntimeKind::DeckLink ? QStringLiteral("deckLinkRuntimeStatus") : QStringLiteral("networkVideoRuntimeStatus"));
         setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
         auto *layout = new QVBoxLayout(this); layout->setContentsMargins(0, 0, 0, 0);
         layout->setAlignment(Qt::AlignTop);
@@ -77,11 +77,11 @@ public:
     QUrl downloadUrl() const {
         return QUrl(kind_ == AddonRuntimeKind::Atem
             ? QStringLiteral("https://www.blackmagicdesign.com/jp/support/family/atem-live-production-switchers")
-            : QStringLiteral("https://ndi.link/NDIRedistV6"));
+            : kind_ == AddonRuntimeKind::DeckLink ? QStringLiteral("https://www.blackmagicdesign.com/jp/support/family/capture-and-playback") : QStringLiteral("https://ndi.link/NDIRedistV6"));
     }
     void retranslate() {
         const auto software = kind_ == AddonRuntimeKind::Atem
-            ? QStringLiteral("ATEM Switchers Software") : QStringLiteral("NDI Runtime 6 (x64)");
+            ? QStringLiteral("ATEM Switchers Software") : kind_ == AddonRuntimeKind::DeckLink ? QStringLiteral("Blackmagic Desktop Video (x64)") : QStringLiteral("NDI Runtime 6 (x64)");
         const auto key = QByteArray("addons.runtime.") + state_.toLatin1();
         message_->setText(uiText(key.constData()).arg(software));
         details_->setText(detail_); details_->setVisible(!detail_.isEmpty());
@@ -101,7 +101,7 @@ public:
         process_ = new QProcess(this);
         process_->setProgram(probeProgram_);
         process_->setArguments({QStringLiteral("--kind"), kind_ == AddonRuntimeKind::Atem
-            ? QStringLiteral("atem") : QStringLiteral("network-video"), QStringLiteral("--addon-file"), addonFile_});
+            ? QStringLiteral("atem") : kind_ == AddonRuntimeKind::DeckLink ? QStringLiteral("decklink") : QStringLiteral("network-video"), QStringLiteral("--addon-file"), addonFile_});
 #ifdef _WIN32
         process_->setCreateProcessArgumentsModifier([](QProcess::CreateProcessArguments *args) {
             args->flags |= 0x08000000; // CREATE_NO_WINDOW

@@ -1,3 +1,4 @@
+#include "decklink.h"
 #include "program_gpu_compositor.h"
 #include "gst_frame_capture.h"
 #include "operator_monitor_output.h"
@@ -2242,6 +2243,8 @@ private:
             static_cast<ID3D11RenderTargetView *>(renderTarget));
         self->virtualCamera_.publish(
             static_cast<ID3D11RenderTargetView *>(renderTarget));
+        self->deckLink_.publish(static_cast<ID3D11RenderTargetView *>(renderTarget),
+            self->renderer_.transparentTarget(), networkTimecode);
         self->networkVideo_.publish(
             static_cast<ID3D11RenderTargetView *>(renderTarget),
             self->renderer_.transparentTarget(), networkTimecode);
@@ -2457,6 +2460,7 @@ private:
     vtrpon::OperatorMonitorOutput operatorMonitor_;
     vtrpon::VirtualCameraOutput virtualCamera_;
     vtrpon::NetworkVideoOutput networkVideo_;
+    vtrpon::DeckLinkOutput deckLink_;
     // These are logical Deck A/B inputs. Their physical source pipeline can be
     // rebound while the corresponding deck is off air.
     std::array<DeckInput, 2> deckInputs_;

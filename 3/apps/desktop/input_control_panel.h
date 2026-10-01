@@ -23,6 +23,7 @@ public:
 
   void setUvcDevices(const QList<UvcDevice> &devices);
   void setNetworkVideoSources(const QList<vtrpon::NetworkVideoSource> &sources, bool enabled);
+  void setDeckLinkSources(const QList<vtrpon::NetworkVideoSource> &sources, bool enabled);
   void setUvcCaptureBusy(bool busy);
   void setStillCaptureBusy(bool busy);
 
@@ -38,7 +39,8 @@ private:
   void updateCaptureButtonWidths();
   QList<UvcDevice> uvcDevices_;
   QList<vtrpon::NetworkVideoSource> networkSources_;
-  bool networkInputEnabled_ = false;
+  bool networkInputEnabled_ = false, deckLinkInputEnabled_ = false;
+  QList<vtrpon::NetworkVideoSource> deckLinkSources_;
 
   QLabel *sectionTitle_ = nullptr;
   QLabel *moduleTitle_ = nullptr;

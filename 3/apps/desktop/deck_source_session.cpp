@@ -1,3 +1,4 @@
+#include "decklink.h"
 #include "deck_source_session.h"
 #include <mutex>
 #include "program_audio_bridge.h"
@@ -731,6 +732,7 @@ bool DeckSourceSession::releaseUvcAudio()
     auto *level = uvcInputAudioLevel_;
     auto *source = uvcAudioSource_;
     auto receiver = std::move(networkAudioReceiver_);
+    auto deckLinkReceiver = std::move(deckLinkAudioReceiver_);
     uvcAudioPipeline_ = nullptr;
     uvcAudioBus_ = nullptr;
     uvcItemAudioVolume_ = nullptr;
@@ -764,7 +766,7 @@ bool DeckSourceSession::startUvcAudio(const QString &audioDeviceId,
     if (audioDeviceId.isEmpty()) {
         return true;
     }
-    const bool network = vtrpon::isNetworkVideoSource(audioDeviceId);
+    const bool network = (vtrpon::isNetworkVideoSource(audioDeviceId) || vtrpon::isDeckLinkSource(audioDeviceId));
     if (!network && !hasElementFactory("wasapi2src")) {
         if (errorDetail) {
             *errorDetail = QStringLiteral(
@@ -854,7 +856,8 @@ bool DeckSourceSession::startUvcAudio(const QString &audioDeviceId,
         (void)releaseUvcAudio();
         return false;
     }
-    if (network) networkAudioReceiver_ = std::make_shared<vtrpon::NetworkVideoReceiver>(
+    if (network && vtrpon::isDeckLinkSource(audioDeviceId)) deckLinkAudioReceiver_ = std::make_shared<vtrpon::DeckLinkReceiver>(audioDeviceId, uvcAudioSource_, true);
+    else if (network) networkAudioReceiver_ = std::make_shared<vtrpon::NetworkVideoReceiver>(
         audioDeviceId, uvcAudioSource_, true);
     return true;
 }
@@ -912,7 +915,7 @@ bool DeckSourceSession::prepareFile(const QString &filePath, qint64 inPointMs,
 bool DeckSourceSession::prepareUvc(const QString &devicePath, const QString &mappedAudioDeviceId,
     double itemVolume, GstClock *audioClock)
 {
-    const QString audioDeviceId = vtrpon::isNetworkVideoSource(devicePath) ? devicePath : mappedAudioDeviceId;
+    const QString audioDeviceId = (vtrpon::isNetworkVideoSource(devicePath) || vtrpon::isDeckLinkSource(devicePath)) ? devicePath : mappedAudioDeviceId;
 #ifdef _WIN32
     if (devicePath.isEmpty()) {
         preparationError_ = QStringLiteral(

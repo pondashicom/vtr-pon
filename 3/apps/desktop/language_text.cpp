@@ -7,6 +7,56 @@
 namespace {
 
 constexpr auto kUiTextIds = std::to_array<const char *>({
+    //% "Select output format"
+    QT_TRID_NOOP("decklink.select_format"),
+    //% "Assign each enabled output to a different hardware channel. Fill and Key use the same video format and source frame. FTB fades them to transparency. Audio is sent to Composite and Fill; Key is silent. Synchronized playback uses a common locked reference when required by the device."
+    QT_TRID_NOOP("decklink.fill_key_help"),
+    //% "Fill/Key: synchronized playback."
+    QT_TRID_NOOP("decklink.pair_synchronized"),
+    //% "Fill/Key: independent playback. Hardware timing is not synchronized."
+    QT_TRID_NOOP("decklink.pair_unsynchronized"),
+    //% "DeckLink"
+    QT_TRID_NOOP("decklink.title"),
+    //% "Choose the output channel and format for Composite, Fill and Key, then enable each output. DeckLink input channels appear in the INPUT dropdown. Input format changes apply to newly added items."
+    QT_TRID_NOOP("decklink.description"),
+    //% "Enable DeckLink input"
+    QT_TRID_NOOP("decklink.enable_input"),
+    //% "Enable DeckLink output"
+    QT_TRID_NOOP("decklink.enable_output"),
+    //% "Output channel"
+    QT_TRID_NOOP("decklink.output_channel"),
+    //% "Output format"
+    QT_TRID_NOOP("decklink.output_mode"),
+    //% "Input format"
+    QT_TRID_NOOP("decklink.input_mode"),
+    //% "Auto (device detection)"
+    QT_TRID_NOOP("decklink.auto_mode"),
+    //% "Select output channel"
+    QT_TRID_NOOP("decklink.select_channel"),
+    //% "Saved selection (currently unavailable)"
+    QT_TRID_NOOP("decklink.saved_unavailable"),
+    //% "DeckLink output is running."
+    QT_TRID_NOOP("decklink.output_running"),
+    //% "No DeckLink devices found. Connect the device and check Desktop Video Setup."
+    QT_TRID_NOOP("decklink.no_devices"),
+    //% "DeckLink devices are available."
+    QT_TRID_NOOP("decklink.ready"),
+    //% "A DeckLink input error occurred."
+    QT_TRID_NOOP("decklink.input_error"),
+    //% "The selected DeckLink input channel is unavailable."
+    QT_TRID_NOOP("decklink.selected_unavailable"),
+    //% "Could not start DeckLink input."
+    QT_TRID_NOOP("decklink.start_failed"),
+    //% "Could not add DeckLink input to the playlist."
+    QT_TRID_NOOP("decklink.add_failed"),
+    //% "DeckLink Live"
+    QT_TRID_NOOP("decklink.live"),
+    //% "UVC / NDI / DeckLink Input"
+    QT_TRID_NOOP("decklink.input_title"),
+    //% "Select an input device or channel"
+    QT_TRID_NOOP("decklink.input_devices"),
+    //% "Add selected input to playlist"
+    QT_TRID_NOOP("decklink.input_add"),
     //% "Updates and notices"
     QT_TRID_NOOP("settings.updates.title"),
     //% "Choose when VTR-PON checks for updates and whether to send a usage notice."

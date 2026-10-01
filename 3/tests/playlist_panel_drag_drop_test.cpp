@@ -6,6 +6,8 @@
 #include <QAction>
 #include "playlist_model.h"
 #include "playlist_panel.h"
+#include "decklink.h"
+#include "decklink_settings_page.h"
 #include "media_thumbnailer.h"
 #include "playlist_view_roles.h"
 #include "controller_scaling.h"
@@ -817,7 +819,7 @@ int verifyPlaylistWindowScaling(QApplication &application) {
   return 0;
 }
 
-int networkSettingsRow(int original) {
+int baseNetworkSettingsRow(int original) {
   const bool ndi = vtrpon::networkVideoAddonInstalled();
   switch (original) {
   case 0: return 0;  // Playlist Settings
@@ -838,6 +840,11 @@ int networkSettingsRow(int original) {
   case 15: return ndi ? 18 : 17;  // Category count
   default: return original;
   }
+}
+
+int networkSettingsRow(int original) {
+  const auto row = baseNetworkSettingsRow(original);
+  return row + (row >= 3 && vtrpon::deckLinkAddonInstalled() ? 1 : 0);
 }
 
 int verifyStillCaptureControls(QApplication &application) {
@@ -960,12 +967,58 @@ int verifyNetworkVideoInputControls() {
   CHECK(button->isEnabled());
   panel.setUvcCaptureBusy(true); CHECK(!button->isEnabled());
   panel.setUvcCaptureBusy(false); CHECK(button->isEnabled());
+  const QString deckPath = QStringLiteral("decklink://100/1/1/0");
+  panel.setDeckLinkSources({{QStringLiteral("DeckLink · Duo · CH 2 · SDI"), deckPath}}, true);
+  CHECK(combo->findData(deckPath) >= 0 && title->text() == vtrpon::uiText("decklink.input_title"));
+  combo->setCurrentIndex(combo->findData(deckPath)); button->click(); CHECK(selected == deckPath);
+  panel.setNetworkVideoSources({}, false);
+  panel.setUvcDevices({});
+  CHECK(combo->currentData().toString() == deckPath && button->isEnabled());
+  panel.setDeckLinkSources({{QStringLiteral("DeckLink renamed · CH 2 · SDI"), deckPath}}, true);
+  CHECK(combo->currentData().toString() == deckPath);
+  panel.setDeckLinkSources({}, false); CHECK(!button->isEnabled());
+  panel.setNetworkVideoSources({{QStringLiteral("LAN PC (Camera)"), path}}, true);
   const auto captureDirectory = qEnvironmentVariable("VTRPON_NETWORK_VIDEO_UI_CAPTURE_DIR");
   if (!captureDirectory.isEmpty()) {
     QDir().mkpath(captureDirectory);
     panel.show(); QCoreApplication::processEvents();
     CHECK(panel.grab().save(QDir(captureDirectory).filePath(QStringLiteral("network-input.png"))));
   }
+  return 0;
+}
+
+int verifyAbsentDeckLinkSettings() {
+  const auto original = vtrpon::savedDeckLinkSettings();
+  auto saved = original;
+  saved.inputMode = 1001;
+  saved.outputChannel = QStringLiteral("decklink://100/0/1/0");
+  saved.outputMode = 1000;
+  saved.fillEnabled = saved.keyEnabled = true;
+  saved.premultipliedFill = true;
+  saved.fillChannel = QStringLiteral("decklink://100/2/1/0"); saved.keyChannel = QStringLiteral("decklink://100/3/1/0"); saved.fillMode = saved.keyMode = 1001;
+  vtrpon::saveDeckLinkSettings(saved);
+  DeckLinkSettingsPage page;
+  auto *inputMode = page.findChild<QComboBox *>("deckLinkInputMode");
+  auto *outputMode = page.findChild<QComboBox *>("deckLinkOutputMode");
+  auto *channel = page.findChild<QComboBox *>("deckLinkOutputChannel");
+  auto *enabled = page.findChild<QCheckBox *>("deckLinkInputEnabled");
+  CHECK(inputMode && outputMode && channel && enabled);
+  CHECK(inputMode->currentData().toUInt() == saved.inputMode);
+  CHECK(outputMode->currentData().toUInt() == saved.outputMode);
+  CHECK(channel->currentData().toString() == saved.outputChannel);
+  auto *fillChannel = page.findChild<QComboBox *>("deckLinkFillChannel"); auto *keyChannel = page.findChild<QComboBox *>("deckLinkKeyChannel");
+  auto *fillMode = page.findChild<QComboBox *>("deckLinkFillMode"); auto *keyMode = page.findChild<QComboBox *>("deckLinkKeyMode");
+  auto *fillFormat = page.findChild<QComboBox *>("deckLinkFillFormat"); auto *fillEnabled = page.findChild<QCheckBox *>("deckLinkFillEnabled");
+  CHECK(fillChannel && keyChannel && fillMode && keyMode && fillFormat && fillEnabled);
+  CHECK(fillChannel->currentData().toString() == saved.fillChannel && keyChannel->currentData().toString() == saved.keyChannel);
+  CHECK(fillMode->currentData().toUInt() == saved.fillMode && keyMode->currentData().toUInt() == saved.keyMode && fillFormat->currentIndex() == 1);
+  enabled->setChecked(!saved.inputEnabled);
+  const auto changed = vtrpon::savedDeckLinkSettings();
+  CHECK(changed.inputMode == saved.inputMode && changed.outputMode == saved.outputMode && changed.outputChannel == saved.outputChannel);
+  CHECK(changed.fillChannel == saved.fillChannel && changed.keyChannel == saved.keyChannel && changed.fillMode == saved.fillMode && changed.keyMode == saved.keyMode && changed.premultipliedFill);
+  fillEnabled->setChecked(false); CHECK(!vtrpon::savedDeckLinkSettings().fillEnabled && vtrpon::savedDeckLinkSettings().keyEnabled);
+  page.reload(); CHECK(!fillEnabled->isChecked() && fillChannel->currentData().toString() == saved.fillChannel);
+  vtrpon::saveDeckLinkSettings(original);
   return 0;
 }
 
@@ -1141,6 +1194,7 @@ int verifyMissingAddonsInChild(QApplication &application) {
   CHECK(QFile::copy(application.applicationDirPath() + QStringLiteral("/vtrpon_en.qm"),
                    directory.filePath(QStringLiteral("vtrpon_en.qm"))));
   auto environment = QProcessEnvironment::systemEnvironment();
+  environment.remove("VTRPON_DECKLINK_ADDON_FILE");
   environment.insert("VTRPON_SWITCHER_ADDON_DIR", directory.filePath("switcher-addons"));
   environment.insert("QT_PLUGIN_PATH", application.libraryPaths().join(QDir::listSeparator()));
   // The normal Windows deployment includes qwindows, not the offscreen plug-in.
@@ -1196,12 +1250,31 @@ int main(int argc, char *argv[]) {
               .filePath(QStringLiteral("switcher-settings.ini"))
               .toUtf8());
   QApplication application(argc, argv);
+  if (application.arguments().contains(QStringLiteral("--decklink-settings-only"))) {
+    CHECK(verifyAbsentDeckLinkSettings() == 0);
+    QTranslator japanese; CHECK(japanese.load(QCoreApplication::applicationDirPath() + QStringLiteral("/vtrpon_ja.qm"))); application.installTranslator(&japanese);
+    CHECK(vtrpon::applyControllerSkin(application, QStringLiteral("material-dark")));
+    vtrpon::DeckLinkRuntime runtime;
+    ControllerSettingsDialog dialog(nullptr, nullptr, nullptr, nullptr, nullptr);
+    auto *navigation = dialog.findChild<QListWidget *>(QStringLiteral("settingsNavigationList")); CHECK(navigation);
+    auto *page = dialog.findChild<QWidget *>(QStringLiteral("deckLinkSettingsPage")); CHECK(page);
+    const auto items = navigation->findItems(QStringLiteral("DeckLink"), Qt::MatchExactly); CHECK(items.size() == 1); navigation->setCurrentItem(items.front());
+    dialog.show(); QElapsedTimer timer; timer.start();
+    while (timer.elapsed() < 1300) { application.processEvents(); QThread::msleep(10); }
+    CHECK(vtrpon::deckLinkState().availability == vtrpon::DeckLinkState::Availability::NoDevices);
+    const auto capture = qEnvironmentVariable("VTRPON_DECKLINK_UI_CAPTURE_DIR");
+    if (!capture.isEmpty()) { CHECK(QDir().mkpath(capture)); CHECK(dialog.grab().save(QDir(capture).filePath("decklink-fillkey-settings.png"))); }
+    dialog.hide(); runtime.requestShutdown();
+    while (!runtime.shutdownComplete() && timer.elapsed() < 5000) { application.processEvents(); QThread::msleep(10); } CHECK(runtime.shutdownComplete());
+    return 0;
+  }
   if (application.arguments().contains(QStringLiteral("--verify-still-capture-only")))
     return verifyStillCaptureControls(application);
   if (application.arguments().contains(QStringLiteral("--verify-missing-addons")))
     return verifyMissingAddons(application);
   CHECK(verifyMissingAddonsInChild(application) == 0);
   if (application.arguments().contains(QStringLiteral("--verify-addon-absence-only"))) return 0;
+  CHECK(verifyAbsentDeckLinkSettings() == 0);
   {
     QWidget window;
     auto *layout = new QVBoxLayout(&window);
@@ -1822,6 +1895,31 @@ int main(int argc, char *argv[]) {
         QStringLiteral("Video Output")};
     if (vtrpon::networkVideoAddonInstalled()) {
       expectedSettingsOrder.push_back(QStringLiteral("NDI"));
+    }
+    if (vtrpon::deckLinkAddonInstalled()) {
+      expectedSettingsOrder.push_back(QStringLiteral("DeckLink"));
+      const auto screenshot = qEnvironmentVariable("VTRPON_DECKLINK_UI_CAPTURE_DIR");
+      if (!screenshot.isEmpty()) {
+        CHECK(QDir().mkpath(screenshot));
+        vtrpon::DeckLinkRuntime runtime;
+        QElapsedTimer discovery; discovery.start();
+        while (vtrpon::deckLinkState().availability == vtrpon::DeckLinkState::Availability::Checking && discovery.elapsed() < 3000) {
+          application.processEvents(); QThread::msleep(10);
+        }
+        settingsNavigation->setCurrentRow(expectedSettingsOrder.size() - 1);
+        settingsDialog.show();
+        QElapsedTimer refresh; refresh.start();
+        while (refresh.elapsed() < 700) { application.processEvents(); QThread::msleep(10); }
+        CHECK(settingsDialog.grab().save(QDir(screenshot).filePath("decklink-no-hardware.png")));
+        const auto addonNavigation = settingsNavigation->findItems(vtrpon::uiText("settings.addons.title"), Qt::MatchExactly);
+        CHECK(addonNavigation.size() == 1);
+        settingsNavigation->setCurrentItem(addonNavigation.front());
+        application.processEvents();
+        CHECK(settingsDialog.grab().save(QDir(screenshot).filePath("addons-decklink.png")));
+        settingsDialog.hide(); runtime.requestShutdown();
+        while (!runtime.shutdownComplete() && discovery.elapsed() < 5000) { application.processEvents(); QThread::msleep(10); }
+        CHECK(runtime.shutdownComplete()); settingsNavigation->setCurrentRow(0);
+      }
     }
     expectedSettingsOrder.append(
         {QStringLiteral("Virtual Camera"),
