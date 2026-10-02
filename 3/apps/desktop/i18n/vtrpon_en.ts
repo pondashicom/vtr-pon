@@ -87,6 +87,30 @@
         <source>Rescan</source>
         <translation>Rescan</translation>
     </message>
+    <message id="vst.scan_cancel">
+        <source>Cancel scan</source>
+        <translation>Cancel scan</translation>
+    </message>
+    <message id="vst.scan_discovering">
+        <source>Searching VST3 folders...</source>
+        <translation>Searching VST3 folders...</translation>
+    </message>
+    <message id="vst.scan_progress">
+        <source>Scanning %1 / %2: %3</source>
+        <translation>Scanning %1 / %2: %3</translation>
+    </message>
+    <message id="vst.scan_complete">
+        <source>%1 plug-ins found. %2 files could not be scanned.</source>
+        <translation>%1 plug-ins found. %2 files could not be scanned.</translation>
+    </message>
+    <message id="vst.scan_canceled">
+        <source>Scan canceled. Plug-ins already found can still be selected.</source>
+        <translation>Scan canceled. Plug-ins already found can still be selected.</translation>
+    </message>
+    <message id="vst.scan_failed">
+        <source>Could not scan VST3 plug-ins: %1</source>
+        <translation>Could not scan VST3 plug-ins: %1</translation>
+    </message>
     <message id="vst.inactive">
         <source>Inactive — press VST to enable the selected plug-in.</source>
         <translation>Inactive — press VST to enable the selected plug-in.</translation>
@@ -4707,11 +4731,14 @@ Adjust the slider to find a comfortable text size.</translation>
     <message id="settings.addons.confirm_manual_uninstall"><source>Remove the manually installed %1 add-on after VTR-PON exits? Only known add-on files will be removed. Other files and feature settings will stay.</source><translation>Remove the manually installed %1 add-on after VTR-PON exits? Only known add-on files will be removed. Other files and feature settings will stay.</translation></message>
     <message id="settings.addons.local"><source>Install from package…</source><translation>Install from package…</translation></message>
     <message id="settings.addons.downloading"><source>Downloading %1…</source><translation>Downloading %1…</translation></message>
-    <message id="settings.addons.pending"><source>The operation is ready. Close VTR-PON to apply it, then start VTR-PON again.</source><translation>The operation is ready. Close VTR-PON to apply it, then start VTR-PON again.</translation></message>
+    <message id="settings.addons.pending"><source>The add-on operation is ready and will take effect after restarting VTR-PON.</source><translation>The add-on operation is ready and will take effect after restarting VTR-PON.</translation></message>
+    <message id="settings.addons.restart_title"><source>Restart VTR-PON</source><translation>Restart VTR-PON</translation></message>
+    <message id="settings.addons.restart_question"><source>VTR-PON must restart to enable the add-on.&#10;Restart now?</source><translation>VTR-PON must restart to enable the add-on.&#10;Restart now?</translation></message>
+    <message id="settings.addons.restart_failed"><source>Could not complete the add-on restart: %1</source><translation>Could not complete the add-on restart: %1</translation></message>
     <message id="settings.addons.operation_failed"><source>Could not prepare the add-on operation: %1</source><translation>Could not prepare the add-on operation: %1</translation></message>
     <message id="settings.addons.last_error"><source>Last operation failed: %1</source><translation>Last operation failed: %1</translation></message>
     <message id="settings.addons.startup_pending"><source>An add-on operation is still pending or needs recovery. Wait for it to finish before starting VTR-PON. Manager data: %1</source><translation>An add-on operation is still pending or needs recovery. Wait for it to finish before starting VTR-PON. Manager data: %1</translation></message>
-    <message id="settings.addons.startup_resuming"><source>A pending add-on operation is being resumed. Wait for it to finish, then start VTR-PON again. Manager data: %1</source><translation>A pending add-on operation is being resumed. Wait for it to finish, then start VTR-PON again. Manager data: %1</translation></message>
+    <message id="settings.addons.startup_resuming"><source>VTR-PON will start automatically after the add-on operation finishes. Close this notice and wait.</source><translation>VTR-PON will start automatically after the add-on operation finishes. Close this notice and wait.</translation></message>
     <message id="settings.addons.agreement_title"><source>Add-on license agreement</source><translation>Add-on license agreement</translation></message>
     <message id="settings.addons.agreement_intro"><source>Review the documents for %1, version %2. Installation is prepared only after you agree to the agreement documents.</source><translation>Review the documents for %1, version %2. Installation is prepared only after you agree to the agreement documents.</translation></message>
     <message id="settings.addons.agreement_tab"><source>Agreement: </source><translation>Agreement: </translation></message>

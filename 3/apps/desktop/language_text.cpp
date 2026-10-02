@@ -150,15 +150,21 @@ constexpr auto kUiTextIds = std::to_array<const char *>({
     QT_TRID_NOOP("settings.addons.local"),
     //% "Downloading %1…"
     QT_TRID_NOOP("settings.addons.downloading"),
-    //% "The operation is ready. Close VTR-PON to apply it, then start VTR-PON again."
+    //% "The add-on operation is ready and will take effect after restarting VTR-PON."
     QT_TRID_NOOP("settings.addons.pending"),
+    //% "Restart VTR-PON"
+    QT_TRID_NOOP("settings.addons.restart_title"),
+    //% "VTR-PON must restart to enable the add-on.\nRestart now?"
+    QT_TRID_NOOP("settings.addons.restart_question"),
+    //% "Could not complete the add-on restart: %1"
+    QT_TRID_NOOP("settings.addons.restart_failed"),
     //% "Could not prepare the add-on operation: %1"
     QT_TRID_NOOP("settings.addons.operation_failed"),
     //% "Last operation failed: %1"
     QT_TRID_NOOP("settings.addons.last_error"),
     //% "An add-on operation is still pending or needs recovery. Wait for it to finish before starting VTR-PON. Manager data: %1"
     QT_TRID_NOOP("settings.addons.startup_pending"),
-    //% "A pending add-on operation is being resumed. Wait for it to finish, then start VTR-PON again. Manager data: %1"
+    //% "VTR-PON will start automatically after the add-on operation finishes. Close this notice and wait."
     QT_TRID_NOOP("settings.addons.startup_resuming"),
     //% "Add-on license agreement"
     QT_TRID_NOOP("settings.addons.agreement_title"),
@@ -191,6 +197,18 @@ constexpr auto kUiTextIds = std::to_array<const char *>({
     QT_TRID_NOOP("vst.scanning"),
     //% "Rescan"
     QT_TRID_NOOP("vst.rescan"),
+    //% "Cancel scan"
+    QT_TRID_NOOP("vst.scan_cancel"),
+    //% "Searching VST3 folders..."
+    QT_TRID_NOOP("vst.scan_discovering"),
+    //% "Scanning %1 / %2: %3"
+    QT_TRID_NOOP("vst.scan_progress"),
+    //% "%1 plug-ins found. %2 files could not be scanned."
+    QT_TRID_NOOP("vst.scan_complete"),
+    //% "Scan canceled. Plug-ins already found can still be selected."
+    QT_TRID_NOOP("vst.scan_canceled"),
+    //% "Could not scan VST3 plug-ins: %1"
+    QT_TRID_NOOP("vst.scan_failed"),
     //% "Inactive — press VST to enable the selected plug-in."
     QT_TRID_NOOP("vst.inactive"),
     //% "Active"

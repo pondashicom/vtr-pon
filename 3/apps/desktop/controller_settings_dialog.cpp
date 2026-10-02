@@ -1147,6 +1147,8 @@ ControllerSettingsDialog::ControllerSettingsDialog(
   fileManagementPage_ = new FileManagementSettingsPage(pageStack);
   pageStack->addWidget(fileManagementPage_);
   addonManagementPage_ = new AddonManagementPage(pageStack);
+  connect(addonManagementPage_, &AddonManagementPage::restartRequested,
+          this, &ControllerSettingsDialog::addonRestartRequested);
   auto *addonManagementScroll = new QScrollArea(pageStack);
   addonManagementScroll->setObjectName(QStringLiteral("addonManagementScroll"));
   addonManagementScroll->setWidgetResizable(true);

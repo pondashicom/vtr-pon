@@ -459,6 +459,9 @@ if(BUILD_TESTING)
   set_tests_properties(update-window PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=windows")
 
   qt_add_executable(addon-package-test tests/addon_package_test.cpp)
+  if(WIN32)
+    add_dependencies(addon-package-test vtr-pon-addon-manager)
+  endif()
   target_include_directories(addon-package-test PRIVATE ${VTRPON_ZLIB_INCLUDE_DIR})
   target_link_libraries(addon-package-test PRIVATE
     vtrpon-addon-package ${VTRPON_ZLIB_LIBRARY})
@@ -1400,6 +1403,7 @@ install(TARGETS vtr-pon-addon-runtime-probe RUNTIME DESTINATION . COMPONENT Runt
 qt_add_library(vtrpon-vst-bridge STATIC
   apps/desktop/vst_service.cpp
   apps/desktop/vst_service.h
+  apps/desktop/vst_scan.h
   apps/desktop/vst_protocol.h)
 target_include_directories(vtrpon-vst-bridge PUBLIC apps/desktop)
 target_link_libraries(vtrpon-vst-bridge PUBLIC Qt6::Core)

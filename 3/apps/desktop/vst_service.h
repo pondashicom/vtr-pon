@@ -6,6 +6,11 @@
 
 namespace vtrpon {
 enum class VstSlot { Edit, Item, Master, Count };
+struct VstScanProgress {
+    QString currentPath, error;
+    int checked = 0, total = 0, skipped = 0;
+    bool discovering = true, canceled = false;
+};
 bool vstModeEnabled();
 void processVst(VstSlot slot, float *samples, size_t frames);
 
@@ -20,7 +25,10 @@ public:
     bool setEnabled(bool enabled);
     void reloadSettings();
     void scan();
+    void cancelScan();
     bool scanning() const;
+    bool catalogRequested() const;
+    VstScanProgress scanProgress() const;
     QJsonArray plugins() const;
     void select(VstSlot slot, const QString &path, const QString &uid);
     QString selectedPath(VstSlot slot) const;
@@ -36,6 +44,7 @@ public:
 signals:
     void changed();
     void catalogChanged();
+    void scanProgressChanged();
     void failure(const QString &channel, const QString &reason);
 private:
     VstService();

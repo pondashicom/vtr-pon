@@ -27,6 +27,7 @@
 #include <thread>
 #include <iostream>
 #include <windows.h>
+#include <tlhelp32.h>
 using namespace vtrpon;
 namespace {
 bool require(bool ok, const char *message) {
@@ -53,14 +54,22 @@ template<class F> bool until(F predicate, int timeout = 5000) {
 }
 int scanParent(VstService &service) {
     service.scan();
-    QProcess *scanner = nullptr;
+    DWORD scannerPid = 0;
     if (!until([&] {
-        const auto children = service.findChildren<QProcess *>();
-        if (children.isEmpty() || !children.front()->processId()) return false;
-        scanner = children.front();
-        return true;
+        // The scanner belongs to the background worker, not the GUI QObject tree.
+        HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+        if (snapshot == INVALID_HANDLE_VALUE) return false;
+        PROCESSENTRY32W entry{}; entry.dwSize = sizeof(entry);
+        if (Process32FirstW(snapshot, &entry)) do {
+            if (entry.th32ParentProcessID == GetCurrentProcessId() &&
+                _wcsicmp(entry.szExeFile, L"vtr-pon-vst3-addon.exe") == 0) {
+                scannerPid = entry.th32ProcessID; break;
+            }
+        } while (Process32NextW(snapshot, &entry));
+        CloseHandle(snapshot);
+        return scannerPid != 0;
     })) return 1;
-    std::cout << "SCANNER_PID=" << scanner->processId() << std::endl;
+    std::cout << "SCANNER_PID=" << scannerPid << std::endl;
     return QCoreApplication::exec();
 }
 bool checkScannerParentDeath(const QString &plugin, const QString &directory,

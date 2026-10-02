@@ -3,6 +3,7 @@
 #include <QByteArray>
 #include <QJsonObject>
 #include <QString>
+#include <QStringList>
 #include <QVector>
 
 namespace vtrpon::addons {
@@ -28,6 +29,12 @@ QString contract(const QString &id);
 int compareVersions(const QString &left, const QString &right);
 bool hasUniqueJsonKeys(const QByteArray &json);
 QString stateDirectory(const QString &applicationRoot);
+QStringList pendingJobs(const QString &applicationRoot);
+bool restartInProgress(const QString &applicationRoot);
+bool requestRestart(const QString &applicationRoot, const QStringList &arguments,
+                    const QString &workingDirectory, QString *error);
+bool finishPendingOperations(const QString &applicationRoot, qint64 parentPid,
+                             const QStringList &pendingIds, QString *error);
 QJsonObject installed(const QString &applicationRoot, const QString &id);
 bool readPackage(const QString &path, Package *package, QString *error);
 QJsonObject consentReceipt(const Package &package);

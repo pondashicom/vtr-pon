@@ -11,6 +11,7 @@
 #include "main_controller.h"
 #include "product_identity.h"
 #include "skins/controller_skin.h"
+#include "settings_style.h"
 #include "user_info.h"
 
 #include <QApplication>
@@ -261,25 +262,35 @@ int main(int argc, char *argv[])
 
     const QString addonState = vtrpon::addons::stateDirectory(
         QCoreApplication::applicationDirPath());
-    bool addonJobPending = false;
-    for (const auto &id : vtrpon::addons::ids()) {
-        if (QFileInfo::exists(addonState + QLatin1Char('/') + id +
-                              QStringLiteral(".job.json"))) {
-            addonJobPending = true;
-            break;
-        }
+    const bool addonJobPending = !vtrpon::addons::pendingJobs(
+        QCoreApplication::applicationDirPath()).isEmpty();
+    const auto showAddonStartupMessage = [&app](QMessageBox::Icon icon, const QString &text) {
+        QMessageBox message(icon, vtrpon::uiText("settings.addons.title"), text, QMessageBox::Ok);
+        message.setObjectName(QStringLiteral("addonStartupDialog"));
+        message.setPalette(vtrpon::controllerSkinPalette(
+            app, vtrpon::ControllerSkinPalette::VtrPonClasic));
+        message.setStyleSheet(vtrpon::settingsStyleSheet(message.objectName()));
+        message.exec();
+    };
+    QString addonRestartError;
+    const QString errorPrefix = QStringLiteral("--addon-restart-error=");
+    for (const auto &argument : app.arguments()) {
+        if (argument.startsWith(errorPrefix)) addonRestartError = argument.sliced(errorPrefix.size());
     }
-    if (addonJobPending) {
-        const QString helper = QCoreApplication::applicationDirPath() +
-                               QStringLiteral("/vtr-pon-addon-manager.exe");
-        const bool launched = QFileInfo::exists(helper) && QProcess::startDetached(
-            helper, {QStringLiteral("--resume-all"), QStringLiteral("--parent-pid"),
-                     QString::number(QCoreApplication::applicationPid())},
-            QCoreApplication::applicationDirPath());
-        QMessageBox::warning(nullptr, vtrpon::uiText("settings.addons.title"),
-            vtrpon::uiText(launched ? "settings.addons.startup_resuming" :
-                           "settings.addons.startup_pending").arg(addonState));
-        return 1;
+    if (!addonRestartError.isEmpty()) {
+        showAddonStartupMessage(QMessageBox::Warning,
+            vtrpon::uiText("settings.addons.restart_failed").arg(addonRestartError));
+        if (addonJobPending) return 1;
+    } else if (addonJobPending ||
+               (!app.arguments().contains(QStringLiteral("--addon-restart-complete")) &&
+                vtrpon::addons::restartInProgress(QCoreApplication::applicationDirPath()))) {
+        QString error;
+        const bool launched = vtrpon::addons::requestRestart(
+            QCoreApplication::applicationDirPath(), app.arguments().mid(1), QDir::currentPath(), &error);
+        showAddonStartupMessage(launched ? QMessageBox::Information : QMessageBox::Warning,
+            launched ? vtrpon::uiText("settings.addons.startup_resuming") :
+                vtrpon::uiText("settings.addons.restart_failed").arg(error + QStringLiteral("\n") + addonState));
+        return launched ? 0 : 1;
     }
 
     if (!configureGStreamerDllSearchPath()) {
@@ -312,6 +323,12 @@ int main(int argc, char *argv[])
     commandLine.setApplicationDescription(
         vtrpon::uiText("application.description"));
     commandLine.addHelpOption();
+    QCommandLineOption addonRestartComplete(QStringLiteral("addon-restart-complete"));
+    addonRestartComplete.setFlags(QCommandLineOption::HiddenFromHelp);
+    commandLine.addOption(addonRestartComplete);
+    QCommandLineOption addonRestartFailure(QStringLiteral("addon-restart-error"), QString(), QStringLiteral("detail"));
+    addonRestartFailure.setFlags(QCommandLineOption::HiddenFromHelp);
+    commandLine.addOption(addonRestartFailure);
     commandLine.addOption(QCommandLineOption(QStringLiteral("portable"),
         QStringLiteral("Use config/<product profile>/user.ini beside the executable (Windows).")));
     const QCommandLineOption output4kOption(

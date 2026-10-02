@@ -87,6 +87,30 @@
         <source>Rescan</source>
         <translation>再検索</translation>
     </message>
+    <message id="vst.scan_cancel">
+        <source>Cancel scan</source>
+        <translation>検索を中止</translation>
+    </message>
+    <message id="vst.scan_discovering">
+        <source>Searching VST3 folders...</source>
+        <translation>VST3フォルダーを検索中…</translation>
+    </message>
+    <message id="vst.scan_progress">
+        <source>Scanning %1 / %2: %3</source>
+        <translation>プラグインを確認中 %1 / %2：%3</translation>
+    </message>
+    <message id="vst.scan_complete">
+        <source>%1 plug-ins found. %2 files could not be scanned.</source>
+        <translation>プラグインを%1件検出しました。読み込めなかったファイル：%2件。</translation>
+    </message>
+    <message id="vst.scan_canceled">
+        <source>Scan canceled. Plug-ins already found can still be selected.</source>
+        <translation>検索を中止しました。検出済みのプラグインは選択できます。</translation>
+    </message>
+    <message id="vst.scan_failed">
+        <source>Could not scan VST3 plug-ins: %1</source>
+        <translation>VST3プラグインを検索できませんでした：%1</translation>
+    </message>
     <message id="vst.inactive">
         <source>Inactive — press VST to enable the selected plug-in.</source>
         <translation>停止中 — VSTボタンで選択したプラグインを有効にします。</translation>
@@ -4707,11 +4731,14 @@ Adjust the slider to find a comfortable text size.</source>
     <message id="settings.addons.confirm_manual_uninstall"><source>Remove the manually installed %1 add-on after VTR-PON exits? Only known add-on files will be removed. Other files and feature settings will stay.</source><translation>VTR-PONの終了後に手動導入された%1を削除しますか？既知のアドオンファイルだけを削除し、ほかのファイルと機能の設定は残します。</translation></message>
     <message id="settings.addons.local"><source>Install from package…</source><translation>パッケージからインストール…</translation></message>
     <message id="settings.addons.downloading"><source>Downloading %1…</source><translation>%1をダウンロード中…</translation></message>
-    <message id="settings.addons.pending"><source>The operation is ready. Close VTR-PON to apply it, then start VTR-PON again.</source><translation>操作を準備しました。VTR-PONを終了すると反映されます。その後、起動し直してください。</translation></message>
+    <message id="settings.addons.pending"><source>The add-on operation is ready and will take effect after restarting VTR-PON.</source><translation>アドオン操作を準備しました。VTR-PONの再起動後に反映されます。</translation></message>
+    <message id="settings.addons.restart_title"><source>Restart VTR-PON</source><translation>VTR-PONの再起動</translation></message>
+    <message id="settings.addons.restart_question"><source>VTR-PON must restart to enable the add-on.&#10;Restart now?</source><translation>アドオンを有効にするためにはVTR-PONの再起動が必要です。&#10;再起動していいですか？</translation></message>
+    <message id="settings.addons.restart_failed"><source>Could not complete the add-on restart: %1</source><translation>アドオンの適用・再起動を完了できませんでした：%1</translation></message>
     <message id="settings.addons.operation_failed"><source>Could not prepare the add-on operation: %1</source><translation>アドオン操作を準備できませんでした：%1</translation></message>
     <message id="settings.addons.last_error"><source>Last operation failed: %1</source><translation>前回の操作に失敗しました：%1</translation></message>
     <message id="settings.addons.startup_pending"><source>An add-on operation is still pending or needs recovery. Wait for it to finish before starting VTR-PON. Manager data: %1</source><translation>アドオン操作が進行中か、復元が必要です。完了するまでVTR-PONを起動できません。管理データ：%1</translation></message>
-    <message id="settings.addons.startup_resuming"><source>A pending add-on operation is being resumed. Wait for it to finish, then start VTR-PON again. Manager data: %1</source><translation>残っているアドオン操作を再開します。処理が終わってからVTR-PONを起動し直してください。管理データ：%1</translation></message>
+    <message id="settings.addons.startup_resuming"><source>VTR-PON will start automatically after the add-on operation finishes. Close this notice and wait.</source><translation>アドオンの適用を完了してから、VTR-PONを自動的に起動します。この案内を閉じて、そのままお待ちください。</translation></message>
     <message id="settings.addons.agreement_title"><source>Add-on license agreement</source><translation>アドオンのライセンス同意</translation></message>
     <message id="settings.addons.agreement_intro"><source>Review the documents for %1, version %2. Installation is prepared only after you agree to the agreement documents.</source><translation>%1 バージョン %2 の文書を確認してください。同意対象の文書に同意した場合だけインストールを準備します。</translation></message>
     <message id="settings.addons.agreement_tab"><source>Agreement: </source><translation>同意対象: </translation></message>

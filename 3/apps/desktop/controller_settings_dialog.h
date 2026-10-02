@@ -96,6 +96,7 @@ public:
   vtrpon::SwitcherControlSettings switcherControlSettings() const;
 
 signals:
+  void addonRestartRequested();
   void operatorMonitorSettingsChanged();
   void operatorTimerSettingsRequested();
   void timeSettingsChanged(bool remainingDefaultChanged);

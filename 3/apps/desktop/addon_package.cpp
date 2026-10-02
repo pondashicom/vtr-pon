@@ -17,6 +17,7 @@
 #include <QSet>
 #include <QStandardPaths>
 #include <QTemporaryFile>
+#include <QUuid>
 
 #include <zlib.h>
 
@@ -297,7 +298,7 @@ bool elevated() {
   CloseHandle(token);
   return ok && elevation.TokenIsElevated;
 }
-bool requestElevation(const QString &path) {
+bool requestElevation(const QString &path, int *result) {
   const QString executable = QCoreApplication::applicationFilePath();
   const QString parameters = QStringLiteral("--apply \"") + path +
                              QStringLiteral("\" --parent-pid 0");
@@ -309,10 +310,16 @@ bool requestElevation(const QString &path) {
   info.lpParameters = reinterpret_cast<LPCWSTR>(parameters.utf16());
   info.nShow = SW_HIDE;
   if (!ShellExecuteExW(&info)) return false;
-  if (info.hProcess) CloseHandle(info.hProcess);
-  return true;
+  if (!info.hProcess) return false;
+  DWORD exitCode = 1;
+  const bool finished = WaitForSingleObject(info.hProcess, INFINITE) == WAIT_OBJECT_0 &&
+                        GetExitCodeProcess(info.hProcess, &exitCode);
+  CloseHandle(info.hProcess);
+  if (finished) *result = int(exitCode);
+  return finished;
 }
-bool waitForRunningCopies(const QString &root, QString *error) {
+bool waitForRunningCopies(const QString &root, QString *error,
+                          const wchar_t *executableName = L"vtr-pon.exe") {
   for (;;) {
     HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
     if (snapshot == INVALID_HANDLE_VALUE)
@@ -321,17 +328,22 @@ bool waitForRunningCopies(const QString &root, QString *error) {
     entry.dwSize = sizeof(entry);
     HANDLE matching = nullptr;
     if (Process32FirstW(snapshot, &entry)) do {
-      if (_wcsicmp(entry.szExeFile, L"vtr-pon.exe") != 0 ||
+      if (_wcsicmp(entry.szExeFile, executableName) != 0 ||
           entry.th32ProcessID == GetCurrentProcessId()) continue;
       HANDLE process = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION | SYNCHRONIZE,
                                    FALSE, entry.th32ProcessID);
       if (!process) {
+        if (GetLastError() == ERROR_INVALID_PARAMETER) continue; // It exited after the snapshot.
         CloseHandle(snapshot);
         return fail(error, QStringLiteral("Could not inspect a running VTR-PON process."));
       }
       wchar_t path[32768]{};
       DWORD length = DWORD(std::size(path));
       if (!QueryFullProcessImageNameW(process, 0, path, &length)) {
+        if (WaitForSingleObject(process, 0) == WAIT_OBJECT_0) {
+          CloseHandle(process);
+          continue;
+        }
         CloseHandle(process);
         CloseHandle(snapshot);
         return fail(error, QStringLiteral("Could not inspect a running VTR-PON path."));
@@ -428,6 +440,107 @@ QString stateDirectory(const QString &applicationRoot) {
   return QDir(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation))
       .filePath(currentProductStorageName() +
                 QStringLiteral("/addon-manager/") + key);
+}
+QStringList pendingJobs(const QString &applicationRoot) {
+  QStringList jobs;
+  for (const auto &id : ids()) {
+    const QString path = jobPath(applicationRoot, id);
+    if (QFileInfo::exists(path)) jobs.append(path);
+  }
+  return jobs;
+}
+bool restartInProgress(const QString &applicationRoot) {
+  const QString path = stateDirectory(applicationRoot) + QStringLiteral("/restart.lock");
+  if (!QFileInfo::exists(path)) return false;
+  QLockFile lock(path);
+  lock.setStaleLockTime(0);
+  if (lock.tryLock(0)) { lock.unlock(); return false; }
+  return lock.error() == QLockFile::LockFailedError;
+}
+bool requestRestart(const QString &applicationRoot, const QStringList &arguments,
+                    const QString &workingDirectory, QString *error) {
+  const QString root = canonicalRoot(applicationRoot);
+  const QString helper = root + QStringLiteral("/vtr-pon-addon-manager.exe");
+  if (root.isEmpty() || !QFileInfo::exists(root + QStringLiteral("/vtr-pon.exe")) ||
+      !QFileInfo::exists(helper))
+    return fail(error, QStringLiteral("The add-on manager executable is missing."));
+  if (!QDir().mkpath(stateDirectory(root)))
+    return fail(error, QStringLiteral("Could not create manager data."));
+  QStringList pendingIds;
+  for (const auto &job : pendingJobs(root))
+    pendingIds.append(QFileInfo(job).fileName().chopped(QStringLiteral(".job.json").size()));
+  QStringList helperArguments{QStringLiteral("--restart"), QStringLiteral("--parent-pid"),
+      QString::number(QCoreApplication::applicationPid()),
+      QStringLiteral("--pending-ids=") + pendingIds.join(QLatin1Char(','))};
+#ifdef Q_OS_WIN
+  const QString readyName = QStringLiteral("Local\\VTR-PON-AddonRestart-") +
+      QUuid::createUuid().toString(QUuid::WithoutBraces);
+  HANDLE ready = CreateEventW(nullptr, TRUE, FALSE,
+      reinterpret_cast<LPCWSTR>(readyName.utf16()));
+  if (!ready) return fail(error, QStringLiteral("Could not prepare the restart handshake."));
+  helperArguments.append(QStringLiteral("--ready-event=") + readyName);
+#endif
+  helperArguments.append(QStringLiteral("--"));
+  for (const auto &argument : arguments) {
+    if (argument != QLatin1String("--addon-restart-complete") &&
+        !argument.startsWith(QLatin1String("--addon-restart-error=")))
+      helperArguments.append(argument);
+  }
+  qint64 helperPid = 0;
+  const bool launched = QProcess::startDetached(helper, helperArguments, workingDirectory, &helperPid);
+#ifdef Q_OS_WIN
+  // Process creation alone does not prove that the installed helper understands
+  // the restart request or even reached main(). Keep the Controller open if not.
+  HANDLE process = launched ? OpenProcess(SYNCHRONIZE, FALSE, DWORD(helperPid)) : nullptr;
+  HANDLE handles[] = {ready, process};
+  const bool acknowledged = launched &&
+      WaitForMultipleObjects(process ? 2 : 1, handles, FALSE, 5000) == WAIT_OBJECT_0;
+  if (process) CloseHandle(process);
+  CloseHandle(ready);
+  if (!acknowledged)
+    return fail(error, QStringLiteral("The add-on restart manager did not become ready. VTR-PON has been kept open."));
+#endif
+  if (!launched)
+    return fail(error, QStringLiteral("Could not start the add-on restart manager."));
+  return true;
+}
+bool finishPendingOperations(const QString &applicationRoot, qint64 parentPid,
+                             const QStringList &pendingIds, QString *error) {
+  const QString root = canonicalRoot(applicationRoot);
+  if (root.isEmpty()) return fail(error, QStringLiteral("The VTR-PON installation was not found."));
+  QStringList originalJobs = pendingJobs(root);
+  for (const auto &id : pendingIds) {
+    if (!ids().contains(id)) return fail(error, QStringLiteral("Invalid pending add-on ID."));
+    if (!originalJobs.contains(jobPath(root, id))) originalJobs.append(jobPath(root, id));
+  }
+#ifdef Q_OS_WIN
+  if (parentPid > 0) {
+    HANDLE parent = OpenProcess(SYNCHRONIZE, FALSE, DWORD(parentPid));
+    if (parent) { WaitForSingleObject(parent, INFINITE); CloseHandle(parent); }
+  }
+  // Existing workers may still be waiting for this Controller to release DLLs.
+  // Their elevated children also finish before the unelevated worker exits.
+  if (!waitForRunningCopies(root, error) ||
+      !waitForRunningCopies(root, error, L"vtr-pon-addon-manager.exe")) return false;
+#else
+  Q_UNUSED(parentPid)
+#endif
+  bool succeeded = true;
+  for (const auto &job : pendingJobs(root)) {
+    QString detail;
+    if (applyJob(job, 0, &detail) != 0) {
+      succeeded = false;
+      if (error) *error = detail;
+    }
+  }
+  for (const auto &job : originalJobs) {
+    QFile failure(job.chopped(QStringLiteral(".job.json").size()) + QStringLiteral(".error.txt"));
+    if (failure.open(QIODevice::ReadOnly)) {
+      succeeded = false;
+      if (error) *error = QString::fromUtf8(failure.readAll());
+    }
+  }
+  return succeeded && pendingJobs(root).isEmpty();
 }
 QJsonObject installed(const QString &applicationRoot, const QString &id) {
   QJsonObject object;
@@ -718,7 +831,8 @@ bool queueUninstall(const QString &applicationRoot, const QString &id,
   return true;
 }
 
-int applyJobImpl(const QString &path, qint64 parentPid, QString *error) {
+int applyJobImpl(const QString &path, qint64 parentPid, QString *error,
+                 bool *alreadyFinished) {
   QJsonObject job;
   if (!readJson(path, &job)) { fail(error, QStringLiteral("Invalid operation file.")); return 1; }
   const QString root = job.value(QStringLiteral("root")).toString();
@@ -738,11 +852,17 @@ int applyJobImpl(const QString &path, qint64 parentPid, QString *error) {
   if (!waitForRunningCopies(root, error)) return 1;
   QTemporaryFile probe(root + QStringLiteral("/.vtrpon-addon-write-XXXXXX"));
   if (!probe.open()) {
-    if (elevated() || !requestElevation(path)) {
+    int elevatedResult = 1;
+    if (elevated() || !requestElevation(path, &elevatedResult)) {
       fail(error, QStringLiteral("Write access to the VTR-PON directory was denied."));
       return 1;
     }
-    return 5; // The elevated helper owns this queued job now.
+    if (elevatedResult != 0) {
+      QFile failure(stateDirectory(root) + QLatin1Char('/') + id + QStringLiteral(".error.txt"));
+      fail(error, failure.open(QIODevice::ReadOnly) ? QString::fromUtf8(failure.readAll()) :
+          QStringLiteral("The elevated add-on operation failed."));
+    }
+    return elevatedResult;
   }
   probe.close();
 #else
@@ -750,6 +870,17 @@ int applyJobImpl(const QString &path, qint64 parentPid, QString *error) {
 #endif
   QLockFile lock(stateDirectory(root) + QStringLiteral("/manager.lock"));
   if (!lock.tryLock(30000)) { fail(error, QStringLiteral("Another add-on operation is active.")); return 2; }
+  // A queued worker and a recovery worker may have read the same job before
+  // either acquired the lock. Use the current transaction state under the lock.
+  if (!QFileInfo::exists(path)) { *alreadyFinished = true; return 0; }
+  QJsonObject currentJob;
+  if (!readJson(path, &currentJob) ||
+      currentJob.value(QStringLiteral("root")).toString() != root ||
+      currentJob.value(QStringLiteral("id")).toString() != id ||
+      currentJob.value(QStringLiteral("operation")).toString() != operation) {
+    fail(error, QStringLiteral("The queued operation changed.")); return 2;
+  }
+  job = currentJob;
   if (job.value(QStringLiteral("stage")).toString() == QLatin1String("applying") &&
       !restoreJob(root, id, &job, error)) return 2;
   const auto old = installed(root, id);
@@ -898,6 +1029,7 @@ int applyJobImpl(const QString &path, qint64 parentPid, QString *error) {
 int applyJob(const QString &path, qint64 parentPid, QString *error) {
   QJsonObject job;
   const bool hadJob = readJson(path, &job);
+  if (!hadJob && !QFileInfo::exists(path)) return 0;
   if (hadJob) {
     const QString root = canonicalRoot(job.value(QStringLiteral("root")).toString());
     const QString id = job.value(QStringLiteral("id")).toString();
@@ -923,7 +1055,9 @@ int applyJob(const QString &path, qint64 parentPid, QString *error) {
     }
     stateOverride = stateDir.absolutePath();
   }
-  const int result = applyJobImpl(path, parentPid, error);
+  bool alreadyFinished = false;
+  const int result = applyJobImpl(path, parentPid, error, &alreadyFinished);
+  if (alreadyFinished) { stateOverride.clear(); return result; }
   if (!hadJob) return result;
   const QString root = job.value(QStringLiteral("root")).toString();
   const QString id = job.value(QStringLiteral("id")).toString();

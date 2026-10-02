@@ -4,7 +4,9 @@
 #include "controller_scaling.h"
 #include "language_text.h"
 #include "settings_style.h"
+#include "skins/controller_skin.h"
 
+#include <QApplication>
 #include <QCoreApplication>
 #include <QCheckBox>
 #include <QDir>
@@ -156,13 +158,15 @@ AddonManagementPage::AddonManagementPage(QWidget *parent) : QWidget(parent) {
     QString error;
     busy_ = true;
     reload();
-    if (reviewAndQueue(path, {}, {}, {}, &error))
+    const bool success = reviewAndQueue(path, {}, {}, {}, &error);
+    if (success)
       setMessage(vtrpon::uiText("settings.addons.pending"));
     else if (!error.isEmpty())
       setMessage(vtrpon::uiText("settings.addons.operation_failed").arg(error));
     else setMessage({});
     busy_ = false;
     reload();
+    if (success) promptRestart();
   });
   retranslate();
   reload();
@@ -337,7 +341,23 @@ void AddonManagementPage::downloadAndQueue(int index) {
     busy_ = false;
     reply->deleteLater();
     reload();
+    if (success) promptRestart();
   });
+}
+
+void AddonManagementPage::promptRestart() {
+  QMessageBox question(QMessageBox::Question,
+      vtrpon::uiText("settings.addons.restart_title"),
+      vtrpon::uiText("settings.addons.restart_question"),
+      QMessageBox::Yes | QMessageBox::No, this);
+  question.setObjectName(QStringLiteral("addonRestartDialog"));
+  question.setPalette(vtrpon::controllerSkinPalette(
+      *qApp, vtrpon::ControllerSkinPalette::VtrPonClasic));
+  question.setStyleSheet(vtrpon::settingsStyleSheet(question.objectName()));
+  question.setDefaultButton(QMessageBox::No);
+  question.button(QMessageBox::Yes)->setText(QStringLiteral("Yes"));
+  question.button(QMessageBox::No)->setText(QStringLiteral("No"));
+  if (question.exec() == QMessageBox::Yes) emit restartRequested();
 }
 
 bool AddonManagementPage::reviewAndQueue(const QString &path,
@@ -368,6 +388,10 @@ bool AddonManagementPage::reviewAndQueue(const QString &path,
 bool AddonManagementPage::confirmAgreement(const vtrpon::addons::Package &package) {
   QDialog dialog(this);
   dialog.setObjectName(QStringLiteral("addonAgreementDialog"));
+  dialog.setAttribute(Qt::WA_StyledBackground, true);
+  dialog.setPalette(vtrpon::controllerSkinPalette(
+      *qApp, vtrpon::ControllerSkinPalette::VtrPonClasic));
+  dialog.setStyleSheet(vtrpon::settingsStyleSheet(dialog.objectName()));
   dialog.setWindowTitle(vtrpon::uiText("settings.addons.agreement_title"));
   dialog.resize(vtrpon::scalePx(760), vtrpon::scalePx(580));
   auto *layout = new QVBoxLayout(&dialog);

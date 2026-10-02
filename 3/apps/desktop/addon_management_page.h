@@ -11,10 +11,17 @@ class QShowEvent;
 namespace vtrpon::addons { struct Package; }
 
 class AddonManagementPage final : public QWidget {
+  Q_OBJECT
 public:
   explicit AddonManagementPage(QWidget *parent = nullptr);
   void reload();
   void retranslate();
+
+signals:
+  void restartRequested();
+
+private slots:
+  void promptRestart();
 
 protected:
   void changeEvent(QEvent *event) override;

@@ -7,6 +7,8 @@
 #include "macro_runner.h"
 #include "vst_service.h"
 #include "application_log.h"
+#include "addon_package.h"
+#include "settings_style.h"
 #include "about_window.h"
 #include "application_shutdown_deadline.h"
 #include "background_io_queue.h"
@@ -21,6 +23,7 @@
 #include "controller_settings_io.h"
 #include "skins/controller_skin.h"
 #include <QApplication>
+#include <QMessageBox>
 #include <QKeySequence>
 #include "edit_panel.h"
 #include "edit_session_controller.h"
@@ -1160,6 +1163,28 @@ private:
     ControllerSettingsDialog dialog(
         uvcDeviceMonitor_, audioInputDeviceMonitor_, uvcAudioMappingStore_,
         switcherController_, languageManager_, controlWindow_);
+    connect(&dialog, &ControllerSettingsDialog::addonRestartRequested, &dialog,
+        [this, &dialog] {
+          if (closing_) return;
+          QString error;
+          if (!vtrpon::addons::requestRestart(QCoreApplication::applicationDirPath(),
+                  QCoreApplication::arguments().mid(1), QDir::currentPath(), &error)) {
+            QMessageBox message(QMessageBox::Warning,
+                vtrpon::uiText("settings.addons.restart_title"),
+                vtrpon::uiText("settings.addons.restart_failed").arg(error),
+                QMessageBox::Ok, &dialog);
+            message.setObjectName(QStringLiteral("addonRestartErrorDialog"));
+            message.setPalette(vtrpon::controllerSkinPalette(
+                *qApp, vtrpon::ControllerSkinPalette::VtrPonClasic));
+            message.setStyleSheet(vtrpon::settingsStyleSheet(message.objectName()));
+            message.exec();
+            return;
+          }
+          dialog.accept();
+          QTimer::singleShot(0, this, [this] {
+            if (controlWindow_) controlWindow_->close();
+          });
+        });
     bool openTimerSettings = false;
     connect(&dialog, &ControllerSettingsDialog::operatorTimerSettingsRequested,
             &dialog, [&openTimerSettings] { openTimerSettings = true; });

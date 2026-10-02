@@ -7,6 +7,7 @@
 #include <QDialog>
 #include <QDir>
 #include <QEvent>
+#include <QFileInfo>
 #include <QHBoxLayout>
 #include <QJsonObject>
 #include <QLabel>
@@ -17,6 +18,7 @@
 #include <QStyle>
 #include <QVBoxLayout>
 #include <QVariant>
+#include <algorithm>
 
 namespace vtrpon {
 namespace {
@@ -44,14 +46,21 @@ public:
         bypass_ = new QCheckBox(this); bypass_->setObjectName(QStringLiteral("vstBypass"));
         open_ = new QPushButton(QStringLiteral("OPEN"), this); open_->setObjectName(QStringLiteral("vstOpen"));
         scan_ = new QPushButton(this);
+        scan_->setObjectName(QStringLiteral("vstScanButton"));
         buttons->addWidget(bypass_); buttons->addStretch(); buttons->addWidget(scan_); buttons->addWidget(open_);
         layout->addLayout(buttons);
         status_ = new QLabel(this); status_->setWordWrap(true); layout->addWidget(status_);
+        scanStatus_ = new QLabel(this); scanStatus_->setObjectName(QStringLiteral("vstScanStatus"));
+        scanStatus_->setWordWrap(true); layout->addWidget(scanStatus_);
         hint_ = new QLabel(this); hint_->setWordWrap(true); layout->addWidget(hint_);
         auto &service = VstService::instance();
         connect(&service, &VstService::changed, this, [this] { refresh(); });
         connect(&service, &VstService::catalogChanged, this, [this] { catalog(); });
-        connect(scan_, &QPushButton::clicked, &service, &VstService::scan);
+        connect(&service, &VstService::scanProgressChanged, this, [this] { refresh(); });
+        connect(scan_, &QPushButton::clicked, &service, [&service] {
+            if (service.scanning()) service.cancelScan();
+            else service.scan();
+        });
         connect(bypass_, &QCheckBox::toggled, this, [this](bool value) { VstService::instance().bypass(slot_, value); });
         connect(plugins_, &QComboBox::currentIndexChanged, this, [this](int index) {
             const auto item = plugins_->itemData(index).toJsonObject();
@@ -62,7 +71,7 @@ public:
             VstService::instance().openEditor(slot_, quintptr(parentWidget()->window()->winId()), position.x(), position.y());
         });
         catalog();
-        if (service.plugins().isEmpty() && !service.scanning()) service.scan();
+        if (!service.catalogRequested()) service.scan();
     }
 protected:
     void changeEvent(QEvent *event) override {
@@ -94,8 +103,19 @@ private:
         const auto &service = VstService::instance();
         setWindowTitle(channel(slot_) + QStringLiteral(" — VST3"));
         label_->setText(uiText("vst.plugin"));
-        scan_->setText(uiText(service.scanning() ? "vst.scanning" : "vst.rescan"));
-        scan_->setEnabled(!service.scanning());
+        scan_->setText(uiText(service.scanning() ? "vst.scan_cancel" : "vst.rescan"));
+        const auto progress = service.scanProgress();
+        if (service.scanning()) {
+            scanStatus_->setText(progress.discovering ? uiText("vst.scan_discovering") :
+                uiText("vst.scan_progress").arg(std::min(progress.checked + 1, progress.total))
+                    .arg(progress.total).arg(QFileInfo(progress.currentPath).fileName()));
+        } else if (progress.canceled) {
+            scanStatus_->setText(uiText("vst.scan_canceled"));
+        } else if (!progress.error.isEmpty()) {
+            scanStatus_->setText(uiText("vst.scan_failed").arg(progress.error));
+        } else if (service.catalogRequested()) {
+            scanStatus_->setText(uiText("vst.scan_complete").arg(service.plugins().size()).arg(progress.skipped));
+        } else scanStatus_->clear();
         bypass_->setText(uiText("vst.bypass"));
         const QSignalBlocker blocker(bypass_); bypass_->setChecked(service.bypassed(slot_));
         status_->setText(uiText(service.statusKey(slot_).toUtf8().constData()) + QStringLiteral("\n") + service.detail(slot_));
@@ -108,7 +128,7 @@ private:
     QComboBox *plugins_;
     QCheckBox *bypass_;
     QPushButton *open_, *scan_;
-    QLabel *label_, *status_, *hint_;
+    QLabel *label_, *status_, *scanStatus_, *hint_;
 };
 class Binding final : public QObject {
 public:

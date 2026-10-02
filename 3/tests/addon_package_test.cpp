@@ -11,6 +11,9 @@
 #include <QJsonObject>
 #include <QStandardPaths>
 #include <QTemporaryDir>
+#include <QProcess>
+#include <QElapsedTimer>
+#include <QThread>
 
 #include <zlib.h>
 #include <cstdio>
@@ -80,6 +83,61 @@ bool check(bool result, const char *message) {
 int main(int argc, char **argv) {
   QCoreApplication app(argc, argv);
   QStandardPaths::setTestModeEnabled(true);
+#ifdef Q_OS_WIN
+  // Emulate an older helper that starts successfully but rejects --restart.
+  if (app.arguments().value(1) == QLatin1String("--restart")) return 2;
+  if (app.arguments().size() >= 3 && app.arguments().at(1) == QLatin1String("--restart-probe")) {
+    QStandardPaths::setTestModeEnabled(false);
+    const QString root = app.applicationDirPath();
+    bool failure = false;
+    for (const auto &argument : app.arguments())
+      if (argument.startsWith(QLatin1String("--addon-restart-error="))) failure = true;
+    const QJsonObject result{{"pending", !vtrpon::addons::pendingJobs(root).isEmpty()}, {"failure", failure},
+        {"installed", !vtrpon::addons::installed(root, QStringLiteral("vtr-pon-atem-addon")).isEmpty()},
+        {"cwd", QDir::currentPath()}, {"arguments", QJsonArray::fromStringList(app.arguments().mid(1))}};
+    QFile marker(app.arguments().at(2));
+    return marker.open(QIODevice::WriteOnly | QIODevice::Append) &&
+        marker.write(QJsonDocument(result).toJson(QJsonDocument::Compact) + '\n') > 0 ? 0 : 1;
+  }
+  if (app.arguments().size() == 6 && app.arguments().at(1) == QLatin1String("--prepare-restart")) {
+    QStandardPaths::setTestModeEnabled(false);
+    const QString root = app.arguments().at(2);
+    const QString marker = app.arguments().at(4);
+    const QString helper = root + QStringLiteral("/vtr-pon-addon-manager.exe");
+    if (!check(QFile::copy(app.applicationFilePath(), root + QStringLiteral("/vtr-pon.exe")) &&
+               QFile::copy(app.arguments().at(3), helper), "restart helper fixture")) return 1;
+    const QString packagePath = root + QStringLiteral("/test.vtrponaddon");
+    const auto bytes = package(QStringLiteral("payload/switcher-addons/vtr-pon-atem-addon.dll"),
+                               QStringLiteral("switcher-addon-abi-v1"));
+    vtrpon::addons::Package parsed;
+    QString error;
+    if (!check(write(packagePath, bytes) && vtrpon::addons::readPackage(packagePath, &parsed, &error) &&
+               vtrpon::addons::queueInstall(root, packagePath, {}, {}, {},
+                   vtrpon::addons::consentReceipt(parsed), &error), "restart install preparation")) return 1;
+    const auto jobs = vtrpon::addons::pendingJobs(root);
+    if (!check(jobs.size() == 1, "pending install enumeration")) return 1;
+    // Competing workers must not apply a transaction twice or erase its error.
+    if (!check(QProcess::startDetached(helper, {"--apply", jobs.front(), "--parent-pid",
+            QString::number(app.applicationPid())}, root), "second queued worker")) return 1;
+    if (app.arguments().at(5) == QLatin1String("failure") &&
+        !check(write(vtrpon::addons::stateDirectory(root) +
+            QStringLiteral("/vtr-pon-atem-addon.vtrponaddon"), "changed package"),
+            "invalid staged package fixture")) return 1;
+    const QString working = root + QStringLiteral("/working directory");
+    const QStringList restartArguments{"--restart-probe", marker, "argument with spaces", "--4k",
+        "--addon-restart-complete", "--addon-restart-error=obsolete"};
+    if (!check(QDir().mkpath(working) &&
+               vtrpon::addons::requestRestart(root, restartArguments, working, &error) &&
+               vtrpon::addons::requestRestart(root, restartArguments, working, &error),
+               "restart coordinator launch")) return 1;
+    QElapsedTimer ready; ready.start();
+    while (!vtrpon::addons::restartInProgress(root) && ready.elapsed() < 3000) QThread::msleep(10);
+    if (!check(vtrpon::addons::restartInProgress(root) && !QFileInfo::exists(marker) &&
+               vtrpon::addons::pendingJobs(root).size() == 1,
+               "restart occurred before the parent exited")) return 1;
+    return 0;
+  }
+#endif
   if (app.arguments().size() == 3 &&
       app.arguments().at(1) == QLatin1String("--install-smoke")) {
     vtrpon::addons::Package parsed;
@@ -401,5 +459,60 @@ int main(int argc, char **argv) {
                  "{\"packages\":[{\"id\":1,\"id\":2}]}")),
              "duplicate catalog key accepted")) return 1;
   QDir(state).removeRecursively();
+#ifdef Q_OS_WIN
+  // Real managers operate on disposable copies; the fake Controller records
+  // startup without loading any media or vendor DLLs.
+  QStandardPaths::setTestModeEnabled(false);
+  const QString manager = app.applicationDirPath() + QStringLiteral("/vtr-pon-addon-manager.exe");
+  {
+    QTemporaryDir oldHelperRoot;
+    if (!check(oldHelperRoot.isValid() &&
+               QFile::copy(app.applicationFilePath(), oldHelperRoot.filePath("vtr-pon.exe")) &&
+               QFile::copy(app.applicationFilePath(), oldHelperRoot.filePath("vtr-pon-addon-manager.exe")),
+               "old restart helper fixture")) return 1;
+    QString restartError;
+    if (!check(!vtrpon::addons::requestRestart(oldHelperRoot.path(), {}, oldHelperRoot.path(), &restartError) &&
+               restartError.contains(QStringLiteral("did not become ready")),
+               "a helper without restart support must not allow the Controller to exit")) return 1;
+    const QString oldState = vtrpon::addons::stateDirectory(oldHelperRoot.path());
+    if (!check(QDir(oldState).removeRecursively(), "old helper state cleanup")) return 1;
+  }
+  for (const auto &scenario : {QStringLiteral("success"), QStringLiteral("failure")}) {
+    QTemporaryDir restartRoot;
+    if (!check(restartRoot.isValid(), "restart fixture directory")) return 1;
+    const QString marker = restartRoot.filePath("started.jsonl");
+    QProcess parent;
+    parent.start(app.applicationFilePath(), {"--prepare-restart", restartRoot.path(), manager, marker, scenario});
+    if (!check(parent.waitForFinished(10000) && parent.exitCode() == 0,
+               "restart preparation process")) {
+      std::fprintf(stderr, "%s\n", parent.readAllStandardError().constData());
+      return 1;
+    }
+    QElapsedTimer timer; timer.start();
+    while ((!QFileInfo::exists(marker) || vtrpon::addons::restartInProgress(restartRoot.path())) &&
+           timer.elapsed() < 10000) QThread::msleep(10);
+    QFile recorded(marker);
+    if (!check(recorded.open(QIODevice::ReadOnly), "Controller was not restarted")) return 1;
+    const auto lines = recorded.readAll().trimmed().split('\n');
+    const auto result = QJsonDocument::fromJson(lines.front()).object();
+    const auto arguments = result.value("arguments").toArray().toVariantList();
+    const bool failed = scenario == QLatin1String("failure");
+    if (!check(lines.size() == 1 && !result.value("pending").toBool() &&
+               result.value("failure").toBool() == failed &&
+               result.value("installed").toBool() == !failed &&
+               arguments.contains(QStringLiteral("argument with spaces")) &&
+               arguments.contains(QStringLiteral("--4k")) &&
+               !arguments.contains(QStringLiteral("--addon-restart-error=obsolete")) &&
+               result.value("cwd").toString() == restartRoot.filePath("working directory"),
+               "restart completion, failure, arguments or working directory")) return 1;
+    recorded.close();
+    const QString restartState = vtrpon::addons::stateDirectory(restartRoot.path());
+    const QString base = QDir(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation))
+        .filePath(vtrpon::currentProductStorageName() + QStringLiteral("/addon-manager"));
+    if (!check(!vtrpon::addons::restartInProgress(restartRoot.path()) &&
+               QFileInfo(restartState).canonicalFilePath().startsWith(QFileInfo(base).canonicalFilePath() + '/') &&
+               QDir(restartState).removeRecursively(), "restart state cleanup")) return 1;
+  }
+#endif
   return 0;
 }

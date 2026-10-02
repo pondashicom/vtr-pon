@@ -12,8 +12,10 @@
 namespace vtrpon {
 
 // The dialog owns the stylesheet. Pages only assign semantic roles; objectName
-// remains available for automation and behavior. See settings.qss for the roles.
-QString settingsStyleSheet();
+// remains available for automation and behavior. Other dialogs can reuse the
+// same appearance by supplying their root objectName. See settings.qss for roles.
+QString settingsStyleSheet(
+    const QString &dialogObjectName = QStringLiteral("controllerSettingsDialog"));
 
 inline QGroupBox *createSettingsGroup(QWidget *parent, const char *titleKey) {
   auto *group = new QGroupBox(uiText(titleKey), parent);

@@ -16,6 +16,7 @@
 #include "controller_settings_dialog.h"
 #include "controller_settings.h"
 #include "settings_style.h"
+#include "addon_management_page.h"
 #include "skins/controller_skin.h"
 #include "view_menu_controller.h"
 #include <QMenuBar>
@@ -32,6 +33,7 @@
 #include "switcher_control.h"
 #include "atem_addon_switcher.h"
 #include "vst_editor.h"
+#include "vst_protocol.h"
 #include "user_info.h"
 
 #include <QApplication>
@@ -61,6 +63,7 @@
 #include <QListView>
 #include <QListWidget>
 #include <QMenu>
+#include <QMessageBox>
 #include <QMimeData>
 #include <QMouseEvent>
 #include <QPushButton>
@@ -81,6 +84,7 @@
 #include <array>
 #include <algorithm>
 #include <cstdio>
+#include <functional>
 #include <memory>
 
 namespace {
@@ -547,6 +551,60 @@ int verifyPlaylistDeletion() {
   CHECK(PlaylistModel::canRestoreSnapshot(model.snapshot()));
   CHECK(model.setActivePlaylistNumber(second));
   CHECK(panel.itemCount() == 2);
+  return 0;
+}
+
+int verifyAddonRestartPrompt(QApplication &application,
+                            ControllerSettingsDialog &settings) {
+  QTranslator japanese;
+  const QDir binaryDirectory(QCoreApplication::applicationDirPath());
+  const QString parentCatalog = binaryDirectory.filePath("../vtrpon_ja.qm");
+  CHECK(japanese.load(QFileInfo::exists(parentCatalog) ? parentCatalog :
+                       binaryDirectory.filePath("vtrpon_ja.qm")));
+  CHECK(application.installTranslator(&japanese));
+  auto *page = settings.findChild<AddonManagementPage *>("addonManagementPage");
+  CHECK(page);
+  const QString originalSkin = vtrpon::currentControllerSkinKey();
+  int requests = 0;
+  const auto connection = QObject::connect(&settings, &ControllerSettingsDialog::addonRestartRequested,
+      &settings, [&requests] { ++requests; });
+  for (const auto &skin : vtrpon::availableControllerSkins()) {
+    CHECK(vtrpon::applyControllerSkin(application, skin.key));
+    for (const auto answer : {QMessageBox::No, QMessageBox::Yes}) {
+      bool verified = false;
+      QTimer::singleShot(0, page, [&, answer] {
+        auto *question = page->findChild<QMessageBox *>("addonRestartDialog");
+        if (!question) return;
+        verified = question->text() == QStringLiteral(
+            "アドオンを有効にするためにはVTR-PONの再起動が必要です。\n再起動していいですか？") &&
+            question->button(QMessageBox::Yes)->text().remove(QLatin1Char('&')) == QStringLiteral("Yes") &&
+            question->button(QMessageBox::No)->text().remove(QLatin1Char('&')) == QStringLiteral("No") &&
+            question->defaultButton() == question->button(QMessageBox::No) &&
+            question->palette().color(QPalette::Window) == QColor("#292828");
+        if (!verified) {
+          std::fprintf(stderr, "restart question=[%s] yes=[%s] no=[%s] default=%d background=%s\n",
+              qPrintable(question->text()), qPrintable(question->button(QMessageBox::Yes)->text()),
+              qPrintable(question->button(QMessageBox::No)->text()),
+              question->defaultButton() == question->button(QMessageBox::No),
+              qPrintable(question->palette().color(QPalette::Window).name()));
+        }
+        const QString captureDirectory = qEnvironmentVariable("VTRPON_ADDON_RESTART_CAPTURE_DIR");
+        if (!captureDirectory.isEmpty() && answer == QMessageBox::No) {
+          verified = QDir().mkpath(captureDirectory) &&
+              question->grab().save(QDir(captureDirectory).filePath(skin.key + ".png")) && verified;
+        }
+        question->button(answer)->click();
+      });
+      const int before = requests;
+      CHECK(QMetaObject::invokeMethod(page, "promptRestart", Qt::DirectConnection));
+      CHECK(verified);
+      CHECK(requests == before + (answer == QMessageBox::Yes ? 1 : 0));
+    }
+  }
+  QObject::disconnect(connection);
+  CHECK(vtrpon::applyControllerSkin(application, originalSkin));
+  CHECK(application.removeTranslator(&japanese));
+  application.processEvents();
   return 0;
 }
 
@@ -1184,6 +1242,137 @@ int verifyMissingAddons(QApplication &application) {
   return 0;
 }
 
+int verifyVstScanUi(QApplication &application) {
+  using namespace vtrpon;
+  const QDir fixture(application.applicationDirPath());
+  application.setProperty("vtrpon.settingsFile", fixture.filePath("test.ini"));
+  QTranslator japanese;
+  CHECK(japanese.load(application.arguments().value(2)));
+  CHECK(application.installTranslator(&japanese));
+  CHECK(applyControllerSkin(application, QStringLiteral("hardware")));
+  auto &service = VstService::instance();
+  CHECK(service.available() && service.setEnabled(true));
+  QPushButton button;
+  bindVstButton(&button, VstSlot::Master);
+  button.show();
+  int ticks = 0;
+  QElapsedTimer lastTick; lastTick.start();
+  qint64 longestTick = 0;
+  QTimer heartbeat;
+  heartbeat.setInterval(5);
+  QObject::connect(&heartbeat, &QTimer::timeout, &application, [&] {
+    longestTick = std::max(longestTick, lastTick.restart()); ++ticks;
+  });
+  heartbeat.start();
+  const auto wait = [&](const std::function<bool()> &predicate, int timeout = 4000) {
+    QElapsedTimer elapsed; elapsed.start();
+    while (!predicate() && elapsed.elapsed() < timeout) {
+      application.processEvents(); QThread::msleep(2);
+    }
+    return predicate();
+  };
+  QElapsedTimer opening; opening.start();
+  CHECK(showVstEditor(&button, VstSlot::Master));
+  CHECK(opening.elapsed() < 400);
+  auto *window = button.findChild<QDialog *>("vstMASTERWindow");
+  CHECK(window && window->isVisible());
+  auto *scan = window->findChild<QPushButton *>("vstScanButton");
+  auto *status = window->findChild<QLabel *>("vstScanStatus");
+  CHECK(scan && status && scan->isEnabled() && scan->text() == QStringLiteral("検索を中止"));
+  const QString hanging = fixture.filePath("common/VST3/z-hang.vst3");
+  CHECK(wait([&] { return service.scanProgress().currentPath.endsWith("z-hang.vst3") &&
+                         service.scanProgress().checked == 2; }));
+  CHECK(wait([&] { return QFileInfo::exists(hanging + ".pid"); }));
+  CHECK(service.scanProgress().total == 3 && service.plugins().size() == 2);
+  CHECK(status->text().contains("z-hang.vst3"));
+  const int before = ticks;
+  CHECK(wait([&] { return ticks >= before + 20; }));
+  CHECK(service.scanning());
+  QElapsedTimer cancel; cancel.start(); scan->click();
+  CHECK(cancel.elapsed() < 150 && !service.scanning() && service.scanProgress().canceled);
+  CHECK(service.plugins().size() == 2);
+  CHECK(scan->text() == QStringLiteral("再検索"));
+#ifdef Q_OS_WIN
+  QFile pidFile(hanging + ".pid");
+  CHECK(wait([&] { return pidFile.exists(); }));
+  CHECK(pidFile.open(QIODevice::ReadOnly));
+  const DWORD pid = pidFile.readAll().toULong(); pidFile.close();
+  HANDLE child = OpenProcess(SYNCHRONIZE, FALSE, pid);
+  if (child) {
+    CHECK(wait([&] { return WaitForSingleObject(child, 0) == WAIT_OBJECT_0; }));
+    CloseHandle(child);
+  }
+#endif
+  QFile module(hanging);
+  CHECK(module.open(QIODevice::WriteOnly | QIODevice::Truncate));
+  CHECK(module.write("ok") == 2); module.close();
+  scan->click();
+  CHECK(wait([&] { return !service.scanning(); }));
+  CHECK(service.plugins().size() == 3 && service.scanProgress().skipped == 0);
+  CHECK(status->text().contains(QStringLiteral("3件")));
+  CHECK(module.open(QIODevice::WriteOnly | QIODevice::Truncate));
+  CHECK(module.write("hang") == 4); module.close();
+  const int beforeTimeout = ticks;
+  longestTick = 0; lastTick.restart();
+  scan->click();
+  CHECK(wait([&] { return !service.scanning(); }, 24000));
+  CHECK(service.plugins().size() == 2 && service.scanProgress().skipped == 1);
+  CHECK(ticks > beforeTimeout + 100 && longestTick < 400);
+  const QString helper = VstService::addonPath();
+  CHECK(QFile::rename(helper, helper + ".saved"));
+  scan->click();
+  CHECK(wait([&] { return !service.scanning(); }));
+  CHECK(!service.scanProgress().error.isEmpty());
+  CHECK(status->text().contains(QStringLiteral("検索できませんでした")));
+  CHECK(QFile::rename(helper + ".saved", helper));
+  CHECK(qputenv("CommonProgramW6432", fixture.filePath("empty").toUtf8()));
+  scan->click();
+  CHECK(wait([&] { return !service.scanning(); }));
+  CHECK(service.plugins().isEmpty() && service.scanProgress().error.isEmpty());
+  QPushButton second;
+  bindVstButton(&second, VstSlot::Edit);
+  CHECK(showVstEditor(&second, VstSlot::Edit));
+  CHECK(!service.scanning()); // An empty result must not trigger another automatic scan.
+  service.setEnabled(false);
+  return 0;
+}
+
+int verifyVstScanInChild(QApplication &application) {
+  QTemporaryDir directory;
+  CHECK(directory.isValid());
+  const QDir fixture(directory.path());
+  CHECK(fixture.mkpath("audio-addons") && fixture.mkpath("common/VST3/b-bundle.vst3/Contents") &&
+        fixture.mkpath("local"));
+  for (const QString &relative : {QStringLiteral("common/VST3/a-good.vst3"),
+      QStringLiteral("common/VST3/b-bundle.vst3/Contents/inner.vst3"),
+      QStringLiteral("common/VST3/z-hang.vst3")}) {
+    QFile module(fixture.filePath(relative));
+    CHECK(module.open(QIODevice::WriteOnly));
+    CHECK(module.write(relative.contains("hang") ? "hang" : "ok") > 0);
+  }
+  const QString controller = fixture.filePath("test.exe");
+  CHECK(QFile::copy(application.applicationFilePath(), controller));
+  CHECK(QFile::copy(application.applicationFilePath(), fixture.filePath("audio-addons/vtr-pon-vst3-addon.exe")));
+  auto environment = QProcessEnvironment::systemEnvironment();
+  environment.insert("CommonProgramW6432", fixture.filePath("common"));
+  environment.insert("LOCALAPPDATA", fixture.filePath("local"));
+  environment.insert("QT_QPA_PLATFORM_PLUGIN_PATH",
+      QDir(application.applicationDirPath()).filePath("platforms"));
+  QProcess child;
+  child.setProcessEnvironment(environment);
+  child.setProcessChannelMode(QProcess::ForwardedChannels);
+  const QDir executableDirectory(application.applicationDirPath());
+  QString translation = executableDirectory.filePath("../vtrpon_ja.qm");
+  if (!QFileInfo::exists(translation))
+    translation = executableDirectory.filePath("vtrpon_ja.qm");
+  CHECK(QFileInfo::exists(translation));
+  child.start(controller, {"--verify-vst-scan-ui", translation});
+  CHECK(child.waitForStarted(5000));
+  CHECK(child.waitForFinished(35000));
+  CHECK(child.exitStatus() == QProcess::NormalExit && child.exitCode() == 0);
+  return 0;
+}
+
 int verifyMissingAddonsInChild(QApplication &application) {
   // Run the normal test binary without optional payloads. Do not rename/remove
   // the developer's installed add-ons or touch their configuration.
@@ -1217,6 +1406,33 @@ int verifyMissingAddonsInChild(QApplication &application) {
 #include "playlist_panel_drag_drop_test.moc"
 
 int main(int argc, char *argv[]) {
+  if (argc > 1 && (QByteArray(argv[1]) == "--verify-vst-scan-ui" ||
+                   QByteArray(argv[1]) == "--scan")) {
+    qInstallMessageHandler([](QtMsgType, const QMessageLogContext &, const QString &message) {
+      std::fprintf(stderr, "%s\n", qPrintable(message)); std::fflush(stderr);
+    });
+  }
+  if (argc == 7 && QByteArray(argv[1]) == "--scan" && QByteArray(argv[3]) == "--result") {
+    QCoreApplication probe(argc, argv);
+    QFile module(QString::fromLocal8Bit(argv[2]));
+    if (module.open(QIODevice::ReadOnly) && module.readAll() == "hang") {
+      QFile pid(module.fileName() + ".pid");
+      if (pid.open(QIODevice::WriteOnly)) pid.write(QByteArray::number(probe.applicationPid()));
+      pid.close();
+#ifdef Q_OS_WIN
+      HANDLE parent = OpenProcess(SYNCHRONIZE, FALSE, QString::fromLocal8Bit(argv[6]).toULong());
+      if (parent) { WaitForSingleObject(parent, INFINITE); CloseHandle(parent); }
+#else
+      QThread::msleep(30000);
+#endif
+      return 1;
+    }
+    QFile result(QString::fromLocal8Bit(argv[4]));
+    if (!result.open(QIODevice::WriteOnly)) return 2;
+    result.write(QJsonDocument(QJsonArray{QJsonObject{{"uid", QString(32, '1')},
+        {"name", QFileInfo(module.fileName()).fileName()}, {"vendor", "Test"}}}).toJson());
+    return 0;
+  }
   if (argc == 2 && QByteArray(argv[1]) == "--operator-monitor-shutdown-child") {
     QThread::msleep(15000);
     return 0;
@@ -1250,6 +1466,14 @@ int main(int argc, char *argv[]) {
               .filePath(QStringLiteral("switcher-settings.ini"))
               .toUtf8());
   QApplication application(argc, argv);
+  if (application.arguments().contains(QStringLiteral("--verify-vst-scan-ui")))
+    return verifyVstScanUi(application);
+  if (application.arguments().contains(QStringLiteral("--verify-vst-scan-only")))
+    return verifyVstScanInChild(application);
+  if (application.arguments().contains(QStringLiteral("--verify-addon-restart-only"))) {
+    ControllerSettingsDialog dialog(nullptr, nullptr, nullptr, nullptr, nullptr);
+    return verifyAddonRestartPrompt(application, dialog);
+  }
   if (application.arguments().contains(QStringLiteral("--decklink-settings-only"))) {
     CHECK(verifyAbsentDeckLinkSettings() == 0);
     QTranslator japanese; CHECK(japanese.load(QCoreApplication::applicationDirPath() + QStringLiteral("/vtrpon_ja.qm"))); application.installTranslator(&japanese);
@@ -1274,6 +1498,7 @@ int main(int argc, char *argv[]) {
     return verifyMissingAddons(application);
   CHECK(verifyMissingAddonsInChild(application) == 0);
   if (application.arguments().contains(QStringLiteral("--verify-addon-absence-only"))) return 0;
+  CHECK(verifyVstScanInChild(application) == 0);
   CHECK(verifyAbsentDeckLinkSettings() == 0);
   {
     QWidget window;
@@ -1885,6 +2110,7 @@ int main(int argc, char *argv[]) {
     auto *installLocal = settingsDialog.findChild<QPushButton *>(
         QStringLiteral("addonInstallLocal"));
     CHECK(addonPage && installLocal && installLocal->isEnabled());
+    CHECK(verifyAddonRestartPrompt(application, settingsDialog) == 0);
     CHECK(settingsDialog.findChild<QPushButton *>(
         QStringLiteral("addonUninstall0")) != nullptr);
     CHECK(!settingsNavigation->dragEnabled());

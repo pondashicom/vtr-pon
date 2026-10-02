@@ -1,7 +1,8 @@
 /* Settings uses VTR-PON Clasic appearance regardless of the Controller skin.
  * Control colors/states follow skins/vtr-pon-clasic/controller.qss; the
  * settings-specific layout, semantic roles and text-size support stay here.
- * All selectors stay within controllerSettingsDialog. New standard controls
+ * All selectors stay within controllerSettingsDialog; settingsStyleSheet()
+ * can scope the same appearance to another dialog. New standard controls
  * need no object-name registration. Use setSettingsRole() for semantic roles:
  * page, card, title, pageTitle, fieldLabel, description, status, warning, error,
  * connection, primaryButton, preview, emptyState.
@@ -308,4 +309,44 @@ QDialog#controllerSettingsDialog QListWidget#settingsNavigationList::item:select
 QDialog#controllerSettingsDialog QAbstractItemView:focus,
 QDialog#controllerSettingsDialog QListWidget#settingsNavigationList:focus {
     border: 1px solid #007BFF;
+}
+
+/* Agreement documents reuse the Settings appearance in every Controller skin. */
+QDialog#controllerSettingsDialog QTextEdit {
+    background: #2E2E2E;
+    color: #FFFFFF;
+    border: 1px solid #555555;
+    border-radius: 5px;
+    padding: 8px;
+    selection-background-color: #2964A3;
+    selection-color: #ffffff;
+}
+QDialog#controllerSettingsDialog QTabWidget::pane {
+    background: #383838;
+    border: 1px solid #555555;
+}
+QDialog#controllerSettingsDialog QTabBar::tab {
+    background: #2E2E2E;
+    color: #BBBBBB;
+    border: 1px solid #555555;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 6px 10px;
+}
+QDialog#controllerSettingsDialog QTabBar::tab:hover {
+    background: #444444;
+    color: #FFFFFF;
+}
+QDialog#controllerSettingsDialog QTabBar::tab:selected {
+    background: #383838;
+    color: #FFFFFF;
+    border-bottom-color: #383838;
+}
+QDialog#controllerSettingsDialog QTabBar QToolButton {
+    background: #2E2E2E;
+    color: #FFFFFF;
+    border: 1px solid #555555;
+}
+QDialog#controllerSettingsDialog QTabBar QToolButton:disabled {
+    color: #8A8A8A;
 }

@@ -1,16 +1,14 @@
 #include "vst_service.h"
 #include "vst_protocol.h"
+#include "vst_scan.h"
 #include "controller_settings.h"
 #include <QCoreApplication>
-#include <QDirIterator>
 #include <QDebug>
 #include <QElapsedTimer>
 #include <QFile>
 #include <QFileInfo>
-#include <QJsonDocument>
 #include <QJsonObject>
 #include <QProcess>
-#include <QTemporaryDir>
 #include <QTimer>
 #include <QUuid>
 #include <array>
@@ -131,13 +129,11 @@ struct VstService::Impl {
         bool bypass = false;
     };
     std::array<Slot, count> channels;
-    QTimer timer, scanTimeout;
-    QProcess *scanner = nullptr;
-    std::unique_ptr<QTemporaryDir> scanDir;
-    QStringList scanPaths;
+    QTimer timer, scanPoll;
+    std::shared_ptr<VstScan> scanState;
+    VstScan::Snapshot scanSnapshot;
     QJsonArray catalog;
-    QString scanFile;
-    bool scanBusy = false;
+    bool scanBusy = false, scanRequested = false, scanCanceled = false;
     explicit Impl(VstService *owner) : q(owner) {}
     void stop(int i) {
         bridges[i].store(nullptr);
@@ -166,41 +162,6 @@ struct VstService::Impl {
         emit q->failure(names[i], reason);
         emit q->changed();
     }
-    void nextScan() {
-        if (scanPaths.isEmpty()) {
-            scanBusy = false;
-            emit q->catalogChanged(); return;
-        }
-        const QString path = scanPaths.takeFirst();
-        scanFile = scanDir->filePath(QUuid::createUuid().toString(QUuid::Id128) + QStringLiteral(".json"));
-        scanner = new QProcess(q);
-        configureProcess(scanner);
-        const auto current = scanner;
-        QObject::connect(current, &QProcess::finished, q, [this, current, path](int code, QProcess::ExitStatus status) {
-            if (scanner != current) return;
-            scanTimeout.stop();
-            QFile file(scanFile);
-            if (code == 0 && status == QProcess::NormalExit && file.size() < 8 * 1024 * 1024 && file.open(QIODevice::ReadOnly)) {
-                const auto array = QJsonDocument::fromJson(file.readAll()).array();
-                for (const auto &value : array) {
-                    auto item = value.toObject();
-                    if (item.value("uid").toString().size() != 32 || item.value("name").toString().isEmpty()) continue;
-                    item.insert("path", path); catalog.append(item);
-                }
-            }
-            file.close(); QFile::remove(scanFile);
-            current->deleteLater(); scanner = nullptr;
-            emit q->catalogChanged(); nextScan();
-        });
-        QObject::connect(current, &QProcess::errorOccurred, q, [this, current](QProcess::ProcessError error) {
-            if (scanner != current || error != QProcess::FailedToStart) return;
-            scanTimeout.stop(); dispose(scanner); scanner = nullptr;
-            nextScan();
-        });
-        current->start(VstService::addonPath(), {QStringLiteral("--scan"), path, QStringLiteral("--result"), scanFile,
-            QStringLiteral("--parent"), QString::number(QCoreApplication::applicationPid())});
-        scanTimeout.start(20000);
-    }
 };
 
 VstService &VstService::instance() {
@@ -217,8 +178,21 @@ bool VstService::available() const {
 }
 VstService::VstService() : QObject(QCoreApplication::instance()), d(std::make_unique<Impl>(this)) {
     reloadSettings();
-    connect(&d->scanTimeout, &QTimer::timeout, this, [this] { if (d->scanner) d->scanner->kill(); });
-    d->scanTimeout.setSingleShot(true);
+    d->scanPoll.setInterval(100);
+    connect(&d->scanPoll, &QTimer::timeout, this, [this] {
+        if (!d->scanState) return;
+        const auto snapshot = d->scanState->snapshot();
+        if (snapshot == d->scanSnapshot) return;
+        const bool catalogChangedState = snapshot.catalog != d->catalog;
+        d->scanSnapshot = snapshot;
+        d->catalog = snapshot.catalog;
+        if (snapshot.done) {
+            d->scanState.reset(); d->scanPoll.stop(); d->scanBusy = false;
+            if (!snapshot.error.isEmpty()) qWarning().noquote() << "VST_SCAN_FAILURE" << snapshot.error;
+        }
+        if (catalogChangedState) emit catalogChanged();
+        emit scanProgressChanged();
+    });
     connect(&d->timer, &QTimer::timeout, this, [this] {
 #ifdef _WIN32
         bool changedState = false;
@@ -267,13 +241,13 @@ VstService::VstService() : QObject(QCoreApplication::instance()), d(std::make_un
     connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, [this] {
         mode = false;
         for (int i = 0; i < count; ++i) d->stop(i);
-        dispose(d->scanner); d->scanner = nullptr;
+        cancelScan();
     });
 }
 VstService::~VstService() {
     mode = false;
     for (int i = 0; i < count; ++i) d->stop(i);
-    dispose(d->scanner);
+    cancelScan();
 }
 void VstService::reloadSettings() {
     auto settings = makeControllerSettings();
@@ -297,24 +271,32 @@ bool VstService::setEnabled(bool enabled) {
 }
 void VstService::scan() {
     if (d->scanBusy || !available()) return;
-    if (!d->scanDir) d->scanDir = std::make_unique<QTemporaryDir>();
-    if (!d->scanDir->isValid()) return;
-    d->catalog = {}; d->scanPaths.clear();
-    QStringList roots{qEnvironmentVariable("CommonProgramW6432") + QStringLiteral("/VST3"),
-        qEnvironmentVariable("LOCALAPPDATA") + QStringLiteral("/Programs/Common/VST3")};
-    for (const auto &root : roots) {
-        if (!QDir(root).exists()) continue;
-        QDirIterator it(root, {QStringLiteral("*.vst3")}, QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
-        while (it.hasNext()) {
-            const QString path = it.next();
-            // Bundle binaries live below another .vst3 directory; scan the bundle once.
-            if (!path.contains(QStringLiteral(".vst3/"), Qt::CaseInsensitive)) d->scanPaths.append(path);
-        }
-    }
-    d->scanPaths.removeDuplicates(); d->scanBusy = true;
-    emit catalogChanged(); d->nextScan();
+    QStringList roots;
+    const auto common = qEnvironmentVariable("CommonProgramW6432");
+    const auto local = qEnvironmentVariable("LOCALAPPDATA");
+    if (!common.isEmpty()) roots.append(common + QStringLiteral("/VST3"));
+    if (!local.isEmpty()) roots.append(local + QStringLiteral("/Programs/Common/VST3"));
+    d->catalog = {}; d->scanSnapshot = {};
+    d->scanBusy = d->scanRequested = true; d->scanCanceled = false;
+    d->scanState = VstScan::start(addonPath(), roots, QCoreApplication::applicationPid());
+    d->scanPoll.start();
+    emit catalogChanged(); emit scanProgressChanged();
+}
+void VstService::cancelScan() {
+    if (!d->scanState) return;
+    d->scanState->cancel();
+    d->scanSnapshot = d->scanState->snapshot();
+    d->catalog = d->scanSnapshot.catalog;
+    d->scanState.reset(); d->scanPoll.stop();
+    d->scanBusy = false; d->scanCanceled = true;
+    emit catalogChanged(); emit scanProgressChanged();
 }
 bool VstService::scanning() const { return d->scanBusy; }
+bool VstService::catalogRequested() const { return d->scanRequested; }
+VstScanProgress VstService::scanProgress() const {
+    const auto &s = d->scanSnapshot;
+    return {s.currentPath, s.error, s.checked, s.total, s.skipped, s.discovering, d->scanCanceled};
+}
 QJsonArray VstService::plugins() const { return d->catalog; }
 QString VstService::selectedPath(VstSlot slot) const { return d->channels[int(slot)].path; }
 QString VstService::selectedUid(VstSlot slot) const { return d->channels[int(slot)].uid; }
