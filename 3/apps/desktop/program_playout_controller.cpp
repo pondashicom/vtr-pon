@@ -1,5 +1,6 @@
 #include "decklink.h"
 #include "program_playout_controller.h"
+#include "live_audio_source.h"
 #include "network_video_source.h"
 #include <QDebug>
 
@@ -292,7 +293,8 @@ ProgramPlayoutController::cueRequestFor(
       item.filePath,
       item.displayName,
       item.sourceType,
-      (vtrpon::isNetworkVideoSource(item.filePath) || vtrpon::isDeckLinkSource(item.filePath)) ? item.filePath
+      vtrpon::isLiveAudioSource(item.filePath) ? vtrpon::liveAudioDeviceId(item.filePath)
+      : (vtrpon::isNetworkVideoSource(item.filePath) || vtrpon::isDeckLinkSource(item.filePath)) ? item.filePath
       : item.sourceType == PlaylistSourceType::Uvc && uvcAudioMappingStore_
           ? uvcAudioMappingStore_->audioDeviceIdFor(item.filePath)
           : QString(),
@@ -1454,7 +1456,8 @@ void ProgramPlayoutController::updateCueUi() {
       takeCueOnAir(*selected);
     }
   } else if (status == DualDeckPlayer::CueStatus::Error) {
-    if (cue_->sourceType == PlaylistSourceType::Uvc && uvcSourceSessions_) {
+    if (cue_->sourceType == PlaylistSourceType::Uvc && uvcSourceSessions_
+        && !vtrpon::isLiveAudioSource(cue_->path)) {
       const auto path = cue_->path;
       const auto detail = player_.cueErrorDetail();
       pendingTakeItemId_.reset();
@@ -3104,6 +3107,13 @@ void ProgramPlayoutController::updatePlaybackUi() {
       return;
     }
     const auto item = onAirMedia ? playlistModel_->itemState(onAirMedia->itemId) : std::nullopt;
+    if (item && item->sourceType == PlaylistSourceType::Uvc && vtrpon::isLiveAudioSource(item->filePath)) {
+      playlistModel_->setUvcDeviceAvailable(item->filePath, false);
+      if (playlistModel_->onAirItemId() == item->id) clearOnAir();
+      userInfoCenter_->showError(QStringLiteral("Live Audio"),
+                                vtrpon::LocalizedText("input.audio.error"), detail);
+      return;
+    }
     if (!programAudioError && item && item->sourceType == PlaylistSourceType::Uvc && uvcSourceSessions_) {
       uvcSourceSessions_->reportSourceFailure(item->filePath, detail);
       if (playlistModel_->onAirItemId() == item->id) clearOnAir();

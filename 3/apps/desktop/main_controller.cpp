@@ -3,6 +3,7 @@
 #include "test_pattern_store.h"
 #include "virtual_camera/output.h"
 #include "main_controller.h"
+#include "live_audio_source.h"
 #include "macro_editor_window.h"
 #include "macro_runner.h"
 #include "vst_service.h"
@@ -1550,6 +1551,12 @@ private:
   }
 
   void connectUvcControls() {
+    connect(audioInputDeviceMonitor_, &AudioInputDeviceMonitor::devicesChanged, this,
+            [this] {
+              if (closing_) return;
+              inputControlPanel_->setAudioInputDevices(audioInputDeviceMonitor_->devices());
+              refreshUvcPreviewSources();
+            });
     connect(uvcDeviceMonitor_, &UvcDeviceMonitor::devicesChanged, this,
             [this] {
               if (inputControlPanel_) inputControlPanel_->setUvcDevices(uvcDeviceMonitor_->devices());
@@ -1591,6 +1598,7 @@ private:
     connect(playlistModel_, &PlaylistModel::modelReset, this,
             [this] { refreshUvcPreviewSources(); });
     inputControlPanel_->setUvcDevices(uvcDeviceMonitor_->devices());
+    inputControlPanel_->setAudioInputDevices(audioInputDeviceMonitor_->devices());
     if (vtrpon::networkVideoAddonInstalled() || vtrpon::deckLinkAddonInstalled()) {
       auto *networkTimer = new QTimer(this);
       connect(networkTimer, &QTimer::timeout, this, [this] { if (!closing_) refreshCaptureDevices(); });
@@ -1602,6 +1610,8 @@ private:
 
   QList<UvcDevice> availableCaptureDevices() const {
     auto devices = uvcDeviceMonitor_->devices();
+    for (const auto &device : audioInputDeviceMonitor_->devices())
+      devices.append({device.displayName, vtrpon::liveAudioSourcePath(device.deviceId)});
     if (vtrpon::networkVideoAddonInstalled() && vtrpon::savedNetworkVideoSettings().inputEnabled)
       for (const auto &source : vtrpon::networkVideoState().sources)
         devices.append({source.name, source.path});
@@ -1626,7 +1636,8 @@ private:
       if (vtrpon::isDeckLinkSource(device.devicePath)) deckLinkSources.append({device.displayName, device.devicePath});
     inputControlPanel_->setDeckLinkSources(deckLinkSources, vtrpon::deckLinkAddonInstalled() && vtrpon::savedDeckLinkSettings().inputEnabled);
     QSet<QString> paths;
-    for (const auto &device : availableCaptureDevices()) paths.insert(device.devicePath);
+    for (const auto &device : availableCaptureDevices())
+      if (!vtrpon::isLiveAudioSource(device.devicePath)) paths.insert(device.devicePath);
     // Saved input items retain their selected format. A changed default format
     // does not make a still-connected channel unavailable.
     if (vtrpon::savedDeckLinkSettings().inputEnabled) {
@@ -2065,6 +2076,7 @@ private:
 
   void registerUvcDevice(const QString &displayName,
                          const QString &devicePath) {
+    const bool audioOnly = vtrpon::isLiveAudioSource(devicePath);
     if (!playlistModel_ || !inputControlPanel_ || !uvcSourceSessions_ ||
         displayName.isEmpty() || devicePath.isEmpty()) {
       return;
@@ -2086,7 +2098,7 @@ private:
 
     inputControlPanel_->setUvcCaptureBusy(true);
     QString errorDetail;
-    const bool sourceStarted =
+    const bool sourceStarted = audioOnly ||
         uvcSourceSessions_->ensureSource(devicePath, &errorDetail);
     inputControlPanel_->setUvcCaptureBusy(false);
     if (!sourceStarted) {
@@ -2100,7 +2112,7 @@ private:
     item.filePath = devicePath;
     item.displayName = displayName;
     item.sourceType = PlaylistSourceType::Uvc;
-    item.mediaType = PlaylistMediaType::Video;
+    item.mediaType = audioOnly ? PlaylistMediaType::Audio : PlaylistMediaType::Video;
     item.settings.startMode = PlaylistStartMode::Play;
     item.settings.endMode = PlaylistEndMode::Pause;
     item.settings.outPointMs = std::nullopt;
@@ -2113,8 +2125,8 @@ private:
           vtrpon::LocalizedText(vtrpon::isDeckLinkSource(devicePath) ? "decklink.add_failed" : vtrpon::isNetworkVideoSource(devicePath) ? "network_video.add_failed" : "uvc.add_to_playlist_failed"));
       return;
     }
-    const QImage thumbnail =
-        uvcSourceSessions_->latestThumbnail(devicePath);
+    const QImage thumbnail = audioOnly ? generateLiveAudioThumbnail()
+        : uvcSourceSessions_->latestThumbnail(devicePath);
     if (!thumbnail.isNull()) {
       playlistPanel_->setItemThumbnail(addedItemIds.constFirst(), thumbnail);
     }
@@ -2130,6 +2142,16 @@ private:
     QSet<QString> registeredPaths;
     for (const auto &item : playlistModel_->snapshot().items) {
       if (item.sourceType != PlaylistSourceType::Uvc) continue;
+      if (vtrpon::isLiveAudioSource(item.filePath)) {
+        const QString deviceId = vtrpon::liveAudioDeviceId(item.filePath);
+        const auto devices = audioInputDeviceMonitor_->devices();
+        const bool available = audioInputDeviceMonitor_->isAvailable() &&
+            std::any_of(devices.cbegin(), devices.cend(), [&](const auto &device) {
+              return device.deviceId == deviceId;
+            });
+        playlistModel_->setUvcDeviceAvailable(item.filePath, available);
+        continue;
+      }
       if ((vtrpon::isNetworkVideoSource(item.filePath) && !vtrpon::networkVideoAddonInstalled()) || (vtrpon::isDeckLinkSource(item.filePath) && !vtrpon::deckLinkAddonInstalled())) {
         playlistModel_->setUvcDeviceAvailable(item.filePath, false);
         continue;

@@ -1,4 +1,5 @@
 #include "playlist_document_io.h"
+#include "live_audio_source.h"
 
 #include "playlist_model.h"
 
@@ -747,5 +748,33 @@ int main(int argc, char *argv[]) {
   CHECK(!PlaylistModel::canRestoreSnapshot(exhaustedSnapshot, &errorDetail));
   CHECK(!PlaylistDocumentIo::fromJson(PlaylistDocumentIo::toJson(exhaustedSnapshot), &errorDetail));
 
+  {
+    PlaylistModel liveAudioModel;
+    PlaylistItemRegistration audio;
+    const QString endpoint = QStringLiteral("USB audio endpoint / 入力 %1");
+    audio.filePath = vtrpon::liveAudioSourcePath(endpoint);
+    audio.displayName = QStringLiteral("USB Microphone");
+    audio.sourceType = PlaylistSourceType::Uvc;
+    audio.mediaType = PlaylistMediaType::Audio;
+    const auto ids = liveAudioModel.addItems({audio, audio});
+    CHECK(ids.size() == 2);
+    const auto path = temporaryDirectory.filePath(QStringLiteral("live-audio.json"));
+    CHECK(PlaylistDocumentIo::writeFile(path, liveAudioModel.snapshot(), &errorDetail));
+    const auto restored = PlaylistDocumentIo::readFile(path, &errorDetail);
+    CHECK(restored && restored->items.size() == 2);
+    CHECK(liveAudioModel.restoreSnapshot(*restored, &errorDetail));
+    for (const auto id : ids) {
+      const auto state = liveAudioModel.itemState(id);
+      CHECK(state && state->sourceType == PlaylistSourceType::Uvc && state->mediaType == PlaylistMediaType::Audio);
+      CHECK(vtrpon::liveAudioDeviceId(state->filePath) == endpoint);
+      CHECK(state->settings.inPointMs == 0 && !state->settings.outPointMs && state->settings.startMode == PlaylistStartMode::Play);
+    }
+    liveAudioModel.setUvcDeviceAvailable(audio.filePath, false);
+    CHECK(liveAudioModel.itemMediaOffline(ids[0]) && liveAudioModel.itemMediaOffline(ids[1]));
+    liveAudioModel.refreshMediaAvailability();
+    CHECK(liveAudioModel.itemMediaOffline(ids[0]) && liveAudioModel.itemMediaOffline(ids[1]));
+    liveAudioModel.setUvcDeviceAvailable(audio.filePath, true);
+    CHECK(!liveAudioModel.itemMediaOffline(ids[0]) && !liveAudioModel.itemMediaOffline(ids[1]));
+  }
   return 0;
 }

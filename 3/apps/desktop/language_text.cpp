@@ -51,7 +51,7 @@ constexpr auto kUiTextIds = std::to_array<const char *>({
     QT_TRID_NOOP("decklink.add_failed"),
     //% "DeckLink Live"
     QT_TRID_NOOP("decklink.live"),
-    //% "UVC / NDI / DeckLink Input"
+    //% "UVC/UAC / NDI / DeckLink Input"
     QT_TRID_NOOP("decklink.input_title"),
     //% "Select an input device or channel"
     QT_TRID_NOOP("decklink.input_devices"),
@@ -291,11 +291,11 @@ constexpr auto kUiTextIds = std::to_array<const char *>({
     QT_TRID_NOOP("network_video.start_failed"),
     //% "Could not add the NDI input to the playlist."
     QT_TRID_NOOP("network_video.add_failed"),
-    //% "UVC/NDI INPUT"
+    //% "UVC/UAC/NDI INPUT"
     QT_TRID_NOOP("input.network.title"),
-    //% "Available UVC devices and NDI sources"
+    //% "Available UVC/UAC devices and NDI sources"
     QT_TRID_NOOP("input.network.devices_accessible"),
-    //% "Add the selected UVC device or NDI source to the playlist"
+    //% "Add the selected UVC/UAC input or NDI source to the playlist"
     QT_TRID_NOOP("input.network.add"),
     //% "NDI LIVE"
     QT_TRID_NOOP("playlist.item.network_live"),
@@ -1294,18 +1294,28 @@ constexpr auto kUiTextIds = std::to_array<const char *>({
     QT_TRID_NOOP("input.accessible"),
     //% "INPUT CONTROL"
     QT_TRID_NOOP("input.title"),
-    //% "UVC input controls"
+    //% "UVC/UAC input controls"
     QT_TRID_NOOP("input.uvc.accessible"),
-    //% "UVC INPUT"
+    //% "UVC/UAC INPUT"
     QT_TRID_NOOP("input.uvc.title"),
-    //% "Available UVC video devices"
+    //% "Available UVC video and audio input devices"
     QT_TRID_NOOP("input.uvc.devices_accessible"),
-    //% "Add selected UVC device to playlist"
+    //% "Add selected UVC/UAC input to playlist"
     QT_TRID_NOOP("input.uvc.add_accessible"),
-    //% "Capture one frame from the current camera feed and add it to the playlist as a UVC input"
+    //% "Add the selected video or audio input to the playlist as a live source"
     QT_TRID_NOOP("input.uvc.add_tooltip"),
-    //% "No UVC devices"
+    //% "No UVC/UAC devices"
     QT_TRID_NOOP("input.uvc.none"),
+    //% "Audio: %1"
+    QT_TRID_NOOP("input.audio.device"),
+    //% "Live Audio"
+    QT_TRID_NOOP("input.audio.live"),
+    //% "Live audio input failed."
+    QT_TRID_NOOP("input.audio.error"),
+    //% "Live Audio | Input connected"
+    QT_TRID_NOOP("input.audio.ready"),
+    //% "Live Audio | MEDIA OFFLINE"
+    QT_TRID_NOOP("input.audio.offline"),
 
     //% "Stereo audio level meter"
     QT_TRID_NOOP("audio_meter.stereo_accessible"),

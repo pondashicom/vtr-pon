@@ -1,5 +1,7 @@
 #include "decklink.h"
 #include "edit_session_controller.h"
+#include "live_audio_source.h"
+#include "media_thumbnailer.h"
 #include "edit_pfl_output.h"
 #include "edit_pfl_protocol.h"
 #include "async_pipeline_stop.h"
@@ -473,6 +475,13 @@ EditSessionController::EditSessionController(EditPanel *panel,
   connect(playlistModel, &PlaylistModel::itemMediaAvailabilityChanged, this,
           [this](quint64 itemId, bool offline) {
             if (panel_) panel_->setGotoTargetOffline(itemId, offline);
+            if (itemId == editItemId_ && vtrpon::isLiveAudioSource(liveDevicePath_)) {
+              liveAudio_->stop();
+              liveAudioNeedsStart_ = !offline;
+              resetAudioPresentation();
+              if (panel_) panel_->setStatus(vtrpon::LocalizedText(offline
+                  ? "input.audio.offline" : "input.audio.ready"), offline);
+            }
           });
   connect(uvcSessions, &UvcSourceSessionManager::thumbnailReady, this,
           [this](const QString &path, const QImage &image) {
@@ -832,7 +841,8 @@ void EditSessionController::loadLiveItem(const PlaylistItemState &item) {
   liveDevicePath_ = item.filePath;
   livePreviewReady_ = false;
   liveAudioNeedsStart_ = true;
-  uvcSessions_->setEditPreviewPath(item.filePath);
+  const bool audioOnly = vtrpon::isLiveAudioSource(item.filePath);
+  uvcSessions_->setEditPreviewPath(audioOnly ? QString() : item.filePath);
   editFileName_ = item.displayName;
   playlistModel_->setEditItemId(item.id);
   panel_->resetForLoadedMedia();
@@ -841,7 +851,8 @@ void EditSessionController::loadLiveItem(const PlaylistItemState &item) {
   panel_->setTransportEnabled(false);
   panel_->setTimelineDuration(-1);
   panel_->setTimelinePosition(0);
-  panel_->setLiveFrame(uvcSessions_->latestThumbnail(item.filePath));
+  panel_->setLiveFrame(audioOnly ? generateLiveAudioThumbnail(QSize(960, 540))
+                               : uvcSessions_->latestThumbnail(item.filePath));
   resetAudioPresentation();
   panel_->setStatus(QStringLiteral("EDIT | %1").arg(editFileName_));
   updateEditorState();
@@ -1448,11 +1459,13 @@ void EditSessionController::updateUi() {
   }
   if (player_.isAvailable()) player_.processBusMessages();
   if (!liveDevicePath_.isEmpty() && removalPendingId_ == 0) {
-    if (liveAudioNeedsStart_ && !player_.isBusy()) {
+    if (liveAudioNeedsStart_ && !player_.isBusy() && !playlistModel_->itemMediaOffline(editItemId_)) {
       liveAudioNeedsStart_ = false;
       const auto state = playlistModel_->itemState(editItemId_);
       if (state) {
-        const QString audioDeviceId = (vtrpon::isNetworkVideoSource(liveDevicePath_) || vtrpon::isDeckLinkSource(liveDevicePath_))
+        const QString audioDeviceId = vtrpon::isLiveAudioSource(liveDevicePath_)
+            ? vtrpon::liveAudioDeviceId(liveDevicePath_)
+            : (vtrpon::isNetworkVideoSource(liveDevicePath_) || vtrpon::isDeckLinkSource(liveDevicePath_))
             ? liveDevicePath_
             : uvcAudioMappings_ ? uvcAudioMappings_->audioDeviceIdFor(liveDevicePath_)
                                 : QString();
@@ -1460,7 +1473,7 @@ void EditSessionController::updateUi() {
         if (!liveAudio_->start(audioDeviceId, state->settings, &error)) {
           panel_->setStatusToolTip(error);
           panel_->setStatus(vtrpon::LocalizedText(
-              vtrpon::isDeckLinkSource(liveDevicePath_) ? "decklink.input_error" : vtrpon::isNetworkVideoSource(liveDevicePath_)
+              vtrpon::isLiveAudioSource(liveDevicePath_) ? "input.audio.error" : vtrpon::isDeckLinkSource(liveDevicePath_) ? "decklink.input_error" : vtrpon::isNetworkVideoSource(liveDevicePath_)
                   ? "network_video.input_error" : "uvc.input_error"), true);
         }
       }
@@ -1470,7 +1483,7 @@ void EditSessionController::updateUi() {
     if (!audioError.isEmpty()) {
       panel_->setStatusToolTip(audioError);
       panel_->setStatus(vtrpon::LocalizedText(
-          vtrpon::isDeckLinkSource(liveDevicePath_) ? "decklink.input_error" : vtrpon::isNetworkVideoSource(liveDevicePath_)
+          vtrpon::isLiveAudioSource(liveDevicePath_) ? "input.audio.error" : vtrpon::isDeckLinkSource(liveDevicePath_) ? "decklink.input_error" : vtrpon::isNetworkVideoSource(liveDevicePath_)
               ? "network_video.input_error" : "uvc.input_error"), true);
     }
     const auto output = liveAudio_->outputLevel();

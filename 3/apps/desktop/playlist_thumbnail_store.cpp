@@ -1,6 +1,7 @@
 #include "playlist_thumbnail_store.h"
 #include "media_thumbnailer.h"
 #include "playlist_model.h"
+#include "live_audio_source.h"
 
 PlaylistThumbnailStore::PlaylistThumbnailStore(PlaylistModel *model, bool enabled,
                                                QObject *parent)
@@ -83,12 +84,15 @@ QString PlaylistThumbnailStore::sourceCodec(quint64 itemId) const
 
 void PlaylistThumbnailStore::request(quint64 itemId)
 {
-    if (!thumbnailer_ || contains(itemId) || model_->itemMediaOffline(itemId)
+    if (contains(itemId) || model_->itemMediaOffline(itemId)
         || model_->itemConversionInProgress(itemId)) {
         return;
     }
     const auto state = model_->itemState(itemId);
-    if (state && state->sourceType != PlaylistSourceType::Uvc) {
+    if (state && state->sourceType == PlaylistSourceType::Uvc &&
+        vtrpon::isLiveAudioSource(state->filePath)) {
+        setThumbnail(itemId, generateLiveAudioThumbnail(), {});
+    } else if (thumbnailer_ && state && state->sourceType != PlaylistSourceType::Uvc) {
         thumbnailer_->requestThumbnail(itemId, state->filePath, state->mediaType,
                                        state->settings.outPointMs,
                                        preferAudioAlbumArt_ &&

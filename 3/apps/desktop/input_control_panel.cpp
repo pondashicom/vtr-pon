@@ -1,4 +1,5 @@
 #include "input_control_panel.h"
+#include "live_audio_source.h"
 #include "controller_button_focus.h"
 #include "controller_operations.h"
 
@@ -251,10 +252,17 @@ void InputControlPanel::retranslateUi() {
   }
   uvcAddButton_->setText(
       vtrpon::uiText(uvcCaptureBusy_ ? "common.capturing" : "common.add"));
+  refreshDevices();
 }
 
 void InputControlPanel::setUvcDevices(const QList<UvcDevice> &devices) {
   uvcDevices_ = devices;
+  refreshDevices();
+}
+
+void InputControlPanel::setAudioInputDevices(const QList<AudioInputDevice> &devices) {
+  if (audioDevices_ == devices) return;
+  audioDevices_ = devices;
   refreshDevices();
 }
 
@@ -299,10 +307,26 @@ void InputControlPanel::refreshDevices() {
     uvcDeviceComboBox_->setItemData(index, device.devicePath,
                                     Qt::ToolTipRole);
   }
-  if (devices.isEmpty()) {
+  if (devices.isEmpty() && audioDevices_.isEmpty()) {
     uvcDeviceComboBox_->addItem(vtrpon::uiText("input.uvc.none"));
     if (auto *model = qobject_cast<QStandardItemModel *>(uvcDeviceComboBox_->model()))
       model->item(0)->setEnabled(false);
+  }
+  if (!audioDevices_.isEmpty()) {
+    uvcDeviceComboBox_->insertSeparator(uvcDeviceComboBox_->count());
+    QHash<QString, int> audioNameCounts;
+    for (const auto &device : audioDevices_) ++audioNameCounts[device.displayName];
+    QHash<QString, int> audioNameIndexes;
+    for (const auto &device : audioDevices_) {
+      QString name = device.displayName;
+      if (audioNameCounts.value(name) > 1)
+        name += QStringLiteral(" (%1)").arg(++audioNameIndexes[device.displayName]);
+      uvcDeviceComboBox_->addItem(vtrpon::uiText("input.audio.device").arg(name),
+                                  vtrpon::liveAudioSourcePath(device.deviceId));
+      const int index = uvcDeviceComboBox_->count() - 1;
+      uvcDeviceComboBox_->setItemData(index, device.displayName, Qt::UserRole + 1);
+      uvcDeviceComboBox_->setItemData(index, device.displayName, Qt::ToolTipRole);
+    }
   }
   if (!networkSources_.isEmpty()) {
     uvcDeviceComboBox_->insertSeparator(uvcDeviceComboBox_->count());
@@ -327,7 +351,7 @@ void InputControlPanel::refreshDevices() {
   const int previousIndex = previousPath.isEmpty() ? -1 : uvcDeviceComboBox_->findData(previousPath);
   uvcDeviceComboBox_->setCurrentIndex(previousIndex >= 0 ? previousIndex
       : firstAvailable < uvcDeviceComboBox_->count() ? firstAvailable : 0);
-  const bool available = !devices.isEmpty() || !networkSources_.isEmpty() || !deckLinkSources_.isEmpty();
+  const bool available = !devices.isEmpty() || !audioDevices_.isEmpty() || !networkSources_.isEmpty() || !deckLinkSources_.isEmpty();
   uvcDeviceComboBox_->setEnabled(available && !uvcCaptureBusy_);
   uvcAddButton_->setEnabled(available && !uvcCaptureBusy_);
 }

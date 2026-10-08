@@ -276,16 +276,16 @@
         <translation>Could not add the NDI input to the playlist.</translation>
     </message>
     <message id="input.network.title">
-        <source>UVC/NDI INPUT</source>
-        <translation>UVC/NDI INPUT</translation>
+        <source>UVC/UAC/NDI INPUT</source>
+        <translation>UVC/UAC/NDI INPUT</translation>
     </message>
     <message id="input.network.devices_accessible">
-        <source>Available UVC devices and NDI sources</source>
-        <translation>Available UVC devices and NDI sources</translation>
+        <source>Available UVC/UAC devices and NDI sources</source>
+        <translation>Available UVC/UAC devices and NDI sources</translation>
     </message>
     <message id="input.network.add">
-        <source>Add the selected UVC device or NDI source to the playlist</source>
-        <translation>Add the selected UVC device or NDI source to the playlist</translation>
+        <source>Add the selected UVC/UAC input or NDI source to the playlist</source>
+        <translation>Add the selected UVC/UAC input or NDI source to the playlist</translation>
     </message>
     <message id="playlist.item.network_live">
         <source>NDI LIVE</source>
@@ -1916,33 +1916,33 @@
     </message>
     <message id="input.uvc.accessible">
         <location filename="../language_text.cpp" line="443"/>
-        <source>UVC input controls</source>
-        <translation>UVC input controls</translation>
+        <source>UVC/UAC input controls</source>
+        <translation>UVC/UAC input controls</translation>
     </message>
     <message id="input.uvc.title">
         <location filename="../language_text.cpp" line="445"/>
-        <source>UVC INPUT</source>
-        <translation>UVC INPUT</translation>
+        <source>UVC/UAC INPUT</source>
+        <translation>UVC/UAC INPUT</translation>
     </message>
     <message id="input.uvc.devices_accessible">
         <location filename="../language_text.cpp" line="447"/>
-        <source>Available UVC video devices</source>
-        <translation>Available UVC video devices</translation>
+        <source>Available UVC video and audio input devices</source>
+        <translation>Available UVC video and audio input devices</translation>
     </message>
     <message id="input.uvc.add_accessible">
         <location filename="../language_text.cpp" line="449"/>
-        <source>Add selected UVC device to playlist</source>
-        <translation>Add selected UVC device to playlist</translation>
+        <source>Add selected UVC/UAC input to playlist</source>
+        <translation>Add selected UVC/UAC input to playlist</translation>
     </message>
     <message id="input.uvc.add_tooltip">
         <location filename="../language_text.cpp" line="451"/>
-        <source>Capture one frame from the current camera feed and add it to the playlist as a UVC input</source>
-        <translation>Capture one frame from the current camera feed and add it to the playlist as a UVC input</translation>
+        <source>Add the selected video or audio input to the playlist as a live source</source>
+        <translation>Add the selected video or audio input to the playlist as a live source</translation>
     </message>
     <message id="input.uvc.none">
         <location filename="../language_text.cpp" line="453"/>
-        <source>No UVC devices</source>
-        <translation>No UVC devices</translation>
+        <source>No UVC/UAC devices</source>
+        <translation>No UVC/UAC devices</translation>
     </message>
     <message id="audio_meter.stereo_accessible">
         <location filename="../language_text.cpp" line="456"/>
@@ -4819,8 +4819,8 @@ Adjust the slider to find a comfortable text size.</translation>
         <translation>DeckLink Live</translation>
     </message>
     <message id="decklink.input_title">
-        <source>UVC / NDI / DeckLink Input</source>
-        <translation>UVC / NDI / DeckLink Input</translation>
+        <source>UVC/UAC / NDI / DeckLink Input</source>
+        <translation>UVC/UAC / NDI / DeckLink Input</translation>
     </message>
     <message id="decklink.input_devices">
         <source>Select an input device or channel</source>
@@ -4846,5 +4846,10 @@ Adjust the slider to find a comfortable text size.</translation>
         <source>Fill/Key: independent playback. Hardware timing is not synchronized.</source>
         <translation>Fill/Key: independent playback. Hardware timing is not synchronized.</translation>
     </message>
+    <message id="input.audio.device"><source>Audio: %1</source><translation>Audio: %1</translation></message>
+    <message id="input.audio.error"><source>Live audio input failed.</source><translation>Live audio input failed.</translation></message>
+    <message id="input.audio.live"><source>Live Audio</source><translation>Live Audio</translation></message>
+    <message id="input.audio.offline"><source>Live Audio | MEDIA OFFLINE</source><translation>Live Audio | MEDIA OFFLINE</translation></message>
+    <message id="input.audio.ready"><source>Live Audio | Input connected</source><translation>Live Audio | Input connected</translation></message>
 </context>
 </TS>

@@ -1,6 +1,8 @@
 #include "dual_deck_player.h"
 #include "async_shutdown_test_utils.h"
 #include "uvc_source_session_manager.h"
+#include "live_audio_source.h"
+#include "live_audio_test_source.h"
 
 #include <QApplication>
 #include <QDataStream>
@@ -103,6 +105,27 @@ public:
     {
         return wait([&] { return player_.cueStatus() == DualDeckPlayer::CueStatus::Ready; },
                     "public CUE reaches Ready");
+    }
+
+    bool liveAudio()
+    {
+        using Source = DualDeckPlayer::DeckSource;
+        CHECK(substituteLiveAudioSource(), "live audio capture is replaced with a test tone");
+        const Source source{Source::Type::Uvc, vtrpon::liveAudioSourcePath(QStringLiteral("usb-input"))};
+        CHECK(player_.cue(source) && cueReady() && player_.takeCue() && player_.play(),
+              "audio-only live input can be taken ON AIR without a video frame");
+        CHECK(player_.isPlaying() && player_.currentSourceHasAudio() &&
+              player_.positionMs() == -1 && player_.durationMs() == -1,
+              "ON AIR live audio reports an active audio source without a file clock");
+        CHECK(player_.pause() && !player_.isPlaying() && player_.play() && player_.isPlaying(),
+              "ON AIR live audio pause and resume use the live transport");
+        CHECK(player_.cue(source) && cueReady() && player_.takeCue() && player_.play(),
+              "same-endpoint live audio retake can use the other deck");
+        CHECK(player_.clearMedia() == DualDeckPlayer::ClearMediaResult::Cleared, "OFF AIR clears live audio from both decks");
+        CHECK(player_.cue(source) && cueReady() && player_.takeCue(),
+              "live audio can be reacquired after OFF AIR");
+        CHECK(player_.clearMedia() == DualDeckPlayer::ClearMediaResult::Cleared, "the reacquired live endpoint is released");
+        return true;
     }
 
     bool nativeCue(const QString &pptx, const QString &video)
@@ -337,6 +360,7 @@ int main(int argc, char **argv)
         ok = arguments.size() == 4 && arguments.at(1) == QStringLiteral("--native-cue")
             ? contract.nativeCue(arguments.at(2), arguments.at(3))
             : contract.run(wave, pdf, imageA, imageB);
+        if (ok && arguments.size() == 1) ok = contract.liveAudio();
         player.requestShutdown();
         ok = require(awaitShutdown([&] { return player.shutdownComplete(); }),
                      "PROGRAM terminal worker finishes before surfaces are destroyed") && ok;

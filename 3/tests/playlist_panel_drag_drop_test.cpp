@@ -6,6 +6,8 @@
 #include <QAction>
 #include "playlist_model.h"
 #include "playlist_panel.h"
+#include "live_audio_source.h"
+#include "playlist_thumbnail_store.h"
 #include "decklink.h"
 #include "decklink_settings_page.h"
 #include "media_thumbnailer.h"
@@ -998,6 +1000,99 @@ int verifyStillCaptureControls(QApplication &application) {
   return 0;
 }
 
+int verifyLiveAudioInputControls() {
+  QTranslator english;
+  CHECK(english.load(QCoreApplication::applicationDirPath() + QStringLiteral("/vtrpon_en.qm")));
+  QCoreApplication::installTranslator(&english);
+  InputControlPanel input;
+  auto *combo = input.findChild<QComboBox *>(QStringLiteral("inputUvcDeviceComboBox"));
+  auto *add = input.findChild<QPushButton *>(QStringLiteral("inputUvcAddButton"));
+  CHECK(combo && add);
+  const QString id = QStringLiteral("USB endpoint / 日本語 %1");
+  const QString path = vtrpon::liveAudioSourcePath(id);
+  CHECK(vtrpon::liveAudioDeviceId(path) == id);
+  CHECK(vtrpon::liveAudioDeviceId(QStringLiteral("live-audio://bad%value")).isEmpty());
+  input.setAudioInputDevices({{QStringLiteral("USB microphone"), id, false},
+                             {QStringLiteral("USB microphone"), QStringLiteral("other-id"), false}});
+  CHECK(combo->isEnabled() && add->isEnabled());
+  CHECK(combo->currentData().toString() == path);
+  CHECK(combo->currentText().contains(QStringLiteral("(1)")));
+  CHECK(combo->itemText(combo->findData(vtrpon::liveAudioSourcePath(QStringLiteral("other-id")))).contains(QStringLiteral("(2)")));
+  QString emittedPath, emittedName;
+  QObject::connect(&input, &InputControlPanel::uvcAddRequested, &input,
+      [&](const QString &name, const QString &value) { emittedName = name; emittedPath = value; });
+  add->click();
+  CHECK(emittedPath == path && emittedName == QStringLiteral("USB microphone"));
+  input.setUvcDevices({{QStringLiteral("Camera"), QStringLiteral("camera-path")}});
+  CHECK(combo->currentData().toString() == path);
+  input.setUvcCaptureBusy(true);
+  CHECK(!combo->isEnabled() && !add->isEnabled());
+  input.setUvcCaptureBusy(false);
+  input.setAudioInputDevices({});
+  CHECK(combo->currentData().toString() == QStringLiteral("camera-path"));
+  input.setUvcDevices({});
+  CHECK(!combo->isEnabled() && !add->isEnabled());
+  auto *title = input.findChild<QLabel *>(QStringLiteral("inputControlModuleTitle"));
+  CHECK(title && title->text() == QStringLiteral("UVC/UAC INPUT"));
+  QTranslator japanese;
+  CHECK(japanese.load(QCoreApplication::applicationDirPath() + QStringLiteral("/vtrpon_ja.qm")));
+  QCoreApplication::installTranslator(&japanese);
+  QApplication::processEvents();
+  CHECK(title->text() == QStringLiteral("UVC/UAC入力"));
+  QCoreApplication::removeTranslator(&japanese);
+  QApplication::processEvents();
+
+  PlaylistModel model;
+  PlaylistThumbnailStore thumbnails(&model, false);
+  PlaylistPanel playlist(&model, nullptr, false);
+  PlaylistItemRegistration item;
+  item.filePath = path;
+  item.displayName = QStringLiteral("USB microphone");
+  item.sourceType = PlaylistSourceType::Uvc;
+  item.mediaType = PlaylistMediaType::Audio;
+  const auto ids = model.addItems({item});
+  CHECK(ids.size() == 1);
+  thumbnails.request(ids[0]);
+  const auto image = thumbnails.thumbnail(ids[0]).toImage();
+  auto *list = playlist.findChild<QListWidget *>(QStringLiteral("playlistList"));
+  CHECK(list && list->count() == 1);
+  CHECK(list->item(0)->data(playlist_view::kItemMediaTypeRole).toString() == QStringLiteral("Live Audio"));
+  CHECK(list->item(0)->data(Qt::UserRole + 2).value<QPixmap>().toImage() == image);
+  auto *tileView = playlist.findChild<QToolButton *>(QStringLiteral("playlistTileViewButton"));
+  auto *listView = playlist.findChild<QToolButton *>(QStringLiteral("playlistListViewButton"));
+  CHECK(tileView && listView);
+  tileView->click();
+  CHECK(list->viewMode() == QListView::IconMode);
+  CHECK(list->item(0)->data(Qt::UserRole + 2).value<QPixmap>().toImage() == image);
+  listView->click();
+  CHECK(!image.isNull() && thumbnails.errorDetail(ids[0]).isEmpty());
+  CHECK(!thumbnails.sourceDurationMs(ids[0]) && thumbnails.sourceSize(ids[0]).isEmpty());
+  auto bad = item;
+  bad.filePath = QStringLiteral("live-audio://bad%value");
+  CHECK(model.addItems({bad}).isEmpty());
+  auto settings = model.itemState(ids[0])->settings;
+  settings.outPointMs = 1000;
+  CHECK(!model.updateItemSettings(ids[0], settings));
+  QString detail;
+  CHECK(model.restoreSnapshot(model.snapshot(), &detail));
+  thumbnails.request(ids[0]);
+  CHECK(thumbnails.thumbnail(ids[0]).toImage() == image);
+  CHECK(list->item(0)->data(Qt::UserRole + 2).value<QPixmap>().toImage() == image);
+  model.setUvcDeviceAvailable(path, false);
+  CHECK(model.itemMediaOffline(ids[0]) && !thumbnails.contains(ids[0]));
+  model.refreshMediaAvailability();
+  CHECK(model.itemMediaOffline(ids[0]));
+  model.setUvcDeviceAvailable(path, true);
+  CHECK(!model.itemMediaOffline(ids[0]) && thumbnails.contains(ids[0]));
+  thumbnails.setPreferAudioAlbumArt(true);
+  thumbnails.request(ids[0]);
+  CHECK(thumbnails.thumbnail(ids[0]).toImage() == image);
+  if (const auto screenshot = qgetenv("VTRPON_TEST_LIVE_AUDIO_THUMBNAIL"); !screenshot.isEmpty())
+    CHECK(image.save(QString::fromLocal8Bit(screenshot)));
+  QCoreApplication::removeTranslator(&english);
+  return 0;
+}
+
 int verifyNetworkVideoInputControls() {
   InputControlPanel panel;
   auto *combo = panel.findChild<QComboBox *>(QStringLiteral("inputUvcDeviceComboBox"));
@@ -1724,6 +1819,7 @@ int main(int argc, char *argv[]) {
     CHECK(crossfadePanel.crossfadeDurationMs() == kDefaultItemFadeDurationMs);
   }
   CHECK(verifyNetworkVideoInputControls() == 0);
+  CHECK(verifyLiveAudioInputControls() == 0);
   CHECK(verifyStillCaptureControls(application) == 0);
   CHECK(verifyPlaylistWindowScaling(application) == 0);
   CHECK(verifySelectionOperations() == 0);

@@ -1,4 +1,5 @@
 #include "playlist_model.h"
+#include "live_audio_source.h"
 #include "playlist_play_sequence.h"
 #include "playlist_media_availability.h"
 
@@ -127,6 +128,10 @@ bool validRegistrationSource(const PlaylistItemRegistration &item,
   case PlaylistSourceType::Pdf:
     return fileInfo.exists() && fileInfo.isFile();
   case PlaylistSourceType::Uvc:
+    if (vtrpon::isLiveAudioSource(item.filePath))
+      return !vtrpon::liveAudioDeviceId(item.filePath).isEmpty() &&
+             !item.displayName.isEmpty() && item.mediaType == PlaylistMediaType::Audio &&
+             item.settings.inPointMs == 0 && !item.settings.outPointMs;
     return !item.filePath.isEmpty() && !item.displayName.isEmpty();
   }
   return false;
@@ -1705,6 +1710,13 @@ bool PlaylistModel::canRestoreSnapshot(
         return false;
       }
     } else if (item.sourceType == PlaylistSourceType::Uvc) {
+      if (vtrpon::isLiveAudioSource(item.filePath) &&
+          (vtrpon::liveAudioDeviceId(item.filePath).isEmpty() ||
+           item.mediaType != PlaylistMediaType::Audio ||
+           item.settings.inPointMs != 0 || item.settings.outPointMs)) {
+        setError(errorDetail, QStringLiteral("Live audio item ID %1 has invalid input details.").arg(item.id));
+        return false;
+      }
       if (item.filePath.isEmpty() || item.displayName.isEmpty()) {
         setError(errorDetail,
                  QStringLiteral("UVC item ID %1 has no device path or display name.")

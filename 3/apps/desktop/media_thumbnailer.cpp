@@ -28,6 +28,7 @@
 #include <gst/video/video.h>
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <cstring>
 #include <memory>
@@ -970,6 +971,30 @@ MediaThumbnailResult generateMediaThumbnailInternal(
 }
 
 } // namespace
+
+QImage generateLiveAudioThumbnail(const QSize &targetSize) {
+  if (targetSize.isEmpty()) return {};
+  // Render at a fixed design size so list, tile and EDIT displays share the
+  // same proportions. Match the file-audio waveform thumbnail's palette.
+  QImage image(QSize(480, 272), QImage::Format_RGBA8888);
+  image.fill(QColor(QStringLiteral("#111a13")));
+  QPainter painter(&image);
+  painter.setRenderHint(QPainter::Antialiasing);
+  painter.setPen(QPen(QColor(QStringLiteral("#55d86b")), 6, Qt::SolidLine, Qt::RoundCap));
+  constexpr std::array<int, 13> heights{12, 24, 40, 58, 34, 70, 90, 70, 34, 58, 40, 24, 12};
+  for (int i = 0; i < static_cast<int>(heights.size()); ++i) {
+    const int x = 132 + i * 18;
+    painter.drawLine(x, 100 - heights[i] / 2, x, 100 + heights[i] / 2);
+  }
+  QFont font = painter.font();
+  font.setPixelSize(43);
+  font.setBold(true);
+  painter.setFont(font);
+  painter.setPen(QColor(QStringLiteral("#e3eee5")));
+  painter.drawText(QRect(12, 164, 456, 70), Qt::AlignCenter, QStringLiteral("Live Audio"));
+  painter.end();
+  return image.scaled(targetSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+}
 
 MediaThumbnailResult generateMediaThumbnail(
     const QString &filePath, PlaylistMediaType mediaType,

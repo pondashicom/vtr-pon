@@ -31,6 +31,7 @@ MediaThumbnailResult generateMediaThumbnail(
     bool preferAudioAlbumArt = false);
 MediaThumbnailResult generateUvcThumbnail(
     const QString &devicePath, const QSize &targetSize = QSize(120, 68));
+QImage generateLiveAudioThumbnail(const QSize &targetSize = QSize(240, 136));
 
 class MediaThumbnailer final : public QObject {
   Q_OBJECT

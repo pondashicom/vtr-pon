@@ -1,5 +1,6 @@
 #include "decklink.h"
 #include "deck_source_session.h"
+#include "live_audio_source.h"
 #include <mutex>
 #include "program_audio_bridge.h"
 #include "network_video_source.h"
@@ -915,9 +916,11 @@ bool DeckSourceSession::prepareFile(const QString &filePath, qint64 inPointMs,
 bool DeckSourceSession::prepareUvc(const QString &devicePath, const QString &mappedAudioDeviceId,
     double itemVolume, GstClock *audioClock)
 {
-    const QString audioDeviceId = (vtrpon::isNetworkVideoSource(devicePath) || vtrpon::isDeckLinkSource(devicePath)) ? devicePath : mappedAudioDeviceId;
+    const bool audioOnly = vtrpon::isLiveAudioSource(devicePath);
+    const QString audioDeviceId = audioOnly ? vtrpon::liveAudioDeviceId(devicePath)
+        : (vtrpon::isNetworkVideoSource(devicePath) || vtrpon::isDeckLinkSource(devicePath)) ? devicePath : mappedAudioDeviceId;
 #ifdef _WIN32
-    if (devicePath.isEmpty()) {
+    if (devicePath.isEmpty() || (audioOnly && audioDeviceId.isEmpty())) {
         preparationError_ = QStringLiteral(
             "UVC device identification is missing.");
         return false;
@@ -926,6 +929,24 @@ bool DeckSourceSession::prepareUvc(const QString &devicePath, const QString &map
         return false;
     }
     programGpuCompositor_->clearDeckFrame(index_);
+    if (audioOnly) {
+        QString detail;
+        if (!startUvcAudio(audioDeviceId, itemVolume, audioClock, &detail)) {
+            preparationState_ = PreparationState::Error;
+            preparationError_ = detail;
+            return false;
+        }
+        uvcDevicePath_ = devicePath;
+        uvcProgramPaused_ = false;
+        hasVideo_ = false;
+        hasAudio_ = true;
+        inPointMs_ = 0;
+        outPointMs_ = -1;
+        preparationState_ = PreparationState::Loading;
+        preparationError_.clear();
+        preparationDeadline_.setRemainingTime(10000);
+        return true;
+    }
     UvcSourceSessionManager::ProgramSource source;
     QString detail;
     if (!uvcSourceSessions_->bindProgramDeck(
@@ -1230,7 +1251,8 @@ DeckSourceSession::ReleaseResult DeckSourceSession::clearForReplacement()
             return result;
         result.detached = true;
         if (sourceType_ == Type::Uvc) {
-            uvcSourceSessions_->releaseProgramDeck(index_);
+            if (!vtrpon::isLiveAudioSource(uvcDevicePath_))
+                uvcSourceSessions_->releaseProgramDeck(index_);
         } else if (sourceType_ == Type::PowerPoint) {
             const bool stopped = powerPointSources_->releaseProgramDeck(index_);
             result.stopConfirmed = stopped && fileStopConfirmed();
@@ -1288,7 +1310,8 @@ DeckSourceSession::ReleaseResult DeckSourceSession::standbyAfterTake()
         succeeded = programGpuCompositor_->configureDeckInput(index_, playbin_, appSink_);
         result.detached = succeeded;
         if (succeeded) {
-            uvcSourceSessions_->releaseProgramDeck(index_);
+            if (!vtrpon::isLiveAudioSource(uvcDevicePath_))
+                uvcSourceSessions_->releaseProgramDeck(index_);
             succeeded = releaseUvcAudio();
         }
         if (succeeded) {
@@ -1376,7 +1399,8 @@ DeckSourceSession::ReleaseResult DeckSourceSession::clearAfterOffAir()
             qWarning() << "OFF AIR completed, but UVC deck detach failed for deck" << index_;
         } else {
             result.detached = true;
-            uvcSourceSessions_->releaseProgramDeck(index_);
+            if (!vtrpon::isLiveAudioSource(uvcDevicePath_))
+                uvcSourceSessions_->releaseProgramDeck(index_);
         }
     } else if (sourceType_ == Type::PowerPoint) {
         result.stopConfirmed = false;
@@ -1505,6 +1529,21 @@ void DeckSourceSession::refreshPreparationState()
         return;
     }
     if (sourceType_ == Type::Uvc) {
+        if (vtrpon::isLiveAudioSource(uvcDevicePath_)) {
+            GstState state = GST_STATE_NULL;
+            const auto result = uvcAudioPipeline_
+                ? gst_element_get_state(uvcAudioPipeline_, &state, nullptr, 0)
+                : GST_STATE_CHANGE_FAILURE;
+            if (result == GST_STATE_CHANGE_FAILURE || preparationDeadline_.hasExpired()) {
+                preparationState_ = PreparationState::Error;
+                preparationError_ = QStringLiteral("Could not prepare the live audio input.");
+            } else if (state == GST_STATE_PLAYING) {
+                hasVideo_ = false;
+                hasAudio_ = true;
+                preparationState_ = PreparationState::Ready;
+            }
+            return;
+        }
         if (!uvcSourceSessions_->sourceIsPlaying(
                 uvcDevicePath_)) {
             preparationState_ = PreparationState::Error;
@@ -1693,6 +1732,12 @@ bool DeckSourceSession::sourceIsPlaying() const
         return powerPointSources_ && powerPointSources_->sourceIsPlaying(index_);
     if (sourceType_ == Type::Pdf)
         return pdfSources_ && pdfSources_->sourceIsPlaying(index_);
+    if (sourceType_ == Type::Uvc && vtrpon::isLiveAudioSource(uvcDevicePath_)) {
+        GstState state = GST_STATE_NULL;
+        return uvcAudioPipeline_ &&
+            gst_element_get_state(uvcAudioPipeline_, &state, nullptr, 0) != GST_STATE_CHANGE_FAILURE &&
+            state == GST_STATE_PLAYING;
+    }
     if (sourceType_ == Type::Uvc)
         return uvcSourceSessions_ && uvcSourceSessions_->sourceIsPlaying(uvcDevicePath_);
 #endif
@@ -1728,7 +1773,8 @@ void DeckSourceSession::setItemVolume(double volume)
 bool DeckSourceSession::takeSourceError(QString &detail)
 {
 #ifdef _WIN32
-    if (sourceType_ == Type::Uvc && uvcSourceSessions_ && !uvcDevicePath_.isEmpty())
+    if (sourceType_ == Type::Uvc && uvcSourceSessions_ && !uvcDevicePath_.isEmpty()
+        && !vtrpon::isLiveAudioSource(uvcDevicePath_))
         return uvcSourceSessions_->sourceErrorAfter(uvcDevicePath_, uvcErrorGeneration_, uvcErrorGeneration_, detail);
     if (sourceType_ == Type::PowerPoint && powerPointSources_ && !powerPointFilePath_.isEmpty())
         return powerPointSources_->sourceErrorAfter(index_, powerPointErrorGeneration_, powerPointErrorGeneration_, detail);

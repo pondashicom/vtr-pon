@@ -1,6 +1,7 @@
 #pragma once
 
 #include "uvc_device_monitor.h"
+#include "uvc_audio_mapping.h"
 #include "network_video.h"
 
 #include <QList>
@@ -22,6 +23,7 @@ public:
                              ControllerOperations *operations = nullptr);
 
   void setUvcDevices(const QList<UvcDevice> &devices);
+  void setAudioInputDevices(const QList<AudioInputDevice> &devices);
   void setNetworkVideoSources(const QList<vtrpon::NetworkVideoSource> &sources, bool enabled);
   void setDeckLinkSources(const QList<vtrpon::NetworkVideoSource> &sources, bool enabled);
   void setUvcCaptureBusy(bool busy);
@@ -38,6 +40,7 @@ private:
   void refreshDevices();
   void updateCaptureButtonWidths();
   QList<UvcDevice> uvcDevices_;
+  QList<AudioInputDevice> audioDevices_;
   QList<vtrpon::NetworkVideoSource> networkSources_;
   bool networkInputEnabled_ = false, deckLinkInputEnabled_ = false;
   QList<vtrpon::NetworkVideoSource> deckLinkSources_;

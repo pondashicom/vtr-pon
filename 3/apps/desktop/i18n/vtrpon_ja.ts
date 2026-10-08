@@ -276,16 +276,16 @@
         <translation>NDI入力をプレイリストへ追加できません。</translation>
     </message>
     <message id="input.network.title">
-        <source>UVC/NDI INPUT</source>
-        <translation>UVC/NDI入力</translation>
+        <source>UVC/UAC/NDI INPUT</source>
+        <translation>UVC/UAC/NDI入力</translation>
     </message>
     <message id="input.network.devices_accessible">
-        <source>Available UVC devices and NDI sources</source>
-        <translation>利用可能なUVCデバイスとNDIソース</translation>
+        <source>Available UVC/UAC devices and NDI sources</source>
+        <translation>利用可能なUVC/UACデバイスとNDIソース</translation>
     </message>
     <message id="input.network.add">
-        <source>Add the selected UVC device or NDI source to the playlist</source>
-        <translation>選択したUVCデバイスまたはNDIソースをプレイリストへ追加</translation>
+        <source>Add the selected UVC/UAC input or NDI source to the playlist</source>
+        <translation>選択したUVC/UAC入力またはNDIソースをプレイリストへ追加</translation>
     </message>
     <message id="playlist.item.network_live">
         <source>NDI LIVE</source>
@@ -1916,33 +1916,33 @@
     </message>
     <message id="input.uvc.accessible">
         <location filename="../language_text.cpp" line="443"/>
-        <source>UVC input controls</source>
-        <translation>UVC入力コントロール</translation>
+        <source>UVC/UAC input controls</source>
+        <translation>UVC/UAC入力コントロール</translation>
     </message>
     <message id="input.uvc.title">
         <location filename="../language_text.cpp" line="445"/>
-        <source>UVC INPUT</source>
-        <translation>UVC入力</translation>
+        <source>UVC/UAC INPUT</source>
+        <translation>UVC/UAC入力</translation>
     </message>
     <message id="input.uvc.devices_accessible">
         <location filename="../language_text.cpp" line="447"/>
-        <source>Available UVC video devices</source>
-        <translation>利用可能なUVC映像デバイス</translation>
+        <source>Available UVC video and audio input devices</source>
+        <translation>利用可能なUVC映像デバイスと音声入力</translation>
     </message>
     <message id="input.uvc.add_accessible">
         <location filename="../language_text.cpp" line="449"/>
-        <source>Add selected UVC device to playlist</source>
-        <translation>選択したUVCデバイスをプレイリストへ追加</translation>
+        <source>Add selected UVC/UAC input to playlist</source>
+        <translation>選択したUVC/UAC入力をプレイリストへ追加</translation>
     </message>
     <message id="input.uvc.add_tooltip">
         <location filename="../language_text.cpp" line="451"/>
-        <source>Capture one frame from the current camera feed and add it to the playlist as a UVC input</source>
-        <translation>現在のカメラ映像から1フレームをキャプチャし、UVC入力としてプレイリストへ追加します</translation>
+        <source>Add the selected video or audio input to the playlist as a live source</source>
+        <translation>選択した映像入力または音声入力をライブ素材としてプレイリストへ追加します</translation>
     </message>
     <message id="input.uvc.none">
         <location filename="../language_text.cpp" line="453"/>
-        <source>No UVC devices</source>
-        <translation>UVCデバイスなし</translation>
+        <source>No UVC/UAC devices</source>
+        <translation>UVC/UACデバイスなし</translation>
     </message>
     <message id="audio_meter.stereo_accessible">
         <location filename="../language_text.cpp" line="456"/>
@@ -4819,8 +4819,8 @@ Adjust the slider to find a comfortable text size.</source>
         <translation>DeckLink ライブ入力</translation>
     </message>
     <message id="decklink.input_title">
-        <source>UVC / NDI / DeckLink Input</source>
-        <translation>UVC / NDI / DeckLink 入力</translation>
+        <source>UVC/UAC / NDI / DeckLink Input</source>
+        <translation>UVC/UAC / NDI / DeckLink 入力</translation>
     </message>
     <message id="decklink.input_devices">
         <source>Select an input device or channel</source>
@@ -4846,5 +4846,10 @@ Adjust the slider to find a comfortable text size.</source>
         <source>Fill/Key: independent playback. Hardware timing is not synchronized.</source>
         <translation>フィル／キー：個別再生中。ハードウェアの出力タイミングは同期していません。</translation>
     </message>
+    <message id="input.audio.device"><source>Audio: %1</source><translation>音声: %1</translation></message>
+    <message id="input.audio.error"><source>Live audio input failed.</source><translation>ライブ音声入力に失敗しました。</translation></message>
+    <message id="input.audio.live"><source>Live Audio</source><translation>Live Audio</translation></message>
+    <message id="input.audio.offline"><source>Live Audio | MEDIA OFFLINE</source><translation>Live Audio | MEDIA OFFLINE</translation></message>
+    <message id="input.audio.ready"><source>Live Audio | Input connected</source><translation>Live Audio | 入力接続済み</translation></message>
 </context>
 </TS>

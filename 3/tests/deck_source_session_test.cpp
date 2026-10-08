@@ -1,4 +1,6 @@
 #include "deck_source_session.h"
+#include "live_audio_source.h"
+#include "live_audio_test_source.h"
 #include "async_shutdown_test_utils.h"
 #include "program_gpu_compositor.h"
 #include "uvc_source_session_manager.h"
@@ -487,6 +489,55 @@ PdfCommandResponse navigatePdf(DeckSourceSession &deck, bool forward)
     return response;
 }
 
+bool liveAudioContract(Fixture &fixture)
+{
+    if (!require(substituteLiveAudioSource(), "live audio uses a synthetic capture source")) return false;
+    auto &deck = fixture.deck;
+    const int camerasBefore = uvcOpenCount.load();
+    const QString endpoint = QStringLiteral("{0.0.1.00000000}.USB audio 入力 / %1");
+    DualDeckPlayer::DeckSource source;
+    source.type = DualDeckPlayer::DeckSource::Type::Uvc;
+    source.locator = vtrpon::liveAudioSourcePath(endpoint);
+    const auto prepared = deck.prepare(source, 0.5, fixture.clock);
+    if (!require(prepared.state == DeckSourceSession::PreparationState::Loading,
+                 "audio-only preparation starts without requesting video") ||
+        !awaitReady(deck, "audio-only input reaches Ready without a camera frame")) return false;
+    bool ok = require(deck.hasAudio() && !deck.hasVideo() && deck.sourceIsPlaying() &&
+                      deck.positionMs() == -1 && deck.durationMs() == -1 &&
+                      !deck.seek(100) && !deck.setRate(1.5) &&
+                      !fixture.compositor->deckFrameReady(0) && uvcOpenCount.load() == camerasBefore,
+                      "live audio has no video, duration, seek or rate and never opens a camera");
+    auto *input = gst_bin_get_by_name(GST_BIN(deck.audioPipeline()), "deck-a-uvc-audio-source");
+    gchar *id = nullptr;
+    g_object_get(input, "device", &id, nullptr);
+    ok &= require(QString::fromUtf8(id) == endpoint, "the exact selected endpoint is passed to the capture source");
+    g_free(id);
+    gst_object_unref(input);
+    pump(150);
+    GstMessage *level = gst_bus_pop_filtered(deck.mappedAudioBus(), GST_MESSAGE_ELEMENT);
+    ok &= require(level && GST_MESSAGE_SRC(level) == GST_OBJECT(deck.inputAudioLevel()),
+                  "live input produces level messages on the existing metering route");
+    if (level) gst_message_unref(level);
+    deck.setLiveFrameUpdates(false);
+    ok &= require(deck.uvcProgramPaused() && deck.sourceIsPlaying(), "pausing gates the live route while capture remains live");
+    deck.setLiveFrameUpdates(true);
+    ok &= require(!deck.uvcProgramPaused(), "live input can resume without seeking");
+    const auto cleared = deck.clearAfterOffAir();
+    ok &= require(cleared.succeeded && cleared.ownershipReleased && !deck.hasAudio(),
+                  "OFF AIR detaches and retires the audio capture");
+    ok &= require(awaitShutdown([&] { return !deck.retirementPending(); }), "live capture retirement completes");
+    deck.prepare(source, 1.0, fixture.clock);
+    ok &= awaitReady(deck, "the endpoint can be prepared again after OFF AIR");
+    ok &= require(deck.clearForReplacement().succeeded, "audio-to-file replacement releases the capture route");
+    ok &= require(awaitShutdown([&] { return !deck.retirementPending(); }), "replacement capture retirement completes");
+    source.locator = vtrpon::liveAudioSourcePath(QStringLiteral("missing-input"));
+    ok &= require(deck.prepare(source, 1.0, fixture.clock).state == DeckSourceSession::PreparationState::Error,
+                  "an unavailable endpoint fails preparation without waiting for video");
+    ok &= require(deck.clearForReplacement().succeeded, "failed live capture can be cleared safely");
+    ok &= require(awaitShutdown([&] { return !deck.retirementPending(); }), "failed capture is retired before the next source");
+    return ok;
+}
+
 bool pdfContract(Fixture &fixture, const QString &path)
 {
     auto &deck = fixture.deck;
@@ -573,6 +624,7 @@ int main(int argc, char **argv)
     if (!require(fixture.initialize(), "deck, source managers, and native compositor initialize")) return 1;
     bool ok = fileContract(fixture, tone);
     ok &= uvcRetirementContract(fixture);
+    ok &= liveAudioContract(fixture);
     // PDF's final case deliberately shuts the compositor down to exercise
     // refusal/retained ownership, so no new input may be prepared afterwards.
     ok &= pdfContract(fixture, pdf);

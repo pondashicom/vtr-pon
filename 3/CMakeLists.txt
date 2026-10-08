@@ -224,6 +224,7 @@ qt_add_executable(vtr-pon WIN32
   apps/desktop/image_add_registration.h
   apps/desktop/input_control_panel.cpp
   apps/desktop/input_control_panel.h
+  apps/desktop/live_audio_source.h
   apps/desktop/macro_runner.cpp
   apps/desktop/macro_runner.h
   apps/desktop/macro_editor_window.cpp
@@ -1132,6 +1133,23 @@ if(BUILD_TESTING)
   target_link_libraries(edit-panel-duration-control-test PRIVATE
     Qt6::Widgets)
   add_dependencies(edit-panel-duration-control-test release_translations)
+
+  if(CMAKE_CONFIGURATION_TYPES)
+    # Widget tests load QM files beside the executable. Multi-config builds
+    # generate them in the build root; refresh the active runtime directory
+    # every build, including translation-only changes.
+    add_custom_target(vtrpon-test-translations
+      COMMAND "${CMAKE_COMMAND}" -E make_directory
+        "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>"
+      COMMAND "${CMAKE_COMMAND}" -E copy_if_different
+        "${CMAKE_CURRENT_BINARY_DIR}/vtrpon_en.qm"
+        "${CMAKE_CURRENT_BINARY_DIR}/vtrpon_ja.qm"
+        "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>"
+      VERBATIM)
+    add_dependencies(vtrpon-test-translations release_translations)
+    add_dependencies(playlist-panel-drag-drop-test vtrpon-test-translations)
+    add_dependencies(edit-panel-duration-control-test vtrpon-test-translations)
+  endif()
 
   add_test(NAME edit-panel-duration-control
     COMMAND edit-panel-duration-control-test
