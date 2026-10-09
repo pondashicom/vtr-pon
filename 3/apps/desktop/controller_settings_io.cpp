@@ -1,5 +1,6 @@
 #include "controller_settings_io.h"
 #include "controller_shortcut_settings.h"
+#include "midi_control_settings.h"
 
 #include <QFile>
 #include <QDir>
@@ -19,6 +20,7 @@ const QJsonObject &defaults() {
       {"files/stillCaptureDirectory", ""},
       {"files/documentConversionDirectory", ""},
       {"shortcuts/bindings", QJsonObject{}},
+      {"midi/control", vtrpon::midiControl::defaults()},
       {"appearance/controllerSkin", "hardware"},
       {"privacy/sendActivityNotice", false},
       {"updates/checkAutomatically", true},
@@ -134,6 +136,8 @@ bool valid(const QJsonObject &values) {
     } else if (expected.type() != it.value().type()) return false;
     if (it.key() == vtrpon::shortcutSettings::key() &&
         !vtrpon::shortcutSettings::validationError(it.value().toObject()).isEmpty()) return false;
+    if (it.key() == vtrpon::midiControl::settingsKey() &&
+        !vtrpon::midiControl::validationError(it.value().toObject()).isEmpty()) return false;
     if (it.value().isString() && it.value().toString().size() > 32768) return false;
     if (it.key().startsWith(QLatin1StringView("files/")) &&
         !it.value().toString().isEmpty() &&
@@ -182,7 +186,8 @@ QJsonObject controllerSettingsSnapshot(const QSettings &settings) {
       result.insert(it.key(), settings.contains(it.key())
           ? QJsonValue(QJsonArray::fromStringList(value.toStringList()))
           : QJsonValue(QJsonValue::Null));
-    } else if (it.value().isObject()) result.insert(it.key(), QJsonObject::fromVariantMap(value.toMap()));
+    } else if (it.key() == midiControl::settingsKey()) result.insert(it.key(), midiControl::normalized(QJsonObject::fromVariantMap(value.toMap())));
+    else if (it.value().isObject()) result.insert(it.key(), QJsonObject::fromVariantMap(value.toMap()));
     else if (it.value().isBool()) result.insert(it.key(), value.toBool());
     else if (it.value().isDouble()) result.insert(it.key(), value.toInt());
     else result.insert(it.key(), value.toString());
@@ -197,6 +202,8 @@ bool replaceControllerSettings(QSettings &settings, const QJsonObject &values) {
   // Older exports may contain the retired fade toggle. The color is now always used.
   auto currentValues = values;
   currentValues.remove(QStringLiteral("player/fadeToBackground"));
+  const auto midi = currentValues.value(midiControl::settingsKey());
+  if (midi.isObject()) currentValues.insert(midiControl::settingsKey(), midiControl::normalized(midi.toObject()));
   if (!valid(currentValues)) return false;
   settings.sync();
   if (settings.status() != QSettings::NoError || !settings.isWritable()) return false;

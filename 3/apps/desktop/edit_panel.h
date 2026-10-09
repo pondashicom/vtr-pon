@@ -59,6 +59,7 @@ public:
   void setAudioLevel(double leftPeakDb, double rightPeakDb, bool clipped);
   void setInputSignalAppearance(bool active, bool clipped);
   void resetAudioPresentation();
+  int nominalVolumeValue() const;
   void setPflState(bool enabled, bool canEnable, const QString &status);
 
 signals:

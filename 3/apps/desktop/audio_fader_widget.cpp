@@ -1,4 +1,5 @@
 #include "audio_fader_widget.h"
+#include "audio_fader_scale.h"
 
 #include "controller_scaling.h"
 #include "skins/controller_skin.h"
@@ -18,12 +19,10 @@
 
 namespace {
 
-constexpr int kSilenceValue = -960;
+constexpr int kSilenceValue = vtrpon::audioFaderScale::silence;
 constexpr int kUnityValue = 0;
-constexpr int kMaximumValue = 60;
+constexpr int kMaximumValue = vtrpon::audioFaderScale::maximum;
 constexpr int kTenthsPerDb = 10;
-constexpr double kUnityTravelFromBottom = 0.80;
-constexpr double kFaderTaperExponent = 4.0;
 constexpr int kUnityDetentEnterPx = 2;
 constexpr int kUnityDetentExitPx = 4;
 
@@ -450,20 +449,7 @@ int AudioFaderWidget::yForValue(int sliderValue) const
 {
     const QRect track = trackRect();
     const int travel = (std::max)(1, track.height() - 1);
-    double travelFromBottom = 0.0;
-    if (sliderValue == kSilenceValue) {
-        travelFromBottom = 0.0;
-    } else if (sliderValue <= kUnityValue) {
-        const double db = static_cast<double>(sliderValue) / kTenthsPerDb;
-        const double gain = std::pow(10.0, db / 20.0);
-        travelFromBottom = kUnityTravelFromBottom
-            * std::pow(gain, 1.0 / kFaderTaperExponent);
-    } else {
-        const double aboveUnity = static_cast<double>(sliderValue)
-            / static_cast<double>(kMaximumValue);
-        travelFromBottom = kUnityTravelFromBottom
-            + (1.0 - kUnityTravelFromBottom) * aboveUnity;
-    }
+    const double travelFromBottom = vtrpon::audioFaderScale::positionForValue(sliderValue);
     return track.bottom() - static_cast<int>(std::lround(
         std::clamp(travelFromBottom, 0.0, 1.0) * travel));
 }
@@ -490,21 +476,7 @@ void AudioFaderWidget::setValueFromY(int y)
 
     const double travelFromBottom = std::clamp(
         static_cast<double>(track.bottom() - boundedY) / travel, 0.0, 1.0);
-    int sliderValue = kSilenceValue;
-    if (travelFromBottom > 0.0
-        && travelFromBottom <= kUnityTravelFromBottom) {
-        const double normalized = travelFromBottom / kUnityTravelFromBottom;
-        const double db = 20.0 * kFaderTaperExponent * std::log10(normalized);
-        sliderValue = static_cast<int>(std::lround(db * kTenthsPerDb));
-        if (sliderValue <= kSilenceValue) {
-            sliderValue = kSilenceValue;
-        }
-    } else if (travelFromBottom > kUnityTravelFromBottom) {
-        const double aboveUnity = (travelFromBottom - kUnityTravelFromBottom)
-            / (1.0 - kUnityTravelFromBottom);
-        sliderValue = static_cast<int>(std::lround(
-            aboveUnity * kMaximumValue));
-    }
+    const int sliderValue = vtrpon::audioFaderScale::valueForPosition(travelFromBottom);
     requestUserValue(std::clamp(sliderValue, minimum(), maximum()));
 }
 

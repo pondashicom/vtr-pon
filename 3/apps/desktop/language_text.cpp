@@ -7,6 +7,100 @@
 namespace {
 
 constexpr auto kUiTextIds = std::to_array<const char *>({
+    //% "MIDI Control"
+    QT_TRID_NOOP("midi.title"),
+    //% "Select an input, select an action, then click MIDI Learn and operate your controller. Save to apply. MIDI actions are suspended while Settings or another modal dialog is open. Volume uses absolute or relative CC; Pickup waits for the hardware to reach the on-screen value. CC 0 is silence and CC 127 is +6 dB by default, following the on-screen fader scale."
+    QT_TRID_NOOP("midi.description"),
+    //% "Enable MIDI control"
+    QT_TRID_NOOP("midi.enable"),
+    //% "MIDI input"
+    QT_TRID_NOOP("midi.device"),
+    //% "Refresh"
+    QT_TRID_NOOP("midi.refresh"),
+    //% "MIDI Learn"
+    QT_TRID_NOOP("midi.learn"),
+    //% "Clear assignment"
+    QT_TRID_NOOP("midi.remove"),
+    //% "Unassigned"
+    QT_TRID_NOOP("midi.unassigned"),
+    //% "Select a MIDI input"
+    QT_TRID_NOOP("midi.select_device"),
+    //% "Saved input (unavailable): %1"
+    QT_TRID_NOOP("midi.saved_device"),
+    //% "MIDI control is disabled."
+    QT_TRID_NOOP("midi.disabled"),
+    //% "MIDI input connected."
+    QT_TRID_NOOP("midi.connected"),
+    //% "MIDI input disconnected. Waiting for reconnection."
+    QT_TRID_NOOP("midi.disconnected"),
+    //% "Could not open MIDI input: %1"
+    QT_TRID_NOOP("midi.open_failed"),
+    //% "MIDI input is supported on Windows."
+    QT_TRID_NOOP("midi.unsupported"),
+    //% "MIDI input overflow. The pending input was discarded."
+    QT_TRID_NOOP("midi.overflow"),
+    //% "Received: %1 / Ch %2 / #%3 / Value %4"
+    QT_TRID_NOOP("midi.received"),
+    //% "Waiting for MIDI input."
+    QT_TRID_NOOP("midi.waiting"),
+    //% "Operate the button, knob or fader to assign."
+    QT_TRID_NOOP("midi.learning"),
+    //% "Press the button to detect a Note input. For a CC button, select CC before MIDI Learn."
+    QT_TRID_NOOP("midi.learning_note"),
+    //% "Input detected. Save to apply."
+    QT_TRID_NOOP("midi.learned"),
+    //% "MIDI input reassigned from %1 to %2. Save to apply."
+    QT_TRID_NOOP("midi.reassigned"),
+    //% "The same MIDI input is assigned to multiple actions. Not saved: %1"
+    QT_TRID_NOOP("midi.duplicate"),
+    //% "A volume fader requires a CC message."
+    QT_TRID_NOOP("midi.cc_required"),
+    //% "Assignment changed. Save to apply."
+    QT_TRID_NOOP("midi.pending"),
+    //% "MIDI settings saved. Control resumes when Settings closes."
+    QT_TRID_NOOP("midi.saved"),
+    //% "Duplicate or invalid assignment. Not saved: %1"
+    QT_TRID_NOOP("midi.conflict"),
+    //% "MIDI assignment"
+    QT_TRID_NOOP("midi.assignment"),
+    //% "MIDI message type"
+    QT_TRID_NOOP("midi.type"),
+    //% "MIDI channel"
+    QT_TRID_NOOP("midi.channel"),
+    //% "Note / CC number"
+    QT_TRID_NOOP("midi.number"),
+    //% "CC mode"
+    QT_TRID_NOOP("midi.cc_mode"),
+    //% "Absolute (0–127)"
+    QT_TRID_NOOP("midi.mode.absolute"),
+    //% "Relative: Twos Complement (1 / 127)"
+    QT_TRID_NOOP("midi.mode.twos-complement"),
+    //% "Relative: Binary Offset (65 / 63)"
+    QT_TRID_NOOP("midi.mode.binary-offset"),
+    //% "Relative: Signed Bit (1 / 65)"
+    QT_TRID_NOOP("midi.mode.signed-bit"),
+    //% "Relative: Signed Bit 2 (65 / 1)"
+    QT_TRID_NOOP("midi.mode.signed-bit-2"),
+    //% "Pickup"
+    QT_TRID_NOOP("midi.pickup"),
+    //% "When enabled, volume waits until the physical control reaches the on-screen fader position. Leave off for immediate control."
+    QT_TRID_NOOP("midi.pickup.help"),
+    //% "Reverse"
+    QT_TRID_NOOP("midi.reverse"),
+    //% "Volume range"
+    QT_TRID_NOOP("midi.range"),
+    //% "Minimum volume"
+    QT_TRID_NOOP("midi.minimum"),
+    //% "Maximum volume"
+    QT_TRID_NOOP("midi.maximum"),
+    //% "MASTER volume"
+    QT_TRID_NOOP("midi.SetMasterVolume"),
+    //% "ON AIR item volume"
+    QT_TRID_NOOP("midi.SetItemVolume"),
+    //% "Nominal volume (EDIT)"
+    QT_TRID_NOOP("midi.SetEditVolume"),
+    //% "BGM volume"
+    QT_TRID_NOOP("midi.SetBgmVolume"),
     //% "Select output format"
     QT_TRID_NOOP("decklink.select_format"),
     //% "Assign each enabled output to a different hardware channel. Fill and Key use the same video format and source frame. FTB fades them to transparency. Audio is sent to Composite and Fill; Key is silent. Synchronized playback uses a common locked reference when required by the device."

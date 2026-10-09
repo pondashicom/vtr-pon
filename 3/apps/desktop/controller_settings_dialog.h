@@ -2,6 +2,7 @@
 
 #include <QDialog>
 #include <QColor>
+#include <QPointer>
 
 class AudioInputDeviceMonitor;
 class AudioOutputDeviceMonitor;
@@ -30,6 +31,8 @@ enum class PlaylistEditActivationMode : int;
 
 namespace vtrpon {
 class AddonRuntimeStatusWidget;
+class MidiControlInput;
+class MidiControlSettingsPage;
 struct SwitcherControlSettings;
 class SwitcherController;
 class UiLanguageManager;
@@ -93,6 +96,7 @@ public:
   void reloadSavedSettings();
   void setSettingsFileStatus(const QString &text);
   void refreshSavedAudioOutputs();
+  void setMidiInput(vtrpon::MidiControlInput *input);
   vtrpon::SwitcherControlSettings switcherControlSettings() const;
 
 signals:
@@ -102,6 +106,7 @@ signals:
   void timeSettingsChanged(bool remainingDefaultChanged);
   void timeSynchronizationRequested();
   void shortcutsChanged();
+  void midiSettingsChanged();
   void testPatternsChanged();
   void settingsReplaced();
   void exportSettingsRequested();
@@ -178,6 +183,9 @@ private:
   QListWidget *navigationList_ = nullptr;
   QStackedWidget *pageStack_ = nullptr;
   NetworkVideoSettingsPage *networkVideoPage_ = nullptr;
+  vtrpon::MidiControlSettingsPage *midiPage_ = nullptr;
+  QWidget *midiPageContainer_ = nullptr;
+  QPointer<vtrpon::MidiControlInput> midiInput_;
   DeckLinkSettingsPage *deckLinkPage_ = nullptr;
   vtrpon::AddonRuntimeStatusWidget *atemRuntimeStatus_ = nullptr;
   TestPatternSettingsPage *testPatternPage_ = nullptr;

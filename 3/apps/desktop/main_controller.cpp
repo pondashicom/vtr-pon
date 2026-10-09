@@ -19,6 +19,9 @@
 #include <QJsonDocument>
 
 #include "controller_shortcuts.h"
+#include "midi_control_input.h"
+#include <QElapsedTimer>
+#include <cmath>
 #include "controller_operations.h"
 #include "controller_settings_dialog.h"
 #include "controller_settings_io.h"
@@ -616,6 +619,15 @@ public:
     shortcuts_ = std::make_unique<ControllerShortcuts>(
         controlWindow_, playlistPanel_, programPanel_, operations_,
         addFileAction_, exitAction_, viewMenuController_);
+    midiInput_ = std::make_unique<vtrpon::MidiControlInput>(operations_, [this](const QString &id) {
+      if (!closing_ && shortcuts_) (void)shortcuts_->triggerAction(id, "MIDI");
+    });
+    midiInput_->setVolumeValueProvider([this](const QString &id) {
+      if (id == QLatin1StringView("SetEditVolume")) return editPanel_->nominalVolumeValue();
+      const double gain = id == QLatin1StringView("SetItemVolume") ? programPanel_->itemGain()
+          : id == QLatin1StringView("SetBgmVolume") ? programPanel_->bgmGain() : programPanel_->masterGain();
+      return gain <= 0 ? -960 : int(std::lround(200.0 * std::log10(gain)));
+    });
     switcherController_->setOperations(operations_);
     connect(controlWindow_, &QObject::destroyed, this,
             [this] { shutdownPlayers(); });
@@ -752,6 +764,7 @@ private:
     // Arm before any cancellation/save/teardown can enter an external call.
     vtrpon::armApplicationShutdownDeadline();
     closing_ = true;
+    if (midiInput_) midiInput_->stop();
     if (macroRunner_) macroRunner_->stop();
     if (viewMenuController_) viewMenuController_->requestShutdown();
     audioOutputs_->requestShutdown();
@@ -1136,6 +1149,7 @@ private:
     playlistPanel_->applyTimeSettings();
     programPanel_->applyTimeSettings();
     if (shortcuts_) shortcuts_->reloadSavedSettings();
+    if (midiInput_) midiInput_->reload();
     applyPlayerBackgroundSettings();
     QString error;
     const bool skinApplied = vtrpon::applyControllerSkin(*qApp, vtrpon::configuredControllerSkinKey(), &error);
@@ -1161,9 +1175,15 @@ private:
     if (!controlWindow_ || activeSettingsDialog_) {
       return;
     }
+    QElapsedTimer settingsOpenTimer;
+    settingsOpenTimer.start();
+    if (midiInput_) midiInput_->setConfigurationMode(true);
+    const auto midiPreparationMs = settingsOpenTimer.elapsed();
     ControllerSettingsDialog dialog(
         uvcDeviceMonitor_, audioInputDeviceMonitor_, uvcAudioMappingStore_,
         switcherController_, languageManager_, controlWindow_);
+    dialog.setMidiInput(midiInput_.get());
+    const auto dialogConstructionMs = settingsOpenTimer.elapsed() - midiPreparationMs;
     connect(&dialog, &ControllerSettingsDialog::addonRestartRequested, &dialog,
         [this, &dialog] {
           if (closing_) return;
@@ -1211,6 +1231,8 @@ private:
     if (audioOutputPage) dialog.showAudioOutputPage();
     connect(&dialog, &ControllerSettingsDialog::shortcutsChanged,
             this, [this] { if (shortcuts_) shortcuts_->reloadSavedSettings(); });
+    connect(&dialog, &ControllerSettingsDialog::midiSettingsChanged,
+            this, [this] { if (midiInput_) midiInput_->reload(); });
     connect(&dialog, &ControllerSettingsDialog::exportSettingsRequested,
             this, [this] { exportSettings(); });
     connect(&dialog, &ControllerSettingsDialog::importSettingsRequested,
@@ -1242,8 +1264,11 @@ private:
               applySwitcherSettings(settings);
             });
     activeSettingsDialog_ = &dialog;
+    qInfo() << "SETTINGS_OPEN_TIMING midiMs=" << midiPreparationMs
+            << "dialogMs=" << dialogConstructionMs << "totalMs=" << settingsOpenTimer.elapsed();
     (void)dialog.exec();
     activeSettingsDialog_.clear();
+    if (midiInput_) midiInput_->setConfigurationMode(false);
     applyPlaylistSettings(dialog.playlistEditActivationMode(),
                            dialog.autoSelectNextItemAfterOnAir(),
                            dialog.preferAudioAlbumArt());
@@ -1686,6 +1711,7 @@ private:
     vtrpon::armApplicationShutdownDeadline();
     if (macroRunner_) macroRunner_->stop();
     operations_->disable();
+    if (midiInput_) midiInput_->stop();
     if (viewMenuController_) viewMenuController_->requestShutdown();
     if (audioOutputs_) audioOutputs_->requestShutdown();
     programController_->shutdown();
@@ -2282,6 +2308,7 @@ private:
   ProgramPlayoutController *programController_ = nullptr;
   vtrpon::SwitcherController *switcherController_ = nullptr;
   std::unique_ptr<ControllerShortcuts> shortcuts_;
+  std::unique_ptr<vtrpon::MidiControlInput> midiInput_;
   std::optional<ImageAddSettings> rememberedImageAddSettings_ = std::nullopt;
 #ifdef _WIN32
   bool powerPointComRegistered_ = false;

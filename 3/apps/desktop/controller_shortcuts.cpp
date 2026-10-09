@@ -8,6 +8,7 @@
 #include "program_panel.h"
 
 #include <QAction>
+#include <QHash>
 #include <QApplication>
 #include <QKeySequence>
 #include <QList>
@@ -39,7 +40,7 @@ public:
           key, controlWindow,
           [guarded, operation] {
             if (guarded)
-              (void)guarded->executeFrom("Shortcut", operation);
+              (void)guarded->execute(operation);
           });
     };
     installOperation(Action::TakeOnAir, Op::TakeSelectedOnAir);
@@ -77,7 +78,7 @@ public:
     for (const auto &binding : bulkBindings) {
       install(binding.first, controlWindow, [guarded, operation = binding.second] {
         if (guarded)
-          (void)guarded->executeFrom("Shortcut", Op::PlaylistBulk, operation);
+          (void)guarded->execute(Op::PlaylistBulk, operation);
       });
       if (playlistPanel) {
         for (auto *menuAction : playlistPanel->bulkOperationsMenu()->actions()) {
@@ -117,7 +118,7 @@ public:
     for (const auto &binding : endModeBindings) {
       install(binding.first, controlWindow, [guarded, mode = binding.second] {
         if (guarded)
-          (void)guarded->executeFrom("Shortcut", Op::EditEndMode, mode);
+          (void)guarded->execute(Op::EditEndMode, mode);
       });
     }
     if (controlWindow) {
@@ -158,22 +159,10 @@ public:
       for (int digit = 1; digit <= 9; ++digit) {
         for (bool playlist : {false, true}) {
           const auto action = static_cast<Action>(18 + (digit - 1) * 2 + (playlist ? 1 : 0));
-          auto *shortcut = new QShortcut(controlWindow);
-          shortcut->setKeys(keys(action));
-          installed_.append({action, shortcut});
-          shortcut->setContext(Qt::WindowShortcut);
-          shortcut->setAutoRepeat(false);
-          connect(shortcut, &QShortcut::activated, this,
-                  [guarded, digit, playlist] {
-                    if (guarded) {
-                      (void)guarded->executeFrom("Shortcut",
-                                                 playlist
-                                                     ? Op::ActivatePlaylist
-                                                     : Op::SelectItemNumber,
-                                                 digit);
-                    }
-                  });
-          shortcuts_.append(shortcut);
+          install(action, controlWindow, [guarded, digit, playlist] {
+            if (guarded)
+              (void)guarded->execute(playlist ? Op::ActivatePlaylist : Op::SelectItemNumber, digit);
+          });
         }
       }
     }
@@ -204,6 +193,13 @@ public:
     if (program_) program_->setPlayPauseShortcutLabel(label(Action::ToggleOnAirPlayback));
     updateEnabledState(QApplication::focusWidget());
   }
+  bool triggerAction(const QString &id, const char *source) {
+    const auto handler = handlers_.value(id);
+    if (!handler) return false;
+    ControllerOperations::InputScope scope(source);
+    handler();
+    return true;
+  }
 private:
   using Action = vtrpon::shortcutSettings::Action;
   QList<QKeySequence> keys(Action action) const {
@@ -227,6 +223,8 @@ private:
 
   void install(Action action, QWidget *controlWindow,
                const std::function<void()> &handler) {
+    const auto id = vtrpon::shortcutSettings::definitions().at(static_cast<int>(action)).id;
+    handlers_.insert(id, handler);
     if (!controlWindow) {
       return;
     }
@@ -236,7 +234,7 @@ private:
       installed_.append({action, shortcut});
       shortcut->setContext(Qt::WindowShortcut);
       shortcut->setAutoRepeat(false);
-      connect(shortcut, &QShortcut::activated, this, handler);
+      connect(shortcut, &QShortcut::activated, this, [this, id] { triggerAction(id, "Shortcut"); });
       shortcuts_.append(shortcut);
     }
   }
@@ -259,6 +257,7 @@ private:
   QList<QPair<Action, QPointer<QShortcut>>> installed_;
   QList<QPair<Action, QPointer<QAction>>> menus_;
   QList<QPointer<QShortcut>> shortcuts_;
+  QHash<QString, std::function<void()>> handlers_;
 };
 
 ControllerShortcuts::ControllerShortcuts(
@@ -272,3 +271,4 @@ ControllerShortcuts::ControllerShortcuts(
 ControllerShortcuts::~ControllerShortcuts() = default;
 
 void ControllerShortcuts::reloadSavedSettings() { impl_->reload(); }
+bool ControllerShortcuts::triggerAction(const QString &id, const char *source) { return impl_->triggerAction(id, source); }

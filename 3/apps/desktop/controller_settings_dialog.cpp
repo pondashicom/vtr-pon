@@ -18,6 +18,9 @@
 #include <QFormLayout>
 #include "controller_settings_io.h"
 #include "controller_shortcut_settings.h"
+#include "midi_control_settings_page.h"
+#include "midi_control_input.h"
+#include <QElapsedTimer>
 #include <QKeySequenceEdit>
 #include <QLineEdit>
 #include <QTableWidget>
@@ -1029,6 +1032,11 @@ ControllerSettingsDialog::ControllerSettingsDialog(
   pageStack->addWidget(bgmPlayerPage);
   pageStack->addWidget(switcherPage);
   pageStack->addWidget(shortcutsPage);
+  midiPageContainer_ = new QWidget(pageStack);
+  midiPageContainer_->setObjectName(QStringLiteral("midiSettingsContainer"));
+  auto *midiLayout = new QVBoxLayout(midiPageContainer_);
+  midiLayout->setContentsMargins(0, 0, 0, 0);
+  pageStack->addWidget(midiPageContainer_);
   auto *appearanceScroll = new QScrollArea(pageStack);
   appearanceScroll->setObjectName(QStringLiteral("appearanceSettingsScroll"));
   appearanceScroll->setWidgetResizable(true);
@@ -1249,6 +1257,7 @@ ControllerSettingsDialog::ControllerSettingsDialog(
                     "settings.category.time_language");
   addNavigationItem("shortcuts", shortcutsPage,
                     "settings.category.shortcuts");
+  addNavigationItem("midi", midiPageContainer_, "midi.title");
   addNavigationItem("test_pattern", testPatternPage_,
                     "menu.tools.test_pattern");
   addNavigationItem("file_management", fileManagementPage_, "settings.files.title");
@@ -2178,7 +2187,19 @@ void ControllerSettingsDialog::showCurrentNavigationPage() {
   }
   const int page = item->data(kNavigationPageRole).toInt();
   if (page >= 0 && page < pageStack_->count()) {
+    bool midiPageCreated = false;
+    if (pageStack_->widget(page) == midiPageContainer_ && !midiPage_) {
+      QElapsedTimer midiPageTimer;
+      midiPageTimer.start();
+      midiPage_ = new vtrpon::MidiControlSettingsPage(midiPageContainer_);
+      midiPageContainer_->layout()->addWidget(midiPage_);
+      connect(midiPage_, &vtrpon::MidiControlSettingsPage::saved, this, &ControllerSettingsDialog::midiSettingsChanged);
+      midiPage_->setInput(midiInput_);
+      midiPageCreated = true;
+      qInfo() << "MIDI_SETTINGS_CREATE_TIMING elapsedMs=" << midiPageTimer.elapsed();
+    }
     pageStack_->setCurrentIndex(page);
+    if (midiPageCreated) resize(size().expandedTo(minimumSizeHint()));
   }
 }
 
@@ -2365,6 +2386,7 @@ void ControllerSettingsDialog::reloadSavedSettings() {
   reloadTimeSettings();
   reloadShortcutEditors();
   // Prevent intermediate widget values from overwriting the restored snapshot.
+  if (midiPage_) midiPage_->reload();
   std::vector<std::unique_ptr<QSignalBlocker>> blockers;
   for (auto *child : findChildren<QObject *>())
     blockers.push_back(std::make_unique<QSignalBlocker>(child));
@@ -2413,6 +2435,10 @@ QColor ControllerSettingsDialog::savedPlayerBackgroundColor() {
 
 void ControllerSettingsDialog::setSettingsFileStatus(const QString &text) {
   resetStatusLabel_->setText(text);
+}
+void ControllerSettingsDialog::setMidiInput(vtrpon::MidiControlInput *input) {
+  midiInput_ = input;
+  if (midiPage_) midiPage_->setInput(input);
 }
 
 QWidget *ControllerSettingsDialog::videoOutputPage() const {

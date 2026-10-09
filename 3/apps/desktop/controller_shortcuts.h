@@ -7,6 +7,7 @@ class PlaylistPanel;
 class ProgramPanel;
 class QAction;
 class QWidget;
+class QString;
 namespace vtrpon { class ViewMenuController; }
 
 class ControllerShortcuts final {
@@ -18,6 +19,7 @@ public:
                       vtrpon::ViewMenuController *viewMenuController);
   ~ControllerShortcuts();
   void reloadSavedSettings();
+  bool triggerAction(const QString &id, const char *source);
 
   ControllerShortcuts(const ControllerShortcuts &) = delete;
   ControllerShortcuts &operator=(const ControllerShortcuts &) = delete;

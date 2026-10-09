@@ -182,6 +182,7 @@ qt_add_executable(vtr-pon WIN32
   apps/desktop/bgm_playout_controller.h
   apps/desktop/audio_fader_widget.cpp
   apps/desktop/audio_fader_widget.h
+  apps/desktop/audio_fader_scale.h
   apps/desktop/addon_management_page.cpp
   apps/desktop/addon_management_page.h
   apps/desktop/audio_meter_widget.cpp
@@ -190,6 +191,12 @@ qt_add_executable(vtr-pon WIN32
   apps/desktop/atem_addon_switcher.h
   apps/desktop/controller_shortcuts.cpp
   apps/desktop/controller_shortcuts.h
+  apps/desktop/midi_control_input.cpp
+  apps/desktop/midi_control_input.h
+  apps/desktop/midi_control_settings.h
+  apps/desktop/midi_message_queue.h
+  apps/desktop/midi_control_settings_page.cpp
+  apps/desktop/midi_control_settings_page.h
   apps/desktop/controller_settings_dialog.cpp
   apps/desktop/controller_settings.h
   apps/desktop/controller_settings_io.cpp
@@ -570,6 +577,30 @@ if(BUILD_TESTING)
   target_include_directories(controller-settings-storage-test PRIVATE apps/desktop)
   target_link_libraries(controller-settings-storage-test PRIVATE Qt6::Core)
   add_test(NAME controller-settings-storage COMMAND controller-settings-storage-test)
+
+  qt_add_executable(midi-control-test
+    tests/midi_control_test.cpp
+    apps/desktop/midi_control_input.cpp
+    apps/desktop/midi_control_input.h
+    apps/desktop/midi_message_queue.h
+    apps/desktop/midi_control_settings_page.cpp
+    apps/desktop/midi_control_settings_page.h
+    apps/desktop/controller_settings_io.cpp
+    apps/desktop/controller_operations.h
+    apps/desktop/controller_scaling.cpp
+    apps/desktop/language_text.cpp)
+  target_include_directories(midi-control-test PRIVATE apps/desktop)
+  target_link_libraries(midi-control-test PRIVATE Qt6::Widgets)
+  if(WIN32)
+    target_compile_definitions(midi-control-test PRIVATE NOMINMAX WIN32_LEAN_AND_MEAN)
+    target_link_libraries(midi-control-test PRIVATE winmm)
+  endif()
+  if(MSVC)
+    target_compile_options(midi-control-test PRIVATE /utf-8)
+  endif()
+  add_dependencies(midi-control-test release_translations)
+  add_test(NAME midi-control COMMAND midi-control-test "${CMAKE_CURRENT_BINARY_DIR}/vtrpon_ja.qm" "${CMAKE_CURRENT_BINARY_DIR}/midi-settings-ja.png")
+  set_tests_properties(midi-control PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=windows")
 
   qt_add_executable(application-log-test
     tests/application_log_test.cpp
@@ -1105,6 +1136,8 @@ if(BUILD_TESTING)
   endif()
 
   qt_add_executable(edit-panel-duration-control-test
+    apps/desktop/midi_control_input.cpp
+    apps/desktop/midi_control_input.h
     apps/desktop/controller_window_scaling.cpp
     apps/desktop/controller_window_scaling.h
     apps/desktop/controller_operations.h
@@ -1132,6 +1165,12 @@ if(BUILD_TESTING)
     apps/desktop)
   target_link_libraries(edit-panel-duration-control-test PRIVATE
     Qt6::Widgets)
+  if(WIN32)
+    target_compile_definitions(edit-panel-duration-control-test PRIVATE NOMINMAX WIN32_LEAN_AND_MEAN)
+    target_link_libraries(edit-panel-duration-control-test PRIVATE winmm)
+  endif()
+  add_test(NAME midi-master-control COMMAND edit-panel-duration-control-test --midi-master-only)
+  set_tests_properties(midi-master-control PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=windows")
   add_dependencies(edit-panel-duration-control-test release_translations)
 
   if(CMAKE_CONFIGURATION_TYPES)

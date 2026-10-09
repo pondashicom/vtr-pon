@@ -1721,3 +1721,4 @@ void EditPanel::updateEditPointButtonAppearance() {
       customOut ? vtrpon::uiText("edit.out_point.custom")
                 : vtrpon::uiText("edit.out_point.default"));
 }
+int EditPanel::nominalVolumeValue() const { return nominalVolumeFader_->value(); }

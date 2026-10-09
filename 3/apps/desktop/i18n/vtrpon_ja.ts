@@ -3,6 +3,54 @@
 <TS version="2.1" language="ja_JP">
 <context>
     <name></name>
+    <message id="midi.title"><source>MIDI Control</source><translation>MIDI制御</translation></message>
+    <message id="midi.description"><source>Select an input, select an action, then click MIDI Learn and operate your controller. Save to apply. MIDI actions are suspended while Settings or another modal dialog is open. Volume uses absolute or relative CC; Pickup waits for the hardware to reach the on-screen value. CC 0 is silence and CC 127 is +6 dB by default, following the on-screen fader scale.</source><translation>入力機器と機能を選び、「MIDI Learn」を押して機器を操作します。保存して適用します。設定画面などのダイアログを開いている間はMIDIによる操作を停止します。音量は絶対値または相対値のCCを使用します。ピックアップは画面の値に追いつくまで音量を変えません。初期値ではCCの0が無音、127が+6 dBです。画面のフェーダーと同じ目盛りで動きます。</translation></message>
+    <message id="midi.enable"><source>Enable MIDI control</source><translation>MIDI制御を有効にする</translation></message>
+    <message id="midi.device"><source>MIDI input</source><translation>MIDI入力機器</translation></message>
+    <message id="midi.refresh"><source>Refresh</source><translation>更新</translation></message>
+    <message id="midi.learn"><source>MIDI Learn</source><translation>MIDI Learn（入力を検出）</translation></message>
+    <message id="midi.remove"><source>Clear assignment</source><translation>割り当てを解除</translation></message>
+    <message id="midi.unassigned"><source>Unassigned</source><translation>未割り当て</translation></message>
+    <message id="midi.select_device"><source>Select a MIDI input</source><translation>MIDI入力機器を選択してください</translation></message>
+    <message id="midi.saved_device"><source>Saved input (unavailable): %1</source><translation>保存済みの入力機器（未接続）: %1</translation></message>
+    <message id="midi.disabled"><source>MIDI control is disabled.</source><translation>MIDI制御は無効です。</translation></message>
+    <message id="midi.connected"><source>MIDI input connected.</source><translation>MIDI入力機器に接続しました。</translation></message>
+    <message id="midi.disconnected"><source>MIDI input disconnected. Waiting for reconnection.</source><translation>MIDI入力機器が未接続です。再接続を待っています。</translation></message>
+    <message id="midi.open_failed"><source>Could not open MIDI input: %1</source><translation>MIDI入力機器を開けませんでした: %1</translation></message>
+    <message id="midi.unsupported"><source>MIDI input is supported on Windows.</source><translation>MIDI入力はWindowsに対応しています。</translation></message>
+    <message id="midi.overflow"><source>MIDI input overflow. The pending input was discarded.</source><translation>MIDI入力が受信容量を超えたため、待機中の入力を破棄しました。</translation></message>
+    <message id="midi.received"><source>Received: %1 / Ch %2 / #%3 / Value %4</source><translation>受信: %1 / Ch %2 / 番号 %3 / 値 %4</translation></message>
+    <message id="midi.waiting"><source>Waiting for MIDI input.</source><translation>MIDI入力を待っています。</translation></message>
+    <message id="midi.learning"><source>Operate the button, knob or fader to assign.</source><translation>割り当てたいボタン・ノブ・フェーダーを操作してください。</translation></message>
+    <message id="midi.learning_note"><source>Press the button to detect a Note input. For a CC button, select CC before MIDI Learn.</source><translation>ボタンを押してください（Note入力を検出します）。CC方式のボタンは、入力種類をCCにしてからMIDI Learnを押してください。</translation></message>
+    <message id="midi.learned"><source>Input detected. Save to apply.</source><translation>入力を検出しました。保存して適用してください。</translation></message>
+    <message id="midi.reassigned"><source>MIDI input reassigned from %1 to %2. Save to apply.</source><translation>「%1」から「%2」へ割り当てを移動しました。保存して適用してください。</translation></message>
+    <message id="midi.duplicate"><source>The same MIDI input is assigned to multiple actions. Not saved: %1</source><translation>同じMIDI入力が複数の操作に割り当てられています。保存していません: %1</translation></message>
+    <message id="midi.cc_required"><source>A volume fader requires a CC message.</source><translation>音量フェーダーにはCC入力を割り当ててください。</translation></message>
+    <message id="midi.pending"><source>Assignment changed. Save to apply.</source><translation>割り当てを変更しました。保存して適用してください。</translation></message>
+    <message id="midi.saved"><source>MIDI settings saved. Control resumes when Settings closes.</source><translation>MIDI設定を保存しました。設定画面を閉じると制御を開始します。</translation></message>
+    <message id="midi.conflict"><source>Duplicate or invalid assignment. Not saved: %1</source><translation>割り当ての重複または不正な値があります。保存していません: %1</translation></message>
+    <message id="midi.assignment"><source>MIDI assignment</source><translation>MIDI割り当て</translation></message>
+    <message id="midi.type"><source>MIDI message type</source><translation>MIDI入力の種類</translation></message>
+    <message id="midi.channel"><source>MIDI channel</source><translation>MIDIチャンネル</translation></message>
+    <message id="midi.number"><source>Note / CC number</source><translation>ノート／CC番号</translation></message>
+    <message id="midi.cc_mode"><source>CC mode</source><translation>CC入力方式</translation></message>
+    <message id="midi.mode.absolute"><source>Absolute (0–127)</source><translation>絶対値（0〜127）</translation></message>
+    <message id="midi.mode.twos-complement"><source>Relative: Twos Complement (1 / 127)</source><translation>相対値: 2の補数（1 / 127）</translation></message>
+    <message id="midi.mode.binary-offset"><source>Relative: Binary Offset (65 / 63)</source><translation>相対値: バイナリオフセット（65 / 63）</translation></message>
+    <message id="midi.mode.signed-bit"><source>Relative: Signed Bit (1 / 65)</source><translation>相対値: 符号ビット（1 / 65）</translation></message>
+    <message id="midi.mode.signed-bit-2"><source>Relative: Signed Bit 2 (65 / 1)</source><translation>相対値: 符号ビット2（65 / 1）</translation></message>
+    <message id="midi.pickup"><source>Pickup</source><translation>ピックアップ</translation></message>
+    <message id="midi.pickup.help"><source>When enabled, volume waits until the physical control reaches the on-screen fader position. Leave off for immediate control.</source><translation>有効にすると、実物の位置が画面のフェーダー位置に追いつくまで音量を変更しません。すぐ操作する場合はチェックを外してください。</translation></message>
+    <message id="midi.reverse"><source>Reverse</source><translation>反転</translation></message>
+    <message id="midi.range"><source>Volume range</source><translation>音量範囲</translation></message>
+    <message id="midi.minimum"><source>Minimum volume</source><translation>音量の下限</translation></message>
+    <message id="midi.maximum"><source>Maximum volume</source><translation>音量の上限</translation></message>
+    <message id="midi.SetMasterVolume"><source>MASTER volume</source><translation>マスター音量</translation></message>
+    <message id="midi.SetItemVolume"><source>ON AIR item volume</source><translation>オンエアのアイテム音量</translation></message>
+    <message id="midi.SetEditVolume"><source>Nominal volume (EDIT)</source><translation>規定音量（エディット）</translation></message>
+    <message id="midi.SetBgmVolume"><source>BGM volume</source><translation>BGM音量</translation></message>
+
     <message id="settings.updates.title"><source>Updates and notices</source><translation>アップデートと通知</translation></message>
     <message id="settings.updates.description"><source>Choose when VTR-PON checks for updates and whether to send a usage notice.</source><translation>アップデートの自動確認と利用状況通知を設定します。</translation></message>
     <message id="settings.updates.check_title"><source>Update checks</source><translation>アップデート確認</translation></message>

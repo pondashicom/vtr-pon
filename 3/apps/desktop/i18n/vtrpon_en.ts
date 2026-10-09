@@ -3,6 +3,54 @@
 <TS version="2.1" language="en_US">
 <context>
     <name></name>
+    <message id="midi.title"><source>MIDI Control</source><translation>MIDI Control</translation></message>
+    <message id="midi.description"><source>Select an input, select an action, then click MIDI Learn and operate your controller. Save to apply. MIDI actions are suspended while Settings or another modal dialog is open. Volume uses absolute or relative CC; Pickup waits for the hardware to reach the on-screen value. CC 0 is silence and CC 127 is +6 dB by default, following the on-screen fader scale.</source><translation>Select an input, select an action, then click MIDI Learn and operate your controller. Save to apply. MIDI actions are suspended while Settings or another modal dialog is open. Volume uses absolute or relative CC; Pickup waits for the hardware to reach the on-screen value. CC 0 is silence and CC 127 is +6 dB by default, following the on-screen fader scale.</translation></message>
+    <message id="midi.enable"><source>Enable MIDI control</source><translation>Enable MIDI control</translation></message>
+    <message id="midi.device"><source>MIDI input</source><translation>MIDI input</translation></message>
+    <message id="midi.refresh"><source>Refresh</source><translation>Refresh</translation></message>
+    <message id="midi.learn"><source>MIDI Learn</source><translation>MIDI Learn</translation></message>
+    <message id="midi.remove"><source>Clear assignment</source><translation>Clear assignment</translation></message>
+    <message id="midi.unassigned"><source>Unassigned</source><translation>Unassigned</translation></message>
+    <message id="midi.select_device"><source>Select a MIDI input</source><translation>Select a MIDI input</translation></message>
+    <message id="midi.saved_device"><source>Saved input (unavailable): %1</source><translation>Saved input (unavailable): %1</translation></message>
+    <message id="midi.disabled"><source>MIDI control is disabled.</source><translation>MIDI control is disabled.</translation></message>
+    <message id="midi.connected"><source>MIDI input connected.</source><translation>MIDI input connected.</translation></message>
+    <message id="midi.disconnected"><source>MIDI input disconnected. Waiting for reconnection.</source><translation>MIDI input disconnected. Waiting for reconnection.</translation></message>
+    <message id="midi.open_failed"><source>Could not open MIDI input: %1</source><translation>Could not open MIDI input: %1</translation></message>
+    <message id="midi.unsupported"><source>MIDI input is supported on Windows.</source><translation>MIDI input is supported on Windows.</translation></message>
+    <message id="midi.overflow"><source>MIDI input overflow. The pending input was discarded.</source><translation>MIDI input overflow. The pending input was discarded.</translation></message>
+    <message id="midi.received"><source>Received: %1 / Ch %2 / #%3 / Value %4</source><translation>Received: %1 / Ch %2 / #%3 / Value %4</translation></message>
+    <message id="midi.waiting"><source>Waiting for MIDI input.</source><translation>Waiting for MIDI input.</translation></message>
+    <message id="midi.learning"><source>Operate the button, knob or fader to assign.</source><translation>Operate the button, knob or fader to assign.</translation></message>
+    <message id="midi.learning_note"><source>Press the button to detect a Note input. For a CC button, select CC before MIDI Learn.</source><translation>Press the button to detect a Note input. For a CC button, select CC before MIDI Learn.</translation></message>
+    <message id="midi.learned"><source>Input detected. Save to apply.</source><translation>Input detected. Save to apply.</translation></message>
+    <message id="midi.reassigned"><source>MIDI input reassigned from %1 to %2. Save to apply.</source><translation>MIDI input reassigned from %1 to %2. Save to apply.</translation></message>
+    <message id="midi.duplicate"><source>The same MIDI input is assigned to multiple actions. Not saved: %1</source><translation>The same MIDI input is assigned to multiple actions. Not saved: %1</translation></message>
+    <message id="midi.cc_required"><source>A volume fader requires a CC message.</source><translation>A volume fader requires a CC message.</translation></message>
+    <message id="midi.pending"><source>Assignment changed. Save to apply.</source><translation>Assignment changed. Save to apply.</translation></message>
+    <message id="midi.saved"><source>MIDI settings saved. Control resumes when Settings closes.</source><translation>MIDI settings saved. Control resumes when Settings closes.</translation></message>
+    <message id="midi.conflict"><source>Duplicate or invalid assignment. Not saved: %1</source><translation>Duplicate or invalid assignment. Not saved: %1</translation></message>
+    <message id="midi.assignment"><source>MIDI assignment</source><translation>MIDI assignment</translation></message>
+    <message id="midi.type"><source>MIDI message type</source><translation>MIDI message type</translation></message>
+    <message id="midi.channel"><source>MIDI channel</source><translation>MIDI channel</translation></message>
+    <message id="midi.number"><source>Note / CC number</source><translation>Note / CC number</translation></message>
+    <message id="midi.cc_mode"><source>CC mode</source><translation>CC mode</translation></message>
+    <message id="midi.mode.absolute"><source>Absolute (0–127)</source><translation>Absolute (0–127)</translation></message>
+    <message id="midi.mode.twos-complement"><source>Relative: Twos Complement (1 / 127)</source><translation>Relative: Twos Complement (1 / 127)</translation></message>
+    <message id="midi.mode.binary-offset"><source>Relative: Binary Offset (65 / 63)</source><translation>Relative: Binary Offset (65 / 63)</translation></message>
+    <message id="midi.mode.signed-bit"><source>Relative: Signed Bit (1 / 65)</source><translation>Relative: Signed Bit (1 / 65)</translation></message>
+    <message id="midi.mode.signed-bit-2"><source>Relative: Signed Bit 2 (65 / 1)</source><translation>Relative: Signed Bit 2 (65 / 1)</translation></message>
+    <message id="midi.pickup"><source>Pickup</source><translation>Pickup</translation></message>
+    <message id="midi.pickup.help"><source>When enabled, volume waits until the physical control reaches the on-screen fader position. Leave off for immediate control.</source><translation>When enabled, volume waits until the physical control reaches the on-screen fader position. Leave off for immediate control.</translation></message>
+    <message id="midi.reverse"><source>Reverse</source><translation>Reverse</translation></message>
+    <message id="midi.range"><source>Volume range</source><translation>Volume range</translation></message>
+    <message id="midi.minimum"><source>Minimum volume</source><translation>Minimum volume</translation></message>
+    <message id="midi.maximum"><source>Maximum volume</source><translation>Maximum volume</translation></message>
+    <message id="midi.SetMasterVolume"><source>MASTER volume</source><translation>MASTER volume</translation></message>
+    <message id="midi.SetItemVolume"><source>ON AIR item volume</source><translation>ON AIR item volume</translation></message>
+    <message id="midi.SetEditVolume"><source>Nominal volume (EDIT)</source><translation>Nominal volume (EDIT)</translation></message>
+    <message id="midi.SetBgmVolume"><source>BGM volume</source><translation>BGM volume</translation></message>
+
     <message id="settings.updates.title"><source>Updates and notices</source><translation>Updates and notices</translation></message>
     <message id="settings.updates.description"><source>Choose when VTR-PON checks for updates and whether to send a usage notice.</source><translation>Choose when VTR-PON checks for updates and whether to send a usage notice.</translation></message>
     <message id="settings.updates.check_title"><source>Update checks</source><translation>Update checks</translation></message>

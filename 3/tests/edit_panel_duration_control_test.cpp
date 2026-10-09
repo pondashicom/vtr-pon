@@ -7,6 +7,8 @@
 #include "controller_window_scaling.h"
 #include "user_info.h"
 #include "vst_service.h"
+#include "midi_control_input.h"
+#include "controller_settings.h"
 
 #include <QAbstractAnimation>
 #include <QApplication>
@@ -40,6 +42,7 @@
 #include <QTimer>
 #include <QToolButton>
 #include <QTranslator>
+#include <QTemporaryDir>
 #include <QVariantAnimation>
 #include <QWidget>
 #include <QWheelEvent>
@@ -48,6 +51,17 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdio>
+
+namespace vtrpon {
+class MidiControlTestAccess {
+public:
+  static void send(MidiControlInput &input, quint32 packed) {
+    input.processMessage(midiControl::decode(packed));
+  }
+  static void enqueue(MidiControlInput &input, quint32 packed) { input.enqueueMessage(packed); }
+  static void drain(MidiControlInput &input) { input.pollMessages(); }
+};
+}
 
 namespace {
 
@@ -2345,6 +2359,79 @@ int verifyOperationInputs(QApplication &application) {
 
 int main(int argc, char *argv[]) {
   QApplication application(argc, argv);
+  if (application.arguments().contains("--midi-master-only")) {
+    namespace midi = vtrpon::midiControl;
+    QTemporaryDir directory; CHECK(directory.isValid());
+    application.setProperty("vtrpon.settingsFile", directory.filePath("midi.ini"));
+    auto settings = vtrpon::makeControllerSettings();
+    auto config = midi::defaults(); config.insert("enabled", true); config.insert("device", "test-input");
+    const QJsonObject binding{{"type", "cc"}, {"channel", 1}, {"number", 7}, {"pickup", true}, {"minimum", -960}, {"maximum", 60}, {"scale", "fader"}};
+    config.insert("bindings", QJsonObject{{"SetMasterVolume", binding}, {"TakeOnAir", QJsonObject{{"type", "note"}, {"channel", 1}, {"number", 60}}}, {"OffAir", QJsonObject{{"type", "note"}, {"channel", 1}, {"number", 61}}}});
+    settings.setValue(midi::settingsKey(), config.toVariantMap()); settings.sync();
+    QWidget window; ProgramPanel panel(&window);
+    auto *fader = panel.findChild<QSlider *>("programMasterFader"); CHECK(fader && fader->isEnabled());
+    int buttons = 0;
+    QStringList events;
+    vtrpon::MidiControlInput input(panel.operations(), [&](const QString &id) { ++buttons; events.append(id); });
+    input.setVolumeValueProvider([&](const QString &) {
+      const auto gain = panel.masterGain();
+      return gain <= 0 ? -960 : int(std::lround(200.0 * std::log10(gain)));
+    });
+    const auto send = [&](int value) { vtrpon::MidiControlTestAccess::send(input, 0xb0 | (7 << 8) | (quint32(value) << 16)); };
+    input.setConfigurationMode(true);
+    for (int raw = 0; raw <= 127; ++raw) send(raw);
+    CHECK(fader->value() == 0);
+    input.reload();
+    vtrpon::MidiControlTestAccess::send(input, 0x7f3c90);
+    input.setConfigurationMode(false);
+    vtrpon::MidiControlTestAccess::send(input, 0x7f3c90); CHECK(buttons == 0);
+    vtrpon::MidiControlTestAccess::send(input, 0x003c80);
+    vtrpon::MidiControlTestAccess::send(input, 0x7f3c90); CHECK(buttons == 1);
+    send(10); CHECK(fader->value() == 0);
+    send(102); CHECK(fader->value() == 0);
+    send(127); CHECK(fader->value() == 60);
+    send(0); CHECK(fader->value() == -960);
+    QDialog modal; modal.setModal(true); modal.open(); application.processEvents();
+    send(127); CHECK(fader->value() == -960);
+    modal.close(); application.processEvents();
+    send(126); CHECK(fader->value() > 0);
+    fader->setValue(-100); send(20); CHECK(fader->value() == -100);
+    send(110); CHECK(fader->value() > -100);
+    fader->setValue(0);
+    input.setConfigurationMode(true); send(102); input.setConfigurationMode(false);
+    send(102); send(110); CHECK(fader->value() > 0);
+    int volumeOperations = 0;
+    QObject::connect(panel.operations(), &ControllerOperations::operationAboutToExecute, &window,
+        [&](ControllerOperations::Action action, const QVariantList &, const QString &) {
+          if (action == ControllerOperations::Action::SetMasterVolume) { ++volumeOperations; events.append("volume"); }
+        });
+    fader->setValue(0); events.clear();
+    const int beforeBurst = buttons;
+    vtrpon::MidiControlTestAccess::enqueue(input, 0x003c80);
+    for (int packet = 0; packet < 20000; ++packet) {
+      vtrpon::MidiControlTestAccess::enqueue(input, 0xb0 | (7 << 8) | (quint32(packet % 128) << 16));
+      if (packet == 2000) vtrpon::MidiControlTestAccess::enqueue(input, 0x7f3c90);
+      if (packet == 4000) vtrpon::MidiControlTestAccess::enqueue(input, 0x003c80);
+      if (packet == 6000) vtrpon::MidiControlTestAccess::enqueue(input, 0x7f3d90);
+      if (packet == 8000) vtrpon::MidiControlTestAccess::enqueue(input, 0x003d80);
+    }
+    vtrpon::MidiControlTestAccess::enqueue(input, 0x7f07b0);
+    vtrpon::MidiControlTestAccess::drain(input);
+    CHECK(buttons == beforeBurst + 2);
+    CHECK(events == QStringList({"TakeOnAir", "OffAir", "volume"}));
+    CHECK(volumeOperations == 1 && fader->value() == 60);
+    input.setConfigurationMode(true);
+    vtrpon::MidiControlTestAccess::send(input, 0x7f3c90);
+    vtrpon::MidiControlTestAccess::enqueue(input, 0x003c80);
+    input.setConfigurationMode(false);
+    const int beforeReleasedButton = buttons;
+    vtrpon::MidiControlTestAccess::enqueue(input, 0x7f3c90);
+    vtrpon::MidiControlTestAccess::drain(input);
+    CHECK(buttons == beforeReleasedButton + 1);
+    input.stop();
+    std::puts("MIDI save/resume, held buttons, Pickup, modal suspension, real MASTER fader and 20,000-CC burst with both buttons: PASS");
+    return 0;
+  }
   const bool repeatControlsOnly = argc == 5 &&
       QString::fromLocal8Bit(argv[4]) == QStringLiteral("--repeat-controls-only");
   const bool liveControlsOnly = argc == 5 &&

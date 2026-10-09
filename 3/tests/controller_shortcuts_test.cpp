@@ -166,6 +166,14 @@ bool runControllerShortcutsRegression() {
     SHORTCUT_CHECK(lastSource == QStringLiteral("Shortcut"));
   }
   const QKeySequence settingsKey(Qt::CTRL | Qt::ALT | Qt::Key_S);
+  for (const auto &definition : shortcuts::definitions()) {
+    const auto expected = expectedOperation(definition.id);
+    const int before = handlerCalls;
+    SHORTCUT_CHECK(routes.triggerAction(definition.id, "MIDI"));
+    SHORTCUT_CHECK(handlerCalls == before + 1 && notified == handlerCalls);
+    SHORTCUT_CHECK(lastAction == expected.action && lastArguments == expected.arguments && lastSource == "MIDI");
+  }
+  SHORTCUT_CHECK(!routes.triggerAction(QStringLiteral("InvalidMidiAction"), "MIDI"));
   auto *settingsShortcut = findShortcut(settingsKey);
   SHORTCUT_CHECK(settingsShortcut && settingsAction->shortcut() == settingsKey);
   SHORTCUT_CHECK(settingsAction->shortcutContext() == Qt::WidgetShortcut);
