@@ -142,6 +142,21 @@ public:
     installOperation(Action::Exit, Op::Exit);
     installOperation(Action::NextOutputDisplay, Op::NextOutputDisplay);
 
+    const auto installFixedOperation = [this, guarded](const QString &id, Op operation,
+                                                      const QVariantList &arguments = {}) {
+      handlers_.insert(id, [guarded, operation, arguments] {
+        if (guarded) (void)guarded->dispatch(operation, arguments);
+      });
+    };
+    installFixedOperation(QStringLiteral("SelectPreviousItem"), Op::SelectRelativeItem, {-1});
+    installFixedOperation(QStringLiteral("SelectNextItem"), Op::SelectRelativeItem, {1});
+    installFixedOperation(QStringLiteral("RemoveSelectedItem"), Op::RemoveSelectedItem);
+    installFixedOperation(QStringLiteral("OpenSettings"), Op::OpenSettings);
+    installFixedOperation(QStringLiteral("IncreaseItemVolume"), Op::AdjustItemVolume, {10});
+    installFixedOperation(QStringLiteral("DecreaseItemVolume"), Op::AdjustItemVolume, {-10});
+    installFixedOperation(QStringLiteral("IncreaseMasterVolume"), Op::AdjustMasterVolume, {10});
+    installFixedOperation(QStringLiteral("DecreaseMasterVolume"), Op::AdjustMasterVolume, {-10});
+
     if (controlWindow) {
       const QKeySequence settingsKey(Qt::CTRL | Qt::ALT | Qt::Key_S);
       if (auto *settingsAction = controlWindow->findChild<QAction *>(QStringLiteral("settingsAction"))) {

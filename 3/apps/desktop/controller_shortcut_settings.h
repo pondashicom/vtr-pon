@@ -44,6 +44,22 @@ namespace vtrpon::shortcutSettings {
 
 
 struct Definition { QString id; QList<QKeySequence> keys; };
+// Controller-wide fixed keys are outside the user-editable bindings, but are
+// also operations that external controllers can assign.
+struct FixedDefinition { QString id; QKeySequence key; };
+inline const QList<FixedDefinition> &fixedDefinitions() {
+  static const QList<FixedDefinition> result{
+    {QStringLiteral("SelectPreviousItem"), QKeySequence(Qt::Key_Up)},
+    {QStringLiteral("SelectNextItem"), QKeySequence(Qt::Key_Down)},
+    {QStringLiteral("RemoveSelectedItem"), QKeySequence(Qt::Key_Delete)},
+    {QStringLiteral("OpenSettings"), QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_S)},
+    {QStringLiteral("IncreaseItemVolume"), QKeySequence(Qt::CTRL | Qt::Key_Up)},
+    {QStringLiteral("DecreaseItemVolume"), QKeySequence(Qt::CTRL | Qt::Key_Down)},
+    {QStringLiteral("IncreaseMasterVolume"), QKeySequence(Qt::SHIFT | Qt::Key_Up)},
+    {QStringLiteral("DecreaseMasterVolume"), QKeySequence(Qt::SHIFT | Qt::Key_Down)}
+  };
+  return result;
+}
 inline const QList<Definition> &definitions() {
   static const QList<Definition> result = [] {
     QList<Definition> rows{

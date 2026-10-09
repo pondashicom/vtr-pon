@@ -14,6 +14,8 @@ inline QStringList actionIds() {
   QStringList result;
   for (int index : shortcutSettings::displayOrder())
     result.append(shortcutSettings::definitions().at(index).id);
+  for (const auto &definition : shortcutSettings::fixedDefinitions())
+    result.append(definition.id);
   result.append({QStringLiteral("SetMasterVolume"), QStringLiteral("SetItemVolume"),
                  QStringLiteral("SetEditVolume"), QStringLiteral("SetBgmVolume")});
   return result;
@@ -23,6 +25,8 @@ inline bool isVolume(const QString &id) {
          id == QLatin1StringView("SetEditVolume") || id == QLatin1StringView("SetBgmVolume");
 }
 inline QString actionLabel(const QString &id) {
+  for (const auto &definition : shortcutSettings::fixedDefinitions())
+    if (definition.id == id) return uiText((QStringLiteral("midi.") + id).toUtf8().constData());
   if (isVolume(id)) return uiText((QStringLiteral("midi.") + id).toUtf8().constData());
   if (id.startsWith(QLatin1StringView("SelectItem"))) return uiText("settings.shortcuts.SelectItem").arg(id.mid(10));
   if (id.startsWith(QLatin1StringView("ActivatePlaylist"))) return uiText("settings.shortcuts.ActivatePlaylist").arg(id.mid(16));

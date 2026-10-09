@@ -50,6 +50,14 @@
     <message id="midi.SetItemVolume"><source>ON AIR item volume</source><translation>オンエアのアイテム音量</translation></message>
     <message id="midi.SetEditVolume"><source>Nominal volume (EDIT)</source><translation>規定音量（エディット）</translation></message>
     <message id="midi.SetBgmVolume"><source>BGM volume</source><translation>BGM音量</translation></message>
+    <message id="midi.SelectPreviousItem"><source>Select the item above</source><translation>上のアイテムを選択</translation></message>
+    <message id="midi.SelectNextItem"><source>Select the item below</source><translation>下のアイテムを選択</translation></message>
+    <message id="midi.RemoveSelectedItem"><source>Delete the selected item</source><translation>選択アイテムを削除</translation></message>
+    <message id="midi.OpenSettings"><source>Open Settings</source><translation>設定画面を開く</translation></message>
+    <message id="midi.IncreaseItemVolume"><source>Increase ON AIR item volume by 1 dB</source><translation>オンエアのアイテム音量を1 dB上げる</translation></message>
+    <message id="midi.DecreaseItemVolume"><source>Decrease ON AIR item volume by 1 dB</source><translation>オンエアのアイテム音量を1 dB下げる</translation></message>
+    <message id="midi.IncreaseMasterVolume"><source>Increase master volume by 1 dB</source><translation>マスター音量を1 dB上げる</translation></message>
+    <message id="midi.DecreaseMasterVolume"><source>Decrease master volume by 1 dB</source><translation>マスター音量を1 dB下げる</translation></message>
 
     <message id="settings.updates.title"><source>Updates and notices</source><translation>アップデートと通知</translation></message>
     <message id="settings.updates.description"><source>Choose when VTR-PON checks for updates and whether to send a usage notice.</source><translation>アップデートの自動確認と利用状況通知を設定します。</translation></message>

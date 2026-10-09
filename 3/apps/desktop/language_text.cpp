@@ -101,6 +101,22 @@ constexpr auto kUiTextIds = std::to_array<const char *>({
     QT_TRID_NOOP("midi.SetEditVolume"),
     //% "BGM volume"
     QT_TRID_NOOP("midi.SetBgmVolume"),
+    //% "Select the item above"
+    QT_TRID_NOOP("midi.SelectPreviousItem"),
+    //% "Select the item below"
+    QT_TRID_NOOP("midi.SelectNextItem"),
+    //% "Delete the selected item"
+    QT_TRID_NOOP("midi.RemoveSelectedItem"),
+    //% "Open Settings"
+    QT_TRID_NOOP("midi.OpenSettings"),
+    //% "Increase ON AIR item volume by 1 dB"
+    QT_TRID_NOOP("midi.IncreaseItemVolume"),
+    //% "Decrease ON AIR item volume by 1 dB"
+    QT_TRID_NOOP("midi.DecreaseItemVolume"),
+    //% "Increase master volume by 1 dB"
+    QT_TRID_NOOP("midi.IncreaseMasterVolume"),
+    //% "Decrease master volume by 1 dB"
+    QT_TRID_NOOP("midi.DecreaseMasterVolume"),
     //% "Select output format"
     QT_TRID_NOOP("decklink.select_format"),
     //% "Assign each enabled output to a different hardware channel. Fill and Key use the same video format and source frame. FTB fades them to transparency. Audio is sent to Composite and Fill; Key is silent. Synchronized playback uses a common locked reference when required by the device."

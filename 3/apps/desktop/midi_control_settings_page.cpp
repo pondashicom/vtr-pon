@@ -201,6 +201,8 @@ void MidiControlSettingsPage::updateRows() {
     const auto &id = ids_[row]; table_->item(row, 0)->setText(midiControl::actionLabel(id));
     QStringList keys;
     for (const auto &key : shortcuts.value(id).toArray()) keys.append(QKeySequence::fromString(key.toString(), QKeySequence::PortableText).toString(QKeySequence::NativeText));
+    for (const auto &definition : shortcutSettings::fixedDefinitions())
+      if (definition.id == id) keys.append(definition.key.toString(QKeySequence::NativeText));
     table_->item(row, 1)->setText(keys.join(QStringLiteral(" / ")));
     const auto binding = bindings_.value(id).toObject();
     table_->item(row, 2)->setText(binding.isEmpty() ? uiText("midi.unassigned") : QStringLiteral("%1  Ch %2  #%3").arg(binding.value("type").toString() == "cc" ? QStringLiteral("CC") : QStringLiteral("Note")).arg(binding.value("channel").toInt()).arg(binding.value("number").toInt()));

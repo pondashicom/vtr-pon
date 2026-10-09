@@ -38,6 +38,17 @@ ExpectedOperation expectedOperation(const QString &id) {
       {QStringLiteral("BgmFadeOut"), Op::BgmFadeOutConfigured}
   };
   if (aliases.contains(id)) return {aliases.value(id), {}};
+  const QHash<QString, ExpectedOperation> fixed{
+      {QStringLiteral("SelectPreviousItem"), {Op::SelectRelativeItem, {-1}}},
+      {QStringLiteral("SelectNextItem"), {Op::SelectRelativeItem, {1}}},
+      {QStringLiteral("RemoveSelectedItem"), {Op::RemoveSelectedItem, {}}},
+      {QStringLiteral("OpenSettings"), {Op::OpenSettings, {}}},
+      {QStringLiteral("IncreaseItemVolume"), {Op::AdjustItemVolume, {10}}},
+      {QStringLiteral("DecreaseItemVolume"), {Op::AdjustItemVolume, {-10}}},
+      {QStringLiteral("IncreaseMasterVolume"), {Op::AdjustMasterVolume, {10}}},
+      {QStringLiteral("DecreaseMasterVolume"), {Op::AdjustMasterVolume, {-10}}}
+  };
+  if (fixed.contains(id)) return fixed.value(id);
   for (const auto &prefix : {QStringLiteral("SelectItem"), QStringLiteral("ActivatePlaylist")}) {
     if (id.startsWith(prefix)) {
       return {prefix == QStringLiteral("SelectItem") ? Op::SelectItemNumber : Op::ActivatePlaylist,
@@ -133,6 +144,8 @@ bool runControllerShortcutsRegression() {
   operations.bind<>(Op::OpenSettings, &window, [&] { ++handlerCalls; });
   operations.bind<int>(Op::AdjustItemVolume, &window, [&](int) { ++handlerCalls; });
   operations.bind<int>(Op::AdjustMasterVolume, &window, [&](int) { ++handlerCalls; });
+  operations.bind<int>(Op::SelectRelativeItem, &window, [&](int) { ++handlerCalls; });
+  operations.bind<>(Op::RemoveSelectedItem, &window, [&] { ++handlerCalls; });
   int notified = 0;
   Op lastAction = Op::Count;
   QVariantList lastArguments;
@@ -174,6 +187,13 @@ bool runControllerShortcutsRegression() {
     SHORTCUT_CHECK(lastAction == expected.action && lastArguments == expected.arguments && lastSource == "MIDI");
   }
   SHORTCUT_CHECK(!routes.triggerAction(QStringLiteral("InvalidMidiAction"), "MIDI"));
+  for (const auto &definition : shortcuts::fixedDefinitions()) {
+    const auto expected = expectedOperation(definition.id);
+    const int before = handlerCalls;
+    SHORTCUT_CHECK(routes.triggerAction(definition.id, "MIDI"));
+    SHORTCUT_CHECK(handlerCalls == before + 1 && notified == handlerCalls);
+    SHORTCUT_CHECK(lastAction == expected.action && lastArguments == expected.arguments && lastSource == "MIDI");
+  }
   auto *settingsShortcut = findShortcut(settingsKey);
   SHORTCUT_CHECK(settingsShortcut && settingsAction->shortcut() == settingsKey);
   SHORTCUT_CHECK(settingsAction->shortcutContext() == Qt::WidgetShortcut);

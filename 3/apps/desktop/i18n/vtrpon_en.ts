@@ -50,6 +50,14 @@
     <message id="midi.SetItemVolume"><source>ON AIR item volume</source><translation>ON AIR item volume</translation></message>
     <message id="midi.SetEditVolume"><source>Nominal volume (EDIT)</source><translation>Nominal volume (EDIT)</translation></message>
     <message id="midi.SetBgmVolume"><source>BGM volume</source><translation>BGM volume</translation></message>
+    <message id="midi.SelectPreviousItem"><source>Select the item above</source><translation>Select the item above</translation></message>
+    <message id="midi.SelectNextItem"><source>Select the item below</source><translation>Select the item below</translation></message>
+    <message id="midi.RemoveSelectedItem"><source>Delete the selected item</source><translation>Delete the selected item</translation></message>
+    <message id="midi.OpenSettings"><source>Open Settings</source><translation>Open Settings</translation></message>
+    <message id="midi.IncreaseItemVolume"><source>Increase ON AIR item volume by 1 dB</source><translation>Increase ON AIR item volume by 1 dB</translation></message>
+    <message id="midi.DecreaseItemVolume"><source>Decrease ON AIR item volume by 1 dB</source><translation>Decrease ON AIR item volume by 1 dB</translation></message>
+    <message id="midi.IncreaseMasterVolume"><source>Increase master volume by 1 dB</source><translation>Increase master volume by 1 dB</translation></message>
+    <message id="midi.DecreaseMasterVolume"><source>Decrease master volume by 1 dB</source><translation>Decrease master volume by 1 dB</translation></message>
 
     <message id="settings.updates.title"><source>Updates and notices</source><translation>Updates and notices</translation></message>
     <message id="settings.updates.description"><source>Choose when VTR-PON checks for updates and whether to send a usage notice.</source><translation>Choose when VTR-PON checks for updates and whether to send a usage notice.</translation></message>

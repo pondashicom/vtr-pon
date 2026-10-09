@@ -127,6 +127,16 @@ int main(int argc, char **argv) {
   auto config = m::defaults(); config.insert("bindings", QJsonObject{{"TakeOnAir", note}, {"SetMasterVolume", cc}});
   CHECK(m::validationError(config).isEmpty());
   CHECK(!m::actionIds().contains("ManualTransition"));
+  const auto midiActions = m::actionIds();
+  QSet<QString> uniqueMidiActions;
+  for (const auto &id : midiActions) uniqueMidiActions.insert(id);
+  CHECK(uniqueMidiActions.size() == midiActions.size());
+  CHECK(midiActions.size() == vtrpon::shortcutSettings::definitions().size() +
+        vtrpon::shortcutSettings::fixedDefinitions().size() + 4);
+  for (const auto &definition : vtrpon::shortcutSettings::definitions())
+    CHECK(midiActions.contains(definition.id));
+  for (const auto &definition : vtrpon::shortcutSettings::fixedDefinitions())
+    CHECK(midiActions.contains(definition.id));
   auto previousRange = cc; previousRange.insert("minimum", -600); previousRange.insert("maximum", 0);
   auto previousConfig = m::defaults(); previousConfig.insert("enabled", true); previousConfig.insert("device", "saved-device");
   previousConfig.insert("bindings", QJsonObject{{"TakeOnAir", note}, {"SetMasterVolume", previousRange}, {"ManualTransition", QJsonObject{{"type", "cc"}, {"channel", 1}, {"number", 9}}}});
@@ -231,6 +241,19 @@ int main(int argc, char **argv) {
   auto *save = page->findChild<QPushButton *>("midiSaveButton"); CHECK(table && learn && save);
   window.setAttribute(Qt::WA_DontShowOnScreen);
   window.resize(900, 900); window.show(); app.processEvents();
+  for (const auto &definition : vtrpon::shortcutSettings::fixedDefinitions()) {
+    const int row = midiActions.indexOf(definition.id);
+    CHECK(row >= 0 && !table->item(row, 0)->text().startsWith("midi."));
+    CHECK(table->item(row, 1)->text() == definition.key.toString(QKeySequence::NativeText));
+  }
+  if (app.arguments().size() > 1) {
+    CHECK(table->item(midiActions.indexOf("SelectPreviousItem"), 0)->text() == QStringLiteral("上のアイテムを選択"));
+    CHECK(table->item(midiActions.indexOf("SelectNextItem"), 0)->text() == QStringLiteral("下のアイテムを選択"));
+  }
+  table->setCurrentCell(midiActions.indexOf("SelectPreviousItem"), 0);
+  learn->click(); input.received("note", 1, 62, 127, true); CHECK(!learn->isChecked());
+  save->click(); settings.sync();
+  CHECK(m::load(settings).value("bindings").toObject().value("SelectPreviousItem").toObject().value("number").toInt() == 62);
   const int masterRow = m::actionIds().indexOf("SetMasterVolume");
   table->scrollToItem(table->item(masterRow, 0), QAbstractItemView::PositionAtCenter);
   app.processEvents();
