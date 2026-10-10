@@ -1,6 +1,7 @@
 #include "decklink.h"
 #include "deck_source_session.h"
 #include "live_audio_source.h"
+#include "wasapi_raw_audio_source.h"
 #include <mutex>
 #include "program_audio_bridge.h"
 #include "network_video_source.h"
@@ -768,10 +769,10 @@ bool DeckSourceSession::startUvcAudio(const QString &audioDeviceId,
         return true;
     }
     const bool network = (vtrpon::isNetworkVideoSource(audioDeviceId) || vtrpon::isDeckLinkSource(audioDeviceId));
-    if (!network && !hasElementFactory("wasapi2src")) {
+    if (!network && !vtrpon::registerWasapiRawAudioSource()) {
         if (errorDetail) {
             *errorDetail = QStringLiteral(
-                "The WASAPI audio input plugin is unavailable.");
+                "The shared RAW audio input is unavailable.");
         }
         return false;
     }
@@ -780,7 +781,7 @@ bool DeckSourceSession::startUvcAudio(const QString &audioDeviceId,
         ? QStringLiteral("deck-a") : QStringLiteral("deck-b");
     const QString input = network
         ? QStringLiteral("appsrc name=%1-uvc-audio-source is-live=true format=time do-timestamp=true block=false max-buffers=0 max-bytes=0 max-time=200000000 leaky-type=downstream ! ")
-        : QStringLiteral("wasapi2src name=%1-uvc-audio-source do-timestamp=true provide-clock=false low-latency=true ! ");
+        : QStringLiteral("vtrponwasapirawsrc name=%1-uvc-audio-source ! ");
     const QString description = (input + QStringLiteral(
         "queue max-size-buffers=0 max-size-bytes=0 "
         "max-size-time=200000000 ! "

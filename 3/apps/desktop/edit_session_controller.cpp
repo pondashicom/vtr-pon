@@ -1,6 +1,7 @@
 #include "decklink.h"
 #include "edit_session_controller.h"
 #include "live_audio_source.h"
+#include "wasapi_raw_audio_source.h"
 #include "media_thumbnailer.h"
 #include "edit_pfl_output.h"
 #include "edit_pfl_protocol.h"
@@ -49,9 +50,13 @@ public:
       return false;
     }
     const bool network = (vtrpon::isNetworkVideoSource(audioDeviceId) || vtrpon::isDeckLinkSource(audioDeviceId));
+    if (!network && !vtrpon::registerWasapiRawAudioSource()) {
+      if (detail) *detail = QStringLiteral("The shared RAW audio input is unavailable.");
+      return false;
+    }
     const QString input = network
         ? QStringLiteral("appsrc name=edit-live-source is-live=true format=time do-timestamp=true block=false max-buffers=0 max-bytes=0 max-time=200000000 leaky-type=downstream ! ")
-        : QStringLiteral("wasapi2src name=edit-live-source do-timestamp=true provide-clock=false low-latency=true ! ");
+        : QStringLiteral("vtrponwasapirawsrc name=edit-live-source ! ");
     const QString description = input + QStringLiteral(
         "queue max-size-buffers=0 max-size-bytes=0 max-size-time=200000000 ! "
         "audioconvert ! audioresample ! "

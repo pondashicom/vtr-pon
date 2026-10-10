@@ -47,10 +47,10 @@ void test_live_audio_source_init(TestLiveAudioSource *self) {
 
 bool substituteLiveAudioSource() {
     auto *registry = gst_registry_get();
-    if (auto *feature = gst_registry_find_feature(registry, "wasapi2src", GST_TYPE_ELEMENT_FACTORY)) {
+    if (auto *feature = gst_registry_find_feature(registry, "vtrponwasapirawsrc", GST_TYPE_ELEMENT_FACTORY)) {
         gst_registry_remove_feature(registry, feature);
         gst_object_unref(feature);
     }
-    return gst_element_register(nullptr, "wasapi2src", GST_RANK_NONE, test_live_audio_source_get_type());
+    return gst_element_register(nullptr, "vtrponwasapirawsrc", GST_RANK_NONE, test_live_audio_source_get_type());
 }
 }

@@ -107,20 +107,35 @@ public:
                     "public CUE reaches Ready");
     }
 
-    bool liveAudio()
+    bool liveAudio(const QString &endpoint = {})
     {
         using Source = DualDeckPlayer::DeckSource;
-        CHECK(substituteLiveAudioSource(), "live audio capture is replaced with a test tone");
-        const Source source{Source::Type::Uvc, vtrpon::liveAudioSourcePath(QStringLiteral("usb-input"))};
+        if (endpoint.isEmpty())
+            CHECK(substituteLiveAudioSource(), "live audio capture is replaced with a test tone");
+        const Source source{Source::Type::Uvc, vtrpon::liveAudioSourcePath(
+            endpoint.isEmpty() ? QStringLiteral("usb-input") : endpoint)};
         CHECK(player_.cue(source) && cueReady() && player_.takeCue() && player_.play(),
               "audio-only live input can be taken ON AIR without a video frame");
         CHECK(player_.isPlaying() && player_.currentSourceHasAudio() &&
               player_.positionMs() == -1 && player_.durationMs() == -1,
               "ON AIR live audio reports an active audio source without a file clock");
+        const auto verifyNativeSignal = [&] {
+            if (endpoint.isEmpty()) return true;
+            return wait([&] {
+                const auto levels = player_.audioLevels();
+                const auto valid = [](const auto &level) {
+                    return level.leftPeakDb > -24 && level.leftPeakDb < -17
+                        && level.rightPeakDb > -24 && level.rightPeakDb < -17 && !level.clipped;
+                };
+                return valid(levels.input) && valid(levels.masterOutput);
+            }, "native RAW stereo tone reaches input and master meters at the reference level");
+        };
+        CHECK(verifyNativeSignal(), "first deck delivers native RAW audio through the existing mixer");
         CHECK(player_.pause() && !player_.isPlaying() && player_.play() && player_.isPlaying(),
               "ON AIR live audio pause and resume use the live transport");
         CHECK(player_.cue(source) && cueReady() && player_.takeCue() && player_.play(),
               "same-endpoint live audio retake can use the other deck");
+        CHECK(verifyNativeSignal(), "the other deck delivers native RAW audio after retake");
         CHECK(player_.clearMedia() == DualDeckPlayer::ClearMediaResult::Cleared, "OFF AIR clears live audio from both decks");
         CHECK(player_.cue(source) && cueReady() && player_.takeCue(),
               "live audio can be reacquired after OFF AIR");
@@ -357,7 +372,9 @@ int main(int argc, char **argv)
         DualDeckPlayer player(&programWindow, &monitorWindow, false, &uvcSources);
         Contract contract(player);
         const auto arguments = application.arguments();
-        ok = arguments.size() == 4 && arguments.at(1) == QStringLiteral("--native-cue")
+        ok = arguments.size() == 3 && arguments.at(1) == QStringLiteral("--live-audio-endpoint")
+            ? contract.liveAudio(arguments.at(2))
+            : arguments.size() == 4 && arguments.at(1) == QStringLiteral("--native-cue")
             ? contract.nativeCue(arguments.at(2), arguments.at(3))
             : contract.run(wave, pdf, imageA, imageB);
         if (ok && arguments.size() == 1) ok = contract.liveAudio();

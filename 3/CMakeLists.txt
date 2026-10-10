@@ -107,6 +107,8 @@ pkg_check_modules(GSTREAMER REQUIRED IMPORTED_TARGET
   gstreamer-pbutils-1.0)
 pkg_check_modules(GSTREAMER_APP REQUIRED IMPORTED_TARGET
   gstreamer-app-1.0)
+pkg_check_modules(GSTREAMER_AUDIO REQUIRED IMPORTED_TARGET
+  gstreamer-audio-1.0)
 
 find_path(VTRPON_ZLIB_INCLUDE_DIR zlib.h PATHS ${GSTREAMER_INCLUDE_DIRS} REQUIRED)
 find_library(VTRPON_ZLIB_LIBRARY NAMES z zlib PATHS ${GSTREAMER_LIBRARY_DIRS} REQUIRED)
@@ -1328,6 +1330,7 @@ if(MSVC)
     /DELAYLOAD:gobject-2.0-0.dll
     /DELAYLOAD:glib-2.0-0.dll
     /DELAYLOAD:gstapp-1.0-0.dll
+    /DELAYLOAD:gstaudio-1.0-0.dll
     /DELAYLOAD:gstd3d11-1.0-0.dll
     /DELAYLOAD:gstpbutils-1.0-0.dll)
   target_compile_options(vtr-pon PRIVATE /utf-8)
@@ -1406,6 +1409,38 @@ endforeach()
 if(WIN32 AND BUILD_TESTING)
   set_tests_properties(gpu-configuration PROPERTIES
     ENVIRONMENT_MODIFICATION "PATH=path_list_prepend:${GSTREAMER_RUNTIME_ROOT}/bin")
+endif()
+
+# Shared Windows RAW capture is embedded in each consumer; no external plugin is required.
+qt_add_library(vtrpon-wasapi-raw-audio STATIC
+  apps/desktop/wasapi_raw_audio_source.cpp
+  apps/desktop/wasapi_capture_endpoint.h
+  apps/desktop/wasapi_raw_audio_source.h)
+target_link_libraries(vtrpon-wasapi-raw-audio PRIVATE
+  PkgConfig::GSTREAMER PkgConfig::GSTREAMER_APP PkgConfig::GSTREAMER_AUDIO)
+target_compile_definitions(vtrpon-wasapi-raw-audio PRIVATE NOMINMAX WIN32_LEAN_AND_MEAN)
+if(WIN32)
+  target_link_libraries(vtrpon-wasapi-raw-audio PRIVATE ole32 uuid)
+endif()
+if(MSVC)
+  target_compile_options(vtrpon-wasapi-raw-audio PRIVATE /utf-8)
+endif()
+foreach(raw_audio_consumer IN ITEMS
+    vtr-pon program-playout-transition-test deck-source-session-test
+    dual-deck-player-contract-test playlist-panel-drag-drop-test)
+  if(TARGET ${raw_audio_consumer})
+    target_link_libraries(${raw_audio_consumer} PRIVATE vtrpon-wasapi-raw-audio)
+  endif()
+endforeach()
+
+# Native initialization/error/stop checks avoid physical devices by default.
+if(WIN32 AND BUILD_TESTING)
+  qt_add_executable(wasapi-raw-audio-source-test tests/wasapi_raw_audio_source_test.cpp)
+  target_include_directories(wasapi-raw-audio-source-test PRIVATE apps/desktop)
+  target_link_libraries(wasapi-raw-audio-source-test PRIVATE
+    vtrpon-wasapi-raw-audio PkgConfig::GSTREAMER PkgConfig::GSTREAMER_APP)
+  add_test(NAME wasapi-raw-audio-source COMMAND wasapi-raw-audio-source-test)
+  set_tests_properties(wasapi-raw-audio-source PROPERTIES TIMEOUT 20)
 endif()
 
 # The host bridge contains no vendor headers or libraries. All media consumers
