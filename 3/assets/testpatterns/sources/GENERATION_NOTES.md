@@ -139,6 +139,24 @@ ffmpeg -hide_banner -loglevel error -n -f lavfi -i 'color=c=black@0:s=1920x1080:
 ffmpeg -hide_banner -loglevel error -n -loop 1 -framerate 30 -i safety_area_source.png -t 20 -an -c:v libvpx-vp9 -lossless 1 -pix_fmt yuva420p -auto-alt-ref 0 Safety_Area_Pixel_Ruler_1080p30_20s.webm
 ```
 
+## ステレオチャンネル確認動画
+
+- `Audio_Stereo_Check_1kHz_1080p30_180s.mp4`: 1920×1080、30fps、180秒（5,400フレーム）、H.264 / yuv420p / BT.709 limited、AAC 320kbps設定 / 48kHzステレオ。
+- Lのみ10秒 → Rのみ10秒 → L+R 10秒を6回繰り返す。画面中央の `L`／`R`／`L+R` も同じ10秒境界で切り替わる。
+- 音声は1kHz正弦波、生成信号のピーク−18dBFS、RMS約−21.01dBFS。片側区間の非出力側はゼロ、L+R区間は左右同相・同レベル。
+- 音声の切り替えは48万サンプル単位。AACはM/S・intensity stereoを無効にして左右を符号化する。圧縮音声の切り替え境界にはコーデック由来の短い過渡区間がある。
+- 生成元: `generate_audio_stereo_check.py`。Python + Pillow、PATH上のFFmpeg（libx264/AAC）、Windows Arial Boldを使用。フォントファイルは同梱しない。
+- スクリプトは動画と、エンコード済み動画の5秒・15秒・25秒地点から3枚の確認画像を生成する。既存出力は上書きしない。
+- `catalog.json` の音声素材先頭に標準登録。通常ビルドおよび配布処理の既存コピー対象に含まれる。
+- 2026-10-10検証: 全5,400フレームの表示と300フレームごとの切り替え、全18区間の1kHz・左右出力・同相を確認。AAC境界の前後100msを除く非出力チャンネルはゼロ、出力側ピークは約−17.993dBFS、RMS約−21.012dBFS。
+  通常ビルド、`test-pattern-store`（1/1）、GStreamerでの全編デコード（無音・非表示出力）に成功。ソースと通常ビルドの2配置先で素材のSHA-256一致を確認。実機スピーカーでの試聴・オンエア表示は未確認。
+
+リポジトリルートからの生成コマンド:
+
+```powershell
+python assets/testpatterns/sources/generate_audio_stereo_check.py
+```
+
 ## 4:3素材
 
 - `SMPTE_HD_Color_Bars_4x3_1440x1080p30_20s.mp4`: 既存SMPTE HDカラーバーの全パターンを1440×1080へ横方向に縮小。クロップなし。1kHz音声はストリームコピー。SD用SMPTE EG 1パターンの新規生成ではない。

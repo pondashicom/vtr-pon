@@ -9,7 +9,9 @@ int main(int argc, char **argv) {
   const auto file = temp.filePath(QStringLiteral("preferences.ini"));
   QSettings settings(file, QSettings::IniFormat);
   const auto bundled = vtrpon::testPatterns::defaults();
-  if (bundled.size() != 13 || vtrpon::testPatterns::load(settings) != bundled) return 2;
+  if (bundled.size() != 14 ||
+      !bundled.contains(QStringLiteral("builtin:Audio_Stereo_Check_1kHz_1080p30_180s.mp4")) ||
+      vtrpon::testPatterns::load(settings) != bundled) return 2;
   for (const auto &entry : bundled)
     if (!QFileInfo::exists(vtrpon::testPatterns::path(entry))) return 3;
   const auto custom = temp.filePath(QStringLiteral("User & Pattern.PNG"));
