@@ -51,6 +51,7 @@ public:
         auto *inputForm = new QFormLayout;
         inputModeLabel_ = new QLabel(this); inputMode_ = new QComboBox(this); inputMode_->setObjectName(QStringLiteral("deckLinkInputMode"));
         inputModeLabel_->setBuddy(inputMode_); inputForm->addRow(inputModeLabel_, inputMode_); layout->addLayout(inputForm);
+        inputHelp_ = new QLabel(this); inputHelp_->setWordWrap(true); vtrpon::setSettingsRole(inputHelp_, "description"); layout->addWidget(inputHelp_);
         status_ = new QLabel(this); status_->setWordWrap(true); status_->setTextInteractionFlags(Qt::TextSelectableByMouse); status_->setTextFormat(Qt::PlainText);
         vtrpon::setSettingsRole(status_, "status"); layout->addWidget(status_); layout->addStretch();
         reload(); retranslate();
@@ -79,6 +80,7 @@ public:
         }
         fillLabel_->setText(vtrpon::uiText("network_video.fill_format")); fillFormat_->setAccessibleName(fillLabel_->text());
         help_->setText(vtrpon::uiText("decklink.fill_key_help")); inputModeLabel_->setText(vtrpon::uiText("decklink.input_mode")); inputMode_->setAccessibleName(inputModeLabel_->text());
+        inputHelp_->setText(vtrpon::uiText("decklink.input_help"));
         channelSnapshot_.clear(); channels_[0]->clear(); refresh();
     }
 private:
@@ -145,7 +147,7 @@ private:
     vtrpon::AddonRuntimeStatusWidget *runtime_;
     vtrpon::DeckLinkSettings settings_;
     QStringList channelSnapshot_;
-    QLabel *title_, *description_, *fillLabel_, *help_, *inputModeLabel_, *status_, *deviceStatus_;
+    QLabel *title_, *description_, *fillLabel_, *help_, *inputModeLabel_, *inputHelp_, *status_, *deviceStatus_;
     QCheckBox *input_, *output_;
     QComboBox *inputMode_, *fillFormat_;
     std::array<QCheckBox *, 3> kinds_{};

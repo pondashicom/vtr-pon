@@ -506,6 +506,15 @@ EditSessionController::EditSessionController(EditPanel *panel,
               panel_->setLiveFrame({});
             }
           });
+  connect(uvcSessions, &UvcSourceSessionManager::sourceSuspended, this,
+          [this](const QString &path) {
+            if (path != liveDevicePath_) return;
+            liveAudio_->stop();
+            liveAudioNeedsStart_ = true;
+            livePreviewReady_ = false;
+            resetAudioPresentation();
+            if (panel_) panel_->setLiveFrame({});
+          });
   connect(uvcAudioMappings, &UvcAudioMappingStore::mappingChanged, this,
           [this](const QString &path, const QString &) {
             if (path != liveDevicePath_) return;
@@ -1464,8 +1473,16 @@ void EditSessionController::updateUi() {
   }
   if (player_.isAvailable()) player_.processBusMessages();
   if (!liveDevicePath_.isEmpty() && removalPendingId_ == 0) {
-    if (liveAudioNeedsStart_ && !player_.isBusy() && !playlistModel_->itemMediaOffline(editItemId_)) {
+    if (uvcSessions_ && uvcSessions_->sourceSuspendedForPriority(liveDevicePath_)) {
+      panel_->setLiveFrame({});
+      panel_->setStatus(vtrpon::LocalizedText("decklink.input_suspended"));
+      return;
+    }
+    const bool liveInputReady = !vtrpon::isDeckLinkSource(liveDevicePath_)
+        || (uvcSessions_ && uvcSessions_->sourceAvailable(liveDevicePath_));
+    if (liveAudioNeedsStart_ && liveInputReady && !player_.isBusy() && !playlistModel_->itemMediaOffline(editItemId_)) {
       liveAudioNeedsStart_ = false;
+      if (vtrpon::isDeckLinkSource(liveDevicePath_)) panel_->setStatus(QStringLiteral("EDIT | %1").arg(editFileName_));
       const auto state = playlistModel_->itemState(editItemId_);
       if (state) {
         const QString audioDeviceId = vtrpon::isLiveAudioSource(liveDevicePath_)

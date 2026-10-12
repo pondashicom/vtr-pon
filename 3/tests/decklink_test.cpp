@@ -1,5 +1,6 @@
 #include "decklink.h"
 #include "controller_settings.h"
+#include "uvc_source_session_manager.h"
 #include <QCoreApplication>
 #include <QLibrary>
 #include <QTemporaryDir>
@@ -14,7 +15,7 @@
 #define CHECK(value) do { if (!(value)) { std::fprintf(stderr, "Failed line %d: %s\n", __LINE__, #value); return 1; } } while(false)
 template<class F> bool waitFor(F f, int milliseconds = 4000) {
     const auto end = std::chrono::steady_clock::now() + std::chrono::milliseconds(milliseconds);
-    while (std::chrono::steady_clock::now() < end) { if (f()) return true; std::this_thread::sleep_for(std::chrono::milliseconds(10)); }
+    while (std::chrono::steady_clock::now() < end) { QCoreApplication::processEvents(); if (f()) return true; std::this_thread::sleep_for(std::chrono::milliseconds(10)); }
     return f();
 }
 struct Pipeline {
@@ -174,6 +175,58 @@ int main(int argc, char **argv) {
     CHECK(waitFor([&] { stats(counts); return counts[0] == 2 && counts[1] == 1; }));
     settings.outputEnabled = false; vtrpon::saveDeckLinkSettings(settings); secondReceiver.reset();
     CHECK(waitFor([&] { stats(counts); return counts[1] == 0; }));
+    qputenv("VTRPON_DECKLINK_TEST_SLOW_CLOSE", "1");
+    for (int i = 0; i < 4; ++i) {
+        Pipeline initial(false), replacement(false);
+        auto first = std::make_unique<vtrpon::DeckLinkReceiver>(path, initial.source, false);
+        sample = initial.sample(); CHECK(sample); gst_sample_unref(sample);
+        first.reset(); // Reopen before the mock driver's delayed close completes.
+        auto next = std::make_unique<vtrpon::DeckLinkReceiver>(path, replacement.source, false);
+        sample = replacement.sample(); CHECK(sample); gst_sample_unref(sample);
+    }
+    CHECK(waitFor([&] { stats(counts); return counts[1] == 0; }));
+    {
+        UvcSourceSessionManager manager(false);
+        options.modeId = 1000; const auto otherPath = vtrpon::deckLinkSourcePath(options);
+        // Adding an item reserves its input even before frames arrive, or while
+        // its device is disconnected. Admission checks must not open hardware.
+        manager.setRegisteredDevicePaths({path});
+        CHECK(manager.conflictingDeckLinkInput(path).isEmpty());
+        CHECK(manager.conflictingDeckLinkInput(otherPath) == path);
+        CHECK(manager.conflictingDeckLinkInput(QStringLiteral("decklink://100/0/2/0")) == path);
+        CHECK(manager.conflictingDeckLinkInput(QStringLiteral("decklink://100/1/2/0")).isEmpty());
+        CHECK(manager.conflictingDeckLinkInput(QStringLiteral("decklink://101/0/2/0")).isEmpty());
+        CHECK(manager.conflictingDeckLinkInput(QStringLiteral("uvc-test-device")).isEmpty());
+        stats(counts); CHECK(counts[1] == 0);
+        manager.setRegisteredDevicePaths({});
+        CHECK(manager.conflictingDeckLinkInput(otherPath).isEmpty());
+        manager.setAvailableDevicePaths({path, otherPath});
+        manager.setRegisteredDevicePaths({path, otherPath});
+        manager.setPreviewDevicePaths({path});
+        CHECK(waitFor([&] { return manager.sourceAvailable(path); }));
+        manager.setPreviewDevicePaths({path, otherPath});
+        CHECK(waitFor([&] { return manager.sourceSuspendedForPriority(otherPath); }));
+        CHECK(!manager.sourceOffline(otherPath)); // Occupancy is not MEDIA OFFLINE.
+        UvcSourceSessionManager::ProgramSource onAir, sharedOnAir;
+        QString reason;
+        CHECK(waitFor([&] { return manager.bindProgramDeck(0, otherPath, onAir, &reason); }));
+        CHECK(onAir.isValid() && manager.sourceSuspendedForPriority(path));
+        CHECK(waitFor([&] { return manager.sourceAvailable(otherPath); }));
+        CHECK(manager.bindProgramDeck(1, otherPath, sharedOnAir, &reason));
+        CHECK(onAir.pipeline == sharedOnAir.pipeline); // Duplicate items share one capture.
+        stats(counts); CHECK(counts[1] == 1);
+        manager.releaseProgramDeck(1);
+        CHECK(!manager.bindProgramDeck(1, path, sharedOnAir, &reason) && reason.isEmpty());
+        CHECK(!manager.sourceOffline(path)); // Standby waits rather than reporting a device failure.
+        manager.releaseProgramDeck(1);
+        manager.setEditPreviewPath(path);
+        CHECK(manager.sourceSuspendedForPriority(path) && !manager.sourceOffline(path));
+        manager.releaseProgramDeck(0);
+        CHECK(waitFor([&] { return manager.sourceAvailable(path) && !manager.sourceSuspendedForPriority(path); }));
+        manager.requestShutdown(); CHECK(waitFor([&] { return manager.shutdownComplete(); }));
+    }
+    CHECK(waitFor([&] { stats(counts); return counts[1] == 0; }));
+    qunsetenv("VTRPON_DECKLINK_TEST_SLOW_CLOSE");
     runtime.requestShutdown(); CHECK(waitFor([&] { return runtime.shutdownComplete(); }));
     std::puts("DeckLink capture sharing, GPU Composite/Fill/Key routing, straight/premultiplied/transparent pixels, paired timestamps, audio routing, synchronization fallback, duplicate/format rejection, fault isolation, absent hardware, reconnection and shutdown passed.");
     return 0;

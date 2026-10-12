@@ -14,6 +14,7 @@
 #include <gst/gst.h>
 #include <gst/video/video.h>
 
+#include <algorithm>
 #include <array>
 #include <atomic>
 #include <chrono>
@@ -196,7 +197,68 @@ public:
         programContext_ = context ? gst_context_ref(context) : nullptr;
     }
 
-    bool ensureSource(const QString &devicePath, QString *errorDetail)
+    static QString deckLinkPhysicalKey(const QString &path)
+    {
+        VtrPonDeckLinkStreamOptions options{};
+        if (!vtrpon::deckLinkSourceOptions(path, &options)) return {};
+        return QStringLiteral("%1/%2").arg(options.persistentId).arg(options.subDeviceIndex);
+    }
+
+    bool deckLinkSuppressed(const QString &path) const
+    {
+        const auto key = deckLinkPhysicalKey(path);
+        const auto selected = preferredDeckLinkPaths_.value(key);
+        return !key.isEmpty() && !selected.isEmpty() && selected != path;
+    }
+
+    QString conflictingDeckLinkInput(const QString &path) const
+    {
+        const auto key = deckLinkPhysicalKey(path);
+        if (key.isEmpty()) return {};
+        QSet<QString> reserved = registeredDevicePaths_;
+        for (const auto &active : deckDevicePaths_) reserved.insert(active);
+        for (const auto &pending : deckRequests_) reserved.insert(pending);
+        for (const auto &opening : startups_.keys()) reserved.insert(opening);
+        for (const auto &active : sessions_.keys()) reserved.insert(active);
+        if (!editDevicePath_.isEmpty()) reserved.insert(editDevicePath_);
+        auto candidates = reserved.values();
+        std::sort(candidates.begin(), candidates.end());
+        for (const auto &candidate : candidates) {
+            if (candidate != path && deckLinkPhysicalKey(candidate) == key)
+                return candidate;
+        }
+        return {};
+    }
+
+    bool selectDeckLinkInput(const QString &path, int priority)
+    {
+        const auto key = deckLinkPhysicalKey(path);
+        if (key.isEmpty()) return true;
+        auto previous = preferredDeckLinkPaths_.value(key);
+        if (!previous.isEmpty() && !sessions_.contains(previous) && !startups_.contains(previous) &&
+            !deckDevicePaths_.values().contains(previous) && !deckRequests_.values().contains(previous) && previous != editDevicePath_) previous.clear();
+        if (previous == path) return true;
+        if (!previous.isEmpty()) {
+            const bool bound = deckDevicePaths_.values().contains(previous);
+            const int previousPriority = bound || deckRequests_.values().contains(previous) ? 2 : previous == editDevicePath_ ? 1 : 0;
+            if (bound || priority <= previousPriority) {
+                // An empty detail keeps standby pending too: its caller treats
+                // a nonempty error as device failure and marks items OFFLINE.
+                return false;
+            }
+            if (const auto job = startups_.value(previous)) job->invalidated = true;
+            if (const auto session = sessions_.take(previous)) retireSession(session);
+            healthyDevicePaths_.remove(previous);
+            preferredDeckLinkPaths_.insert(key, path);
+            emit owner_->sourceSuspended(previous);
+            emit owner_->thumbnailReady(previous, {});
+            if (previous == editDevicePath_) emit owner_->editPreviewReady(previous, {});
+        }
+        preferredDeckLinkPaths_.insert(key, path);
+        return true;
+    }
+
+    bool ensureSource(const QString &devicePath, QString *errorDetail, int priority = 0)
     {
         if (errorDetail) {
             errorDetail->clear();
@@ -229,6 +291,20 @@ public:
         if (retryAfterMs_.value(devicePath) > monotonicMs()) {
             if (errorDetail) *errorDetail = QStringLiteral("The UVC input is offline. Waiting to retry.");
             return false;
+        }
+        if (!selectDeckLinkInput(devicePath, std::max(priority, devicePath == editDevicePath_ ? 1 : 0))) return false;
+        const auto physical = deckLinkPhysicalKey(devicePath);
+        if (!physical.isEmpty()) {
+            for (auto it = startups_.cbegin(); it != startups_.cend(); ++it)
+                if (it.key() != devicePath && it.value()->invalidated && deckLinkPhysicalKey(it.key()) == physical) return false;
+            for (auto it = retirements_.cbegin(); it != retirements_.cend(); ++it) {
+                if (deckLinkPhysicalKey(it.key()) != physical) continue;
+                if (!it.value()->done.load(std::memory_order_acquire)) return false;
+                if (!it.value()->succeeded) {
+                    if (errorDetail) *errorDetail = QStringLiteral("The previous DeckLink input could not be stopped safely.");
+                    return false;
+                }
+            }
         }
         if (auto retiring = retirements_.find(devicePath); retiring != retirements_.end()) {
             if (!retiring.value()->done.load(std::memory_order_acquire)) return false;
@@ -288,8 +364,12 @@ public:
                          ProgramSource &source, QString *errorDetail)
     {
         source = {};
-        if (deckIndex < 0 || deckIndex > 1
-            || !ensureSource(devicePath, errorDetail)) {
+        if (deckIndex < 0 || deckIndex > 1) return false;
+        deckRequests_.insert(deckIndex, devicePath);
+        QString detail;
+        if (!ensureSource(devicePath, &detail, 2)) {
+            if (!detail.isEmpty()) deckRequests_.remove(deckIndex);
+            if (errorDetail) *errorDetail = detail;
             return false;
         }
         const std::shared_ptr<Session> session = sessions_.value(devicePath);
@@ -297,6 +377,7 @@ public:
         if (!session && startups_.contains(devicePath)) return false;
         if (!session || !session->pipeline
             || !session->programSinks[deckIndex]) {
+            deckRequests_.remove(deckIndex);
             if (errorDetail) {
                 *errorDetail = QStringLiteral(
                     "Could not connect the shared UVC session to ON AIR.");
@@ -311,6 +392,7 @@ public:
             updateProgramValves(previousDevicePath);
         }
         deckDevicePaths_.insert(deckIndex, devicePath);
+        deckRequests_.remove(deckIndex);
         updateProgramValves(devicePath);
         releaseUnusedSessions();
         source.pipeline = session->pipeline;
@@ -320,6 +402,7 @@ public:
 
     void releaseProgramDeck(int deckIndex)
     {
+        deckRequests_.remove(deckIndex);
         const QString devicePath = deckDevicePaths_.take(deckIndex);
         if (devicePath.isEmpty()) {
             return;
@@ -385,6 +468,13 @@ public:
             retryAfterMs_.remove(path);
         }
         registeredDevicePaths_ = paths;
+        for (auto it = preferredDeckLinkPaths_.begin(); it != preferredDeckLinkPaths_.end();) {
+            if (!paths.contains(it.value()) && !previewDevicePaths_.contains(it.value()) &&
+                it.value() != editDevicePath_ && !deckDevicePaths_.values().contains(it.value()) &&
+                !deckRequests_.values().contains(it.value()))
+                it = preferredDeckLinkPaths_.erase(it);
+            else ++it;
+        }
     }
 
     void setAvailableDevicePaths(const QSet<QString> &paths)
@@ -416,6 +506,9 @@ public:
         const bool wasHealthy = healthyDevicePaths_.remove(path);
         const bool firstFailure = !failedDevicePaths_.contains(path);
         failedDevicePaths_.insert(path);
+        const auto key = deckLinkPhysicalKey(path);
+        if (!key.isEmpty() && preferredDeckLinkPaths_.value(key) == path &&
+            !deckDevicePaths_.values().contains(path)) preferredDeckLinkPaths_.remove(key);
         // Synchronous observers detach only the affected Program/CUE input
         // before its producer is handed to the retirement worker.
         // Opening can fail before the first healthy frame has ever arrived.
@@ -510,6 +603,7 @@ public:
         // Keep polling until any in-flight opener can retire its own result.
         previewDevicePaths_.clear();
         deckDevicePaths_.clear();
+        deckRequests_.clear();
         const auto sessions = sessions_;
         sessions_.clear();
         for (const auto &session : sessions) retireSession(session);
@@ -708,7 +802,7 @@ private:
             const bool bound = deckDevicePaths_.values().contains(devicePath);
             const bool probing = registeredDevicePaths_.contains(devicePath) &&
                 !healthyDevicePaths_.contains(devicePath) && existing->errorGeneration == 0;
-            if (bound || (existing->errorGeneration == 0 &&
+            if (bound || (!deckLinkSuppressed(devicePath) && existing->errorGeneration == 0 &&
                           (usedDevicePaths.contains(devicePath) || probing))) {
                 continue;
             }
@@ -1030,6 +1124,8 @@ private:
     QTimer busTimer_;
     QHash<QString, std::shared_ptr<Session>> sessions_;
     QHash<int, QString> deckDevicePaths_;
+    QHash<int, QString> deckRequests_;
+    QHash<QString, QString> preferredDeckLinkPaths_;
     QString editDevicePath_;
     QSet<QString> previewDevicePaths_;
     QSet<QString> registeredDevicePaths_;
@@ -1111,6 +1207,16 @@ bool UvcSourceSessionManager::sourceAvailable(const QString &path) const
 bool UvcSourceSessionManager::sourceOffline(const QString &path) const
 {
     return impl_->sourceOffline(path);
+}
+
+bool UvcSourceSessionManager::sourceSuspendedForPriority(const QString &path) const
+{
+    return impl_->deckLinkSuppressed(path);
+}
+
+QString UvcSourceSessionManager::conflictingDeckLinkInput(const QString &path) const
+{
+    return impl_->conflictingDeckLinkInput(path);
 }
 
 void UvcSourceSessionManager::reportSourceFailure(const QString &path, const QString &detail)

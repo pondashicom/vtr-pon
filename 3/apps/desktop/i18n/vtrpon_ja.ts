@@ -4831,6 +4831,26 @@ Adjust the slider to find a comfortable text size.</source>
         <source>Input format</source>
         <translation>入力映像形式</translation>
     </message>
+    <message id="decklink.input_help">
+        <source>Auto requires hardware format detection. Otherwise select the source's exact format and add the input again. One channel shares one input across thumbnails, EDIT and ON AIR; another connector or format waits while ON AIR is using the channel. Half-duplex channels cannot capture and output together.</source>
+        <translation>「自動」は信号形式の自動検出に対応した機器で使えます。非対応の機器では入力元と同じ映像形式を選び、入力を追加し直してください。同じ入力はサムネイル・エディット・オンエアで共有します。オンエア中は同じチャンネルの別端子・別形式を待機させます。半二重のチャンネルは入力と出力を同時に使えません。</translation>
+    </message>
+    <message id="decklink.input_suspended">
+        <source>EDIT input paused: this DeckLink channel is in use by a higher-priority input.</source>
+        <translation>このDeckLinkチャンネルは優先度の高い入力で使用中のため、エディット入力を一時停止しています。</translation>
+    </message>
+    <message id="decklink.input_conflict">
+        <source>Cannot add this DeckLink input: the channel is exclusively in use by another input.</source>
+        <translation>このDeckLink入力は追加できません。同じチャンネルの入力は排他使用です。</translation>
+    </message>
+    <message id="decklink.input_conflict_detail">
+        <source>Requested input: %1
+Registered or active input: %2
+Different connectors or video formats on the same channel cannot be used together. Stop the conflicting input and remove its registered items before adding this input. Identical inputs and independent channels can be registered together.</source>
+        <translation>追加する入力: %1
+登録済み・使用中の入力: %2
+同じチャンネルの別端子・別映像形式は同時に使用できません。競合する入力を停止し、その登録済みアイテムを削除してから追加してください。同じ入力の重複登録と、独立した別チャンネルの登録は可能です。</translation>
+    </message>
     <message id="decklink.auto_mode">
         <source>Auto (device detection)</source>
         <translation>自動（機器の信号検出）</translation>

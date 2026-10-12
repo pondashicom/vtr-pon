@@ -2122,6 +2122,36 @@ private:
       return;
     }
 
+    const QString conflictingInput = uvcSourceSessions_->conflictingDeckLinkInput(devicePath);
+    if (!conflictingInput.isEmpty()) {
+      const auto channels = vtrpon::deckLinkState().channels;
+      const auto inputLabel = [&channels](const QString &path) {
+        VtrPonDeckLinkStreamOptions requested{};
+        if (!vtrpon::deckLinkSourceOptions(path, &requested)) return path;
+        for (const auto &channel : channels) {
+          VtrPonDeckLinkStreamOptions candidate{};
+          if (!channel.input || !vtrpon::deckLinkSourceOptions(channel.path, &candidate)
+              || candidate.persistentId != requested.persistentId
+              || candidate.subDeviceIndex != requested.subDeviceIndex
+              || candidate.connection != requested.connection) continue;
+          if (!requested.modeId)
+            return channel.name + QStringLiteral(" / ") + vtrpon::uiText("decklink.auto_mode");
+          for (const auto &mode : channel.modes) {
+            if (mode.modeId == requested.modeId)
+              return channel.name + QStringLiteral(" / ")
+                  + QString::fromUtf8(QByteArray(mode.nameUtf8, sizeof(mode.nameUtf8)).split('\0').constFirst());
+          }
+          return channel.name;
+        }
+        return path;
+      };
+      userInfoCenter_->showError(QStringLiteral("DeckLink"),
+          vtrpon::LocalizedText("decklink.input_conflict"),
+          vtrpon::LocalizedText("decklink.input_conflict_detail")
+              .arg(inputLabel(devicePath)).arg(inputLabel(conflictingInput)).resolve());
+      return;
+    }
+
     inputControlPanel_->setUvcCaptureBusy(true);
     QString errorDetail;
     const bool sourceStarted = audioOnly ||

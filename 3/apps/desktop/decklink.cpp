@@ -277,6 +277,9 @@ struct Subscriber {
 };
 struct Capture : std::enable_shared_from_this<Capture> {
     std::mutex mutex;
+    // Successive captures of this physical input serialize SDK open/close on
+    // their workers; detaching a UI consumer must never wait for the driver.
+    std::shared_ptr<std::mutex> hardware = std::make_shared<std::mutex>();
     QString path;
     std::map<uint64_t, std::shared_ptr<Subscriber>> subscribers;
     uint64_t serial = 0;
@@ -286,6 +289,7 @@ struct Capture : std::enable_shared_from_this<Capture> {
     explicit Capture(QString p) : path(std::move(p)) {}
     void error(const QString &text) {
         std::lock_guard lock(mutex);
+        stopping = true;
         for (const auto &[id, subscriber] : subscribers) {
             auto *err = g_error_new_literal(GST_RESOURCE_ERROR, GST_RESOURCE_ERROR_READ, text.toUtf8().constData());
             gst_element_post_message(subscriber->source, gst_message_new_error(GST_OBJECT(subscriber->source), err, "DeckLink input")); g_error_free(err);
@@ -325,6 +329,8 @@ struct Capture : std::enable_shared_from_this<Capture> {
         gst_app_src_push_buffer(GST_APP_SRC(subscriber->source), buffer);
     }
     void run() {
+        std::unique_lock hardwareLock(*hardware);
+        if (stopping || shared().stopping) { stopping = true; --shared().captures; return; }
         {
             Addon addon; VtrPonDeckLinkStreamOptions options{}; char detail[1024]{};
             addon.discover();
@@ -446,6 +452,8 @@ public:
         if (!deckLinkSourceOptions(path, &options)) return;
         const auto physical = QStringLiteral("%1/%2").arg(options.persistentId).arg(options.subDeviceIndex);
         std::lock_guard outer(capturesMutex); capture = captures[physical].lock();
+        std::unique_lock<std::mutex> subscriptionLock;
+        if (capture) subscriptionLock = std::unique_lock(capture->mutex);
         if (capture && !capture->stopping && capture->path != path) {
             auto *error = g_error_new_literal(GST_RESOURCE_ERROR, GST_RESOURCE_ERROR_BUSY,
                 "This DeckLink channel is already capturing another connection or format.");
@@ -453,12 +461,20 @@ public:
             g_error_free(error); capture.reset(); return;
         }
         bool start = !capture || capture->stopping;
-        if (start) { capture = std::make_shared<Capture>(path); captures[physical] = capture; }
-        { std::lock_guard lock(capture->mutex); token = ++capture->serial; capture->subscribers[token] = std::make_shared<Subscriber>(source, audio); }
+        if (start) {
+            auto previous = capture;
+            if (subscriptionLock.owns_lock()) subscriptionLock.unlock();
+            capture = std::make_shared<Capture>(path);
+            if (previous) capture->hardware = previous->hardware;
+            captures[physical] = capture;
+            subscriptionLock = std::unique_lock(capture->mutex);
+        }
+        token = ++capture->serial; capture->subscribers[token] = std::make_shared<Subscriber>(source, audio);
         if (start) { auto owner = capture; ++shared().captures; std::thread([owner] { try { owner->run(); } catch (...) { owner->error(QStringLiteral("DeckLink capture worker failed.")); owner->stopping = true; --shared().captures; } }).detach(); }
     }
     ~Impl() {
         if (!capture) return;
+        std::lock_guard outer(capturesMutex);
         std::lock_guard lock(capture->mutex); capture->subscribers.erase(token); if (capture->subscribers.empty()) capture->stopping = true;
     }
 };

@@ -4831,6 +4831,26 @@ Adjust the slider to find a comfortable text size.</translation>
         <source>Input format</source>
         <translation>Input format</translation>
     </message>
+    <message id="decklink.input_help">
+        <source>Auto requires hardware format detection. Otherwise select the source's exact format and add the input again. One channel shares one input across thumbnails, EDIT and ON AIR; another connector or format waits while ON AIR is using the channel. Half-duplex channels cannot capture and output together.</source>
+        <translation>Auto requires hardware format detection. Otherwise select the source's exact format and add the input again. One channel shares one input across thumbnails, EDIT and ON AIR; another connector or format waits while ON AIR is using the channel. Half-duplex channels cannot capture and output together.</translation>
+    </message>
+    <message id="decklink.input_suspended">
+        <source>EDIT input paused: this DeckLink channel is in use by a higher-priority input.</source>
+        <translation>EDIT input paused: this DeckLink channel is in use by a higher-priority input.</translation>
+    </message>
+    <message id="decklink.input_conflict">
+        <source>Cannot add this DeckLink input: the channel is exclusively in use by another input.</source>
+        <translation>Cannot add this DeckLink input: the channel is exclusively in use by another input.</translation>
+    </message>
+    <message id="decklink.input_conflict_detail">
+        <source>Requested input: %1
+Registered or active input: %2
+Different connectors or video formats on the same channel cannot be used together. Stop the conflicting input and remove its registered items before adding this input. Identical inputs and independent channels can be registered together.</source>
+        <translation>Requested input: %1
+Registered or active input: %2
+Different connectors or video formats on the same channel cannot be used together. Stop the conflicting input and remove its registered items before adding this input. Identical inputs and independent channels can be registered together.</translation>
+    </message>
     <message id="decklink.auto_mode">
         <source>Auto (device detection)</source>
         <translation>Auto (device detection)</translation>

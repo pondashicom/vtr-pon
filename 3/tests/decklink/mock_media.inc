@@ -35,7 +35,12 @@ int32_t VTRPON_DECKLINK_CALL readInput(void *handle, VtrPonDeckLinkPacket *out, 
 }
 int32_t VTRPON_DECKLINK_CALL closeInput(void *handle, char *err, uint32_t cap) {
     const auto status = check(handle, err, cap); if (status) return status;
-    auto &c = *static_cast<Context *>(handle); if (c.input) --inputs; c.input = false; return VtrPonDeckLinkOk;
+    auto &c = *static_cast<Context *>(handle);
+    if (c.input) {
+        if (std::getenv("VTRPON_DECKLINK_TEST_SLOW_CLOSE")) std::this_thread::sleep_for(std::chrono::milliseconds(250));
+        --inputs;
+    }
+    c.input = false; return VtrPonDeckLinkOk;
 }
 int32_t VTRPON_DECKLINK_CALL openOutput(void *handle, const VtrPonDeckLinkStreamOptions *options, char *err, uint32_t cap) {
     const auto status = check(handle, err, cap); if (status) return status;

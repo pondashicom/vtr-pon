@@ -43,6 +43,10 @@ public:
     bool sourceAvailable(const QString &devicePath) const;
     // Initial connection is neither frame-confirmed nor offline.
     bool sourceOffline(const QString &devicePath) const;
+    bool sourceSuspendedForPriority(const QString &devicePath) const;
+    // Registration reserves the input across playlists, even during signal loss.
+    // Identical inputs and independent SDK sub-devices do not conflict.
+    QString conflictingDeckLinkInput(const QString &devicePath) const;
     void reportSourceFailure(const QString &devicePath, const QString &detail);
     QImage latestThumbnail(const QString &devicePath) const;
     bool sourceIsPlaying(const QString &devicePath) const;
@@ -60,6 +64,9 @@ signals:
     void editPreviewReady(const QString &devicePath, const QImage &image);
     void sourceError(const QString &devicePath, const QString &detail);
     void sourceAvailabilityChanged(const QString &devicePath, bool available);
+    // A lower-priority connector/format releases video and EDIT audio without
+    // reporting a missing device. Identical input paths continue sharing.
+    void sourceSuspended(const QString &devicePath);
 
 private:
     class Impl;

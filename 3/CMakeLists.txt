@@ -1545,10 +1545,14 @@ if(WIN32 AND BUILD_TESTING)
   target_compile_definitions(decklink-host-test-addon PRIVATE VTRPON_DECKLINK_ADDON_BUILD NOMINMAX _CRT_SECURE_NO_WARNINGS)
   set_target_properties(decklink-host-test-addon PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/decklink-test-only")
-  qt_add_executable(decklink-test tests/decklink_test.cpp)
-  target_link_libraries(decklink-test PRIVATE vtrpon-decklink Qt6::Core Qt6::Gui
+  qt_add_executable(decklink-test tests/decklink_test.cpp
+    apps/desktop/uvc_source_session_manager.cpp apps/desktop/uvc_source_session_manager.h)
+  target_link_libraries(decklink-test PRIVATE vtrpon-decklink vtrpon-network-video Qt6::Core Qt6::Gui
     PkgConfig::GSTREAMER PkgConfig::GSTREAMER_APP d3d11)
   target_compile_definitions(decklink-test PRIVATE NOMINMAX WIN32_LEAN_AND_MEAN)
+  if(MSVC)
+    target_compile_options(decklink-test PRIVATE /utf-8)
+  endif()
   add_dependencies(decklink-test decklink-host-test-addon)
   add_test(NAME decklink-media-host COMMAND decklink-test "$<TARGET_FILE:decklink-host-test-addon>")
   set_tests_properties(decklink-media-host PROPERTIES TIMEOUT 60 RUN_SERIAL TRUE)

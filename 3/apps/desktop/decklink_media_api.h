@@ -39,8 +39,8 @@ typedef struct VtrPonDeckLinkMediaApi {
     int32_t (VTRPON_DECKLINK_CALL *listChannels)(void *, VtrPonDeckLinkChannel *, uint32_t,
         uint32_t *, char *, uint32_t);
     /* modeId=0 requests input format detection when the device supports it.
-     * Fixed-format devices use the first supported mode; callers may specify
-     * an explicit input mode. Output always requires an explicit mode. */
+     * Devices without detection require an explicit mode and return an error
+     * for modeId=0. Output always requires an explicit mode. */
     int32_t (VTRPON_DECKLINK_CALL *openInput)(void *, const VtrPonDeckLinkStreamOptions *, char *, uint32_t);
     int32_t (VTRPON_DECKLINK_CALL *readInput)(void *, VtrPonDeckLinkPacket *, uint32_t timeoutMs, char *, uint32_t);
     int32_t (VTRPON_DECKLINK_CALL *closeInput)(void *, char *, uint32_t);

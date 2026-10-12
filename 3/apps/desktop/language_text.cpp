@@ -141,6 +141,14 @@ constexpr auto kUiTextIds = std::to_array<const char *>({
     QT_TRID_NOOP("decklink.output_mode"),
     //% "Input format"
     QT_TRID_NOOP("decklink.input_mode"),
+    //% "Auto requires hardware format detection. Otherwise select the source's exact format and add the input again. One channel shares one input across thumbnails, EDIT and ON AIR; another connector or format waits while ON AIR is using the channel. Half-duplex channels cannot capture and output together."
+    QT_TRID_NOOP("decklink.input_help"),
+    //% "EDIT input paused: this DeckLink channel is in use by a higher-priority input."
+    QT_TRID_NOOP("decklink.input_suspended"),
+    //% "Cannot add this DeckLink input: the channel is exclusively in use by another input."
+    QT_TRID_NOOP("decklink.input_conflict"),
+    //% "Requested input: %1\nRegistered or active input: %2\nDifferent connectors or video formats on the same channel cannot be used together. Stop the conflicting input and remove its registered items before adding this input. Identical inputs and independent channels can be registered together."
+    QT_TRID_NOOP("decklink.input_conflict_detail"),
     //% "Auto (device detection)"
     QT_TRID_NOOP("decklink.auto_mode"),
     //% "Select output channel"
