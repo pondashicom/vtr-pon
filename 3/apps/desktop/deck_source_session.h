@@ -2,6 +2,7 @@
 
 #include "dual_deck_player.h"
 #include "async_pipeline_stop.h"
+#include "async_file_preparation.h"
 #include <QDeadlineTimer>
 #include <vector>
 #include <optional>
@@ -76,6 +77,10 @@ public:
     PdfCommandResponse previousPdfPage();
 
     Type sourceType() const { return sourceType_; }
+    void reportFileOffline() { if (sourceType_ == Type::File) mediaOffline_ = true; }
+    bool mediaOffline() const { return mediaOffline_; }
+    bool filePreparationActive() const { return fileRequest_.has_value() || bool(filePreparation_); }
+    bool filePreparationPending() const { return fileRequest_.has_value() || (filePreparation_ && !filePreparation_->done()); }
     bool hasVideo() const { return hasVideo_; }
     bool hasAudio() const { return hasAudio_; }
     qint64 inPointMs() const { return inPointMs_; }
@@ -131,6 +136,9 @@ private:
     GstBus *bus_ = nullptr;
     std::shared_ptr<BusCallbacks> fileBusCallbacks_;
     std::vector<std::shared_ptr<AsyncPipelineStop>> retiredFiles_;
+    std::shared_ptr<AsyncFilePreparation> filePreparation_;
+    std::optional<AsyncFilePreparation::Request> fileRequest_;
+    bool mediaOffline_ = false;
     QDeadlineTimer preparationDeadline_{QDeadlineTimer::Forever};
     guintptr videoWindowHandle_ = 0;
     guintptr monitorWindowHandle_ = 0;

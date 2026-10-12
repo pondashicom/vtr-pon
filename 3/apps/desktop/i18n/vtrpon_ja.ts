@@ -128,6 +128,36 @@
         <source>Select a plug-in</source>
         <translation>プラグインを選択</translation>
     </message>
+    <message id="vst.apply">
+        <source>Apply</source>
+        <translation>適用</translation>
+    </message>
+    <message id="vst.applying_button">
+        <source>Applying...</source>
+        <translation>適用中…</translation>
+    </message>
+    <message id="vst.none">
+        <source>None</source>
+        <translation>なし</translation>
+    </message>
+    <message id="vst.current">
+        <source>Current VST: %1</source>
+        <translation>現在のVST: %1</translation>
+    </message>
+    <message id="vst.applying">
+        <source>Checking the new plug-in. Current audio processing continues.</source>
+        <translation>候補のプラグインを確認中です。現在の音声処理を継続しています。</translation>
+    </message>
+    <message id="vst.apply_failed">
+        <source>Could not apply the plug-in. The current VST is unchanged.
+%1</source>
+        <translation>適用できませんでした。現在のVSTは変更していません。
+%1</translation>
+    </message>
+    <message id="vst.apply_failure_notice">
+        <source>Could not apply the %1 plug-in. The current VST is unchanged.</source>
+        <translation>%1のプラグインを適用できませんでした。現在のVSTは変更していません。</translation>
+    </message>
     <message id="vst.plugin">
         <source>VST3 plug-in</source>
         <translation>VST3プラグイン</translation>

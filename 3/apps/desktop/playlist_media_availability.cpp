@@ -4,12 +4,17 @@
 #include <QTimer>
 
 #include <atomic>
+#include <chrono>
 #include <exception>
 #include <thread>
 #include <utility>
 
 namespace {
 constexpr int kMediaAvailabilityCheckIntervalMs = 5000;
+qint64 monotonicMs() {
+  return std::chrono::duration_cast<std::chrono::milliseconds>(
+      std::chrono::steady_clock::now().time_since_epoch()).count();
+}
 }
 
 // Worker-owned values only. No QObject or model pointer crosses the thread
@@ -22,11 +27,13 @@ struct MediaAvailabilityScan {
   std::atomic_bool cancelled{false};
   std::atomic_bool finished{false};
   bool succeeded = false;
+  std::atomic_int activeIndex{-1};
+  std::atomic<qint64> probeStartedMs{0};
 };
 
 PlaylistMediaAvailability::PlaylistMediaAvailability(
-    PlaylistModel *model, PlaylistModel::MediaAvailabilityProbe probe)
-    : model_(model), probe_(std::move(probe)) {
+    PlaylistModel *model, PlaylistModel::MediaAvailabilityProbe probe, int timeoutMs)
+    : model_(model), timeoutMs_(timeoutMs), probe_(std::move(probe)) {
   auto *timer = new QTimer(model);
   timer->setInterval(kMediaAvailabilityCheckIntervalMs);
   timer->setTimerType(Qt::CoarseTimer);
@@ -79,7 +86,8 @@ void PlaylistMediaAvailability::requestShutdown() {
 }
 
 bool PlaylistMediaAvailability::shutdownComplete() const {
-  return !scan_ || scan_->finished.load(std::memory_order_acquire);
+  // Detached scans retain only value snapshots; shutdown need not wait for a NAS.
+  return shuttingDown_ || !scan_ || scan_->finished.load(std::memory_order_acquire);
 }
 
 void PlaylistMediaAvailability::refresh() {
@@ -105,12 +113,16 @@ void PlaylistMediaAvailability::refresh() {
     std::thread([scan, probe = probe_] {
       try {
         QHash<QString, bool> availabilityByPath;
-        for (const auto &item : std::as_const(scan->items)) {
+        for (qsizetype index = 0; index < scan->items.size(); ++index) {
+          const auto &item = scan->items[index];
           if (scan->cancelled.load(std::memory_order_relaxed)) break;
           auto found = availabilityByPath.constFind(item.filePath);
           bool available;
           if (found == availabilityByPath.cend()) {
+            scan->probeStartedMs.store(monotonicMs(), std::memory_order_relaxed);
+            scan->activeIndex.store(static_cast<int>(index), std::memory_order_release);
             available = probe(item.filePath);
+            scan->activeIndex.store(-1, std::memory_order_release);
             availabilityByPath.insert(item.filePath, available);
           } else {
             available = found.value();
@@ -132,8 +144,22 @@ void PlaylistMediaAvailability::refresh() {
 }
 
 void PlaylistMediaAvailability::finishScan() {
-  if (!scan_ ||
-      !scan_->finished.load(std::memory_order_acquire)) return;
+  if (!scan_) return;
+  if (!scan_->finished.load(std::memory_order_acquire)) {
+    if (!shuttingDown_ && !scan_->cancelled.load()) {
+      const int index = scan_->activeIndex.load(std::memory_order_acquire);
+      const auto started = scan_->probeStartedMs.load(std::memory_order_relaxed);
+      if (index >= 0 && monotonicMs() - started >= timeoutMs_) {
+        const auto &item = scan_->items[index];
+        const auto current = model_->itemState(item.id);
+        if (scan_->generation == generation_ && current && current->filePath == item.filePath)
+          model_->setFileMediaOffline(item.id);
+        // Reject even a late successful probe. Keep at most one OS call in flight.
+        scan_->cancelled.store(true);
+      }
+    }
+    return;
+  }
   auto scan = std::move(scan_);
   resultTimer_->stop();
   const bool refreshRequested = std::exchange(refreshRequested_, false);

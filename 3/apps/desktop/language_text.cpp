@@ -311,6 +311,20 @@ constexpr auto kUiTextIds = std::to_array<const char *>({
     QT_TRID_NOOP("vst.addon_missing"),
     //% "Select a plug-in"
     QT_TRID_NOOP("vst.select"),
+    //% "Apply"
+    QT_TRID_NOOP("vst.apply"),
+    //% "Applying..."
+    QT_TRID_NOOP("vst.applying_button"),
+    //% "None"
+    QT_TRID_NOOP("vst.none"),
+    //% "Current VST: %1"
+    QT_TRID_NOOP("vst.current"),
+    //% "Checking the new plug-in. Current audio processing continues."
+    QT_TRID_NOOP("vst.applying"),
+    //% "Could not apply the plug-in. The current VST is unchanged.\n%1"
+    QT_TRID_NOOP("vst.apply_failed"),
+    //% "Could not apply the %1 plug-in. The current VST is unchanged."
+    QT_TRID_NOOP("vst.apply_failure_notice"),
     //% "VST3 plug-in"
     QT_TRID_NOOP("vst.plugin"),
     //% "Bypass"

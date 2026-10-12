@@ -18,6 +18,7 @@
 #include <chrono>
 #include <cstring>
 #include <mutex>
+#include <vector>
 
 namespace vtrpon {
 namespace {
@@ -74,7 +75,7 @@ void processVst(VstSlot slot, float *samples, size_t frames) {
     auto bridge = bridges[int(slot)].load();
     if (!vstModeEnabled() || !bridge || bridge->failed || bridge->bypass) return;
     std::unique_lock lock(bridge->processing, std::try_to_lock);
-    if (!lock.owns_lock()) return;
+    if (!lock.owns_lock() || bridge->failed) return;
     auto *shared = bridge->shared;
     if (!shared || !InterlockedCompareExchange(&shared->ready, 0, 0)) return;
     if (frames > bridge->staged.size() / 2 || InterlockedCompareExchange(&shared->failed, 0, 0)) {
@@ -85,10 +86,11 @@ void processVst(VstSlot slot, float *samples, size_t frames) {
     if (!frames) return;
     // This is the only wait in the audio path. No Qt, pipe I/O, allocation or
     // plug-in teardown here. A missed deadline permanently retires this bridge.
-    // Neural effects can process in bursts longer than 5 ms even for a 10 ms
-    // input block. Allow a small scheduling margin and scale larger decoder
-    // buffers to their audio duration, while keeping a hung worker bounded.
-    const auto budgetMs = std::clamp<int>((frames * 1000 + vst::kRate - 1) / vst::kRate, 20, 50);
+    // Neural effects batch several input blocks internally: a 10 ms input can
+    // take over 20 ms during normal processing under video load. Use the same
+    // bounded scheduling margin for small and large buffers. This deadline
+    // covers the entire buffer, not each sub-block separately.
+    constexpr int budgetMs = 50;
     bridge->lastFrames = int(frames); bridge->lastBudgetMs = budgetMs;
     const auto deadline = std::chrono::steady_clock::now() + std::chrono::milliseconds(budgetMs);
     for (size_t offset = 0; offset < frames;) {
@@ -120,7 +122,7 @@ void processVst(VstSlot slot, float *samples, size_t frames) {
 struct VstService::Impl {
     VstService *q;
     struct Slot {
-        QString path, uid, status = QStringLiteral("vst.inactive"), detail;
+        QString path, uid, status = QStringLiteral("vst.inactive"), detail, applyError;
         QProcess *process = nullptr;
         std::shared_ptr<Bridge> bridge;
         QElapsedTimer startup, heartbeatTimer;
@@ -129,24 +131,69 @@ struct VstService::Impl {
         bool bypass = false;
     };
     std::array<Slot, count> channels;
+    std::array<Slot, count> candidates;
+    std::vector<Slot> retired;
     QTimer timer, scanPoll;
     std::shared_ptr<VstScan> scanState;
     VstScan::Snapshot scanSnapshot;
     QJsonArray catalog;
     bool scanBusy = false, scanRequested = false, scanCanceled = false;
     explicit Impl(VstService *owner) : q(owner) {}
-    void stop(int i) {
-        bridges[i].store(nullptr);
-        auto &s = channels[i];
+    static void stopInstance(Slot &s) {
         if (s.bridge) s.bridge->failed = true;
         s.bridge.reset();
         dispose(s.process); s.process = nullptr;
-        if (std::none_of(channels.cbegin(), channels.cend(), [](const auto &channel) { return bool(channel.bridge); }))
+    }
+    void updateTimer() {
+        const auto running = [](const auto &s) { return bool(s.bridge); };
+        if (retired.empty() && std::none_of(channels.cbegin(), channels.cend(), running)
+            && std::none_of(candidates.cbegin(), candidates.cend(), running))
             timer.stop();
     }
-    void fail(int i, const QString &reason) {
-        const auto &s = channels[i];
-        qWarning().noquote() << "VST_FAILURE" << names[i] << "path=" << s.path << "class=" << s.uid << reason;
+    void stop(int i) {
+        bridges[i].store(nullptr);
+        stopInstance(channels[i]);
+        stopInstance(candidates[i]);
+        candidates[i] = {};
+        channels[i].applyError.clear();
+        updateTimer();
+    }
+    void collectRetired() {
+        for (auto it = retired.begin(); it != retired.end();) {
+            // Let an in-flight block finish on the previous plug-in. Never wait
+            // on the UI thread or kill that process in the middle of its block.
+            auto bridge = it->bridge;
+            std::unique_lock lock(bridge->processing, std::try_to_lock);
+            if (!lock.owns_lock()) { ++it; continue; }
+            stopInstance(*it);
+            it = retired.erase(it);
+        }
+        updateTimer();
+    }
+    void saveSelection(int i) {
+        auto &s = channels[i];
+        auto settings = makeControllerSettings();
+        settings.setValue(key(i, "path"), s.path);
+        settings.setValue(key(i, "uid"), s.uid);
+        settings.sync();
+        if (settings.status() != QSettings::NoError)
+            s.detail = QStringLiteral("Could not save the plug-in selection.");
+    }
+    void commit(int i) {
+        auto previous = std::move(channels[i]);
+        channels[i] = std::move(candidates[i]);
+        candidates[i] = {};
+        auto &s = channels[i];
+        s.status = QStringLiteral("vst.active");
+        bridges[i].store(s.bridge);
+        if (previous.bridge) retired.push_back(std::move(previous));
+        saveSelection(i);
+        qInfo().noquote() << "VST_APPLIED" << names[i] << "path=" << s.path << "class=" << s.uid;
+    }
+    void fail(int i, const QString &reason, bool candidate = false) {
+        auto &s = candidate ? candidates[i] : channels[i];
+        qWarning().noquote() << (candidate ? "VST_APPLY_FAILURE" : "VST_FAILURE")
+            << names[i] << "path=" << s.path << "class=" << s.uid << reason;
 #ifdef _WIN32
         if (s.bridge) {
             auto *shared = s.bridge->shared;
@@ -156,11 +203,67 @@ struct VstService::Impl {
                 << "bufferFrames=" << s.bridge->lastFrames.load() << "budgetMs=" << s.bridge->lastBudgetMs.load();
         }
 #endif
-        stop(i);
-        channels[i].status = QStringLiteral("vst.failed");
-        channels[i].detail = reason;
-        emit q->failure(names[i], reason);
+        if (candidate) {
+            stopInstance(s);
+            s = {};
+            channels[i].applyError = reason;
+            emit q->applicationFailed(names[i], reason);
+        } else {
+            bridges[i].store(nullptr);
+            stopInstance(s);
+            s.status = QStringLiteral("vst.failed");
+            s.detail = reason;
+            emit q->failure(names[i], reason);
+        }
+        updateTimer();
         emit q->changed();
+    }
+    void processFailed(int i, QProcess *process, const QString &reason) {
+        if (candidates[i].process == process) fail(i, reason, true);
+        else if (channels[i].process == process) fail(i, reason);
+    }
+    bool poll(int i, bool candidate) {
+#ifdef _WIN32
+        auto &s = candidate ? candidates[i] : channels[i];
+        if (!s.bridge) return false;
+        auto *shared = s.bridge->shared;
+        if (s.bridge->failed || InterlockedCompareExchange(&shared->failed, 0, 0)) {
+            QString reason;
+            switch (s.bridge->fault.load()) {
+            case Bridge::Fault::Deadline: reason = QStringLiteral("Audio processing exceeded its %1 ms deadline.").arg(s.bridge->lastBudgetMs.load()); break;
+            case Bridge::Fault::NonFinite: reason = QStringLiteral("The plug-in returned invalid audio (NaN/Inf)."); break;
+            case Bridge::Fault::OversizedBuffer: reason = QStringLiteral("The audio buffer exceeds the supported size."); break;
+            case Bridge::Fault::Transport: reason = QStringLiteral("The VST audio transport failed."); break;
+            default: reason = QStringLiteral("The plug-in reported an audio processing error."); break;
+            }
+            fail(i, reason, candidate); return false;
+        }
+        const long heartbeat = InterlockedCompareExchange(&shared->heartbeat, 0, 0);
+        if (s.heartbeat != heartbeat) { s.heartbeat = heartbeat; s.heartbeatTimer.restart(); }
+        const bool ready = InterlockedCompareExchange(&shared->ready, 0, 0);
+        if ((!ready && s.startup.elapsed() > 15000) || (ready && s.heartbeatTimer.elapsed() > 2000)) {
+            fail(i, QStringLiteral("The plug-in stopped responding."), candidate); return false;
+        }
+        if (candidate) {
+            if (ready) { commit(i); return true; }
+            return false;
+        }
+        bool changed = false;
+        const long editorStatus = InterlockedCompareExchange(&shared->editorStatus, 0, 0);
+        if (editorStatus != s.editorStatus) {
+            s.editorStatus = editorStatus;
+            if (editorStatus) qInfo().noquote() << "VST_EDITOR_RESULT" << names[i]
+                << "status=" << editorStatus << "pid=" << s.process->processId();
+        }
+        if (editorStatus < 0 && s.detail.isEmpty()) {
+            s.detail = QStringLiteral("This plug-in does not provide a compatible Windows editor."); changed = true;
+        }
+        const QString state = s.bypass ? QStringLiteral("vst.bypassed") : QStringLiteral("vst.active");
+        if (s.status != state) { s.status = state; changed = true; }
+        return changed;
+#else
+        Q_UNUSED(i); Q_UNUSED(candidate); return false;
+#endif
     }
 };
 
@@ -197,41 +300,10 @@ VstService::VstService() : QObject(QCoreApplication::instance()), d(std::make_un
 #ifdef _WIN32
         bool changedState = false;
         for (int i = 0; i < count; ++i) {
-            auto &s = d->channels[i];
-            if (!s.bridge) continue;
-            auto *shared = s.bridge->shared;
-            if (s.bridge->failed || InterlockedCompareExchange(&shared->failed, 0, 0)) {
-                QString reason;
-                switch (s.bridge->fault.load()) {
-                case Bridge::Fault::Deadline: reason = QStringLiteral("Audio processing exceeded its %1 ms deadline.").arg(s.bridge->lastBudgetMs.load()); break;
-                case Bridge::Fault::NonFinite: reason = QStringLiteral("The plug-in returned invalid audio (NaN/Inf)."); break;
-                case Bridge::Fault::OversizedBuffer: reason = QStringLiteral("The audio buffer exceeds the supported size."); break;
-                case Bridge::Fault::Transport: reason = QStringLiteral("The VST audio transport failed."); break;
-                default: reason = QStringLiteral("The plug-in reported an audio processing error."); break;
-                }
-                d->fail(i, reason); continue;
-            }
-            const long heartbeat = InterlockedCompareExchange(&shared->heartbeat, 0, 0);
-            if (s.heartbeat != heartbeat) { s.heartbeat = heartbeat; s.heartbeatTimer.restart(); }
-            const bool ready = InterlockedCompareExchange(&shared->ready, 0, 0);
-            const long editorStatus = InterlockedCompareExchange(&shared->editorStatus, 0, 0);
-            if (editorStatus != s.editorStatus) {
-                s.editorStatus = editorStatus;
-                if (editorStatus) qInfo().noquote() << "VST_EDITOR_RESULT" << names[i]
-                    << "status=" << editorStatus << "pid=" << s.process->processId();
-            }
-            if (editorStatus < 0 && s.detail.isEmpty()) {
-                s.detail = QStringLiteral("This plug-in does not provide a compatible Windows editor."); changedState = true;
-            }
-            if ((!ready && s.startup.elapsed() > 15000) || (ready && s.heartbeatTimer.elapsed() > 2000)) {
-                d->fail(i, QStringLiteral("The plug-in stopped responding.")); continue;
-            }
-            const QString state = ready ? (s.bypass ? QStringLiteral("vst.bypassed") : QStringLiteral("vst.active")) : QStringLiteral("vst.loading");
-            if (s.status != state) {
-                s.status = state; changedState = true;
-                qInfo() << "VST_STATE" << names[i] << state << "warmupMaxUs=" << InterlockedCompareExchange(&shared->warmupMaxUs, 0, 0);
-            }
+            changedState |= d->poll(i, false);
+            changedState |= d->poll(i, true);
         }
+        d->collectRetired();
         if (changedState) emit changed();
 #endif
     });
@@ -241,12 +313,16 @@ VstService::VstService() : QObject(QCoreApplication::instance()), d(std::make_un
     connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, [this] {
         mode = false;
         for (int i = 0; i < count; ++i) d->stop(i);
+        for (auto &s : d->retired) Impl::stopInstance(s);
+        d->retired.clear();
         cancelScan();
     });
 }
 VstService::~VstService() {
     mode = false;
     for (int i = 0; i < count; ++i) d->stop(i);
+    for (auto &s : d->retired) Impl::stopInstance(s);
+    d->retired.clear();
     cancelScan();
 }
 void VstService::reloadSettings() {
@@ -300,21 +376,25 @@ VstScanProgress VstService::scanProgress() const {
 QJsonArray VstService::plugins() const { return d->catalog; }
 QString VstService::selectedPath(VstSlot slot) const { return d->channels[int(slot)].path; }
 QString VstService::selectedUid(VstSlot slot) const { return d->channels[int(slot)].uid; }
+bool VstService::applying(VstSlot slot) const { return bool(d->candidates[int(slot)].bridge); }
+QString VstService::applyError(VstSlot slot) const { return d->channels[int(slot)].applyError; }
 void VstService::select(VstSlot slot, const QString &path, const QString &uid) {
     const int i = int(slot);
-    qInfo().noquote() << "VST_SELECT" << names[i] << "path=" << path << "class=" << uid;
-    d->stop(i); auto &s = d->channels[i]; s.path = path; s.uid = uid; s.detail.clear();
-    s.status = QStringLiteral("vst.inactive"); s.bypass = false;
-    auto settings = makeControllerSettings();
-    settings.setValue(key(i, "path"), path); settings.setValue(key(i, "uid"), uid); settings.sync();
-    if (settings.status() != QSettings::NoError) s.detail = QStringLiteral("Could not save the plug-in selection.");
-    activate(slot);
-}
-void VstService::activate(VstSlot slot) {
-    const int i = int(slot);
-    auto &s = d->channels[i];
-    if (!vstModeEnabled() || !available() || s.path.isEmpty() || s.uid.isEmpty()) { emit changed(); return; }
-    if (s.process) { bypass(slot, false); return; }
+    if (!vstModeEnabled() || !available()) return;
+    qInfo().noquote() << "VST_APPLY" << names[i] << "path=" << path << "class=" << uid;
+    auto &current = d->channels[i];
+    auto &s = d->candidates[i];
+    Impl::stopInstance(s); s = {};
+    current.applyError.clear();
+    if (path.isEmpty() && uid.isEmpty()) {
+        d->stop(i); current = {}; d->saveSelection(i);
+        emit changed(); return;
+    }
+    // Reapplying the running instance must preserve its parameter state.
+    if (current.bridge && !current.bridge->failed && current.path == path && current.uid == uid) {
+        bypass(slot, false); d->updateTimer(); return;
+    }
+    s.path = path; s.uid = uid;
 #ifdef _WIN32
     auto bridge = std::make_shared<Bridge>();
     const QString id = QStringLiteral("Local\\VtrPonVst-") + QUuid::createUuid().toString(QUuid::Id128);
@@ -322,26 +402,32 @@ void VstService::activate(VstSlot slot) {
     if (bridge->mapping) bridge->shared = static_cast<vst::Shared *>(MapViewOfFile(bridge->mapping, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(vst::Shared)));
     bridge->request = CreateEventW(nullptr, FALSE, FALSE, reinterpret_cast<LPCWSTR>((id + "-request").utf16()));
     bridge->response = CreateEventW(nullptr, FALSE, FALSE, reinterpret_cast<LPCWSTR>((id + "-response").utf16()));
-    if (!bridge->shared || !bridge->request || !bridge->response) { d->fail(i, QStringLiteral("Could not create VST audio transport.")); return; }
+    if (!bridge->shared || !bridge->request || !bridge->response) { d->fail(i, QStringLiteral("Could not create VST audio transport."), true); return; }
     new (bridge->shared) vst::Shared;
-    s.bridge = bridge; s.bypass = false; s.detail.clear(); s.status = QStringLiteral("vst.loading");
-    s.heartbeat = 0; s.editorStatus = 0; s.startup.start(); s.heartbeatTimer.start(); bridges[i].store(bridge);
+    s.bridge = bridge; s.startup.start(); s.heartbeatTimer.start();
     s.process = new QProcess(this); configureProcess(s.process);
     auto *process = s.process;
     connect(process, &QProcess::finished, this, [this, i, process](int code, QProcess::ExitStatus) {
-        if (d->channels[i].process == process) d->fail(i, code == 6
+        d->processFailed(i, process, code == 6
             ? QStringLiteral("This plug-in cannot process stereo 32-bit float audio at 48 kHz.")
             : code == 5 ? QStringLiteral("The plug-in could not be loaded or initialized. Check its installation and license.")
             : QStringLiteral("The VST add-on exited (code %1).").arg(code));
     });
     connect(process, &QProcess::errorOccurred, this, [this, i, process](QProcess::ProcessError error) {
-        if (error == QProcess::FailedToStart && d->channels[i].process == process) d->fail(i, QStringLiteral("Could not start the VST add-on."));
+        if (error == QProcess::FailedToStart) d->processFailed(i, process, QStringLiteral("Could not start the VST add-on."));
     });
     d->timer.start();
     process->start(addonPath(), {QStringLiteral("--run"), id, QStringLiteral("--module"), s.path,
         QStringLiteral("--class"), s.uid, QStringLiteral("--parent"), QString::number(QCoreApplication::applicationPid())});
 #endif
     emit changed();
+}
+void VstService::activate(VstSlot slot) {
+    auto &s = d->channels[int(slot)];
+    if (!vstModeEnabled() || !available()) return;
+    if (s.process) { bypass(slot, false); return; }
+    if (applying(slot) || s.path.isEmpty() || s.uid.isEmpty()) { emit changed(); return; }
+    select(slot, s.path, s.uid);
 }
 void VstService::bypass(VstSlot slot, bool bypassed) {
     auto &s = d->channels[int(slot)]; s.bypass = bypassed;
@@ -351,7 +437,10 @@ void VstService::bypass(VstSlot slot, bool bypassed) {
 }
 bool VstService::active(VstSlot slot) const { return vstModeEnabled() && d->channels[int(slot)].status == QLatin1StringView("vst.active"); }
 bool VstService::bypassed(VstSlot slot) const { return d->channels[int(slot)].bypass; }
-QString VstService::statusKey(VstSlot slot) const { return d->channels[int(slot)].status; }
+QString VstService::statusKey(VstSlot slot) const {
+    const auto &s = d->channels[int(slot)];
+    return !s.bridge && applying(slot) ? QStringLiteral("vst.loading") : s.status;
+}
 QString VstService::detail(VstSlot slot) const { return d->channels[int(slot)].detail; }
 int VstService::latency(VstSlot slot) const {
 #ifdef _WIN32

@@ -1,6 +1,9 @@
 #pragma once
 
 #include "dual_deck_player.h"
+#include "async_file_preparation.h"
+#include "async_pipeline_stop.h"
+#include <optional>
 
 #include <gst/gst.h>
 
@@ -39,6 +42,7 @@ public:
     Status cachedStatus() const { return bgmStatus_; }
     void refreshStatus();
     void pollBus();
+    bool mediaOffline() const { return mediaOffline_; }
     QString errorDetail() const { return bgmErrorDetail_; }
     Event takeEvent(QString &detail);
     void setItemVolume(double volume);
@@ -47,6 +51,12 @@ public:
 
 private:
     void drainBus();
+    void beginStop();
+    std::shared_ptr<AsyncPipelineStop> stopJob_;
+    std::shared_ptr<AsyncFilePreparation> preparation_;
+    std::optional<AsyncFilePreparation::Request> pendingLoad_;
+    QDeadlineTimer preparationDeadline_{QDeadlineTimer::Forever};
+    bool mediaOffline_ = false;
 
     GstElement *bgmPlaybin_ = nullptr;
     GstElement *bgmInputAudioLevel_ = nullptr;

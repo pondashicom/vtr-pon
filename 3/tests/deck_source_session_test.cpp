@@ -135,6 +135,55 @@ bool testAsyncStop()
     return ok;
 }
 
+bool testPreparationTimeout()
+{
+    auto *pipeline = gst_pipeline_new("blocked-preparation");
+    auto entered = std::make_shared<std::atomic_bool>(false);
+    auto release = std::make_shared<std::atomic_bool>(false);
+    auto stopped = std::make_shared<std::atomic_bool>(false);
+    auto job = AsyncFilePreparation::startWithWork(pipeline,
+        [entered, release](GstElement *, const auto &) {
+            entered->store(true);
+            while (!release->load()) QThread::msleep(2);
+            AsyncFilePreparation::Result result;
+            result.state = AsyncFilePreparation::State::Ready;
+            return result;
+        }, 40);
+    int ticks = 0;
+    QTimer timer;
+    timer.setInterval(5);
+    QObject::connect(&timer, &QTimer::timeout, [&] { ++ticks; });
+    timer.start();
+    pump(100);
+    bool ok = require(entered->load() && !job->done() && ticks >= 3
+        && job->state() == AsyncFilePreparation::State::Offline,
+        "an unresponsive file becomes offline while the GUI timer continues");
+    // A late success must remain offline, even before cancellation.
+    release->store(true);
+    pump(30);
+    ok &= require(job->done() && job->state() == AsyncFilePreparation::State::Offline,
+        "late preparation success cannot revive a timed-out source");
+    entered->store(false); release->store(false);
+    auto active = AsyncFilePreparation::startWithWork(pipeline,
+        [entered, release](GstElement *, const auto &) {
+            entered->store(true);
+            while (!release->load()) QThread::msleep(2);
+            return AsyncFilePreparation::Result{};
+        });
+    auto stop = AsyncPipelineStop::start(pipeline, [stopped] { stopped->store(true); },
+        AsyncFilePreparation::retire(active));
+    pump(30);
+    ok &= require(!stop->done() && !stopped->load(),
+        "retirement waits for the old file worker without stopping the GUI");
+    release->store(true);
+    pump(50);
+    ok &= require(active->state() == AsyncFilePreparation::State::Cancelled
+        && stop->succeeded() && stopped->load(),
+        "cancelled preparation retires only after the worker releases the pipeline");
+    gst_object_unref(pipeline);
+    return ok;
+}
+
 bool testThumbnailCoalescing()
 {
     auto mailbox = std::make_shared<UvcThumbnailMailbox>();
@@ -394,10 +443,10 @@ bool fileContract(Fixture &fixture, const QString &path)
                       && reachesState(deck.pipeline(), GST_STATE_PAUSED),
                   "File can pause after a rate change");
     const auto standby = deck.standbyAfterTake();
-    ok &= require(standby.succeeded && !standby.ownershipReleased && !standby.stopConfirmed
-                      && reachesState(deck.pipeline(), GST_STATE_READY)
-                      && deck.sourceType() == DeckSourceSession::Type::File,
-                  "off-air File standby retains source identity at READY rather than releasing it");
+    ok &= require(standby.succeeded && standby.ownershipReleased && !standby.stopConfirmed
+                      && reachesState(deck.pipeline(), GST_STATE_NULL)
+                      && deck.sourceType() == DeckSourceSession::Type::None,
+                  "off-air File retires its old graph and leaves a fresh NULL deck");
     const auto cleared = deck.clearForReplacement();
     if (cleared.stopConfirmed) {
         GstState current = GST_STATE_VOID_PENDING;
@@ -421,6 +470,45 @@ bool fileContract(Fixture &fixture, const QString &path)
     source.locator = QFileInfo(path).absolutePath() + QStringLiteral("/does-not-exist.wav");
     const auto missing = deck.prepare(source, 1.0, fixture.clock);
     ok &= awaitFileError(deck, missing);
+    return ok;
+}
+
+bool blockedFileReplacementContract(Fixture &fixture, const QString &path)
+{
+    auto &deck = fixture.deck;
+    if (!deck.clearForReplacement().succeeded) return false;
+    struct Gate { std::atomic_bool entered{false}, release{false}; };
+    auto gate = std::make_shared<Gate>();
+    g_signal_connect_data(deck.pipeline(), "source-setup", G_CALLBACK(+[](GstElement *, GstElement *, gpointer data) {
+        const auto &gate = *static_cast<std::shared_ptr<Gate> *>(data);
+        gate->entered.store(true);
+        while (!gate->release.load()) QThread::msleep(2);
+    }), new std::shared_ptr<Gate>(gate), +[](gpointer data, GClosure *) {
+        delete static_cast<std::shared_ptr<Gate> *>(data);
+    }, GConnectFlags(0));
+    DualDeckPlayer::DeckSource source;
+    source.type = DualDeckPlayer::DeckSource::Type::File;
+    source.locator = path;
+    QElapsedTimer elapsed; elapsed.start();
+    const auto prepared = deck.prepare(source, 1.0, fixture.clock);
+    bool ok = require(elapsed.elapsed() < 100 && prepared.state == DeckSourceSession::PreparationState::Loading,
+        "a blocked source open returns control to the GUI immediately");
+    for (int i = 0; i < 200 && !gate->entered.load(); ++i) { deck.refreshPreparation(); pump(5); }
+    ok &= require(gate->entered.load(), "the real playbin source-setup callback is held in its worker");
+    elapsed.restart();
+    const auto retired = deck.clearForReplacement();
+    ok &= require(retired.succeeded && elapsed.elapsed() < 200,
+        "replacing a blocked source never waits for its state lock or NULL transition");
+    if (retired.succeeded) {
+        const auto next = deck.prepare(source, 1.0, fixture.clock);
+        ok &= require(next.state == DeckSourceSession::PreparationState::Loading,
+            "replacement graph accepts another file while the old source remains blocked");
+        ok &= awaitReady(deck, "replacement file reaches Ready independently of the blocked source");
+    }
+    gate->release.store(true);
+    pump(100);
+    ok &= require(deck.refreshPreparation().state == DeckSourceSession::PreparationState::Ready,
+        "late completion of the retired source cannot overwrite the new standby state");
     return ok;
 }
 
@@ -597,7 +685,7 @@ int main(int argc, char **argv)
     QApplication app(argc, argv);
     if (!testThumbnailCoalescing()) return 1;
     gst_init(nullptr, nullptr);
-    if (!testAsyncStop()) return 1;
+    if (!testAsyncStop() || !testPreparationTimeout()) return 1;
     {
         const QString ownPath=QStringLiteral("opaque-self-camera-test-path");
         vtrpon::UvcSelfCameraRegistration registration;
@@ -623,6 +711,7 @@ int main(int argc, char **argv)
     Fixture fixture;
     if (!require(fixture.initialize(), "deck, source managers, and native compositor initialize")) return 1;
     bool ok = fileContract(fixture, tone);
+    ok &= blockedFileReplacementContract(fixture, tone);
     ok &= uvcRetirementContract(fixture);
     ok &= liveAudioContract(fixture);
     // PDF's final case deliberately shuts the compositor down to exercise

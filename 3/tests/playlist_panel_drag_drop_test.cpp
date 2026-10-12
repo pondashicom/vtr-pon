@@ -893,11 +893,11 @@ int baseNetworkSettingsRow(int original) {
   case 8: return ndi ? 12 : 11;  // Shortcut Keys
   case 9:
   case 10: return ndi ? 10 : 9;  // Appearance / former Background
-  case 11: return ndi ? 13 : 12;  // Test Pattern
+  case 11: return ndi ? 14 : 13;  // Test Pattern
   case 12: return ndi ? 11 : 10;  // Language & Time
   case 13: return ndi ? 6 : 5;  // Return Monitor
-  case 14: return ndi ? 16 : 15;  // Save / Reset
-  case 15: return ndi ? 18 : 17;  // Category count
+  case 14: return ndi ? 17 : 16;  // Save / Reset
+  case 15: return ndi ? 19 : 18;  // Category count
   default: return original;
   }
 }
@@ -2253,6 +2253,7 @@ int main(int argc, char *argv[]) {
          QStringLiteral("Appearance"),
          QStringLiteral("Language & Time"),
          QStringLiteral("Shortcut Keys"),
+         QStringLiteral("MIDI Control"),
          QStringLiteral("Test Pattern"),
          QStringLiteral("File Management"),
          QStringLiteral("Add-ons"),

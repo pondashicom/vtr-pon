@@ -800,7 +800,7 @@ void EditSessionController::loadItem(quint64 itemId, const QString &path) {
         true);
     return;
   }
-  if (!fileInfo.exists() || !fileInfo.isFile()) {
+  if (path.isEmpty() || (playlistModel_ && playlistModel_->itemMediaOffline(itemId))) {
     panel_->setStatus(QStringLiteral("The file to load into EDIT could not be found."),
                       true);
     return;
@@ -1472,6 +1472,15 @@ void EditSessionController::updateUi() {
     return;
   }
   if (player_.isAvailable()) player_.processBusMessages();
+  if (liveDevicePath_.isEmpty() && removalPendingId_ == 0 && player_.mediaOffline()) {
+    loadPending_ = false;
+    pendingSeekMs_.reset();
+    seekLockMs_.reset();
+    if (playlistModel_) playlistModel_->setFileMediaOffline(editItemId_);
+    panel_->setTransportEnabled(false);
+    panel_->setStatus(QStringLiteral("MEDIA OFFLINE"), true);
+    return;
+  }
   if (!liveDevicePath_.isEmpty() && removalPendingId_ == 0) {
     if (uvcSessions_ && uvcSessions_->sourceSuspendedForPriority(liveDevicePath_)) {
       panel_->setLiveFrame({});
@@ -1525,7 +1534,15 @@ void EditSessionController::updateUi() {
     return;
   }
   if (loadPending_) {
-    if (player_.isBusy()) return;
+    if (player_.isBusy()) {
+      QString detail;
+      if (player_.takeEvent(detail) == EditPlayer::Event::Error) {
+        loadPending_ = false;
+        panel_->setTransportEnabled(false);
+        panel_->setStatus(detail, true);
+      }
+      return;
+    }
     loadPending_ = false;
     panel_->setTransportEnabled(player_.hasMedia());
     updateEditorState();
@@ -1648,7 +1665,7 @@ void EditSessionController::updateUi() {
 
   QString detail;
   const EditPlayer::Event event = player_.takeEvent(detail);
-  if (event == EditPlayer::Event::Error) {
+  if (event == EditPlayer::Event::Error || event == EditPlayer::Event::MediaOffline) {
     pendingSeekMs_.reset();
     seekLockMs_.reset();
     seekLockTicks_ = 0;

@@ -21,6 +21,7 @@ constexpr guint kRate = 48000;
 constexpr guint kFrameBytes = 2 * sizeof(float);
 constexpr guint64 kBufferTime = 200 * GST_MSECOND;
 constexpr guint64 kLatencyTime = 10 * GST_MSECOND;
+constexpr gsize kOutputChunkBytes = (kRate / 50) * kFrameBytes;
 constexpr const char *kCaps =
     "audio/x-raw,format=F32LE,rate=48000,channels=2,layout=interleaved";
 
@@ -37,6 +38,7 @@ struct Channel {
     {
         buffers.clear();
         queuedBytes = 0;
+        frontOffset = 0;
         discontinuity = true;
         ++generation;
     }
@@ -45,6 +47,7 @@ struct Channel {
     std::condition_variable ready;
     std::deque<Buffer> buffers;
     guint64 queuedBytes = 0;
+    gsize frontOffset = 0;
     guint64 bufferTime = kBufferTime;
     GstClockTime producerLatency = 0;
     const void *producer = nullptr;
@@ -266,13 +269,15 @@ GstFlowReturn sinkRender(GstBaseSink *base, GstBuffer *input)
         if (sink->state->detached.load() || channel->producer != sink->state || !channel->connected || generation != channel->generation) return GST_FLOW_OK;
         const guint64 limit = gst_util_uint64_scale(
             channel->bufferTime, kRate * kFrameBytes, GST_SECOND);
-        if (bytes > limit || channel->queuedBytes > limit - bytes) {
+        if (channel->queuedBytes && (bytes > limit || channel->queuedBytes > limit - bytes)) {
             // An unavailable/stalled output must not make the media decoder
             // fail. Keep storage bounded and resume with current PCM rather
             // than replaying an old backlog when the receiver recovers.
             channel->clearLocked();
-            if (bytes > limit) return GST_FLOW_OK;
         }
+        // Demuxers may deliver a single PCM block larger than buffer-time
+        // (e.g. 500.5 ms from a PCM MOV). Keep that block intact: the bound is
+        // the configured backlog or one input block, never an unbounded queue.
         channel->queuedBytes += bytes;
         channel->buffers.push_back(std::move(buffer));
     }
@@ -413,9 +418,31 @@ GstFlowReturn sourceCreate(GstPushSrc *base, GstBuffer **output)
                 return source->state->interrupted.load() || !channel->buffers.empty();
             });
             if (source->state->interrupted.load()) return GST_FLOW_FLUSHING;
-            buffer = std::move(channel->buffers.front());
-            channel->buffers.pop_front();
-            channel->queuedBytes -= gst_buffer_get_size(buffer.get());
+            auto &front = channel->buffers.front();
+            const gsize size = gst_buffer_get_size(front.get());
+            const gsize offset = channel->frontOffset;
+            const gsize bytes = (std::min)(size - offset, kOutputChunkBytes);
+            if (!offset && bytes == size) {
+                buffer = std::move(front);
+            } else {
+                // Feed short spans to the mixer so a large decoder block does
+                // not commit half a second of old fader/transport state ahead.
+                // Retain the remainder in the generation-checked bridge queue.
+                buffer.reset(gst_buffer_copy_region(front.get(), GST_BUFFER_COPY_MEMORY, offset, bytes));
+                if (!buffer) return GST_FLOW_ERROR;
+                GST_BUFFER_FLAGS(buffer.get()) = GST_BUFFER_FLAGS(front.get());
+                if (offset) GST_BUFFER_FLAG_UNSET(buffer.get(), GST_BUFFER_FLAG_DISCONT);
+                const auto start = gst_util_uint64_scale(offset / kFrameBytes, GST_SECOND, kRate);
+                const auto end = gst_util_uint64_scale((offset + bytes) / kFrameBytes, GST_SECOND, kRate);
+                GST_BUFFER_PTS(buffer.get()) = GST_BUFFER_PTS(front.get()) + start;
+                GST_BUFFER_DURATION(buffer.get()) = end - start;
+            }
+            channel->frontOffset += bytes;
+            if (channel->frontOffset == size) {
+                channel->buffers.pop_front();
+                channel->frontOffset = 0;
+            }
+            channel->queuedBytes -= bytes;
             discontinuity = channel->discontinuity;
             channel->discontinuity = false;
             generation = channel->generation;

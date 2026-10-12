@@ -41,7 +41,12 @@ public:
         plugins_->setMinimumWidth(scalePx(360));
         plugins_->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
         label_->setBuddy(plugins_);
-        layout->addWidget(label_); layout->addWidget(plugins_);
+        apply_ = new QPushButton(this); apply_->setObjectName(QStringLiteral("vstApply"));
+        auto *selection = new QHBoxLayout;
+        selection->addWidget(plugins_, 1); selection->addWidget(apply_);
+        layout->addWidget(label_); layout->addLayout(selection);
+        current_ = new QLabel(this); current_->setObjectName(QStringLiteral("vstCurrent"));
+        current_->setWordWrap(true); layout->addWidget(current_);
         auto *buttons = new QHBoxLayout;
         bypass_ = new QCheckBox(this); bypass_->setObjectName(QStringLiteral("vstBypass"));
         open_ = new QPushButton(QStringLiteral("OPEN"), this); open_->setObjectName(QStringLiteral("vstOpen"));
@@ -62,8 +67,9 @@ public:
             else service.scan();
         });
         connect(bypass_, &QCheckBox::toggled, this, [this](bool value) { VstService::instance().bypass(slot_, value); });
-        connect(plugins_, &QComboBox::currentIndexChanged, this, [this](int index) {
-            const auto item = plugins_->itemData(index).toJsonObject();
+        connect(plugins_, &QComboBox::currentIndexChanged, this, [this] { refresh(); });
+        connect(apply_, &QPushButton::clicked, this, [this] {
+            const auto item = plugins_->currentData().toJsonObject();
             VstService::instance().select(slot_, item.value("path").toString(), item.value("uid").toString());
         });
         connect(open_, &QPushButton::clicked, this, [this] {
@@ -81,20 +87,25 @@ protected:
 private:
     void catalog() {
         const auto &service = VstService::instance();
+        // Scanning and language changes must not discard an unapplied choice.
+        const auto draft = initialized_ ? plugins_->currentData().toJsonObject()
+            : QJsonObject{{"path", service.selectedPath(slot_)}, {"uid", service.selectedUid(slot_)}};
+        const auto draftLabel = initialized_ ? plugins_->currentText() : QString();
+        initialized_ = true;
         const QSignalBlocker blocker(plugins_);
-        plugins_->clear(); plugins_->addItem(uiText("vst.select"));
+        plugins_->clear(); plugins_->addItem(uiText("vst.none"));
         int selected = 0;
         for (const auto &value : service.plugins()) {
             const auto item = value.toObject();
             plugins_->addItem(item.value("name").toString() + QStringLiteral(" — ") + item.value("vendor").toString(), item);
             const auto scannedPath = QDir::cleanPath(QDir::fromNativeSeparators(item.value("path").toString()));
-            const auto selectedPath = QDir::cleanPath(QDir::fromNativeSeparators(service.selectedPath(slot_)));
+            const auto selectedPath = QDir::cleanPath(QDir::fromNativeSeparators(draft.value("path").toString()));
             if (scannedPath.compare(selectedPath, Qt::CaseInsensitive) == 0 &&
-                item.value("uid").toString().compare(service.selectedUid(slot_), Qt::CaseInsensitive) == 0) selected = plugins_->count() - 1;
+                item.value("uid").toString().compare(draft.value("uid").toString(), Qt::CaseInsensitive) == 0) selected = plugins_->count() - 1;
         }
-        if (!selected && !service.selectedPath(slot_).isEmpty()) {
-            QJsonObject item{{"path", service.selectedPath(slot_)}, {"uid", service.selectedUid(slot_)}};
-            plugins_->addItem(service.selectedPath(slot_) + QStringLiteral(" / ") + service.selectedUid(slot_), item);
+        if (!selected && !draft.value("path").toString().isEmpty()) {
+            plugins_->addItem(draftLabel.isEmpty() ? draft.value("path").toString()
+                + QStringLiteral(" / ") + draft.value("uid").toString() : draftLabel, draft);
             selected = plugins_->count() - 1;
         }
         plugins_->setCurrentIndex(selected); refresh();
@@ -103,6 +114,18 @@ private:
         const auto &service = VstService::instance();
         setWindowTitle(channel(slot_) + QStringLiteral(" — VST3"));
         label_->setText(uiText("vst.plugin"));
+        apply_->setText(uiText(service.applying(slot_) ? "vst.applying_button" : "vst.apply"));
+        QString currentName = service.selectedPath(slot_).isEmpty() ? uiText("vst.none")
+            : QFileInfo(service.selectedPath(slot_)).fileName() + QStringLiteral(" / ") + service.selectedUid(slot_);
+        for (const auto &value : service.plugins()) {
+            const auto item = value.toObject();
+            if (QDir::fromNativeSeparators(item.value("path").toString()).compare(
+                    QDir::fromNativeSeparators(service.selectedPath(slot_)), Qt::CaseInsensitive) == 0
+                && item.value("uid").toString().compare(service.selectedUid(slot_), Qt::CaseInsensitive) == 0) {
+                currentName = item.value("name").toString(); break;
+            }
+        }
+        current_->setText(uiText("vst.current").arg(currentName));
         scan_->setText(uiText(service.scanning() ? "vst.scan_cancel" : "vst.rescan"));
         const auto progress = service.scanProgress();
         if (service.scanning()) {
@@ -118,17 +141,32 @@ private:
         } else scanStatus_->clear();
         bypass_->setText(uiText("vst.bypass"));
         const QSignalBlocker blocker(bypass_); bypass_->setChecked(service.bypassed(slot_));
-        status_->setText(uiText(service.statusKey(slot_).toUtf8().constData()) + QStringLiteral("\n") + service.detail(slot_));
+        auto status = uiText(service.statusKey(slot_).toUtf8().constData());
+        if (!service.detail(slot_).isEmpty()) status += QStringLiteral("\n") + service.detail(slot_);
+        if (service.applying(slot_)) status += QStringLiteral("\n") + uiText("vst.applying");
+        else if (!service.applyError(slot_).isEmpty())
+            status += QStringLiteral("\n") + uiText("vst.apply_failed").arg(service.applyError(slot_));
+        status_->setText(status);
         hint_->setText(uiText("vst.hint").arg(service.latency(slot_)));
         open_->setEnabled(vstModeEnabled() && (service.active(slot_) || service.statusKey(slot_) == QLatin1StringView("vst.bypassed")));
-        plugins_->setEnabled(vstModeEnabled()); bypass_->setEnabled(vstModeEnabled());
+        const auto draft = plugins_->currentData().toJsonObject();
+        const bool different = QDir::fromNativeSeparators(draft.value("path").toString()).compare(
+                QDir::fromNativeSeparators(service.selectedPath(slot_)), Qt::CaseInsensitive) != 0
+            || draft.value("uid").toString().compare(service.selectedUid(slot_), Qt::CaseInsensitive) != 0;
+        apply_->setEnabled(vstModeEnabled() && !service.applying(slot_)
+            && (different || (!draft.value("path").toString().isEmpty()
+                && !service.active(slot_) && !service.bypassed(slot_))));
+        plugins_->setEnabled(vstModeEnabled() && !service.applying(slot_)); bypass_->setEnabled(vstModeEnabled());
+        layout()->activate();
+        adjustSize();
         if (!vstModeEnabled()) hide();
     }
     VstSlot slot_;
+    bool initialized_ = false;
     QComboBox *plugins_;
     QCheckBox *bypass_;
-    QPushButton *open_, *scan_;
-    QLabel *label_, *status_, *scanStatus_, *hint_;
+    QPushButton *open_, *scan_, *apply_;
+    QLabel *label_, *status_, *scanStatus_, *hint_, *current_;
 };
 class Binding final : public QObject {
 public:

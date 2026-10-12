@@ -98,6 +98,7 @@ ProgramPlayoutController::ProgramPlayoutController(
       failMacroReservation(QStringLiteral("The macro standby item became unavailable."));
     }
     const auto item = playlistModel_->itemState(itemId);
+    updateDskSelectionAvailability();
     if (!item || item->sourceType != PlaylistSourceType::Uvc) return;
     if (offline) {
       if (playlistModel_->onAirItemId() == itemId) {
@@ -575,8 +576,7 @@ bool ProgramPlayoutController::validateMacroTarget(quint64 itemId,
   if (playlistModel_->itemConversionInProgress(itemId)) {
     return macroOperationError(error, QStringLiteral("The macro target is still being imported or converted."));
   }
-  if (item->filePath.isEmpty() || playlistModel_->itemMediaOffline(itemId) ||
-      !QFileInfo::exists(item->filePath)) {
+  if (item->filePath.isEmpty() || playlistModel_->itemMediaOffline(itemId)) {
     return macroOperationError(error, QStringLiteral("The macro target file is unavailable."));
   }
   if (playlistModel_->dskItemId() == itemId) {
@@ -1269,8 +1269,7 @@ void ProgramPlayoutController::scheduleSelectedItemCue() {
   const auto selected = playlistPanel_->selectedItemState();
   const std::optional<CueRequest> requestedCue =
       selected && !playlistModel_->itemConversionInProgress(selected->id) &&
-              (selected->sourceType != PlaylistSourceType::Uvc ||
-               !playlistModel_->itemMediaOffline(selected->id)) &&
+              !playlistModel_->itemMediaOffline(selected->id) &&
               playlistModel_->playlistMode(selected->playlistNumber) !=
                   PlaylistMode::Bgm &&
               (allowSameItemOnAirRetake_ ||
@@ -1369,7 +1368,7 @@ void ProgramPlayoutController::beginPendingCue() {
     return;
   }
   if (pendingCue_->sourceType == PlaylistSourceType::File &&
-      !QFileInfo::exists(pendingCue_->path)) {
+      playlistModel_->itemMediaOffline(pendingCue_->itemId)) {
     pendingTakeItemId_.reset();
     playlistModel_->setCueItemState(
         pendingCue_->itemId, PlaylistCueState::Error,
@@ -1456,6 +1455,9 @@ void ProgramPlayoutController::updateCueUi() {
       takeCueOnAir(*selected);
     }
   } else if (status == DualDeckPlayer::CueStatus::Error) {
+    const auto failedId = cue_->itemId;
+    if (player_.cueMediaOffline()) playlistModel_->setFileMediaOffline(failedId);
+    if (!cue_ || cue_->itemId != failedId) return; // Availability observers can replace a reservation.
     if (cue_->sourceType == PlaylistSourceType::Uvc && uvcSourceSessions_
         && !vtrpon::isLiveAudioSource(cue_->path)) {
       const auto path = cue_->path;
@@ -1840,7 +1842,7 @@ bool ProgramPlayoutController::cuePlaylistItemToDsk(
     return false;
   }
   if (item.sourceType != PlaylistSourceType::File ||
-      item.filePath.isEmpty() || !QFileInfo::exists(item.filePath)) {
+      item.filePath.isEmpty() || playlistModel_->itemMediaOffline(item.id)) {
     setPendingDskOn(false);
     showWarning(QStringLiteral("Select a valid playlist item to send to DSK."));
     updateDskSelectionAvailability();
@@ -2396,6 +2398,8 @@ void ProgramPlayoutController::updateDskUi() {
   QString eventDetail;
   const DualDeckPlayer::DskEvent event = player_.takeDskEvent(eventDetail);
   if (event == DualDeckPlayer::DskEvent::CueError) {
+    if (dskCue_ && player_.dskCueMediaOffline())
+      playlistModel_->setFileMediaOffline(dskCue_->itemId);
     if (player_.dskStatus() == DualDeckPlayer::DskStatus::On) {
       resetNextDskTransitionState(true);
       showWarning(eventDetail.isEmpty() ? player_.dskErrorDetail()
@@ -2408,6 +2412,7 @@ void ProgramPlayoutController::updateDskUi() {
       showWarning(eventDetail);
     }
   } else if (event == DualDeckPlayer::DskEvent::Error) {
+    if (player_.dskMediaOffline()) playlistModel_->setFileMediaOffline(playlistModel_->dskItemId());
     failDsk(eventDetail.isEmpty() ? player_.dskErrorDetail() : eventDetail);
     return;
   } else if (event == DualDeckPlayer::DskEvent::EndOfStream &&
@@ -2527,7 +2532,7 @@ void ProgramPlayoutController::updateDskSelectionAvailability() {
       (conversionInProgress ||
        (selected->sourceType == PlaylistSourceType::File &&
         !selected->filePath.isEmpty() &&
-        QFileInfo::exists(selected->filePath))));
+        !playlistModel_->itemMediaOffline(selected->id))));
 }
 
 void ProgramPlayoutController::nextPowerPointSlide() {
@@ -3117,6 +3122,12 @@ void ProgramPlayoutController::updatePlaybackUi() {
     if (!programAudioError && item && item->sourceType == PlaylistSourceType::Uvc && uvcSourceSessions_) {
       uvcSourceSessions_->reportSourceFailure(item->filePath, detail);
       if (playlistModel_->onAirItemId() == item->id) clearOnAir();
+      return;
+    }
+    if (item && item->sourceType == PlaylistSourceType::File && player_.onAirMediaOffline()) {
+      playlistModel_->setFileMediaOffline(item->id);
+      clearOnAir(); // Retire the unavailable file without a GUI-thread stop/seek.
+      showWarning(QStringLiteral("MEDIA OFFLINE\n") + detail);
       return;
     }
     const bool stopped = player_.stop();

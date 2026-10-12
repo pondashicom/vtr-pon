@@ -43,6 +43,8 @@ bool BgmPlayback::shutdown()
         shutdownConfirmed_ = true;
         return true;
     }
+    if (stopJob_) return shutdownConfirmed_ = stopJob_->succeeded();
+    if (auto wait = AsyncFilePreparation::retire(preparation_)) wait();
     if (gst_element_set_state(bgmPlaybin_, GST_STATE_NULL) == GST_STATE_CHANGE_FAILURE) {
         qWarning() << "BGM playbin" << "rejected GST_STATE_NULL";
         return false;
@@ -125,7 +127,7 @@ bool BgmPlayback::initialize(GstBusSyncHandler callback, gpointer userData)
                  "video-sink", videoDiscard,
                  "audio-sink", audioOutput, nullptr);
     bgmBus_ = gst_element_get_bus(bgmPlaybin_);
-    if (!bgmBus_) {
+    if (!bgmBus_ || preparation_ || stopJob_) {
         return false;
     }
     gst_bus_set_sync_handler(bgmBus_, callback, userData, nullptr);
@@ -140,10 +142,10 @@ bool BgmPlayback::load(const QString &filePath, qint64 inPointMs,
         inPointMs < 0 || (outPointMs >= 0 && outPointMs <= inPointMs)) {
         return false;
     }
-    (void)gst_element_set_state(bgmPlaybin_, GST_STATE_READY);
-    drainBus();
-    const QByteArray uri = QUrl::fromLocalFile(filePath).toEncoded();
-    g_object_set(bgmPlaybin_, "uri", uri.constData(), nullptr);
+    beginStop();
+    pendingLoad_ = AsyncFilePreparation::Request{filePath, inPointMs, outPointMs};
+    preparationDeadline_.setRemainingTime(AsyncFilePreparation::timeoutMs);
+    mediaOffline_ = false;
     bgmInPointMs_ = inPointMs;
     bgmOutPointMs_ = outPointMs;
     bgmRangeSeekIssued_ = false;
@@ -152,13 +154,6 @@ bool BgmPlayback::load(const QString &filePath, qint64 inPointMs,
     pendingBgmEvent_ = Event::None;
     pendingBgmEventDetail_.clear();
     bgmStatus_ = Status::Loading;
-    if (gst_element_set_state(bgmPlaybin_, GST_STATE_PAUSED) ==
-        GST_STATE_CHANGE_FAILURE) {
-        bgmStatus_ = Status::Error;
-        bgmErrorDetail_ = QStringLiteral(
-            "Could not prepare the BGM playback pipeline.");
-        return false;
-    }
     return true;
 }
 
@@ -182,7 +177,7 @@ bool BgmPlayback::play()
 bool BgmPlayback::pause()
 {
     shutdownConfirmed_ = false;
-    if (!bgmPlaybin_) {
+    if (!bgmPlaybin_ || preparation_ || stopJob_) {
         return false;
     }
     if (bgmStatus_ == Status::Paused ||
@@ -205,6 +200,8 @@ BgmPlayback::StopResult BgmPlayback::stop()
     if (!bgmPlaybin_) {
         return StopResult::Failed;
     }
+    if (preparation_ || stopJob_ || bgmStatus_ == Status::Loading || bgmStatus_ == Status::Error)
+        return clear() ? StopResult::Stopped : StopResult::Failed;
     if (bgmStatus_ == Status::Empty) {
         return StopResult::AlreadyEmpty;
     }
@@ -227,11 +224,8 @@ bool BgmPlayback::clear()
     if (!bgmPlaybin_) {
         return false;
     }
-    if (gst_element_set_state(bgmPlaybin_, GST_STATE_READY) ==
-        GST_STATE_CHANGE_FAILURE) {
-        return false;
-    }
-    drainBus();
+    pendingLoad_.reset();
+    beginStop();
     bgmStatus_ = Status::Empty;
     bgmErrorDetail_.clear();
     bgmInPointMs_ = 0;
@@ -246,7 +240,7 @@ bool BgmPlayback::clear()
 bool BgmPlayback::seek(qint64 positionMs)
 {
     shutdownConfirmed_ = false;
-    if (!bgmPlaybin_ ||
+    if (!bgmPlaybin_ || preparation_ || stopJob_ ||
         bgmStatus_ == Status::Empty ||
         bgmStatus_ == Status::Loading) {
         return false;
@@ -272,7 +266,7 @@ bool BgmPlayback::seek(qint64 positionMs)
 
 qint64 BgmPlayback::positionMs() const
 {
-    if (!bgmPlaybin_ ||
+    if (!bgmPlaybin_ || preparation_ || stopJob_ ||
         bgmStatus_ == Status::Empty ||
         bgmStatus_ == Status::Loading) {
         return -1;
@@ -288,7 +282,7 @@ qint64 BgmPlayback::positionMs() const
 
 qint64 BgmPlayback::durationMs() const
 {
-    if (!bgmPlaybin_ ||
+    if (!bgmPlaybin_ || preparation_ || stopJob_ ||
         bgmStatus_ == Status::Empty) {
         return -1;
     }
@@ -304,84 +298,61 @@ BgmPlayback::Status BgmPlayback::status()
     return bgmStatus_;
 }
 
+void BgmPlayback::beginStop()
+{
+    if (stopJob_) return;
+    auto *pipeline = bgmPlaybin_;
+    auto *bus = bgmBus_;
+    stopJob_ = AsyncPipelineStop::start(pipeline, [pipeline, bus] {
+        g_object_set(pipeline, "uri", nullptr, nullptr);
+        if (bus) while (auto *message = gst_bus_pop(bus)) gst_message_unref(message);
+    }, AsyncFilePreparation::retire(std::exchange(preparation_, {})));
+}
+
 void BgmPlayback::refreshStatus()
 {
-    if (bgmStatus_ != Status::Loading || !bgmPlaybin_) {
-        return;
-    }
-    GstState state = GST_STATE_NULL;
-    GstState pending = GST_STATE_VOID_PENDING;
-    const GstStateChangeReturn result = gst_element_get_state(
-        bgmPlaybin_, &state, &pending, 0);
-    if (result == GST_STATE_CHANGE_FAILURE) {
-        bgmStatus_ = Status::Error;
-        bgmErrorDetail_ = QStringLiteral(
-            "Could not check the BGM preparation state.");
-        return;
-    }
-    if (result != GST_STATE_CHANGE_SUCCESS || state != GST_STATE_PAUSED ||
-        pending != GST_STATE_VOID_PENDING) {
-        return;
-    }
-
-    gint audioStreams = 0;
-    g_object_get(bgmPlaybin_, "n-audio", &audioStreams, nullptr);
-    bgmHasAudio_ = audioStreams > 0;
-    if (!bgmHasAudio_) {
-        bgmStatus_ = Status::Error;
-        bgmErrorDetail_ = QStringLiteral(
-            "No playable audio stream was found in the BGM item.");
-        return;
-    }
-
-    if (!bgmRangeSeekIssued_) {
-        gint64 duration = GST_CLOCK_TIME_NONE;
-        if (gst_element_query_duration(bgmPlaybin_, GST_FORMAT_TIME,
-                                       &duration) && duration > 0) {
-            const qint64 durationMs = duration / GST_MSECOND;
-            if (bgmInPointMs_ >= durationMs ||
-                (bgmOutPointMs_ >= 0 && bgmOutPointMs_ > durationMs)) {
+    if (stopJob_) {
+        if (!stopJob_->done()) {
+            if (pendingLoad_ && preparationDeadline_.hasExpired()) {
+                pendingLoad_.reset();
                 bgmStatus_ = Status::Error;
-                bgmErrorDetail_ = QStringLiteral(
-                    "The BGM In or Out point exceeds the media duration.");
-                return;
+                bgmErrorDetail_ = QStringLiteral("The previous BGM source is still stopping.");
             }
-        }
-        if (bgmInPointMs_ == 0 && bgmOutPointMs_ < 0) {
-            bgmStatus_ = Status::Ready;
             return;
         }
-        const bool seekSucceeded = gst_element_seek(
-            bgmPlaybin_, 1.0, GST_FORMAT_TIME,
-            static_cast<GstSeekFlags>(GST_SEEK_FLAG_FLUSH |
-                                      GST_SEEK_FLAG_ACCURATE),
-            GST_SEEK_TYPE_SET, bgmInPointMs_ * GST_MSECOND,
-            bgmOutPointMs_ >= 0 ? GST_SEEK_TYPE_SET : GST_SEEK_TYPE_NONE,
-            bgmOutPointMs_ >= 0 ? bgmOutPointMs_ * GST_MSECOND
-                                : GST_CLOCK_TIME_NONE);
-        if (!seekSucceeded) {
+        if (!stopJob_->succeeded()) {
+            pendingLoad_.reset();
             bgmStatus_ = Status::Error;
-            bgmErrorDetail_ = QStringLiteral(
-                "Failed to prepare the BGM In/Out points.");
+            bgmErrorDetail_ = QStringLiteral("Could not stop the BGM pipeline.");
             return;
         }
-        bgmRangeSeekIssued_ = true;
+        stopJob_.reset();
+    }
+    if (pendingLoad_) {
+        preparation_ = AsyncFilePreparation::start(bgmPlaybin_, *pendingLoad_,
+            static_cast<int>(preparationDeadline_.remainingTime()));
+        pendingLoad_.reset();
+    }
+    if (bgmStatus_ != Status::Loading || !preparation_) return;
+    const auto state = preparation_->state();
+    if (state == AsyncFilePreparation::State::Loading) return;
+    if (state != AsyncFilePreparation::State::Ready) {
+        mediaOffline_ = state == AsyncFilePreparation::State::Offline;
+        bgmStatus_ = Status::Error;
+        bgmErrorDetail_ = mediaOffline_ ? AsyncFilePreparation::offlineError()
+            : preparation_->done() ? preparation_->result().error
+                                  : QStringLiteral("Media preparation was cancelled.");
         return;
     }
-
-    gint64 position = GST_CLOCK_TIME_NONE;
-    if (!gst_element_query_position(bgmPlaybin_, GST_FORMAT_TIME,
-                                    &position)) {
-        return;
-    }
-    if (qAbs(position / GST_MSECOND - bgmInPointMs_) <= 250) {
-        bgmStatus_ = Status::Ready;
-    }
+    bgmHasAudio_ = preparation_->result().hasAudio;
+    preparation_.reset();
+    bgmStatus_ = bgmHasAudio_ ? Status::Ready : Status::Error;
+    if (!bgmHasAudio_) bgmErrorDetail_ = QStringLiteral("No playable audio stream was found in the BGM item.");
 }
 
 void BgmPlayback::pollBus()
 {
-    if (!bgmBus_) {
+    if (!bgmBus_ || preparation_ || stopJob_) {
         return;
     }
     while (GstMessage *message = gst_bus_pop(bgmBus_)) {
@@ -408,6 +379,7 @@ void BgmPlayback::pollBus()
                 << (debug ? debug : "");
             const QString detail = QString::fromUtf8(
                 error ? error->message : "Unknown GStreamer error");
+            mediaOffline_ = AsyncFilePreparation::isOfflineError(error);
             g_clear_error(&error);
             g_free(debug);
             bgmErrorDetail_ = detail;

@@ -1040,6 +1040,50 @@ bool bgmSurvivesFileFlushes(ProgramAudioOutput &output, PcmTrace &master,
     return ok;
 }
 
+bool largeChunkSequence(ProgramAudioOutput &output, PcmTrace &master, GstClock *clock)
+{
+    // PCM MOV demuxers can deliver 500.5 ms at once, larger than the bridge's
+    // 200 ms backlog limit. That is valid PCM, not a stalled consumer.
+    GError *error = nullptr;
+    GstElement *pipeline = gst_parse_launch(
+        "audiotestsrc samplesperbuffer=24024 wave=saw freq=123.456 volume=0.125 ! "
+        "audio/x-raw,format=F32LE,rate=48000,channels=2,layout=interleaved ! "
+        "volume name=large-chunk-reference ! "
+        "vtrponaudiosink channel=deck-a-audio sync=true qos=false", &error);
+    if (error || !pipeline) {
+        if (error) g_error_free(error);
+        if (pipeline) gst_object_unref(pipeline);
+        return require(false, "large PCM chunk producer initializes");
+    }
+    gst_pipeline_use_clock(GST_PIPELINE(pipeline), clock);
+    GstElement *reference = gst_bin_get_by_name(GST_BIN(pipeline), "large-chunk-reference");
+    PcmTrace source(reference, pipeline);
+    if (reference) gst_object_unref(reference);
+    PcmTrace bridge(output.itemLevel(0), output.pipeline());
+    output.setDeckAudible(0, true);
+    output.setDeckAudible(1, false);
+    output.setBgmTransportGain(0.0);
+    const auto mark = master.mark();
+    const auto bridgeMark = bridge.mark();
+    bool ok = require(source.valid() && bridge.valid() && setState(pipeline, GST_STATE_PLAYING),
+                      "large PCM chunk playback starts");
+    pump(1600);
+    ok &= checkSequence(source, master, mark, 1000, "500.5 ms PCM chunks reach MASTER", false, true);
+    ok &= checkSequence(source, bridge, bridgeMark, 1000, "500.5 ms PCM chunks reach ITEM", false, true, true);
+    output.setDeckAudible(0, false);
+    pump(150);
+    const auto mutedMark = master.mark();
+    pump(150);
+    const auto muted = master.since(mutedMark);
+    ok &= require(!muted.empty() && std::all_of(muted.begin(), muted.end(), [](const Chunk &chunk) {
+        return std::all_of(chunk.samples.begin(), chunk.samples.end(), [](float sample) { return sample == 0.0F; });
+    }), "muting a large PCM block does not leave half a second of old audio in the mixer");
+    ok &= require(setState(pipeline, GST_STATE_NULL), "large PCM chunk producer stops");
+    gst_object_unref(pipeline);
+    pump(100);
+    return ok;
+}
+
 bool liveSequence(ProgramAudioOutput &output, PcmTrace &master, GstClock *clock)
 {
     GError *error = nullptr;
@@ -1241,6 +1285,7 @@ int main(int argc, char **argv)
     if (!physicalOutput) {
         ok &= bgmSequence(output, master, uniquePath, clock);
         ok &= bgmSurvivesFileFlushes(output, master, uniquePath, constantPath, clock);
+        ok &= largeChunkSequence(output, master, clock);
         ok &= liveSequence(output, master, clock);
     }
     QElapsedTimer stopping;

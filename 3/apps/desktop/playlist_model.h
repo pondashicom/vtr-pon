@@ -91,7 +91,8 @@ public:
   explicit PlaylistModel(QObject *parent = nullptr);
   // The probe runs on a background thread and must not access GUI/model state.
   using MediaAvailabilityProbe = std::function<bool(const QString &)>;
-  PlaylistModel(QObject *parent, MediaAvailabilityProbe availabilityProbe);
+  PlaylistModel(QObject *parent, MediaAvailabilityProbe availabilityProbe,
+                int availabilityTimeoutMs = 10000);
   ~PlaylistModel() override;
 
   QList<quint64> addItems(const QList<PlaylistItemRegistration> &items);
@@ -143,6 +144,7 @@ public:
   int indexOf(quint64 itemId) const;
   std::optional<PlaylistItemState> itemState(quint64 itemId) const;
   bool itemMediaOffline(quint64 itemId) const;
+  void setFileMediaOffline(quint64 itemId);
   void setUvcDeviceAvailable(const QString &devicePath, bool available);
   std::optional<PlaylistItemConversionState>
   itemConversionState(quint64 itemId) const;

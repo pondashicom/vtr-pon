@@ -154,10 +154,10 @@ PlaylistModel::PlaylistModel(QObject *parent)
       }) {}
 
 PlaylistModel::PlaylistModel(QObject *parent,
-                             MediaAvailabilityProbe availabilityProbe)
+                             MediaAvailabilityProbe availabilityProbe, int availabilityTimeoutMs)
     : QObject(parent), playSequence_(std::make_unique<PlaylistPlaySequence>(this)),
       mediaAvailability_(std::make_unique<PlaylistMediaAvailability>(
-          this, std::move(availabilityProbe))) {
+          this, std::move(availabilityProbe), availabilityTimeoutMs)) {
   PlaylistState initialPlaylist;
   initialPlaylist.number = 1;
   playlistsByNumber_.insert(initialPlaylist.number, initialPlaylist);
@@ -1076,6 +1076,21 @@ PlaylistModel::itemState(quint64 itemId) const {
 
 bool PlaylistModel::itemMediaOffline(quint64 itemId) const {
   return mediaAvailability_->isOffline(itemId);
+}
+
+void PlaylistModel::setFileMediaOffline(quint64 itemId) {
+  const auto source = itemState(itemId);
+  if (!source || source->sourceType == PlaylistSourceType::Uvc) return;
+  QList<quint64> changed;
+  for (const auto &item : std::as_const(itemsById_)) {
+    if (item.sourceType == PlaylistSourceType::Uvc || item.filePath != source->filePath ||
+        itemMediaOffline(item.id)) continue;
+    mediaAvailability_->setOffline(item.id, true);
+    changed.append(item.id);
+  }
+  if (changed.isEmpty()) return;
+  mediaAvailability_->invalidateScan();
+  for (const auto id : changed) emit itemMediaAvailabilityChanged(id, true);
 }
 
 void PlaylistModel::setUvcDeviceAvailable(const QString &devicePath, bool available) {

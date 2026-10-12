@@ -1058,6 +1058,10 @@ if(BUILD_TESTING)
     apps/desktop/controller_scaling.h
     apps/desktop/audio_output_settings.cpp
     apps/desktop/audio_output_settings.h
+    apps/desktop/midi_control_input.cpp
+    apps/desktop/midi_control_input.h
+    apps/desktop/midi_control_settings_page.cpp
+    apps/desktop/midi_control_settings_page.h
     apps/desktop/controller_settings_dialog.cpp
     apps/desktop/addon_management_page.cpp
     apps/desktop/addon_management_page.h

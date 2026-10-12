@@ -101,7 +101,10 @@ bool DskPlayback::shutdown()
     for (Dsk &dsk : dsks_) {
         dsk.pendingPath.clear();
         if (dsk.stopJob) confirmed = dsk.stopJob->succeeded() && confirmed;
-        else confirmed = stopPipeline(dsk.playbin, "DSK playbin") && confirmed;
+        else {
+            if (auto wait = AsyncFilePreparation::retire(dsk.preparation)) wait();
+            confirmed = stopPipeline(dsk.playbin, "DSK playbin") && confirmed;
+        }
     }
     shutdownConfirmed_ = confirmed;
     return confirmed;
@@ -130,6 +133,8 @@ bool DskPlayback::cue(const QString &filePath, qint64 inPointMs,
     Dsk &dsk = dsks_[dskCueDeck_];
     if (!resetDskDeck(dskCueDeck_)) return false;
     dsk.pendingPath = filePath;
+    dsk.mediaOffline = false;
+    dsk.preparationDeadline.setRemainingTime(AsyncFilePreparation::timeoutMs);
     dsk.inPointMs = inPointMs;
     dsk.outPointMs = outPointMs;
     dsk.status = DskStatus::Loading;
@@ -153,45 +158,12 @@ bool DskPlayback::startPendingCue(int dskIndex)
     drainBus(dsk.bus);
     programGpuCompositor_->clearDskFrame(dskIndex);
 
-    const QMimeType mimeType = QMimeDatabase().mimeTypeForFile(
-        filePath, QMimeDatabase::MatchContent);
-    dsk.isStillImage = mimeType.name().startsWith(
-        QStringLiteral("image/"));
-    dsk.inPointMs = dsk.isStillImage ? 0 : inPointMs;
-    dsk.outPointMs = dsk.isStillImage ? -1 : outPointMs;
-    dsk.rangeSeekIssued = dsk.isStillImage
-        || (dsk.inPointMs == 0 && dsk.outPointMs < 0);
-    GstElement *imageFreeze = nullptr;
-    if (dsk.isStillImage) {
-        imageFreeze = gst_element_factory_make(
-            "imagefreeze", "dsk-image-freeze");
-        if (!imageFreeze) {
-            setDskError(dskIndex, QStringLiteral(
-                "Could not create imagefreeze for the still-image DSK."),
-                true);
-            return false;
-        }
-        gst_object_ref_sink(imageFreeze);
-    }
-    g_object_set(dsk.playbin, "video-filter", imageFreeze, nullptr);
-    if (imageFreeze) {
-        gst_object_unref(imageFreeze);
-    }
-
-    const QByteArray uri = QUrl::fromLocalFile(filePath).toEncoded();
-    g_object_set(dsk.playbin, "uri", uri.constData(), nullptr);
+    dsk.isStillImage = false;
     dsk.status = DskStatus::Loading;
     dsk.errorDetail.clear();
-    pendingDskEvent_ = DskEvent::None;
-    pendingDskEventDetail_.clear();
-    if (gst_element_set_state(dsk.playbin, GST_STATE_PAUSED)
-        == GST_STATE_CHANGE_FAILURE) {
-        if (dsk.status != DskStatus::Error) {
-            setDskError(dskIndex, QStringLiteral(
-                "Could not transition the DSK media to PAUSED."), true);
-        }
-        return false;
-    }
+    dsk.preparation = AsyncFilePreparation::start(dsk.playbin,
+        {filePath, inPointMs, outPointMs, 1.0, true},
+        static_cast<int>(dsk.preparationDeadline.remainingTime()));
     return true;
 }
 
@@ -436,6 +408,16 @@ qint64 DskPlayback::durationMs() const
     return queryDskTime(dskActiveDeck_, GST_QUERY_DURATION);
 }
 
+bool DskPlayback::mediaOffline() const
+{
+    return dskActiveDeck_ >= 0 && dsks_[dskActiveDeck_].mediaOffline;
+}
+
+bool DskPlayback::cueMediaOffline() const
+{
+    return dskCueDeck_ >= 0 && dsks_[dskCueDeck_].mediaOffline;
+}
+
 QString DskPlayback::errorDetail() const
 {
     if (dskCueDeck_ >= 0 && !dsks_[dskCueDeck_].errorDetail.isEmpty()) {
@@ -459,7 +441,7 @@ void DskPlayback::pollBus()
     refreshDskStatus();
     for (int index = 0; index < static_cast<int>(dsks_.size()); ++index) {
         Dsk &dsk = dsks_[index];
-        if (!dsk.bus || dsk.stopJob || dsk.status == DskStatus::Empty) {
+        if (!dsk.bus || dsk.stopJob || dsk.preparation || dsk.status == DskStatus::Empty) {
             continue;
         }
         while (GstMessage *message = gst_bus_pop(dsk.bus)) {
@@ -484,6 +466,7 @@ void DskPlayback::pollBus()
                 const QString detail = QString::fromUtf8(
                     error ? error->message
                           : "Unknown DSK GStreamer error");
+                dsk.mediaOffline = AsyncFilePreparation::isOfflineError(error);
                 g_clear_error(&error);
                 g_free(debug);
                 setDskError(index, detail, index == dskCueDeck_);
@@ -543,7 +526,7 @@ bool DskPlayback::seekDskRange(int dskIndex, GstSeekFlags flags)
         return false;
     }
     Dsk &dsk = dsks_[dskIndex];
-    if (!dsk.playbin) {
+    if (!dsk.playbin || dsk.preparation || dsk.stopJob) {
         return false;
     }
     return gst_element_seek(
@@ -558,7 +541,7 @@ bool DskPlayback::seekDskRange(int dskIndex, GstSeekFlags flags)
 qint64 DskPlayback::queryDskTime(int dskIndex, GstQueryType type) const
 {
     if (dskIndex < 0 || dskIndex >= static_cast<int>(dsks_.size())
-        || !dsks_[dskIndex].playbin) {
+        || !dsks_[dskIndex].playbin || dsks_[dskIndex].preparation || dsks_[dskIndex].stopJob) {
         return -1;
     }
     gint64 value = GST_CLOCK_TIME_NONE;
@@ -604,7 +587,7 @@ bool DskPlayback::resetDskDeck(int dskIndex)
     dsk.stopJob = AsyncPipelineStop::start(pipeline, [pipeline, bus] {
         drainBus(bus);
         g_object_set(pipeline, "video-filter", nullptr, "uri", nullptr, nullptr);
-    });
+    }, AsyncFilePreparation::retire(std::exchange(dsk.preparation, {})));
     if (dsk.stopJob->done() && !dsk.stopJob->succeeded()) {
         setDskError(dskIndex, QStringLiteral("Could not start the DSK stop worker."), true);
         return false;
@@ -624,7 +607,13 @@ void DskPlayback::finishRetirements()
     for (int index = 0; index < static_cast<int>(dsks_.size()); ++index) {
         auto &dsk = dsks_[index];
         if (dsk.stopJob) {
-            if (!dsk.stopJob->done()) continue;
+            if (!dsk.stopJob->done()) {
+                if (!dsk.pendingPath.isEmpty() && dsk.preparationDeadline.hasExpired()) {
+                    dsk.pendingPath.clear();
+                    setDskError(index, QStringLiteral("The previous DSK source is still stopping."), true);
+                }
+                continue;
+            }
             if (!dsk.stopJob->succeeded()) {
                 dsk.pendingPath.clear();
                 if (dsk.status != DskStatus::Error)
@@ -663,61 +652,29 @@ void DskPlayback::refreshDskStatus()
         return;
     }
 
-    GstState state = GST_STATE_NULL;
-    GstState pending = GST_STATE_VOID_PENDING;
-    const GstStateChangeReturn stateResult = gst_element_get_state(
-        dsk.playbin, &state, &pending, 0);
-    if (stateResult == GST_STATE_CHANGE_FAILURE) {
-        const QString detail = QStringLiteral(
-            "Could not check the DSK ready state.");
-        setDskError(cueDeck, detail, true);
+    if (!dsk.preparation) return;
+    const auto state = dsk.preparation->state();
+    if (state == AsyncFilePreparation::State::Loading) return;
+    if (state != AsyncFilePreparation::State::Ready) {
+        dsk.mediaOffline = state == AsyncFilePreparation::State::Offline;
+        setDskError(cueDeck, dsk.mediaOffline ? AsyncFilePreparation::offlineError()
+            : dsk.preparation->done() ? dsk.preparation->result().error
+                                     : QStringLiteral("Media preparation was cancelled."), true);
         return;
     }
-    if (stateResult != GST_STATE_CHANGE_SUCCESS
-        || state != GST_STATE_PAUSED
-        || pending != GST_STATE_VOID_PENDING) {
+    const auto &result = dsk.preparation->result();
+    if (!result.hasVideo) {
+        setDskError(cueDeck, QStringLiteral("No playable video stream was found in the DSK item."), true);
         return;
     }
-
-    if (!dsk.rangeSeekIssued) {
-        gint64 duration = GST_CLOCK_TIME_NONE;
-        if (gst_element_query_duration(dsk.playbin, GST_FORMAT_TIME,
-                                       &duration)
-            && duration > 0) {
-            const qint64 durationMs = duration / GST_MSECOND;
-            if (dsk.inPointMs >= durationMs
-                || (dsk.outPointMs >= 0
-                    && dsk.outPointMs > durationMs)) {
-                const QString detail = QStringLiteral(
-                    "The DSK In or Out point exceeds the media duration.");
-                setDskError(cueDeck, detail, true);
-                return;
-            }
-        }
-        programGpuCompositor_->clearDskFrame(cueDeck);
-        if (!seekDskRange(cueDeck, static_cast<GstSeekFlags>(
-                GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_ACCURATE))) {
-            const QString detail = QStringLiteral(
-                "Could not prepare the DSK item at its In point.");
-            setDskError(cueDeck, detail, true);
-            return;
-        }
-        dsk.rangeSeekIssued = true;
-        return;
-    }
-
+    dsk.isStillImage = result.stillImage;
+    if (dsk.isStillImage) { dsk.inPointMs = 0; dsk.outPointMs = -1; }
     if (!programGpuCompositor_->dskFrameReady(cueDeck)) {
+        if (dsk.preparationDeadline.hasExpired())
+            setDskError(cueDeck, QStringLiteral("No DSK frame arrived before the preparation deadline."), true);
         return;
     }
-    if (!dsk.isStillImage
-        && (dsk.inPointMs != 0 || dsk.outPointMs >= 0)) {
-        gint64 position = GST_CLOCK_TIME_NONE;
-        if (!gst_element_query_position(dsk.playbin, GST_FORMAT_TIME,
-                                        &position)
-            || qAbs(position / GST_MSECOND - dsk.inPointMs) > 250) {
-            return;
-        }
-    }
+    dsk.preparation.reset();
     dsk.status = DskStatus::Ready;
 }
 

@@ -4,6 +4,7 @@
 
 #include "dual_deck_player.h"
 #include "async_pipeline_stop.h"
+#include "async_file_preparation.h"
 #include <gst/gst.h>
 #include <array>
 
@@ -48,6 +49,8 @@ public:
     qint64 positionMs() const;
     qint64 durationMs() const;
     QString errorDetail() const;
+    bool cueMediaOffline() const;
+    bool mediaOffline() const;
     DskEvent takeEvent(QString &detail);
     void pollBus();
 
@@ -55,6 +58,9 @@ private:
     struct Dsk {
         std::shared_ptr<AsyncPipelineStop> stopJob;
         QString pendingPath;
+        QDeadlineTimer preparationDeadline{QDeadlineTimer::Forever};
+        std::shared_ptr<AsyncFilePreparation> preparation;
+        bool mediaOffline = false;
         GstElement *playbin = nullptr;
         GstElement *appSink = nullptr;
         GstBus *bus = nullptr;

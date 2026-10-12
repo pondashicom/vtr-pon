@@ -12,7 +12,7 @@ struct MediaAvailabilityScan;
 class PlaylistMediaAvailability final {
 public:
   PlaylistMediaAvailability(PlaylistModel *model,
-                            PlaylistModel::MediaAvailabilityProbe probe);
+                            PlaylistModel::MediaAvailabilityProbe probe, int timeoutMs);
   ~PlaylistMediaAvailability();
 
   bool isOffline(quint64 itemId) const;
@@ -27,6 +27,7 @@ private:
   void finishScan();
 
   PlaylistModel *model_;
+  int timeoutMs_;
   PlaylistModel::MediaAvailabilityProbe probe_;
   QSet<quint64> offlineItemIds_;
   std::shared_ptr<MediaAvailabilityScan> scan_;

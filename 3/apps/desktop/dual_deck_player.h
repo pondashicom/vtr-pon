@@ -78,6 +78,8 @@ public:
     bool clearCue();
     CueStatus cueStatus();
     QString cueErrorDetail() const;
+    bool cueMediaOffline() const;
+    bool onAirMediaOffline() const;
     bool takeCue(bool crossfade = false,
                  float itemVideoFadeProgress = 1.0F,
                  TakeCueFailure *failure = nullptr);
@@ -106,6 +108,8 @@ public:
     qint64 dskPositionMs() const;
     qint64 dskDurationMs() const;
     QString dskErrorDetail() const;
+    bool dskCueMediaOffline() const;
+    bool dskMediaOffline() const;
     DskEvent takeDskEvent(QString &detail);
 
     bool play();
@@ -163,6 +167,7 @@ public:
     qint64 bgmDurationMs() const;
     BgmStatus bgmStatus();
     QString bgmErrorDetail() const;
+    bool bgmMediaOffline() const;
     BgmEvent takeBgmEvent(QString &detail);
     AudioLevel bgmSignalLevel();
     void setBgmItemVolume(double volume);

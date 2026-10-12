@@ -128,6 +128,36 @@
         <source>Select a plug-in</source>
         <translation>Select a plug-in</translation>
     </message>
+    <message id="vst.apply">
+        <source>Apply</source>
+        <translation>Apply</translation>
+    </message>
+    <message id="vst.applying_button">
+        <source>Applying...</source>
+        <translation>Applying...</translation>
+    </message>
+    <message id="vst.none">
+        <source>None</source>
+        <translation>None</translation>
+    </message>
+    <message id="vst.current">
+        <source>Current VST: %1</source>
+        <translation>Current VST: %1</translation>
+    </message>
+    <message id="vst.applying">
+        <source>Checking the new plug-in. Current audio processing continues.</source>
+        <translation>Checking the new plug-in. Current audio processing continues.</translation>
+    </message>
+    <message id="vst.apply_failed">
+        <source>Could not apply the plug-in. The current VST is unchanged.
+%1</source>
+        <translation>Could not apply the plug-in. The current VST is unchanged.
+%1</translation>
+    </message>
+    <message id="vst.apply_failure_notice">
+        <source>Could not apply the %1 plug-in. The current VST is unchanged.</source>
+        <translation>Could not apply the %1 plug-in. The current VST is unchanged.</translation>
+    </message>
     <message id="vst.plugin">
         <source>VST3 plug-in</source>
         <translation>VST3 plug-in</translation>

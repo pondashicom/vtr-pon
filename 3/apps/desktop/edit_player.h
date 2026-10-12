@@ -19,7 +19,7 @@ public:
         bool clipped = false;
     };
 
-    enum class Event { None, EndOfStream, ScanBoundary, Error };
+    enum class Event { None, EndOfStream, ScanBoundary, Error, MediaOffline };
 
     explicit EditPlayer(QWidget *videoWindow);
     ~EditPlayer();
@@ -30,6 +30,7 @@ public:
     VideoFrameCapture captureStillFrame() const;
     bool isAvailable() const;
     bool hasMedia() const;
+    bool mediaOffline() const;
     bool isBusy() const;
     bool isPlaying() const;
     void requestShutdown();

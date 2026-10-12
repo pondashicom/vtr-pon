@@ -654,6 +654,12 @@ public:
           userInfoCenter_->showWarning(QStringLiteral("VST3"),
               vtrpon::LocalizedText::fromRaw(vtrpon::uiText("vst.failure_notice").arg(channel) + QStringLiteral("\n") + reason));
         });
+    connect(&vtrpon::VstService::instance(), &vtrpon::VstService::applicationFailed,
+        this, [this](const QString &channel, const QString &reason) {
+          userInfoCenter_->showWarning(QStringLiteral("VST3"),
+              vtrpon::LocalizedText::fromRaw(vtrpon::uiText("vst.apply_failure_notice").arg(channel)
+                  + QStringLiteral("\n") + reason));
+        });
     playlistPanel_->focusAddFilesButton();
   }
 

@@ -3,6 +3,7 @@
 #include "audio_delay.h"
 #include "audio_effects.h"
 #include "async_pipeline_stop.h"
+#include "async_file_preparation.h"
 #include "edit_pfl_output.h"
 #include "edit_pfl_protocol.h"
 
@@ -345,8 +346,9 @@ public:
     }
 
     bool isAvailable() const { return available_ && !shuttingDown_; }
-    bool hasMedia() const { return isAvailable() && hasMedia_ && !stopJob_; }
-    bool isBusy() const { return stopJob_ && !stopJob_->done(); }
+    bool mediaOffline() const { return mediaOffline_; }
+    bool hasMedia() const { return isAvailable() && hasMedia_ && !stopJob_ && !preparation_; }
+    bool isBusy() const { return (stopJob_ && !stopJob_->done()) || preparation_ || !pendingLoad_.isEmpty(); }
     bool isPlaying() const
     {
         if (!hasMedia()) {
@@ -388,7 +390,8 @@ public:
         scanStartPositionMs_ = 0;
         detachCallbacks();
         pendingLoad_.clear();
-        if (!stopJob_) stopJob_ = AsyncPipelineStop::start(playbin_);
+        if (!stopJob_) stopJob_ = AsyncPipelineStop::start(playbin_, {},
+            AsyncFilePreparation::retire(std::exchange(preparation_, {})));
         resetAudioLevel();
     }
 
@@ -405,18 +408,14 @@ public:
         if (!isAvailable()) {
             return false;
         }
+        if (filePath.isEmpty()) return false;
         const QFileInfo fileInfo(filePath);
-        if (!fileInfo.exists() || !fileInfo.isFile()) {
-            setEvent(Event::Error,
-                     QStringLiteral("The file to load into EDIT could not be found.\n")
-                         + filePath);
-            return false;
-        }
-
         if (stopJob_ && stopJob_->done() && !stopJob_->succeeded()) return false;
         pendingEvent_ = Event::None;
         pendingEventDetail_.clear();
         pendingLoad_ = fileInfo.absoluteFilePath();
+        mediaOffline_ = false;
+        preparationDeadline_.setRemainingTime(AsyncFilePreparation::timeoutMs);
         beginUnload();
         return true;
     }
@@ -437,7 +436,7 @@ public:
         stopJob_ = AsyncPipelineStop::start(pipeline, [pipeline, bus] {
             g_object_set(pipeline, "uri", nullptr, nullptr);
             while (auto *message = gst_bus_pop(bus)) gst_message_unref(message);
-        });
+        }, AsyncFilePreparation::retire(std::exchange(preparation_, {})));
     }
 
     bool finishUnload()
@@ -456,24 +455,42 @@ public:
 
     bool unload()
     {
+        mediaOffline_ = false;
         pendingLoad_.clear();
         if (!isAvailable()) return false;
-        if (!stopJob_ && !hasMedia_) return true;
+        if (!stopJob_ && !hasMedia_ && !preparation_) return true;
         beginUnload();
         return finishUnload();
     }
 
     void completePendingLoad()
     {
-        if (!finishUnload() || pendingLoad_.isEmpty()) return;
-        const QByteArray uri = QUrl::fromLocalFile(pendingLoad_).toEncoded();
-        pendingLoad_.clear();
-        g_object_set(playbin_, "uri", uri.constData(), nullptr);
-        hasMedia_ = true;
-        if (gst_element_set_state(playbin_, GST_STATE_PAUSED) == GST_STATE_CHANGE_FAILURE) {
-            (void)unload();
-            setEvent(Event::Error, QStringLiteral("Could not load the file into the EDIT player."));
+        if (!finishUnload()) {
+            if (!pendingLoad_.isEmpty() && preparationDeadline_.hasExpired()) {
+                pendingLoad_.clear();
+                setEvent(Event::Error, QStringLiteral("The previous EDIT source is still stopping."));
+            }
+            return;
         }
+        if (!pendingLoad_.isEmpty()) {
+            preparation_ = AsyncFilePreparation::start(playbin_, {std::exchange(pendingLoad_, {})},
+                static_cast<int>(preparationDeadline_.remainingTime()));
+        }
+        if (!preparation_) return;
+        const auto state = preparation_->state();
+        if (state == AsyncFilePreparation::State::Loading) return;
+        if (state == AsyncFilePreparation::State::Ready) {
+            preparation_.reset();
+            hasMedia_ = true;
+            return;
+        }
+        const bool offline = state == AsyncFilePreparation::State::Offline;
+        mediaOffline_ = offline;
+        const auto detail = offline ? AsyncFilePreparation::offlineError()
+            : preparation_->done() ? preparation_->result().error
+                                   : QStringLiteral("Media preparation was cancelled.");
+        beginUnload();
+        setEvent(offline ? Event::MediaOffline : Event::Error, detail);
     }
 
     bool play()
@@ -775,7 +792,7 @@ public:
             return;
         }
         completePendingLoad();
-        if (stopJob_) return;
+        if (stopJob_ || preparation_) return;
         while (GstMessage *message = gst_bus_pop(bus_)) {
             const GstMessageType type = GST_MESSAGE_TYPE(message);
             if (type == GST_MESSAGE_STATE_CHANGED) {
@@ -796,6 +813,7 @@ public:
                     << (debug ? debug : "");
                 const QString detail = QString::fromUtf8(
                     error ? error->message : "Unknown GStreamer error");
+                const bool offline = AsyncFilePreparation::isOfflineError(error);
                 g_clear_error(&error);
                 g_free(debug);
                 // A GStreamer error invalidates the loaded media. Reuse the
@@ -805,7 +823,8 @@ public:
                     hasMedia_ = false;
                     resetAudioLevel();
                 }
-                setEvent(Event::Error, detail);
+                mediaOffline_ = offline;
+                setEvent(offline ? Event::MediaOffline : Event::Error, detail);
             } else if (type == GST_MESSAGE_SEGMENT_DONE) {
                 if (scanActive_) {
                     setEvent(Event::ScanBoundary, QString());
@@ -1177,6 +1196,9 @@ private:
     }
 
     std::shared_ptr<AsyncPipelineStop> stopJob_;
+    std::shared_ptr<AsyncFilePreparation> preparation_;
+    QDeadlineTimer preparationDeadline_{QDeadlineTimer::Forever};
+    bool mediaOffline_ = false;
     QString pendingLoad_;
     GstElement *playbin_ = nullptr;
     std::shared_ptr<EditPflFeed> pflFeed_ = std::make_shared<EditPflFeed>();
@@ -1231,6 +1253,7 @@ bool EditPlayer::isAvailable() const { return impl_->isAvailable(); }
 void EditPlayer::requestShutdown() { impl_->requestShutdown(); }
 bool EditPlayer::shutdownComplete() const { return impl_->shutdownComplete(); }
 bool EditPlayer::isBusy() const { return impl_->isBusy(); }
+bool EditPlayer::mediaOffline() const { return impl_->mediaOffline(); }
 bool EditPlayer::hasMedia() const { return impl_->hasMedia(); }
 bool EditPlayer::isPlaying() const { return impl_->isPlaying(); }
 void EditPlayer::shutdown() { impl_->shutdown(); }

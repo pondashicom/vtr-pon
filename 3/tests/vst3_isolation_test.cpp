@@ -131,7 +131,7 @@ bool checkDualEditors(VstService &service, const QString &path, const QString &m
     const auto owner = reinterpret_cast<HWND>(control.winId());
     service.select(VstSlot::Master, path, masterUid);
     service.select(VstSlot::Item, path, itemUid);
-    bool ok = require(until([&] { return service.active(VstSlot::Master) && service.active(VstSlot::Item); }, 18000), "both effects active");
+    bool ok = require(until([&] { return (service.active(VstSlot::Master) && !service.applying(VstSlot::Master)) && (service.active(VstSlot::Item) && !service.applying(VstSlot::Item)); }, 18000), "both effects active");
     std::array<HWND, 2> originalWindows{};
     std::array<HWND, 2> originalChildren{};
     std::atomic_bool validAudio{true};
@@ -180,7 +180,7 @@ bool checkDualEditors(VstService &service, const QString &path, const QString &m
     }
     audio.request_stop(); audio.join();
     ok &= require(validAudio, "dual effects preserve finite PCM while switching editors");
-    ok &= require(service.active(VstSlot::Master) && service.active(VstSlot::Item), "both effects survive editor switching");
+    ok &= require((service.active(VstSlot::Master) && !service.applying(VstSlot::Master)) && (service.active(VstSlot::Item) && !service.applying(VstSlot::Item)), "both effects survive editor switching");
     return ok;
 }
 bool checkSwitching(VstService &service, const QString &pathA, const QString &uidA,
@@ -206,15 +206,129 @@ bool checkSwitching(VstService &service, const QString &pathA, const QString &ui
     bool ok = true;
     for (int pass = 0; pass < 4; ++pass) {
         service.select(VstSlot::Master, pass % 2 ? pathB : pathA, pass % 2 ? uidB : uidA);
-        ok &= require(until([&] { return service.active(VstSlot::Master) || service.statusKey(VstSlot::Master) == "vst.failed"; }, 18000)
-            && service.active(VstSlot::Master), "switch initializes while audio keeps streaming");
+        ok &= require(until([&] { return (service.active(VstSlot::Master) && !service.applying(VstSlot::Master)) || service.statusKey(VstSlot::Master) == "vst.failed"; }, 18000)
+            && (service.active(VstSlot::Master) && !service.applying(VstSlot::Master)), "switch initializes while audio keeps streaming");
         const auto start = processed.load();
         ok &= require(until([&] { return processed.load() >= start + 200; }, 4000), "continuous 10 ms audio cadence");
-        ok &= require(service.active(VstSlot::Master), "effect remains active after processing bursts");
+        ok &= require((service.active(VstSlot::Master) && !service.applying(VstSlot::Master)), "effect remains active after processing bursts");
     }
     audio.request_stop(); audio.join();
     QObject::disconnect(connection);
     return require(valid && failures == 0, "switching preserves valid PCM and raises no fault") && ok;
+}
+bool checkApply(VstService &service, const QString &path, const QString &goodUid,
+                const QString &badUid, const QString &nextUid = {}, const QString &hangUid = {}) {
+    constexpr auto slot = VstSlot::Master;
+    const bool fixture = !nextUid.isEmpty();
+    service.setEnabled(true);
+    service.select(slot, path, goodUid);
+    if (!require(until([&] { return !service.applying(slot) && service.active(slot); }, 18000),
+                 "original plug-in active before replacement")) return false;
+    const auto savedUid = [&] { return makeControllerSettings().value("audio/vst/master/uid").toString(); };
+    const auto runningPid = [&] {
+        for (auto *process : service.findChildren<QProcess *>())
+            if (process->state() == QProcess::Running && process->arguments().contains(goodUid)) return process->processId();
+        return qint64(0);
+    };
+    const auto originalPid = runningPid();
+    bool ok = require(originalPid != 0, "original plug-in process is identified");
+    int rejected = 0, stopped = 0;
+    const auto rejectedConnection = QObject::connect(&service, &VstService::applicationFailed, &service,
+        [&](const QString &, const QString &) { ++rejected; });
+    const auto stoppedConnection = QObject::connect(&service, &VstService::failure, &service,
+        [&](const QString &, const QString &) { ++stopped; });
+    std::atomic_bool valid{true};
+    std::atomic_int processed{0};
+    std::jthread audio([&](std::stop_token stop) {
+        std::array<float, 960> pcm;
+        while (!stop.stop_requested()) {
+            pcm.fill(0.25f); processVst(slot, pcm.data(), 480);
+            for (float value : pcm)
+                if (!std::isfinite(value) || (fixture && value != 0.125f)) valid = false;
+            ++processed; std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        }
+    });
+    QPushButton control("VST");
+    bindVstButton(&control, slot); showVstEditor(&control, slot);
+    if (fixture) service.cancelScan();
+    else ok &= require(until([&] { return !service.scanning(); }, 30000), "installed plug-in names are available");
+    auto *window = control.findChild<QDialog *>("vstMASTERWindow");
+    auto *combo = window ? window->findChild<QComboBox *>("vstPluginComboBox") : nullptr;
+    auto *apply = window ? window->findChild<QPushButton *>("vstApply") : nullptr;
+    ok &= require(combo && apply, "selector has an explicit Apply button");
+    if (combo && apply) {
+        combo->addItem("Rejected candidate", QJsonObject{{"path", path}, {"uid", badUid}});
+        combo->setCurrentIndex(combo->count() - 1);
+        const int before = processed.load();
+        ok &= require(until([&] { return processed >= before + 10; }), "audio continues while only changing selection");
+        ok &= require(!service.applying(slot) && service.selectedUid(slot) == goodUid && savedUid() == goodUid,
+                      "dropdown alone changes neither processing nor saved selection");
+        service.catalogChanged();
+        ok &= require(combo->currentData().toJsonObject().value("uid").toString() == badUid,
+                      "catalog refresh preserves unapplied selection");
+        apply->click();
+        ok &= require(service.applying(slot) && service.active(slot) && service.selectedUid(slot) == goodUid,
+                      "Apply starts candidate while original stays active");
+        ok &= require(!apply->isEnabled(), "repeated Apply is disabled while checking candidate");
+        ok &= require(until([&] { return !service.applying(slot); }, 18000), "candidate reports initialization failure");
+        ok &= require(rejected == 1 && stopped == 0 && !service.applyError(slot).isEmpty(),
+                      "application failure is separate from stopping current audio");
+        ok &= require(service.active(slot) && service.selectedUid(slot) == goodUid && savedUid() == goodUid
+                      && runningPid() == originalPid && valid, "failure preserves original process, PCM, and saved selection");
+        ok &= require(apply->isEnabled(), "failed candidate can be retried explicitly");
+        QApplication::processEvents();
+        window->grab().save(QCoreApplication::applicationDirPath() + "/vst-apply-failure-verified.png");
+        // The original bypass flag must also survive a rejected replacement.
+        audio.request_stop(); audio.join();
+        service.bypass(slot, true);
+        apply->click();
+        ok &= require(until([&] { return !service.applying(slot); }, 18000) && service.bypassed(slot),
+                      "failed replacement preserves original bypass state");
+        service.bypass(slot, false);
+    }
+    audio.request_stop(); if (audio.joinable()) audio.join();
+    if (fixture) {
+        // Check a hung initializer while processing every old block, not just a
+        // cached active flag. Candidate timeout must never retire the old worker.
+        service.select(slot, path, hangUid);
+        const auto before = rejected;
+        ok &= require(until([&] {
+            std::array<float, 960> pcm; pcm.fill(0.25f); processVst(slot, pcm.data(), 480);
+            if (pcm.front() != 0.125f || pcm.back() != 0.125f) valid = false;
+            return !service.applying(slot);
+        }, 18000) && rejected == before + 1 && service.active(slot) && valid,
+                      "startup timeout preserves every original PCM block");
+        service.select(slot, path + ".missing", goodUid);
+        ok &= require(until([&] { return !service.applying(slot); }) && savedUid() == goodUid && service.active(slot),
+                      "module load failure leaves committed selection intact");
+        service.select(slot, path, nextUid);
+        ok &= require(service.applying(slot) && service.selectedUid(slot) == goodUid && savedUid() == goodUid,
+                      "valid replacement remains provisional during startup");
+        ok &= require(until([&] {
+            if (!service.applying(slot)) return true;
+            std::array<float, 960> pcm; pcm.fill(0.25f); processVst(slot, pcm.data(), 480);
+            if (pcm.front() != 0.125f || pcm.back() != 0.125f) valid = false;
+            return false;
+        }) && valid && service.selectedUid(slot) == nextUid
+                      && savedUid() == nextUid, "successful startup commits and saves the new selection");
+        std::array<float, 960> pcm; pcm.fill(0.25f); processVst(slot, pcm.data(), 480);
+        ok &= require(pcm.front() == 0.0625f && pcm.back() == 0.0625f, "only successful replacement changes audible PCM");
+        service.select(slot, path, hangUid); service.setEnabled(false); service.setEnabled(true);
+        ok &= require(!service.applying(slot) && service.selectedUid(slot) == nextUid && savedUid() == nextUid,
+                      "disabling VST cancels pending work without saving it");
+        service.activate(slot);
+        ok &= require(until([&] { return !service.applying(slot) && service.active(slot); }), "last successful selection reactivates");
+    }
+    if (combo && apply) {
+        combo->setCurrentIndex(0);
+        ok &= require(service.active(slot), "selecting None alone keeps the current effect");
+        apply->click();
+        ok &= require(!service.active(slot) && service.selectedUid(slot).isEmpty() && savedUid().isEmpty(),
+                      "None is committed only by Apply");
+    }
+    QObject::disconnect(rejectedConnection); QObject::disconnect(stoppedConnection);
+    std::cout << "Transactional VST selection: " << (ok ? "passed" : "FAILED") << '\n';
+    return ok;
 }
 class PcmStrip {
 public:
@@ -318,7 +432,7 @@ bool checkEffectRouting(VstService &service) {
     ok &= require(service.setEnabled(true), "re-enable VST after EQ fallback");
     for (const auto slot : {VstSlot::Edit, VstSlot::Item, VstSlot::Master}) service.activate(slot);
     ok &= require(until([&] {
-        return service.active(VstSlot::Edit) && service.active(VstSlot::Item) && service.active(VstSlot::Master);
+        return (service.active(VstSlot::Edit) && !service.applying(VstSlot::Edit)) && (service.active(VstSlot::Item) && !service.applying(VstSlot::Item)) && (service.active(VstSlot::Master) && !service.applying(VstSlot::Master));
     }), "all slots reactivate after mode change");
     ok &= require(switched.check(0.125f), "global re-enable replaces stored EQ on the existing strip");
     return ok;
@@ -330,7 +444,7 @@ int main(int argc, char **argv) {
         std::cerr << message.toStdString() << '\n';
     });
     QTranslator translator;
-    if (app.arguments().contains("--editor") && translator.load(QCoreApplication::applicationDirPath() + "/vtrpon_ja.qm")) app.installTranslator(&translator);
+    if (translator.load(QCoreApplication::applicationDirPath() + "/vtrpon_ja.qm")) app.installTranslator(&translator);
     gst_init(nullptr, nullptr);
     if (!require(registerAudioEqualizer() && registerAudioEffects(), "register independent EQ and effect elements")) return 1;
     QTemporaryDir temporary;
@@ -351,11 +465,15 @@ int main(int argc, char **argv) {
         std::cout << "Installed plug-in continuous switching: " << (passed ? "passed" : "FAILED") << '\n';
         return passed ? 0 : 1;
     }
+    if (app.arguments().value(1) == "--apply-installed") {
+        const bool passed = checkApply(service, app.arguments().value(2), app.arguments().value(3), app.arguments().value(4));
+        service.setEnabled(false); return passed ? 0 : 1;
+    }
     if (app.arguments().value(1) == "--installed") {
         service.setEnabled(true);
         service.select(VstSlot::Master, app.arguments().value(2), app.arguments().value(3));
-        if (!until([&] { return service.active(VstSlot::Master) || service.statusKey(VstSlot::Master) == "vst.failed"; }, 18000)
-            || !service.active(VstSlot::Master)) {
+        if (!until([&] { return (service.active(VstSlot::Master) && !service.applying(VstSlot::Master)) || service.statusKey(VstSlot::Master) == "vst.failed"; }, 18000)
+            || !(service.active(VstSlot::Master) && !service.applying(VstSlot::Master))) {
             std::cerr << "Installed plug-in initialization: " << service.detail(VstSlot::Master).toStdString() << '\n'; return 1;
         }
         std::array<float, 960> audio{};
@@ -365,7 +483,7 @@ int main(int argc, char **argv) {
             processVst(VstSlot::Master, audio.data(), 480);
             QApplication::processEvents(); QThread::msleep(10);
         }
-        bool passed = until([&] { return service.active(VstSlot::Master); }, 300);
+        bool passed = until([&] { return (service.active(VstSlot::Master) && !service.applying(VstSlot::Master)); }, 300);
         if (app.arguments().contains("--editor")) {
             QPushButton control("VST");
             control.setWindowTitle("VTR-PON3 VST editor test"); control.move(120, 120); control.show();
@@ -409,7 +527,7 @@ int main(int argc, char **argv) {
                 service.openEditor(VstSlot::Master, quintptr(control.winId()), 160, 180);
                 passed &= require(until(editorVisible), "native editor can reopen");
             }
-            passed &= require(service.active(VstSlot::Master), "closing GUI preserves processing");
+            passed &= require((service.active(VstSlot::Master) && !service.applying(VstSlot::Master)), "closing GUI preserves processing");
             std::cout << "Installed plug-in native editor: " << (passed ? "passed" : "FAILED") << '\n';
         }
         std::cout << "Installed plug-in PCM: " << (passed ? "passed" : "FAILED") << "; latency " << service.latency(VstSlot::Master) << " samples; " << service.detail(VstSlot::Master).toStdString() << '\n';
@@ -422,7 +540,13 @@ int main(int argc, char **argv) {
     if (!require(scanner.waitForFinished(10000) && scanner.exitCode() == 0, "isolated SDK scan")) return 1;
     QFile file(temporary.filePath("scan.json")); file.open(QIODevice::ReadOnly);
     const auto catalog = QJsonDocument::fromJson(file.readAll()).array();
-    if (!require(catalog.size() == 6, "enumerate every class in one module")) return 1;
+    if (!require(catalog.size() == 9, "enumerate every class in one module")) return 1;
+    if (app.arguments().contains("--apply-only")) {
+        const bool passed = checkApply(service, plugin, catalog[0].toObject().value("uid").toString(),
+            catalog[6].toObject().value("uid").toString(), catalog[7].toObject().value("uid").toString(),
+            catalog[8].toObject().value("uid").toString());
+        service.setEnabled(false); return passed ? 0 : 1;
+    }
     bool ok = checkScannerParentDeath(plugin, temporary.filePath("scan-module"), false);
     ok &= checkScannerParentDeath(plugin, temporary.filePath("scan-loader"), true);
     scanner.start(VstService::addonPath(), {"--scan", plugin, "--result", temporary.filePath("unowned-scan.json")});
@@ -437,13 +561,16 @@ int main(int argc, char **argv) {
     ok &= checkDualEditors(service, plugin, gainUid, QStringLiteral("VTR Test Gain"),
         catalog[5].toObject().value("uid").toString(), QStringLiteral("VTR Test Burst"));
     ok &= checkSwitching(service, plugin, gainUid, plugin, catalog[5].toObject().value("uid").toString(), true);
+    ok &= checkApply(service, plugin, catalog[0].toObject().value("uid").toString(),
+        catalog[6].toObject().value("uid").toString(), catalog[7].toObject().value("uid").toString(),
+        catalog[8].toObject().value("uid").toString());
     for (const auto slot : {VstSlot::Edit, VstSlot::Item, VstSlot::Master}) {
         service.select(slot, plugin, gainUid);
-        ok &= require(until([&] { return service.active(slot); }), "plug-in initialization");
+        ok &= require(until([&] { return (service.active(slot) && !service.applying(slot)); }), "plug-in initialization");
         pcm.fill(0.25f); processVst(slot, pcm.data(), pcm.size() / 2);
         ok &= require(pcm[0] == 0.125f && pcm.back() == 0.125f, "actual PCM processing through SDK");
         service.bypass(slot, true); pcm.fill(0.25f); processVst(slot, pcm.data(), pcm.size() / 2);
-        ok &= require(pcm[0] == 0.25f && !service.active(slot), "dry bypass");
+        ok &= require(pcm[0] == 0.25f && !(service.active(slot) && !service.applying(slot)), "dry bypass");
     }
     service.bypass(VstSlot::Master, false);
     std::array<float, 8192 * 2> largeBuffer; largeBuffer.fill(0.25f);
@@ -456,7 +583,7 @@ int main(int argc, char **argv) {
     QObject::connect(&service, &VstService::failure, &app, [&](const QString &, const QString &) { ++failures; });
     for (int i = 1; i < 4; ++i) {
         service.select(VstSlot::Master, plugin, catalog[i].toObject().value("uid").toString());
-        ok &= require(until([&] { return service.active(VstSlot::Master); }), "fault plug-in initialization");
+        ok &= require(until([&] { return (service.active(VstSlot::Master) && !service.applying(VstSlot::Master)); }), "fault plug-in initialization");
         pcm.fill(0.25f); QElapsedTimer deadline; deadline.start();
         if (i == 1) {
             largeBuffer.fill(0.1f); largeBuffer[4096 * 2] = 0.25f;
@@ -476,12 +603,12 @@ int main(int argc, char **argv) {
     }
     ok &= require(failures == 3, "one failure notification per failed instance");
     service.select(VstSlot::Master, plugin, catalog[4].toObject().value("uid").toString());
-    ok &= require(until([&] { return service.active(VstSlot::Master); }), "UI hang plug-in initialization");
+    ok &= require(until([&] { return (service.active(VstSlot::Master) && !service.applying(VstSlot::Master)); }), "UI hang plug-in initialization");
     service.openEditor(VstSlot::Master, 0, 100, 100);
     ok &= require(until([&] { return service.statusKey(VstSlot::Master) == "vst.failed"; }, 4000), "idle UI heartbeat timeout without audio requests");
     ok &= require(failures == 4, "UI hang emits one failure notification");
     service.select(VstSlot::Master, plugin, gainUid);
-    ok &= require(until([&] { return service.active(VstSlot::Master); }), "manual recovery after crash");
+    ok &= require(until([&] { return (service.active(VstSlot::Master) && !service.applying(VstSlot::Master)); }), "manual recovery after crash");
     service.setEnabled(false);
     pcm.fill(0.25f); processVst(VstSlot::Master, pcm.data(), pcm.size() / 2);
     ok &= require(pcm[0] == 0.25f && button.text() == "EQ", "global disable restores EQ and dry routing");

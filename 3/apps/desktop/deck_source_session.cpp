@@ -631,6 +631,8 @@ void DeckSourceSession::detachCallbacks()
 
 bool DeckSourceSession::stopPipelinesForShutdown()
 {
+    fileRequest_.reset();
+    if (auto wait = AsyncFilePreparation::retire(filePreparation_)) wait();
     bool confirmed = stopPipeline(playbin_, "dual-deck playbin");
 #ifdef _WIN32
     pendingSource_.reset();
@@ -654,6 +656,7 @@ bool DeckSourceSession::retirementPending() const
 bool DeckSourceSession::fileStopConfirmed() const
 {
     if (!playbin_) return true;
+    if (filePreparationPending()) return false;
     GstState state = GST_STATE_VOID_PENDING;
     return gst_element_get_state(playbin_, &state, nullptr, 0) != GST_STATE_CHANGE_FAILURE
         && state == GST_STATE_NULL;
@@ -891,8 +894,7 @@ bool DeckSourceSession::prepareFile(const QString &filePath, qint64 inPointMs,
     programGpuCompositor_->clearDeckFrame(index_);
 #endif
 
-    const QByteArray uri = QUrl::fromLocalFile(filePath).toEncoded();
-    g_object_set(playbin_, "uri", uri.constData(), nullptr);
+
     g_object_set(itemAudioVolume_, "volume", 1.0, nullptr);
     hasVideo_ = false;
     hasAudio_ = false;
@@ -905,12 +907,10 @@ bool DeckSourceSession::prepareFile(const QString &filePath, qint64 inPointMs,
     rangeSeekIssued_ = false;
     preparationDeadline_.setRemainingTime(10000);
 
-    if (gst_element_set_state(playbin_, GST_STATE_PAUSED) == GST_STATE_CHANGE_FAILURE) {
-        fileStateChangeFailed_ = true;
-        preparationState_ = PreparationState::Error;
-        preparationError_ = QStringLiteral("Could not transition GStreamer to PAUSED.");
-        return false;
-    }
+    mediaOffline_ = false;
+    // Start on the next readiness poll. Rapid selection changes replace this
+    // value before opening any file or allocating another retired pipeline.
+    fileRequest_ = AsyncFilePreparation::Request{filePath, inPointMs, outPointMs, playbackRate};
     return true;
 }
 
@@ -1174,6 +1174,16 @@ bool DeckSourceSession::replaceFilePipeline()
 {
 #ifdef _WIN32
     if (sourceType_ != Type::File || !programGpuCompositor_) return false;
+    if (fileRequest_ && !filePreparation_) {
+        fileRequest_.reset();
+        sourceType_ = Type::None;
+        hasVideo_ = hasAudio_ = false;
+        inPointMs_ = 0;
+        outPointMs_ = -1;
+        preparationState_ = PreparationState::Empty;
+        preparationError_.clear();
+        return true;
+    }
     std::erase_if(retiredFiles_, [](const auto &job) { return job->succeeded(); });
     // Bound retained driver resources if several independent stops never finish.
     if (retiredFiles_.size() >= 4) return false;
@@ -1209,11 +1219,12 @@ bool DeckSourceSession::replaceFilePipeline()
     std::swap(inputAudioLevel_, retired->inputAudioLevel_);
     std::swap(itemAudioVolume_, retired->itemAudioVolume_);
     std::swap(appSink_, retired->appSink_);
+    std::swap(filePreparation_, retired->filePreparation_);
     // The worker captures only the abandoned graph. It cannot call back into
     // this deck, the player, or the compositor, even after application shutdown.
     auto stopJob = AsyncPipelineStop::start(retired->pipeline(), [retired] {
         retired->pipelinesStopped_ = true;
-    });
+    }, AsyncFilePreparation::retire(retired->filePreparation_));
     const bool stopStarted = !stopJob->done() || stopJob->succeeded();
     retiredFiles_.push_back(std::move(stopJob));
     sourceType_ = Type::None;
@@ -1238,6 +1249,15 @@ DeckSourceSession::ReleaseResult DeckSourceSession::clearForReplacement()
     pendingAudioClock_.reset();
 #endif
     ReleaseResult result;
+#ifdef _WIN32
+    if (sourceType_ == Type::File) {
+        result.succeeded = replaceFilePipeline();
+        result.detached = result.ownershipReleased = result.succeeded;
+        return result;
+    }
+#endif
+    if (filePreparationPending()) return result;
+    filePreparation_.reset();
     if (!playbin_ || gst_element_set_state(playbin_, GST_STATE_NULL) == GST_STATE_CHANGE_FAILURE)
         return result;
     result.stopConfirmed = fileStopConfirmed();
@@ -1304,7 +1324,12 @@ DeckSourceSession::ReleaseResult DeckSourceSession::standbyAfterTake()
     bool succeeded = true;
     switch (sourceType_) {
     case Type::File:
-        succeeded = gst_element_set_state(playbin_, GST_STATE_READY) != GST_STATE_CHANGE_FAILURE;
+#ifdef _WIN32
+        succeeded = replaceFilePipeline();
+        result.detached = result.ownershipReleased = succeeded;
+#else
+        succeeded = !filePreparationPending() && gst_element_set_state(playbin_, GST_STATE_READY) != GST_STATE_CHANGE_FAILURE;
+#endif
         break;
     case Type::Uvc:
 #ifdef _WIN32
@@ -1384,6 +1409,14 @@ DeckSourceSession::ReleaseResult DeckSourceSession::clearAfterOffAir()
     pendingAudioClock_.reset();
 #endif
     ReleaseResult result;
+#ifdef _WIN32
+    if (sourceType_ == Type::File) {
+        result.succeeded = replaceFilePipeline();
+        result.detached = result.ownershipReleased = result.succeeded;
+        return result;
+    }
+#endif
+    if (filePreparationPending()) return result;
     bool cleanupComplete = true;
     if (gst_element_set_state(playbin_, GST_STATE_NULL) == GST_STATE_CHANGE_FAILURE) {
         cleanupComplete = false;
@@ -1468,9 +1501,9 @@ void DeckSourceSession::refreshPreparationState()
         return;
     }
     if (sourceType_ == Type::File && preparationDeadline_.hasExpired()) {
+        mediaOffline_ = true;
         preparationState_ = PreparationState::Error;
-        preparationError_ = QStringLiteral(
-            "Preparation timed out. Press ON AIR to retry, or select another item.");
+        preparationError_ = AsyncFilePreparation::offlineError();
         return;
     }
     if (index_ < 0) {
@@ -1565,101 +1598,34 @@ void DeckSourceSession::refreshPreparationState()
     if (sourceType_ != Type::File) {
         return;
     }
-    GstState state = GST_STATE_NULL;
-    GstState pending = GST_STATE_VOID_PENDING;
-    const GstStateChangeReturn result = gst_element_get_state(
-        playbin_, &state, &pending, 0);
-    if (result == GST_STATE_CHANGE_FAILURE) {
+    if (fileRequest_) {
+        filePreparation_ = AsyncFilePreparation::start(playbin_, *fileRequest_,
+            static_cast<int>(preparationDeadline_.remainingTime()));
+        fileRequest_.reset();
+    }
+    if (!filePreparation_) return;
+    const auto state = filePreparation_->state();
+    if (state == AsyncFilePreparation::State::Loading) return;
+    if (state != AsyncFilePreparation::State::Ready) {
+        mediaOffline_ = state == AsyncFilePreparation::State::Offline;
         preparationState_ = PreparationState::Error;
-        preparationError_ = QStringLiteral("Could not check whether the item is ready.");
+        preparationError_ = mediaOffline_ ? AsyncFilePreparation::offlineError()
+            : filePreparation_->done() ? filePreparation_->result().error
+                                      : QStringLiteral("Media preparation was cancelled.");
         return;
     }
-    if (result != GST_STATE_CHANGE_SUCCESS
-        || state != GST_STATE_PAUSED
-        || pending != GST_STATE_VOID_PENDING) {
-        return;
-    }
-
-    gint videoStreams = 0;
-    gint audioStreams = 0;
-    g_object_get(playbin_,
-                 "n-video", &videoStreams,
-                 "n-audio", &audioStreams,
-                 nullptr);
-    hasVideo_ = videoStreams > 0;
-    hasAudio_ = audioStreams > 0;
-    if (!hasVideo_ && !hasAudio_) {
-        preparationState_ = PreparationState::Error;
-        preparationError_ = QStringLiteral(
-            "No playable video or audio streams were found.");
-        return;
-    }
-
-    if (!rangeSeekIssued_) {
-        if (inPointMs_ == 0 && outPointMs_ < 0 && playbackRate_ == 1.0) {
+    hasVideo_ = filePreparation_->result().hasVideo;
+    hasAudio_ = filePreparation_->result().hasAudio;
 #ifdef _WIN32
-            if (hasVideo_
-                && !programGpuCompositor_->deckFrameReady(index_)) {
-                return;
-            }
-#endif
-            preparationState_ = PreparationState::Ready;
-            return;
-        }
-
-        gint64 duration = GST_CLOCK_TIME_NONE;
-        const bool hasDuration = gst_element_query_duration(
-            playbin_, GST_FORMAT_TIME, &duration);
-        if (hasDuration && duration > 0) {
-            const qint64 durationMs = duration / GST_MSECOND;
-            if (inPointMs_ >= durationMs
-                || (outPointMs_ >= 0
-                    && outPointMs_ > durationMs)) {
-                preparationState_ = PreparationState::Error;
-                preparationError_ = QStringLiteral(
-                    "The In or Out point exceeds the media duration.");
-                return;
-            }
-        }
-
-#ifdef _WIN32
-        programGpuCompositor_->clearDeckFrame(index_);
-#endif
-        const bool seekSucceeded = gst_element_seek(
-            playbin_, playbackRate_, GST_FORMAT_TIME,
-            static_cast<GstSeekFlags>(GST_SEEK_FLAG_FLUSH
-                                      | GST_SEEK_FLAG_ACCURATE),
-            GST_SEEK_TYPE_SET, inPointMs_ * GST_MSECOND,
-            outPointMs_ >= 0 ? GST_SEEK_TYPE_SET
-                                 : GST_SEEK_TYPE_NONE,
-            outPointMs_ >= 0
-                ? outPointMs_ * GST_MSECOND
-                : GST_CLOCK_TIME_NONE);
-        if (!seekSucceeded) {
+    if (hasVideo_ && !programGpuCompositor_->deckFrameReady(index_)) {
+        if (preparationDeadline_.hasExpired()) {
             preparationState_ = PreparationState::Error;
-            preparationError_ = QStringLiteral(
-                "Could not prepare the In/Out points.");
-            return;
+            preparationError_ = QStringLiteral("No video frame arrived before the preparation deadline.");
         }
-        rangeSeekIssued_ = true;
-        return;
-    }
-
-    gint64 position = GST_CLOCK_TIME_NONE;
-    if (!gst_element_query_position(playbin_, GST_FORMAT_TIME,
-                                    &position)) {
-        return;
-    }
-    const qint64 positionMs = position / GST_MSECOND;
-    if (qAbs(positionMs - inPointMs_) > 250) {
-        return;
-    }
-#ifdef _WIN32
-    if (hasVideo_
-        && !programGpuCompositor_->deckFrameReady(index_)) {
         return;
     }
 #endif
+    filePreparation_.reset();
     preparationState_ = PreparationState::Ready;
 }
 
@@ -1691,7 +1657,7 @@ DeckSourceSession::PreparationResult DeckSourceSession::refreshPreparation()
 
 bool DeckSourceSession::setFileState(GstState state)
 {
-    if (sourceType_ != Type::File || !playbin_) return false;
+    if (sourceType_ != Type::File || !playbin_ || filePreparationActive()) return false;
 #ifndef _WIN32
     if (state == GST_STATE_PAUSED)
         setBooleanPropertyIfAvailable(monitorSink_, "async", FALSE);
@@ -1701,14 +1667,14 @@ bool DeckSourceSession::setFileState(GstState state)
 
 qint64 DeckSourceSession::positionMs() const
 {
-    if (sourceType_ != Type::File || !playbin_) return -1;
+    if (sourceType_ != Type::File || !playbin_ || filePreparationActive()) return -1;
     gint64 position = 0;
     return gst_element_query_position(playbin_, GST_FORMAT_TIME, &position)
         ? position / GST_MSECOND : -1;
 }
 qint64 DeckSourceSession::durationMs() const
 {
-    if (sourceType_ != Type::File || !playbin_) return -1;
+    if (sourceType_ != Type::File || !playbin_ || filePreparationActive()) return -1;
     gint64 duration = 0;
     return gst_element_query_duration(playbin_, GST_FORMAT_TIME, &duration)
         ? duration / GST_MSECOND : -1;
@@ -1716,7 +1682,7 @@ qint64 DeckSourceSession::durationMs() const
 
 bool DeckSourceSession::seek(qint64 positionMs)
 {
-    if (sourceType_ != Type::File || !playbin_) return false;
+    if (sourceType_ != Type::File || !playbin_ || filePreparationActive()) return false;
     const qint64 upperBound = outPointMs_ >= 0 ? outPointMs_ : (std::max)(positionMs, inPointMs_);
     const qint64 target = std::clamp(positionMs, inPointMs_, upperBound);
     return gst_element_seek(playbin_, playbackRate_, GST_FORMAT_TIME,
@@ -1742,7 +1708,7 @@ bool DeckSourceSession::sourceIsPlaying() const
     if (sourceType_ == Type::Uvc)
         return uvcSourceSessions_ && uvcSourceSessions_->sourceIsPlaying(uvcDevicePath_);
 #endif
-    if (sourceType_ != Type::File || !playbin_) return false;
+    if (sourceType_ != Type::File || !playbin_ || filePreparationActive()) return false;
     // A flushing seek re-prerolls PAUSED while the transport target stays PLAYING.
     GST_OBJECT_LOCK(playbin_);
     const bool playing = GST_STATE_TARGET(playbin_) == GST_STATE_PLAYING
@@ -1790,7 +1756,7 @@ bool DeckSourceSession::takeSourceError(QString &detail)
 
 bool DeckSourceSession::setRate(double rate)
 {
-    if (!playbin_ || sourceType_ != Type::File
+    if (!playbin_ || sourceType_ != Type::File || filePreparationActive()
         || rate == 0.0) {
         return false;
     }

@@ -39,10 +39,14 @@ public:
         ok &= compositor.configureDeckInput(0, deck.pipeline(), deck.appSink());
         const DualDeckPlayer::DeckSource source{DualDeckPlayer::DeckSource::Type::File, path};
         ok &= deck.prepare(source).state == DualDeckPlayer::CueStatus::Loading;
+        deck.refreshPreparation(); // Dispatch file opening before forcing the UI deadline.
         // Drive the actual deadline branch without a ten-second test sleep.
         deck.preparationDeadline_.setRemainingTime(0);
         ok &= deck.refreshPreparation().state == DualDeckPlayer::CueStatus::Error;
-        ok &= deck.preparationError_.contains(QStringLiteral("timed out"));
+        ok &= deck.mediaOffline() && deck.preparationError_.contains(QStringLiteral("Media offline"));
+        // The preparation worker may still own the state transition after the
+        // UI deadline. Wait before modifying its graph in this test fixture.
+        ok &= awaitShutdown([&] { return deck.filePreparation_->done(); });
         auto *blocker = GST_ELEMENT(g_object_new(cue_stop_blocker_get_type(), nullptr));
         gst_bin_add(GST_BIN(deck.pipeline()), blocker);
         gst_element_set_state(blocker, GST_STATE_PAUSED);

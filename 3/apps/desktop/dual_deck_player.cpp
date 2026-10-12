@@ -454,6 +454,26 @@ public:
     }
 
     QString cueErrorDetail() const { return cueErrorDetail_; }
+    bool cueMediaOffline() const { return cueDeck_ >= 0 && decks_[cueDeck_].mediaOffline(); }
+    bool onAirMediaOffline() const {
+        const int deck = currentDeck_.load(std::memory_order_relaxed);
+        return deck >= 0 && decks_[deck].mediaOffline();
+    }
+    bool dskMediaOffline() const {
+#ifdef _WIN32
+        return dsk_.mediaOffline();
+#else
+        return false;
+#endif
+    }
+    bool bgmMediaOffline() const { return bgm_.mediaOffline(); }
+    bool dskCueMediaOffline() const {
+#ifdef _WIN32
+        return dsk_.cueMediaOffline();
+#else
+        return false;
+#endif
+    }
 
     bool takeCue(bool crossfade, float itemVideoFadeProgress, TakeCueFailure *failure)
     {
@@ -1765,7 +1785,7 @@ private:
         else pollBus(programAudioOutput_.bus(), -1);
         bgm_.pollBus();
         for (int index = 0; index < static_cast<int>(decks_.size()); ++index) {
-            pollBus(decks_[index].bus(), index);
+            if (!decks_[index].filePreparationActive()) pollBus(decks_[index].bus(), index);
 #ifdef _WIN32
             pollBus(decks_[index].mappedAudioBus(), index);
 #endif
@@ -1799,6 +1819,8 @@ private:
 
     void pollBus(GstBus *bus, int deckIndex)
     {
+        if (deckIndex >= 0 && bus == decks_[deckIndex].bus()
+            && decks_[deckIndex].filePreparationActive()) return;
         if (!bus) {
             return;
         }
@@ -1834,6 +1856,8 @@ private:
                     << (debug ? debug : "");
                 const QString detail = QString::fromUtf8(
                     error ? error->message : "Unknown GStreamer error");
+                if (deckIndex >= 0 && AsyncFilePreparation::isOfflineError(error))
+                    decks_[deckIndex].reportFileOffline();
                 g_clear_error(&error);
                 g_free(debug);
 
@@ -2011,6 +2035,12 @@ DualDeckPlayer::CueStatus DualDeckPlayer::cueStatus()
 {
     return impl_->cueStatus();
 }
+bool DualDeckPlayer::onAirMediaOffline() const { return impl_->onAirMediaOffline(); }
+bool DualDeckPlayer::dskMediaOffline() const { return impl_->dskMediaOffline(); }
+bool DualDeckPlayer::cueMediaOffline() const { return impl_->cueMediaOffline(); }
+bool DualDeckPlayer::dskCueMediaOffline() const { return impl_->dskCueMediaOffline(); }
+bool DualDeckPlayer::bgmMediaOffline() const { return impl_->bgmMediaOffline(); }
+
 QString DualDeckPlayer::cueErrorDetail() const
 {
     return impl_->cueErrorDetail();

@@ -3,6 +3,7 @@
 #include "uvc_source_session_manager.h"
 #include "live_audio_source.h"
 #include "live_audio_test_source.h"
+#include "vst_service.h"
 
 #include <QApplication>
 #include <QDataStream>
@@ -105,6 +106,60 @@ public:
     {
         return wait([&] { return player_.cueStatus() == DualDeckPlayer::CueStatus::Ready; },
                     "public CUE reaches Ready");
+    }
+
+    bool fileAudio(const QStringList &paths, const QString &vstModule = {}, const QString &vstUid = {})
+    {
+        using Source = DualDeckPlayer::DeckSource;
+        auto &vst = vtrpon::VstService::instance();
+        if (!vstModule.isEmpty()) {
+            CHECK(vst.setEnabled(true), "VST add-on is available for the media test");
+            vst.select(vtrpon::VstSlot::Master, vstModule, vstUid);
+            CHECK(wait([&] { return vst.active(vtrpon::VstSlot::Master); },
+                       "master VST starts before file playback", 18000), "master VST initializes");
+        }
+        CHECK(wait([&] { return player_.programAudioOutputReady(); }, "audio output is ready"),
+              "file audio test has an output");
+        player_.setMasterVolume(1.0);
+        player_.setMasterMuted(false);
+        player_.setFtbCoverage(0.0);
+        const auto sustainedSignal = [&] {
+            QElapsedTimer elapsed;
+            elapsed.start();
+            int input = 0, item = 0, master = 0;
+            while (elapsed.elapsed() < 2200) {
+                QApplication::processEvents();
+                player_.processBusMessages();
+                if (!vstModule.isEmpty() && !vst.active(vtrpon::VstSlot::Master)) {
+                    std::cerr << "VST failed during file playback: "
+                              << vst.detail(vtrpon::VstSlot::Master).toStdString() << '\n';
+                    return false;
+                }
+                const auto levels = player_.audioLevels();
+                if (elapsed.elapsed() > 500) {
+                    input += levels.input.leftPeakDb > -55 || levels.input.rightPeakDb > -55;
+                    item += levels.itemPostFader.leftPeakDb > -55 || levels.itemPostFader.rightPeakDb > -55;
+                    master += levels.masterOutput.leftPeakDb > -55 || levels.masterOutput.rightPeakDb > -55;
+                }
+                QThread::msleep(20);
+            }
+            std::cout << "Sustained audio: input=" << input << " item=" << item
+                      << " master=" << master << " position=" << player_.positionMs() << '\n';
+            return input >= 10 && item >= 10 && master >= 10;
+        };
+        // The third TAKE reuses a deck whose previous graph was retired.
+        for (int pass = 0; pass < 3; ++pass) {
+            std::cout << "File audio pass " << pass << '\n';
+            CHECK(player_.cue({Source::Type::File, paths.at(pass % paths.size())}) && cueReady()
+                      && player_.takeCue(), "file prepares and takes on air");
+            player_.setItemVolume(1.0);
+            CHECK(player_.play() && sustainedSignal(), "file PCM continuously reaches input, item and master");
+            CHECK(player_.pause() && player_.seek(1000) && player_.play() && sustainedSignal(),
+                  "file PCM survives pause, seek and resume");
+        }
+        CHECK(player_.clearMedia() == DualDeckPlayer::ClearMediaResult::Cleared, "file audio test clears on air");
+        if (!vstModule.isEmpty()) vst.setEnabled(false);
+        return true;
     }
 
     bool liveAudio(const QString &endpoint = {})
@@ -372,7 +427,11 @@ int main(int argc, char **argv)
         DualDeckPlayer player(&programWindow, &monitorWindow, false, &uvcSources);
         Contract contract(player);
         const auto arguments = application.arguments();
-        ok = arguments.size() == 3 && arguments.at(1) == QStringLiteral("--live-audio-endpoint")
+        ok = arguments.size() >= 5 && arguments.at(1) == QStringLiteral("--file-audio-vst")
+            ? contract.fileAudio(arguments.mid(4), arguments.at(2), arguments.at(3))
+            : arguments.size() >= 3 && arguments.at(1) == QStringLiteral("--file-audio")
+            ? contract.fileAudio(arguments.mid(2))
+            : arguments.size() == 3 && arguments.at(1) == QStringLiteral("--live-audio-endpoint")
             ? contract.liveAudio(arguments.at(2))
             : arguments.size() == 4 && arguments.at(1) == QStringLiteral("--native-cue")
             ? contract.nativeCue(arguments.at(2), arguments.at(3))

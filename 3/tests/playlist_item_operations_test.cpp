@@ -5,6 +5,11 @@
 #include <QCoreApplication>
 #include <QTemporaryFile>
 #include <cstdio>
+#include <QElapsedTimer>
+#include <QThread>
+#include <QTimer>
+#include <atomic>
+#include <memory>
 
 #define CHECK(expression)                                                       \
     do {                                                                        \
@@ -141,6 +146,39 @@ int main(int argc, char **argv)
     }
     CHECK(operations.execute(A::CopyItemState, ids[1]).status == S::Unavailable);
     CHECK(operations.execute(A::SetItemColor, ids[1], PlaylistItemColor::Red).status == S::Unavailable);
+
+    {
+        auto release = std::make_shared<std::atomic_bool>(false);
+        auto entered = std::make_shared<std::atomic_bool>(false);
+        PlaylistModel offlineModel(nullptr, [release, entered](const QString &) {
+            entered->store(true);
+            while (!release->load()) QThread::msleep(2);
+            return true;
+        }, 40);
+        const auto offlineIds = offlineModel.addItems({source, source});
+        CHECK(offlineIds.size() == 2);
+        int ticks = 0;
+        QTimer timer;
+        timer.setInterval(5);
+        QObject::connect(&timer, &QTimer::timeout, [&] { ++ticks; });
+        timer.start();
+        offlineModel.refreshMediaAvailability();
+        QElapsedTimer elapsed; elapsed.start();
+        while (elapsed.elapsed() < 200 && !offlineModel.itemMediaOffline(offlineIds[0])) {
+            QCoreApplication::processEvents(); QThread::msleep(2);
+        }
+        const bool timedOut = entered->load() && ticks >= 3
+            && offlineModel.itemMediaOffline(offlineIds[0])
+            && offlineModel.itemMediaOffline(offlineIds[1]);
+        offlineModel.requestShutdown();
+        const bool detached = offlineModel.shutdownComplete();
+        release->store(true);
+        CHECK(timedOut && detached);
+        elapsed.restart();
+        while (elapsed.elapsed() < 50) { QCoreApplication::processEvents(); QThread::msleep(2); }
+        CHECK(offlineModel.itemMediaOffline(offlineIds[0]));
+        CHECK(offlineModel.itemMediaOffline(offlineIds[1]));
+    }
 
     ControllerOperations disabledOperations;
     PlaylistItemOperations itemOperations(&model, &disabledOperations);

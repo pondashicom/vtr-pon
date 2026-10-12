@@ -712,6 +712,8 @@ void BgmPlayoutController::update() {
   if (pendingTransportAction_ == PendingTransportAction::Stop) return;
   const auto status = player_->bgmStatus();
   if (status == DualDeckPlayer::BgmStatus::Error) {
+    if (playlistModel_ && player_->bgmMediaOffline())
+      playlistModel_->setFileMediaOffline(playlistModel_->bgmItemId());
     handleLoadFailure(player_->bgmErrorDetail());
     return;
   }

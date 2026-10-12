@@ -30,7 +30,10 @@ public:
     bool catalogRequested() const;
     VstScanProgress scanProgress() const;
     QJsonArray plugins() const;
+    // Prepare a replacement; commit the selection only after successful startup.
     void select(VstSlot slot, const QString &path, const QString &uid);
+    bool applying(VstSlot slot) const;
+    QString applyError(VstSlot slot) const;
     QString selectedPath(VstSlot slot) const;
     QString selectedUid(VstSlot slot) const;
     void activate(VstSlot slot);
@@ -46,6 +49,7 @@ signals:
     void catalogChanged();
     void scanProgressChanged();
     void failure(const QString &channel, const QString &reason);
+    void applicationFailed(const QString &channel, const QString &reason);
 private:
     VstService();
     struct Impl;
