@@ -14,6 +14,7 @@
     <message id="midi.select_device"><source>Select a MIDI input</source><translation>Select a MIDI input</translation></message>
     <message id="midi.saved_device"><source>Saved input (unavailable): %1</source><translation>Saved input (unavailable): %1</translation></message>
     <message id="midi.disabled"><source>MIDI control is disabled.</source><translation>MIDI control is disabled.</translation></message>
+    <message id="midi.searching"><source>Searching for MIDI input devices...</source><translation>Searching for MIDI input devices...</translation></message>
     <message id="midi.connected"><source>MIDI input connected.</source><translation>MIDI input connected.</translation></message>
     <message id="midi.disconnected"><source>MIDI input disconnected. Waiting for reconnection.</source><translation>MIDI input disconnected. Waiting for reconnection.</translation></message>
     <message id="midi.open_failed"><source>Could not open MIDI input: %1</source><translation>Could not open MIDI input: %1</translation></message>
@@ -4845,6 +4846,10 @@ Adjust the slider to find a comfortable text size.</translation>
     <message id="decklink.output_running">
         <source>DeckLink output is running.</source>
         <translation>DeckLink output is running.</translation>
+    </message>
+    <message id="decklink.output_starting">
+        <source>Starting DeckLink output...</source>
+        <translation>Starting DeckLink output...</translation>
     </message>
     <message id="decklink.no_devices">
         <source>No DeckLink devices found. Connect the device and check Desktop Video Setup.</source>

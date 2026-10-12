@@ -2,6 +2,7 @@
 #include "controller_operations.h"
 #include "controller_settings.h"
 #include "midi_message_queue.h"
+#include "midi_device_discovery.h"
 #include <QJsonDocument>
 #include <QPointer>
 #include <QTimer>
@@ -17,9 +18,12 @@
 namespace vtrpon {
 QList<MidiControlInput::Device> MidiControlInput::devices() {
   QList<Device> result;
+  QElapsedTimer elapsed;
+  elapsed.start();
 #ifdef _WIN32
   QMap<QString, int> occurrences;
-  for (UINT index = 0; index < midiInGetNumDevs(); ++index) {
+  const auto count = midiInGetNumDevs();
+  for (UINT index = 0; index < count; ++index) {
     MIDIINCAPSW caps{};
     if (midiInGetDevCapsW(index, &caps, sizeof(caps)) != MMSYSERR_NOERROR) continue;
     const auto name = QString::fromWCharArray(caps.szPname);
@@ -27,6 +31,7 @@ QList<MidiControlInput::Device> MidiControlInput::devices() {
     result.append({id, name, index});
   }
 #endif
+  if (elapsed.elapsed() >= 250) qInfo() << "MIDI device enumeration elapsedMs=" << elapsed.elapsed() << "count=" << result.size();
   return result;
 }
 
@@ -97,7 +102,14 @@ public:
       setStatus(configurationMode ? QStringLiteral("midi.select_device") : QStringLiteral("midi.disabled"));
       return;
     }
-    const auto available = MidiControlInput::devices();
+    if (!openedId.isEmpty() && openedId != requested) close();
+    discovery.request();
+    if (status == QStringLiteral("midi.disabled") || status == QStringLiteral("midi.select_device"))
+      setStatus(QStringLiteral("midi.searching"));
+  }
+  void refreshConnection(const QList<MidiControlInput::Device> &available) {
+    const auto requested = requestedDevice();
+    if (stopped || requested.isEmpty()) return;
     const auto found = std::find_if(available.begin(), available.end(), [&](const auto &device) { return device.id == requested; });
     if (found == available.end()) { close(); setStatus(QStringLiteral("midi.disconnected")); return; }
 #ifdef _WIN32
@@ -118,6 +130,8 @@ public:
   }
   void poll() {
     const QPointer<MidiControlInput> ownerGuard(owner);
+    if (auto available = discovery.takeResult()) refreshConnection(*available);
+    if (!ownerGuard) return;
     const auto pending = queue.take();
     if (pending.noteOverflow) router.resetButtons(QStringLiteral("note"));
     if (pending.buttonOverflow || pending.relativeOverflow) router.resetButtons(QStringLiteral("cc"));
@@ -215,6 +229,7 @@ public:
   bool configurationMode = false, stopped = false;
   quint64 generation = 0;
   midiControl::MessageQueue queue;
+  MidiDeviceDiscovery discovery;
 };
 MidiControlInput::MidiControlInput(ControllerOperations *operations, std::function<void(const QString &)> buttonAction, QObject *parent)
     : QObject(parent), impl_(std::make_unique<Impl>(this, operations, std::move(buttonAction))) { reload(); }

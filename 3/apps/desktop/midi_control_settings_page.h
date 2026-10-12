@@ -3,6 +3,8 @@
 #include <QWidget>
 #include <QPointer>
 #include <QElapsedTimer>
+#include <memory>
+#include "midi_control_input.h"
 
 class QCheckBox;
 class QComboBox;
@@ -14,6 +16,7 @@ class QTableWidget;
 class QTimer;
 namespace vtrpon {
 class MidiControlInput;
+class MidiDeviceDiscovery;
 class MidiControlSettingsPage final : public QWidget {
   Q_OBJECT
 public:
@@ -28,6 +31,7 @@ protected:
 private:
   void retranslate();
   void refreshDevices();
+  void updateDeviceList(const QList<MidiControlInput::Device> &devices);
   void updateConnection();
   void selectRow();
   QStringList editBinding(bool replaceConflicts = false);
@@ -35,6 +39,7 @@ private:
   void save();
   QString selectedId() const;
   QPointer<MidiControlInput> input_;
+  std::shared_ptr<MidiDeviceDiscovery> discovery_;
   QStringList ids_ = midiControl::actionIds();
   QJsonObject bindings_;
   QTimer *receivedDisplayTimer_;

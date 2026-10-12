@@ -6,7 +6,11 @@ extern "C" {
 /* Media ABI 1. All calls use the context's MTA owner thread. Borrowed packet
  * bytes remain valid until the next read/close on that context. No SDK types
  * cross this boundary. Each context owns at most one input and one output.
- * A channel is a logical SDK subdevice plus a physical connection bit. */
+ * A channel is a logical SDK subdevice plus a physical connection bit.
+ * persistentId is the channel selection key: PersistentID when available,
+ * otherwise TopologicalID on older cards. The fallback follows PCIe location;
+ * reselect the channel after moving/replacing a card. stableId is nonzero only
+ * when a usable, unambiguous selection key is available in this snapshot. */
 #define VTRPON_DECKLINK_MEDIA_ABI 1u
 typedef struct VtrPonDeckLinkChannel {
     uint32_t structSize, deviceIndex, direction, connection;

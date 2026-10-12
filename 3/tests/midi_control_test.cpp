@@ -1,6 +1,7 @@
 #include "midi_control_input.h"
 #include "midi_control_settings_page.h"
 #include "midi_message_queue.h"
+#include "midi_device_discovery.h"
 #include "controller_operations.h"
 #include "controller_settings.h"
 #include "controller_settings_io.h"
@@ -24,8 +25,19 @@
 #include <QTimer>
 #include <QVBoxLayout>
 #include <cstdio>
+#include <atomic>
+#include <future>
+#include <thread>
 
 #define CHECK(value) do { if (!(value)) { std::fprintf(stderr, "MIDI check failed at line %d: %s\n", __LINE__, #value); return 1; } } while (false)
+template<class F> bool waitForMidi(F predicate, int timeoutMs = 5000) {
+  QElapsedTimer elapsed; elapsed.start();
+  while (!predicate() && elapsed.elapsed() < timeoutMs) {
+    QCoreApplication::processEvents();
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+  }
+  return predicate();
+}
 int main(int argc, char **argv) {
   QApplication app(argc, argv);
   namespace m = vtrpon::midiControl;
@@ -62,7 +74,7 @@ int main(int argc, char **argv) {
       app.setProperty("vtrpon.settingsFile", path);
       ControllerOperations operations;
       vtrpon::MidiControlInput input(&operations, {});
-      CHECK(input.statusKey() == "midi.connected");
+      CHECK(waitForMidi([&] { return input.statusKey() == "midi.connected"; }));
       QElapsedTimer cycles; cycles.start();
       for (int pass = 0; pass < 3; ++pass) {
         input.setConfigurationMode(true);
@@ -92,7 +104,7 @@ int main(int argc, char **argv) {
     ControllerOperations operations;
     vtrpon::MidiControlInput input(&operations, {});
     input.setConfigurationMode(true); input.monitorDevice(devices.first().id);
-    CHECK(input.statusKey() == "midi.connected");
+    CHECK(waitForMidi([&] { return input.statusKey() == "midi.connected"; }));
     int received = 0;
     QObject::connect(&input, &vtrpon::MidiControlInput::received, &app,
         [&](const QString &type, int channel, int number, int value, bool pressed) {
@@ -103,6 +115,39 @@ int main(int argc, char **argv) {
     std::printf("Monitoring %s for 20 seconds.\n", devices.first().name.toUtf8().constData()); std::fflush(stdout);
     QTimer::singleShot(20000, &app, &QCoreApplication::quit); app.exec(); input.stop();
     std::printf("Received messages: %d\n", received); return received > 0 ? 0 : 1;
+  }
+  // A stalled driver must not freeze UI events, start duplicate queries, or
+  // make closing the owning screen wait for its enumeration to return.
+  {
+    auto release = std::make_shared<std::promise<void>>();
+    auto gate = release->get_future().share();
+    auto calls = std::make_shared<std::atomic_int>(0);
+    auto finished = std::make_shared<std::atomic_bool>(false);
+    auto discovery = std::make_unique<vtrpon::MidiDeviceDiscovery>([gate, calls, finished] {
+      ++*calls;
+      gate.wait_for(std::chrono::seconds(5));
+      *finished = true;
+      return vtrpon::MidiDeviceDiscovery::Devices{};
+    });
+    QElapsedTimer elapsed; elapsed.start();
+    discovery->request(); discovery->request();
+    CHECK(elapsed.elapsed() < 500);
+    CHECK(waitForMidi([&] { return calls->load() == 1; }));
+    bool uiResponded = false;
+    QTimer::singleShot(0, &app, [&] { uiResponded = true; });
+    CHECK(waitForMidi([&] { return uiResponded; }, 500));
+    CHECK(!finished->load() && !discovery->takeResult());
+    elapsed.restart(); discovery.reset();
+    CHECK(elapsed.elapsed() < 500);
+    release->set_value();
+    CHECK(waitForMidi([&] { return finished->load(); }));
+    vtrpon::MidiDeviceDiscovery available([] {
+      return vtrpon::MidiDeviceDiscovery::Devices{{QStringLiteral("test-id"), QStringLiteral("test-device"), 7}};
+    });
+    available.request();
+    std::optional<vtrpon::MidiDeviceDiscovery::Devices> result;
+    CHECK(waitForMidi([&] { if (!result) result = available.takeResult(); return result.has_value(); }));
+    CHECK(result->size() == 1 && result->first().id == "test-id" && result->first().index == 7);
   }
   const QJsonObject note{{"type", "note"}, {"channel", 1}, {"number", 60}};
   m::MessageQueue queue;

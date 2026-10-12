@@ -133,7 +133,7 @@ private:
         const std::array<QString, 3> names{QStringLiteral("Composite"), QStringLiteral("Fill"), QStringLiteral("Key")};
         if (settings_.outputEnabled) for (unsigned i = 0; i < 3; ++i) if (settings_.outputMask() & (1u << i)) {
             const auto &out = state.outputs[i]; text.append(names[i] + QStringLiteral(": ") + (out.error.isEmpty() ?
-                vtrpon::uiText(out.running ? "network_video.output_running" : "network_video.output_starting") : out.error));
+                vtrpon::uiText(out.running ? "decklink.output_running" : "decklink.output_starting") : out.error));
         }
         if (settings_.outputEnabled && settings_.fillEnabled && settings_.keyEnabled && state.outputs[1].running && state.outputs[2].running) {
             if (state.pairSynchronized) text.append(vtrpon::uiText("decklink.pair_synchronized"));

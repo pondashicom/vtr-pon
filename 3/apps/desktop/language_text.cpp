@@ -31,6 +31,8 @@ constexpr auto kUiTextIds = std::to_array<const char *>({
     QT_TRID_NOOP("midi.disabled"),
     //% "MIDI input connected."
     QT_TRID_NOOP("midi.connected"),
+    //% "Searching for MIDI input devices..."
+    QT_TRID_NOOP("midi.searching"),
     //% "MIDI input disconnected. Waiting for reconnection."
     QT_TRID_NOOP("midi.disconnected"),
     //% "Could not open MIDI input: %1"
@@ -147,6 +149,8 @@ constexpr auto kUiTextIds = std::to_array<const char *>({
     QT_TRID_NOOP("decklink.saved_unavailable"),
     //% "DeckLink output is running."
     QT_TRID_NOOP("decklink.output_running"),
+    //% "Starting DeckLink output..."
+    QT_TRID_NOOP("decklink.output_starting"),
     //% "No DeckLink devices found. Connect the device and check Desktop Video Setup."
     QT_TRID_NOOP("decklink.no_devices"),
     //% "DeckLink devices are available."

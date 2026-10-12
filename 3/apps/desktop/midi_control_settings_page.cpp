@@ -1,5 +1,6 @@
 #include "midi_control_settings_page.h"
 #include "midi_control_input.h"
+#include "midi_device_discovery.h"
 #include "controller_settings.h"
 #include "controller_settings_io.h"
 #include "settings_style.h"
@@ -33,6 +34,16 @@ MidiControlSettingsPage::MidiControlSettingsPage(QWidget *parent) : QWidget(pare
   deviceLabel_ = new QLabel(this); deviceRow->addWidget(deviceLabel_);
   device_ = new QComboBox(this); device_->setObjectName(QStringLiteral("midiInputDevice")); deviceLabel_->setBuddy(device_); deviceRow->addWidget(device_, 1);
   refresh_ = new QPushButton(this); deviceRow->addWidget(refresh_); layout->addLayout(deviceRow);
+  discovery_ = std::make_shared<MidiDeviceDiscovery>();
+  auto *devicePoll = new QTimer(this);
+  devicePoll->setInterval(50);
+  connect(devicePoll, &QTimer::timeout, this, [this] {
+    if (auto devices = discovery_->takeResult()) {
+      refresh_->setEnabled(true);
+      updateDeviceList(*devices);
+    }
+  });
+  devicePoll->start();
   connection_ = new QLabel(this); connection_->setWordWrap(true); setSettingsRole(connection_, "status"); layout->addWidget(connection_);
   received_ = new QLabel(this); received_->setObjectName(QStringLiteral("midiLastReceived")); layout->addWidget(received_);
   receivedDisplayTimer_ = new QTimer(this);
@@ -139,10 +150,14 @@ void MidiControlSettingsPage::setInput(MidiControlInput *input) {
   updateConnection(); selectRow();
 }
 void MidiControlSettingsPage::refreshDevices() {
+  refresh_->setEnabled(false);
+  discovery_->request();
+}
+void MidiControlSettingsPage::updateDeviceList(const QList<MidiControlInput::Device> &devices) {
   const auto selected = device_->currentData().toString();
   const QSignalBlocker blocker(device_);
   device_->clear(); device_->addItem(uiText("midi.select_device"), "");
-  for (const auto &device : MidiControlInput::devices()) device_->addItem(device.name, device.id);
+  for (const auto &device : devices) device_->addItem(device.name, device.id);
   if (!selected.isEmpty() && device_->findData(selected) < 0) {
     const auto saved = QJsonDocument::fromJson(selected.toUtf8()).array();
     const auto name = saved.isEmpty() ? QString{} : saved.first().toString();
@@ -157,7 +172,7 @@ void MidiControlSettingsPage::reload() {
   enabled_->setChecked(config.value("enabled").toBool());
   bindings_ = config.value("bindings").toObject();
   { const QSignalBlocker blocker(device_); device_->clear(); device_->addItem(QString{}, config.value("device").toString()); }
-  refreshDevices(); updateRows();
+  updateDeviceList({}); refreshDevices(); updateRows();
   table_->setCurrentCell(std::max(0, table_->currentRow()), 0); selectRow(); status_->clear();
 }
 QString MidiControlSettingsPage::selectedId() const { return ids_.value(table_->currentRow()); }

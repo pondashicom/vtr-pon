@@ -31,6 +31,19 @@ struct Pipeline {
 };
 int main(int argc, char **argv) {
     QCoreApplication app(argc, argv); gst_init(nullptr, nullptr);
+    if (argc == 3 && QString::fromLocal8Bit(argv[1]) == QStringLiteral("--hardware-discovery")) {
+        QTemporaryDir temporary; CHECK(temporary.isValid());
+        app.setProperty("vtrpon.settingsFile", temporary.filePath("user.ini"));
+        qputenv("VTRPON_DECKLINK_ADDON_FILE", QByteArray(argv[2]));
+        qunsetenv("VTRPON_DECKLINK_ALLOW_TEST_ADDON");
+        vtrpon::DeckLinkRuntime runtime;
+        CHECK(waitFor([] { return vtrpon::deckLinkState().availability == vtrpon::DeckLinkState::Availability::Ready; }));
+        for (const auto &channel : vtrpon::deckLinkState().channels)
+            std::printf("%s | %s | %s | modes=%lld\n", channel.input ? "IN" : "OUT",
+                channel.name.toUtf8().constData(), channel.path.toUtf8().constData(), static_cast<long long>(channel.modes.size()));
+        runtime.requestShutdown(); CHECK(waitFor([&] { return runtime.shutdownComplete(); }));
+        return 0;
+    }
     CHECK(argc == 2); QTemporaryDir temporary; CHECK(temporary.isValid());
     app.setProperty("vtrpon.settingsFile", temporary.filePath("user.ini"));
     qputenv("VTRPON_DECKLINK_ADDON_FILE", QByteArray(argv[1]));
