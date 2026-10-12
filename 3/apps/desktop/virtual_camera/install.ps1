@@ -37,7 +37,24 @@ $legacyDataFile = Join-Path $dataDirectory 'frames.bin'
 if (Get-Process vtr-pon -ErrorAction SilentlyContinue) {
     throw 'Close VTR-PON before changing the virtual camera.'
 }
-foreach ($path in @($installedDll, $dataFile, $legacyDataFile)) {
+$dllNeedsCopy = $false
+if ($Action -eq 'Install') {
+    if (-not $SourceDll) {
+        $SourceDll = Join-Path ([IO.Path]::GetFullPath($BuildDirectory)) 'vtr-pon-virtual-camera.dll'
+    }
+    if (-not (Test-Path -LiteralPath $SourceDll -PathType Leaf)) { throw "Camera DLL is missing: $SourceDll" }
+    $dllNeedsCopy = -not (Test-Path -LiteralPath $installedDll) -or
+        (Get-FileHash -LiteralPath $SourceDll -Algorithm SHA256).Hash -ne
+        (Get-FileHash -LiteralPath $installedDll -Algorithm SHA256).Hash
+}
+# Camera Frame Server can retain the DLL after all camera clients have closed.
+# An identical DLL is not replaced, so it does not need exclusive write access.
+# Replacement and removal must still wait for the DLL to be released.
+$pathsToCheck = @($dataFile, $legacyDataFile)
+if ($Action -eq 'Uninstall' -or $dllNeedsCopy) {
+    $pathsToCheck = @($installedDll) + $pathsToCheck
+}
+foreach ($path in $pathsToCheck) {
     if (Test-Path -LiteralPath $path) {
         $busy = $null
         for ($attempt = 0; $attempt -lt 30; $attempt++) {
@@ -71,10 +88,6 @@ if ($Action -eq 'Uninstall') {
     Write-Output 'Virtual camera COM registration and files removed. Empty directories retained.'
     exit 0
 }
-if (-not $SourceDll) {
-    $SourceDll = Join-Path ([IO.Path]::GetFullPath($BuildDirectory)) 'vtr-pon-virtual-camera.dll'
-}
-if (-not (Test-Path -LiteralPath $SourceDll -PathType Leaf)) { throw "Camera DLL is missing: $SourceDll" }
 if (Test-Path -LiteralPath $registry) {
     $registeredDll = (Get-Item -LiteralPath "$registry\InprocServer32").GetValue('')
     if ($registeredDll -ne $installedDll) {
@@ -95,9 +108,7 @@ Set-Acl -LiteralPath $binaryDirectory -AclObject $binaryAcl
 $dataAcl = [Security.AccessControl.DirectorySecurity]::new()
 $dataAcl.SetSecurityDescriptorSddlForm("D:P(A;OICI;FA;;;SY)(A;OICI;FA;;;BA)(A;OICI;0x1301bf;;;LS)(A;OICI;0x1301bf;;;$UserSid)")
 Set-Acl -LiteralPath $dataDirectory -AclObject $dataAcl
-if (-not (Test-Path -LiteralPath $installedDll) -or
-    (Get-FileHash -LiteralPath $SourceDll -Algorithm SHA256).Hash -ne
-    (Get-FileHash -LiteralPath $installedDll -Algorithm SHA256).Hash) {
+if ($dllNeedsCopy) {
     Copy-Item -LiteralPath $SourceDll -Destination $installedDll -Force
 }
 # sizeof(Shared): 64-byte header + 3 x (24 metadata + NV12 + alignment).
