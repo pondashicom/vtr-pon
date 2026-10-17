@@ -16,12 +16,17 @@ public static class VtrPonCameraFileOperations {
     public static extern bool DeleteFile(string path);
     [DllImport("kernel32.dll", EntryPoint="MoveFileExW", CharSet=CharSet.Unicode, ExactSpelling=true, SetLastError=true)]
     public static extern bool MoveFileEx(string source, string destination, uint flags);
+    public static bool ScheduleDelete(string path) {
+        // PowerShell converts a null string argument to String.Empty. Keep this
+        // call in C# so MoveFileExW receives the null pointer required for delete.
+        return MoveFileEx(path, null, 4);
+    }
 }
 '@
 }
 
 function Schedule-CameraDllRemoval([string]$Path) {
-    if (-not [VtrPonCameraFileOperations]::MoveFileEx($Path, $null, 4)) {
+    if (-not [VtrPonCameraFileOperations]::ScheduleDelete($Path)) {
         $code = [Runtime.InteropServices.Marshal]::GetLastWin32Error()
         throw [ComponentModel.Win32Exception]::new($code, "Could not schedule camera DLL removal: $Path")
     }

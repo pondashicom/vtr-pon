@@ -1,6 +1,7 @@
 param(
     [string]$CameraDll = (Join-Path $PSScriptRoot '../build/vtr-pon-virtual-camera.dll'),
-    [string]$ResultPath
+    [string]$ResultPath,
+    [switch]$TestNativeRestartScheduling
 )
 $ErrorActionPreference = 'Stop'
 $registrationScript = Join-Path $PSScriptRoot '../apps/desktop/virtual_camera/install.ps1'
@@ -12,6 +13,10 @@ if ($parseErrors.Count) { throw ($parseErrors | Out-String) }
 $helpers = $ast.FindAll({param($node) $node -is [Management.Automation.Language.FunctionDefinitionAst]}, $false)
 . ([scriptblock]::Create(($helpers | ForEach-Object { $_.Extent.Text }) -join "`n"))
 Initialize-CameraFileOperations
+$nativeScheduler = (Get-Command Schedule-CameraDllRemoval).ScriptBlock
+if ($TestNativeRestartScheduling -and -not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+    throw 'Native restart-scheduling test requires an elevated PowerShell.'
+}
 Add-Type -IgnoreWarnings -WarningAction SilentlyContinue -TypeDefinition @'
 using System;
 using System.Runtime.InteropServices;
@@ -109,6 +114,43 @@ try {
 
     Assert (-not (Remove-CameraDll $path)) 'An already removed DLL requested restart'
     $results += 'Repeated cleanup of an absent DLL succeeds without restart'
+
+    if ($TestNativeRestartScheduling) {
+        # Exercise the real API and inspect its actual source/empty-target pair.
+        # Never edit existing queue entries. The unique fixture entry is harmless
+        # after this test removes its own files and is consumed on next restart.
+        $session = [Microsoft.Win32.Registry]::LocalMachine.OpenSubKey('SYSTEM\CurrentControlSet\Control\Session Manager')
+        try {
+            $before = @($session.GetValue('PendingFileRenameOperations', @(), [Microsoft.Win32.RegistryValueOptions]::DoNotExpandEnvironmentNames))
+            Set-Item -LiteralPath Function:Schedule-CameraDllRemoval -Value $nativeScheduler
+            Copy-Item -LiteralPath $CameraDll -Destination $path
+            $module = [VtrPonCameraUninstallTest]::LoadLibraryEx($path, [IntPtr]::Zero, 1)
+            Assert ($module -ne [IntPtr]::Zero) 'Could not map native-scheduler fixture'
+            Assert (Remove-CameraDll $path) 'Native scheduling did not request restart'
+            $retiredFiles = @(Get-ChildItem -LiteralPath $testRoot -File -Filter '*.remove-*')
+            Assert ($retiredFiles.Count -eq 1 -and -not (Test-Path -LiteralPath $path)) 'Native scheduling did not retire the DLL'
+            $retired = $retiredFiles[0].FullName
+            $pending = @($session.GetValue('PendingFileRenameOperations', @(), [Microsoft.Win32.RegistryValueOptions]::DoNotExpandEnvironmentNames))
+            $index = [Array]::IndexOf($pending, ('\??\' + $retired))
+            # Current Windows 11 may prefix a native delete source with *1.
+            if ($index -lt 0) { $index = [Array]::IndexOf($pending, ('*1\??\' + $retired)) }
+            Assert ($index -ge 0 -and $index % 2 -eq 0 -and $index + 1 -lt $pending.Count -and $pending[$index + 1] -ceq '') 'No native source/empty-target delete pair was recorded'
+            $others = @()
+            for ($i=0; $i -lt $pending.Count; $i++) {
+                if ($i -eq $index) { $i++; continue }
+                $others += $pending[$i]
+            }
+            Assert (($others -join "`0") -ceq ($before -join "`0")) 'Existing pending operations changed'
+            Copy-Item -LiteralPath $CameraDll -Destination $path
+            $newHash = (Get-FileHash -LiteralPath $path).Hash
+            [VtrPonCameraUninstallTest]::FreeLibrary($module) | Out-Null
+            $module = [IntPtr]::Zero
+            Remove-Item -LiteralPath $retired
+            Assert ((Get-FileHash -LiteralPath $path).Hash -eq $newHash) 'Native pending deletion targets the new DLL'
+            Remove-Item -LiteralPath $path
+            $results += 'Real Windows restart-deletion API records the old DLL only; existing operations and reinstall are preserved'
+        } finally { $session.Dispose() }
+    }
 } finally {
     if ($held) { $held.Dispose() }
     if ($module -ne [IntPtr]::Zero) { [VtrPonCameraUninstallTest]::FreeLibrary($module) | Out-Null }
@@ -116,6 +158,6 @@ try {
     foreach ($file in Get-ChildItem -LiteralPath $testRoot -File) { Remove-Item -LiteralPath $file.FullName }
     Remove-Item -LiteralPath $testRoot
 }
-$report = [ordered]@{passed=$results.Count;tests=$results;nativeImageMapping=$true;restartSchedulingMocked=$true;registryAndServicesChanged=$false}
+$report = [ordered]@{passed=$results.Count;tests=$results;nativeImageMapping=$true;restartSchedulingMocked=$true;nativeRestartSchedulingTested=[bool]$TestNativeRestartScheduling;registrationAndServicesChanged=$false}
 if ($ResultPath) { $report | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $ResultPath -Encoding UTF8 }
 $results | ForEach-Object { Write-Output "PASS: $_" }
