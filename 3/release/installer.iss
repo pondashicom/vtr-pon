@@ -87,6 +87,7 @@ Type: files; Name: "{userdesktop}\VTR-PON.lnk"
 [Code]
 var
   CameraRegistrationFailed: Boolean;
+  CameraRemovalNeedsRestart: Boolean;
   DesktopShortcutCheckBox: TNewCheckBox;
 
 procedure InitializeWizard;
@@ -162,6 +163,12 @@ begin
       CameraCommand(Action), '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
   Log('Virtual camera ShellExec started=' + IntToStr(Ord(Started)) +
       ' result=' + IntToStr(ResultCode));
+  if Started and (Action = 'Uninstall') and (ResultCode = 3010) then
+  begin
+    CameraRemovalNeedsRestart := True;
+    Log('Virtual camera removal completed; retired DLL cleanup requires restart.');
+    Exit;
+  end;
   if not Started or (ResultCode <> 0) then
   begin
     CameraRegistrationFailed := True;
@@ -191,4 +198,9 @@ procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 begin
   if CurUninstallStep = usUninstall then
     RunCameraRegistration('Uninstall');
+end;
+
+function UninstallNeedRestart: Boolean;
+begin
+  Result := CameraRemovalNeedsRestart;
 end;

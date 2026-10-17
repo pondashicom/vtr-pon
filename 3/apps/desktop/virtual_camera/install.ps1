@@ -6,6 +6,83 @@ param(
     [string]$UserSid = [Security.Principal.WindowsIdentity]::GetCurrent().User.Value
 )
 $ErrorActionPreference = 'Stop'
+
+function Initialize-CameraFileOperations {
+    if ('VtrPonCameraFileOperations' -as [type]) { return }
+    Add-Type -IgnoreWarnings -WarningAction SilentlyContinue -TypeDefinition @'
+using System.Runtime.InteropServices;
+public static class VtrPonCameraFileOperations {
+    [DllImport("kernel32.dll", EntryPoint="DeleteFileW", CharSet=CharSet.Unicode, ExactSpelling=true, SetLastError=true)]
+    public static extern bool DeleteFile(string path);
+    [DllImport("kernel32.dll", EntryPoint="MoveFileExW", CharSet=CharSet.Unicode, ExactSpelling=true, SetLastError=true)]
+    public static extern bool MoveFileEx(string source, string destination, uint flags);
+}
+'@
+}
+
+function Schedule-CameraDllRemoval([string]$Path) {
+    if (-not [VtrPonCameraFileOperations]::MoveFileEx($Path, $null, 4)) {
+        $code = [Runtime.InteropServices.Marshal]::GetLastWin32Error()
+        throw [ComponentModel.Win32Exception]::new($code, "Could not schedule camera DLL removal: $Path")
+    }
+}
+
+function Remove-CameraDll([string]$Path) {
+    if (-not (Test-Path -LiteralPath $Path)) { return $false }
+    Initialize-CameraFileOperations
+    if ([VtrPonCameraFileOperations]::DeleteFile($Path)) { return $false }
+    $code = [Runtime.InteropServices.Marshal]::GetLastWin32Error()
+    if ($code -in 2, 3) { return $false }
+    if ($code -notin 5, 32, 33) {
+        throw [ComponentModel.Win32Exception]::new($code, "Could not remove camera DLL: $Path")
+    }
+
+    # A mapped image cannot be deleted even after its last camera client closes.
+    # Retire its name before scheduling deletion so reinstalling before reboot
+    # cannot cause the newly installed DLL to be deleted at that reboot.
+    $retiredPath = $Path + '.remove-' + [Guid]::NewGuid().ToString('N')
+    if (-not [VtrPonCameraFileOperations]::MoveFileEx($Path, $retiredPath, 0)) {
+        $code = [Runtime.InteropServices.Marshal]::GetLastWin32Error()
+        throw [ComponentModel.Win32Exception]::new($code, "Could not retire camera DLL: $Path")
+    }
+    try {
+        if ([VtrPonCameraFileOperations]::DeleteFile($retiredPath)) { return $false }
+        $code = [Runtime.InteropServices.Marshal]::GetLastWin32Error()
+        if ($code -in 2, 3) { return $false }
+        if ($code -notin 5, 32, 33) {
+            throw [ComponentModel.Win32Exception]::new($code, "Could not remove retired camera DLL: $retiredPath")
+        }
+        Schedule-CameraDllRemoval $retiredPath
+    } catch {
+        $failure = $_
+        if (-not [VtrPonCameraFileOperations]::MoveFileEx($retiredPath, $Path, 0)) {
+            throw "Camera DLL removal failed and its name could not be restored: $retiredPath. $failure"
+        }
+        throw $failure
+    }
+    return $true
+}
+
+function Wait-CameraFilesIdle([string[]]$Paths, [int]$Attempts = 30) {
+    foreach ($path in $Paths) {
+        if (-not (Test-Path -LiteralPath $path)) { continue }
+        $busy = $null
+        for ($attempt = 0; $attempt -lt $Attempts; $attempt++) {
+            try {
+                $idle = [IO.File]::Open($path, [IO.FileMode]::Open,
+                    [IO.FileAccess]::ReadWrite, [IO.FileShare]::None)
+                $idle.Dispose()
+                $busy = $null
+                break
+            } catch [IO.IOException] {
+                $busy = $_
+                if ($attempt + 1 -lt $Attempts) { Start-Sleep -Seconds 1 }
+            }
+        }
+        if ($busy) { throw "Camera file is still in use: $path. $busy" }
+    }
+}
+
 if (-not [Environment]::Is64BitProcess) {
     # Inno Setup 6 is a 32-bit process. Relaunch under native PowerShell before
     # using Program Files or the 64-bit HKLM COM registry view.
@@ -47,52 +124,35 @@ if ($Action -eq 'Install') {
         (Get-FileHash -LiteralPath $SourceDll -Algorithm SHA256).Hash -ne
         (Get-FileHash -LiteralPath $installedDll -Algorithm SHA256).Hash
 }
-# Camera Frame Server can retain the DLL after all camera clients have closed.
-# An identical DLL is not replaced, so it does not need exclusive write access.
-# Replacement and removal must still wait for the DLL to be released.
-$pathsToCheck = @($dataFile, $legacyDataFile)
-if ($Action -eq 'Uninstall' -or $dllNeedsCopy) {
-    $pathsToCheck = @($installedDll) + $pathsToCheck
-}
-foreach ($path in $pathsToCheck) {
-    if (Test-Path -LiteralPath $path) {
-        $busy = $null
-        for ($attempt = 0; $attempt -lt 30; $attempt++) {
-            try {
-                $idle = [IO.File]::Open($path, [IO.FileMode]::Open,
-                    [IO.FileAccess]::ReadWrite, [IO.FileShare]::None)
-                $idle.Dispose()
-                $busy = $null
-                break
-            } catch [IO.IOException] {
-                $busy = $_
-                Start-Sleep -Seconds 1
-            }
-        }
-        if ($busy) { throw "Camera file is still in use: $path. $busy" }
-    }
-}
-# Literal allowlist only; never recursively remove a computed directory.
-if ($Action -eq 'Uninstall') {
-    if (Test-Path -LiteralPath $registry) {
-        $registeredDll = (Get-Item -LiteralPath "$registry\InprocServer32").GetValue('')
-        if ($registeredDll -ne $installedDll) {
-            throw "Virtual camera registration belongs to another DLL: $registeredDll"
-        }
-        Remove-Item -LiteralPath "$registry\InprocServer32"
-        Remove-Item -LiteralPath $registry
-    }
-    if (Test-Path -LiteralPath $installedDll) { Remove-Item -LiteralPath $installedDll }
-    if (Test-Path -LiteralPath $dataFile) { Remove-Item -LiteralPath $dataFile }
-    if (Test-Path -LiteralPath $legacyDataFile) { Remove-Item -LiteralPath $legacyDataFile }
-    Write-Output 'Virtual camera COM registration and files removed. Empty directories retained.'
-    exit 0
-}
+# Check ownership before changing any files, including retiring a mapped DLL.
 if (Test-Path -LiteralPath $registry) {
     $registeredDll = (Get-Item -LiteralPath "$registry\InprocServer32").GetValue('')
     if ($registeredDll -ne $installedDll) {
         throw "Virtual camera registration belongs to another DLL: $registeredDll"
     }
+}
+# Keep the active frame-data guard. Only DLL-only retention during removal can
+# use delayed cleanup; replacing a different DLL still requires exclusive access.
+$pathsToCheck = @($dataFile, $legacyDataFile)
+if ($Action -eq 'Install' -and $dllNeedsCopy) {
+    $pathsToCheck = @($installedDll) + $pathsToCheck
+}
+Wait-CameraFilesIdle $pathsToCheck
+# Literal allowlist only; never recursively remove a computed directory.
+if ($Action -eq 'Uninstall') {
+    $needsRestart = Remove-CameraDll $installedDll
+    if (Test-Path -LiteralPath $registry) {
+        Remove-Item -LiteralPath "$registry\InprocServer32"
+        Remove-Item -LiteralPath $registry
+    }
+    if (Test-Path -LiteralPath $dataFile) { Remove-Item -LiteralPath $dataFile }
+    if (Test-Path -LiteralPath $legacyDataFile) { Remove-Item -LiteralPath $legacyDataFile }
+    if ($needsRestart) {
+        Write-Output 'Virtual camera registration removed. Retired DLL will be deleted after Windows restarts.'
+        exit 3010
+    }
+    Write-Output 'Virtual camera COM registration and files removed. Empty directories retained.'
+    exit 0
 }
 if ((Test-Path -LiteralPath $dataFile) -and
     (Get-Item -LiteralPath $dataFile).Length -ne 9331456) {
