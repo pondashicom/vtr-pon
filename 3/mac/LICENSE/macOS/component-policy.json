@@ -1,0 +1,181 @@
+{
+  "schemaVersion": 1,
+  "releaseReady": false,
+  "components": {
+    "vtr-pon": {
+      "selectedLicense": "MPL-2.0; self-authored test patterns CC0-1.0",
+      "scope": "Main application, helpers, test executables and build scripts; bundled self-authored test-pattern media separately CC0."
+    },
+    "qtbase": {
+      "selectedLicense": "LGPL-3.0-only",
+      "scope": "Core, Gui, Widgets, Network, DBus and selected Cocoa/image/TLS plugins; embedded notices follow the reviewed SBOM/source/feature conditions."
+    },
+    "qtimageformats": {
+      "selectedLicense": "LGPL-3.0-only",
+      "scope": "Only TIFF and WebP plugins; their separately linked libraries are separate components."
+    },
+    "qtsvg": {
+      "selectedLicense": "LGPL-3.0-only",
+      "scope": "Svg framework, SVG image and icon plugins; includes XSVG notice."
+    },
+    "qtwebengine": {
+      "selectedLicense": "LGPL-3.0-only",
+      "scope": "Only QtPdf; PDFium and its embedded third-party code also apply. QtWebEngine browser modules are not bundled."
+    },
+    "gstreamer": {
+      "selectedLicense": "LGPL-2.0-or-later AND LGPL-2.1-or-later AND MIT",
+      "scope": "Selected libraries/plugins and scanner only. The build recipe also builds GPL plugins, but they are excluded from this .app."
+    },
+    "gst-libav": {
+      "selectedLicense": "LGPL-2.1-or-later",
+      "scope": "Rebuilt against the isolated LGPL FFmpeg; do not substitute Homebrew libav or FFmpeg."
+    },
+    "gst-plugins-rs": {
+      "selectedLicense": "MIT",
+      "scope": "dav1d plugin, version 0.15.0-RELEASE; Rust dependency notices also apply."
+    },
+    "ffmpeg": {
+      "selectedLicense": "LGPL-2.1-or-later",
+      "scope": "8.1 shared decoder build, GPL/nonfree/version3/autodetection disabled; embedded permissive-code notices retained."
+    },
+    "brotli": {
+      "selectedLicense": "MIT",
+      "scope": ""
+    },
+    "dav1d": {
+      "selectedLicense": "BSD-2-Clause",
+      "scope": ""
+    },
+    "dbus": {
+      "selectedLicense": "AFL-2.1",
+      "scope": "Select the AFL-2.1 alternative for libdbus, retain upstream notices."
+    },
+    "double-conversion": {
+      "selectedLicense": "BSD-3-Clause",
+      "scope": ""
+    },
+    "flac": {
+      "selectedLicense": "BSD-3-Clause",
+      "scope": "Only libFLAC; command-line programs are not bundled."
+    },
+    "freetype": {
+      "selectedLicense": "FTL",
+      "scope": "Select the FreeType License; retain embedded-code notices."
+    },
+    "gettext": {
+      "selectedLicense": "LGPL-2.1-or-later",
+      "scope": "Only libintl; GNU gettext programs under GPL are not bundled."
+    },
+    "glib": {
+      "selectedLicense": "LGPL-2.1-or-later",
+      "scope": "GLib/GObject/GIO/GModule/GThread; retain bundled-code notices."
+    },
+    "graphite2": {
+      "selectedLicense": "LGPL-2.1-or-later",
+      "scope": "Select LGPL alternative; preserve original COPYING and header notices."
+    },
+    "harfbuzz": {
+      "selectedLicense": "MIT",
+      "scope": ""
+    },
+    "icu4c@78": {
+      "selectedLicense": "Unicode-3.0",
+      "scope": "ICU 78.3 original license and data notices."
+    },
+    "jpeg-turbo": {
+      "selectedLicense": "IJG AND BSD-3-Clause AND Zlib",
+      "scope": "Only libjpeg; upstream license describes each part."
+    },
+    "libb2": {
+      "selectedLicense": "CC0-1.0",
+      "scope": ""
+    },
+    "libogg": {
+      "selectedLicense": "BSD-3-Clause",
+      "scope": ""
+    },
+    "libpng": {
+      "selectedLicense": "Libpng-2.0",
+      "scope": ""
+    },
+    "libtiff": {
+      "selectedLicense": "libtiff",
+      "scope": ""
+    },
+    "libvorbis": {
+      "selectedLicense": "BSD-3-Clause",
+      "scope": ""
+    },
+    "libvpx": {
+      "selectedLicense": "BSD-3-Clause",
+      "scope": "Include PATENTS and additional patent grant text as applicable."
+    },
+    "libx11": {
+      "selectedLicense": "MIT",
+      "scope": "X11-style notices differ by source file; original COPYING retained."
+    },
+    "libxau": {
+      "selectedLicense": "MIT",
+      "scope": ""
+    },
+    "libxcb": {
+      "selectedLicense": "MIT",
+      "scope": ""
+    },
+    "libxdmcp": {
+      "selectedLicense": "MIT",
+      "scope": ""
+    },
+    "md4c": {
+      "selectedLicense": "MIT",
+      "scope": ""
+    },
+    "mpg123": {
+      "selectedLicense": "LGPL-2.1-or-later",
+      "scope": "Only libmpg123 decoder; retain original notice and license."
+    },
+    "openssl@3": {
+      "selectedLicense": "Apache-2.0",
+      "scope": "Include NOTICE and Apache 2.0 original text."
+    },
+    "opus": {
+      "selectedLicense": "BSD-3-Clause",
+      "scope": "Retain included third-party notices and patent grants."
+    },
+    "orc": {
+      "selectedLicense": "BSD-2-Clause",
+      "scope": "Original notices cover differently licensed source fragments."
+    },
+    "pcre2": {
+      "selectedLicense": "BSD-3-Clause",
+      "scope": "Retain additional upstream notices, including historical contributions."
+    },
+    "webp": {
+      "selectedLicense": "BSD-3-Clause",
+      "scope": "Include PATENTS and AUTHORS."
+    },
+    "xz": {
+      "selectedLicense": "0BSD",
+      "scope": "Only liblzma; source package has other licenses for tools/tests."
+    },
+    "zlib": {
+      "selectedLicense": "Zlib",
+      "scope": ""
+    },
+    "zstd": {
+      "selectedLicense": "BSD-3-Clause",
+      "scope": "Select the BSD alternative for shared libzstd."
+    }
+  },
+  "publicSourceBaseUrl": null,
+  "sourceDistribution": "Same-download source sidecar; public hosting not yet configured",
+  "excludedQtAttributions": {
+    "d3d12memoryallocator": "D3D12 backend is Windows-only",
+    "android-native-style": "Android platform plugin is not bundled",
+    "android-gradle-wrapper": "Android packaging tool is not bundled",
+    "dejayvu": "WebAssembly font is not bundled",
+    "wintab": "Windows platform plugin is not bundled",
+    "rhi-miniengine-d3d12-mipmap": "D3D12 backend is Windows-only",
+    "pixman": "Gui CMake explicitly excludes Pixman assembly for arm64; separate Qt NEON helpers remain enabled."
+  }
+}

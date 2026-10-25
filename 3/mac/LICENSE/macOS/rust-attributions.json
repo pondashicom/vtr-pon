@@ -1,0 +1,2745 @@
+{
+  "schemaVersion": 1,
+  "scope": "Cargo.lock closure superset, not a claim that every crate is linked on macOS",
+  "pluginVersion": "0.15.0",
+  "cargoLockAfterRecipePatchSha256": "092bc1b8541bd8361b10cf5081cbb821db0010f40c812ccd95259d650fddccb0",
+  "crates": [
+    {
+      "name": "allocator-api2",
+      "version": "0.2.21",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/allocator-api2/allocator-api2-0.2.21.crate",
+        "sha256": "683d7910e743518b0e34f1186f92494becacb047c7b6bf616c96772180fef923",
+        "file": "rust/archives/allocator-api2-0.2.21.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/allocator-api2/LICENSE-APACHE",
+          "sha256": "20fe7b00e904ed690e3b9fd6073784d3fc428141dbd10b81c01fd143d0797f58"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/allocator-api2/LICENSE-MIT",
+          "sha256": "36516aefdc84c5d5a1e7485425913a22dbda69eb1930c5e84d6ae4972b5194b9"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "android_system_properties",
+      "version": "0.1.5",
+      "declaredLicense": "MIT/Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/android_system_properties/android_system_properties-0.1.5.crate",
+        "sha256": "819e7219dbd41043ac279b19830f2efc897156490d7fd6ea916720117ee66311",
+        "file": "rust/archives/android_system_properties-0.1.5.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/android_system_properties/LICENSE-APACHE",
+          "sha256": "216486f29671a4262efe32af6d84a75bef398127f8c5f369b5c8305983887a06"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/android_system_properties/LICENSE-MIT",
+          "sha256": "80f275e90d799911ed3830a7f242a2ef5a4ade2092fe0aa07bfb2d2cf2f2b95e"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "anyhow",
+      "version": "1.0.102",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/anyhow/anyhow-1.0.102.crate",
+        "sha256": "7f202df86484c868dbad7eaa557ef785d5c66295e41b460ef922eca0723b842c",
+        "file": "rust/archives/anyhow-1.0.102.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/anyhow/LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/anyhow/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "atomic_refcell",
+      "version": "0.1.13",
+      "declaredLicense": "Apache-2.0/MIT",
+      "source": {
+        "url": "https://static.crates.io/crates/atomic_refcell/atomic_refcell-0.1.13.crate",
+        "sha256": "41e67cd8309bbd06cd603a9e693a784ac2e5d1e955f11286e355089fcab3047c",
+        "file": "rust/archives/atomic_refcell-0.1.13.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/atomic_refcell/LICENSE.MIT",
+          "sha256": "d8e997e6cdf64acfdd3a9315b5dea0dd933f1f5386a55a2c16916dc8514071f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/atomic_refcell/LICENSE.APACHE",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "autocfg",
+      "version": "1.5.0",
+      "declaredLicense": "Apache-2.0 OR MIT",
+      "source": {
+        "url": "https://static.crates.io/crates/autocfg/autocfg-1.5.0.crate",
+        "sha256": "c08606f8c3cbf4ce6ec8e28fb0014a2c086708fe954eaa885384a6165172e7e8",
+        "file": "rust/archives/autocfg-1.5.0.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/autocfg/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/autocfg/LICENSE-MIT",
+          "sha256": "27995d58ad5c1145c1a8cd86244ce844886958a35eb2b78c6b772748669999ac"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "av-data",
+      "version": "0.4.4",
+      "declaredLicense": "MIT",
+      "source": {
+        "url": "https://static.crates.io/crates/av-data/av-data-0.4.4.crate",
+        "sha256": "fca67ba5d317924c02180c576157afd54babe48a76ebc66ce6d34bb8ba08308e",
+        "file": "rust/archives/av-data-0.4.4.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/av-data/LICENSE",
+          "sha256": "0ffd79084929c4913ea1223796dccfb1d86abfb359e86ef7c0137d9805bfaacd"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "bitflags",
+      "version": "2.11.0",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/bitflags/bitflags-2.11.0.crate",
+        "sha256": "843867be96c8daad0d758b57df9392b6d8d271134fce549de6ce169ff98a92af",
+        "file": "rust/archives/bitflags-2.11.0.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/bitflags/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/bitflags/LICENSE-MIT",
+          "sha256": "6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "bumpalo",
+      "version": "3.20.2",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/bumpalo/bumpalo-3.20.2.crate",
+        "sha256": "5d20789868f4b01b2f2caec9f5c4e0213b41e3e5702a50157d699ae31ced2fcb",
+        "file": "rust/archives/bumpalo-3.20.2.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/bumpalo/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/bumpalo/LICENSE-MIT",
+          "sha256": "65f94e99ddaf4f5d1782a6dae23f35d4293a9a01444a13135a6887017d353cee"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "byte-slice-cast",
+      "version": "1.2.3",
+      "declaredLicense": "MIT",
+      "source": {
+        "url": "https://static.crates.io/crates/byte-slice-cast/byte-slice-cast-1.2.3.crate",
+        "sha256": "7575182f7272186991736b70173b0ea045398f984bf5ebbb3804736ce1330c9d",
+        "file": "rust/archives/byte-slice-cast-1.2.3.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/byte-slice-cast/LICENSE",
+          "sha256": "c524732311819f888ce57b1b56148feaa6e9b1705fcb158e7e5d71554ccf39ed"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "bytes",
+      "version": "1.11.1",
+      "declaredLicense": "MIT",
+      "source": {
+        "url": "https://static.crates.io/crates/bytes/bytes-1.11.1.crate",
+        "sha256": "1e748733b7cbc798e1434b6ac524f0c1ff2ab456fe201501e6497c8417a4fc33",
+        "file": "rust/archives/bytes-1.11.1.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/bytes/LICENSE",
+          "sha256": "45f522cacecb1023856e46df79ca625dfc550c94910078bd8aec6e02880b3d42"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "cc",
+      "version": "1.2.56",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/cc/cc-1.2.56.crate",
+        "sha256": "aebf35691d1bfb0ac386a69bac2fde4dd276fb618cf8bf4f5318fe285e821bb2",
+        "file": "rust/archives/cc-1.2.56.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/cc/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/cc/LICENSE-MIT",
+          "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "cfg-expr",
+      "version": "0.17.2",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/cfg-expr/cfg-expr-0.17.2.crate",
+        "sha256": "8d4ba6e40bd1184518716a6e1a781bf9160e286d219ccdb8ab2612e74cfe4789",
+        "file": "rust/archives/cfg-expr-0.17.2.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/cfg-expr/LICENSE-APACHE",
+          "sha256": "8173d5c29b4f956d532781d2b86e4e30f83e6b7878dce18c919451d6ba707c90"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/cfg-expr/LICENSE-MIT",
+          "sha256": "090a294a492ab2f41388252312a65cf2f0e423330b721a68c6665ac64766753b"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "cfg-if",
+      "version": "1.0.4",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/cfg-if/cfg-if-1.0.4.crate",
+        "sha256": "9330f8b2ff13f34540b44e946ef35111825727b38d33286ef986142615121801",
+        "file": "rust/archives/cfg-if-1.0.4.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/cfg-if/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/cfg-if/LICENSE-MIT",
+          "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "chrono",
+      "version": "0.4.43",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/chrono/chrono-0.4.43.crate",
+        "sha256": "fac4744fb15ae8337dc853fee7fb3f4e48c0fbaa23d0afe49c447b4fab126118",
+        "file": "rust/archives/chrono-0.4.43.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/chrono/LICENSE.txt",
+          "sha256": "946c9835d8034d24404f8cfec5f4654cee5dad17e944afc3d06d742cf2882831"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "core-foundation-sys",
+      "version": "0.8.7",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/core-foundation-sys/core-foundation-sys-0.8.7.crate",
+        "sha256": "773648b94d0e5d620f64f280777445740e61fe701025087ec8b57f45c791888b",
+        "file": "rust/archives/core-foundation-sys-0.8.7.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/core-foundation-sys/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/core-foundation-sys/LICENSE-MIT",
+          "sha256": "62065228e42caebca7e7d7db1204cbb867033de5982ca4009928915e4095f3a3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "dav1d",
+      "version": "0.11.1",
+      "declaredLicense": "MIT",
+      "source": {
+        "url": "https://static.crates.io/crates/dav1d/dav1d-0.11.1.crate",
+        "sha256": "3ee89cb860616069c67520dcd66cacdb900b57c799f634a0eb6d91f6e2a82b61",
+        "file": "rust/archives/dav1d-0.11.1.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/dav1d/LICENSE",
+          "sha256": "8eb4fb5a6505da473ee195f326007c8c7e28357e3e6a11e293ce2a480384030c"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "dav1d-sys",
+      "version": "0.8.3",
+      "declaredLicense": "MIT",
+      "source": {
+        "url": "https://static.crates.io/crates/dav1d-sys/dav1d-sys-0.8.3.crate",
+        "sha256": "c3c91aea6668645415331133ed6f8ddf0e7f40160cd97a12d59e68716a58704b",
+        "file": "rust/archives/dav1d-sys-0.8.3.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/dav1d-sys/LICENSE",
+          "sha256": "8eb4fb5a6505da473ee195f326007c8c7e28357e3e6a11e293ce2a480384030c"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "either",
+      "version": "1.15.0",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/either/either-1.15.0.crate",
+        "sha256": "48c757948c5ede0e46177b7add2e67155f70e33c07fea8284df6576da70b3719",
+        "file": "rust/archives/either-1.15.0.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/either/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/either/LICENSE-MIT",
+          "sha256": "7576269ea71f767b99297934c0b2367532690f8c4badc695edf8e04ab6a1e545"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "equivalent",
+      "version": "1.0.2",
+      "declaredLicense": "Apache-2.0 OR MIT",
+      "source": {
+        "url": "https://static.crates.io/crates/equivalent/equivalent-1.0.2.crate",
+        "sha256": "877a4ace8713b0bcf2a4e7eec82529c029f1d0619886d18145fea96c3ffe5c0f",
+        "file": "rust/archives/equivalent-1.0.2.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/equivalent/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/equivalent/LICENSE-MIT",
+          "sha256": "7365cc8878a1d7ce155a58c4ca09c3d7a6be413efa5334a80ea842912b669349"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "find-msvc-tools",
+      "version": "0.1.9",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/find-msvc-tools/find-msvc-tools-0.1.9.crate",
+        "sha256": "5baebc0774151f905a1a2cc41989300b1e6fbb29aff0ceffa1064fdd3088d582",
+        "file": "rust/archives/find-msvc-tools-0.1.9.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/find-msvc-tools/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/find-msvc-tools/LICENSE-MIT",
+          "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "foldhash",
+      "version": "0.1.5",
+      "declaredLicense": "Zlib",
+      "source": {
+        "url": "https://static.crates.io/crates/foldhash/foldhash-0.1.5.crate",
+        "sha256": "d9c4f5dac5e15c24eb999c26181a6ca40b39fe946cbe4c263c7209467bc83af2",
+        "file": "rust/archives/foldhash-0.1.5.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/foldhash/LICENSE",
+          "sha256": "b1181a40b2a7b25cf66fd01481713bc1005df082c53ef73e851e55071b102744"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "foldhash",
+      "version": "0.2.0",
+      "declaredLicense": "Zlib",
+      "source": {
+        "url": "https://static.crates.io/crates/foldhash/foldhash-0.2.0.crate",
+        "sha256": "77ce24cb58228fbb8aa041425bb1050850ac19177686ea6e0f41a70416f56fdb",
+        "file": "rust/archives/foldhash-0.2.0.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/foldhash/LICENSE",
+          "sha256": "b1181a40b2a7b25cf66fd01481713bc1005df082c53ef73e851e55071b102744"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "futures-channel",
+      "version": "0.3.32",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/futures-channel/futures-channel-0.3.32.crate",
+        "sha256": "07bbe89c50d7a535e539b8c17bc0b49bdb77747034daa8087407d655f3f7cc1d",
+        "file": "rust/archives/futures-channel-0.3.32.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/futures-channel/LICENSE-APACHE",
+          "sha256": "275c491d6d1160553c32fd6127061d7f9606c3ea25abfad6ca3f6ed088785427"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/futures-channel/LICENSE-MIT",
+          "sha256": "6652c868f35dfe5e8ef636810a4e576b9d663f3a17fb0f5613ad73583e1b88fd"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "futures-core",
+      "version": "0.3.32",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/futures-core/futures-core-0.3.32.crate",
+        "sha256": "7e3450815272ef58cec6d564423f6e755e25379b217b0bc688e295ba24df6b1d",
+        "file": "rust/archives/futures-core-0.3.32.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/futures-core/LICENSE-APACHE",
+          "sha256": "275c491d6d1160553c32fd6127061d7f9606c3ea25abfad6ca3f6ed088785427"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/futures-core/LICENSE-MIT",
+          "sha256": "6652c868f35dfe5e8ef636810a4e576b9d663f3a17fb0f5613ad73583e1b88fd"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "futures-executor",
+      "version": "0.3.32",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/futures-executor/futures-executor-0.3.32.crate",
+        "sha256": "baf29c38818342a3b26b5b923639e7b1f4a61fc5e76102d4b1981c6dc7a7579d",
+        "file": "rust/archives/futures-executor-0.3.32.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/futures-executor/LICENSE-APACHE",
+          "sha256": "275c491d6d1160553c32fd6127061d7f9606c3ea25abfad6ca3f6ed088785427"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/futures-executor/LICENSE-MIT",
+          "sha256": "6652c868f35dfe5e8ef636810a4e576b9d663f3a17fb0f5613ad73583e1b88fd"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "futures-io",
+      "version": "0.3.32",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/futures-io/futures-io-0.3.32.crate",
+        "sha256": "cecba35d7ad927e23624b22ad55235f2239cfa44fd10428eecbeba6d6a717718",
+        "file": "rust/archives/futures-io-0.3.32.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/futures-io/LICENSE-APACHE",
+          "sha256": "275c491d6d1160553c32fd6127061d7f9606c3ea25abfad6ca3f6ed088785427"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/futures-io/LICENSE-MIT",
+          "sha256": "6652c868f35dfe5e8ef636810a4e576b9d663f3a17fb0f5613ad73583e1b88fd"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "futures-macro",
+      "version": "0.3.32",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/futures-macro/futures-macro-0.3.32.crate",
+        "sha256": "e835b70203e41293343137df5c0664546da5745f82ec9b84d40be8336958447b",
+        "file": "rust/archives/futures-macro-0.3.32.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/futures-macro/LICENSE-APACHE",
+          "sha256": "275c491d6d1160553c32fd6127061d7f9606c3ea25abfad6ca3f6ed088785427"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/futures-macro/LICENSE-MIT",
+          "sha256": "6652c868f35dfe5e8ef636810a4e576b9d663f3a17fb0f5613ad73583e1b88fd"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "futures-sink",
+      "version": "0.3.32",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/futures-sink/futures-sink-0.3.32.crate",
+        "sha256": "c39754e157331b013978ec91992bde1ac089843443c49cbc7f46150b0fad0893",
+        "file": "rust/archives/futures-sink-0.3.32.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/futures-sink/LICENSE-APACHE",
+          "sha256": "275c491d6d1160553c32fd6127061d7f9606c3ea25abfad6ca3f6ed088785427"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/futures-sink/LICENSE-MIT",
+          "sha256": "6652c868f35dfe5e8ef636810a4e576b9d663f3a17fb0f5613ad73583e1b88fd"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "futures-task",
+      "version": "0.3.32",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/futures-task/futures-task-0.3.32.crate",
+        "sha256": "037711b3d59c33004d3856fbdc83b99d4ff37a24768fa1be9ce3538a1cde4393",
+        "file": "rust/archives/futures-task-0.3.32.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/futures-task/LICENSE-APACHE",
+          "sha256": "275c491d6d1160553c32fd6127061d7f9606c3ea25abfad6ca3f6ed088785427"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/futures-task/LICENSE-MIT",
+          "sha256": "6652c868f35dfe5e8ef636810a4e576b9d663f3a17fb0f5613ad73583e1b88fd"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "futures-util",
+      "version": "0.3.32",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/futures-util/futures-util-0.3.32.crate",
+        "sha256": "389ca41296e6190b48053de0321d02a77f32f8a5d2461dd38762c0593805c6d6",
+        "file": "rust/archives/futures-util-0.3.32.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/futures-util/LICENSE-APACHE",
+          "sha256": "275c491d6d1160553c32fd6127061d7f9606c3ea25abfad6ca3f6ed088785427"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/futures-util/LICENSE-MIT",
+          "sha256": "6652c868f35dfe5e8ef636810a4e576b9d663f3a17fb0f5613ad73583e1b88fd"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "getrandom",
+      "version": "0.3.4",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/getrandom/getrandom-0.3.4.crate",
+        "sha256": "899def5c37c4fd7b2664648c28120ecec138e4d395b459e5ca34f9cce2dd77fd",
+        "file": "rust/archives/getrandom-0.3.4.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/getrandom/LICENSE-APACHE",
+          "sha256": "aaff376532ea30a0cd5330b9502ad4a4c8bf769c539c87ffe78819d188a18ebf"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/getrandom/LICENSE-MIT",
+          "sha256": "29e9fe5074bd27e0e5d5d110394fbbcd841baee2651a3c4b4560a632702cede4"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "gio-sys",
+      "version": "0.22.1",
+      "declaredLicense": "MIT",
+      "source": {
+        "url": "https://github.com/gtk-rs/gtk-rs-core",
+        "commit": "aa0dee233fcefd2d938a9f8024eac0e4a2eeb0a3",
+        "archive": "rust/archives/gtk-rs-core-aa0dee233fcefd2d938a9f8024eac0e4a2eeb0a3.tar.gz",
+        "archiveSha256": "2a3a3410f43901b70afaa00e15d4f7eaa14f53e6e8cf14af7a852ecc0658432c",
+        "bundle": "rust/archives/gtk-rs-core-aa0dee233fcefd2d938a9f8024eac0e4a2eeb0a3.bundle",
+        "bundleSha256": "6f4f273c0655f6b8d5a92e94be4ef44ada947a6182553bb46bbacf746f179a16",
+        "verification": "Git object hash equals Cargo.lock; bundle verify succeeded"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/gio-sys/LICENSE",
+          "sha256": "8cf56d10131ce201cf69ab74b111d3ebac1acca3833d7efb39ae357224b70edb"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "glib",
+      "version": "0.22.1",
+      "declaredLicense": "MIT",
+      "source": {
+        "url": "https://github.com/gtk-rs/gtk-rs-core",
+        "commit": "aa0dee233fcefd2d938a9f8024eac0e4a2eeb0a3",
+        "archive": "rust/archives/gtk-rs-core-aa0dee233fcefd2d938a9f8024eac0e4a2eeb0a3.tar.gz",
+        "archiveSha256": "2a3a3410f43901b70afaa00e15d4f7eaa14f53e6e8cf14af7a852ecc0658432c",
+        "bundle": "rust/archives/gtk-rs-core-aa0dee233fcefd2d938a9f8024eac0e4a2eeb0a3.bundle",
+        "bundleSha256": "6f4f273c0655f6b8d5a92e94be4ef44ada947a6182553bb46bbacf746f179a16",
+        "verification": "Git object hash equals Cargo.lock; bundle verify succeeded"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/glib/LICENSE",
+          "sha256": "8cf56d10131ce201cf69ab74b111d3ebac1acca3833d7efb39ae357224b70edb"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/glib/COPYRIGHT",
+          "sha256": "dae402989de65164815b7e2b6bc2b9576285434c3785934c8b6ece0fa055960d"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/glib/gobject-sys/LICENSE",
+          "sha256": "8cf56d10131ce201cf69ab74b111d3ebac1acca3833d7efb39ae357224b70edb"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/glib/sys/LICENSE",
+          "sha256": "8cf56d10131ce201cf69ab74b111d3ebac1acca3833d7efb39ae357224b70edb"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "glib-macros",
+      "version": "0.22.1",
+      "declaredLicense": "MIT",
+      "source": {
+        "url": "https://github.com/gtk-rs/gtk-rs-core",
+        "commit": "aa0dee233fcefd2d938a9f8024eac0e4a2eeb0a3",
+        "archive": "rust/archives/gtk-rs-core-aa0dee233fcefd2d938a9f8024eac0e4a2eeb0a3.tar.gz",
+        "archiveSha256": "2a3a3410f43901b70afaa00e15d4f7eaa14f53e6e8cf14af7a852ecc0658432c",
+        "bundle": "rust/archives/gtk-rs-core-aa0dee233fcefd2d938a9f8024eac0e4a2eeb0a3.bundle",
+        "bundleSha256": "6f4f273c0655f6b8d5a92e94be4ef44ada947a6182553bb46bbacf746f179a16",
+        "verification": "Git object hash equals Cargo.lock; bundle verify succeeded"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/glib-macros/LICENSE",
+          "sha256": "8cf56d10131ce201cf69ab74b111d3ebac1acca3833d7efb39ae357224b70edb"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/glib-macros/COPYRIGHT",
+          "sha256": "dae402989de65164815b7e2b6bc2b9576285434c3785934c8b6ece0fa055960d"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "glib-sys",
+      "version": "0.22.1",
+      "declaredLicense": "MIT",
+      "source": {
+        "url": "https://github.com/gtk-rs/gtk-rs-core",
+        "commit": "aa0dee233fcefd2d938a9f8024eac0e4a2eeb0a3",
+        "archive": "rust/archives/gtk-rs-core-aa0dee233fcefd2d938a9f8024eac0e4a2eeb0a3.tar.gz",
+        "archiveSha256": "2a3a3410f43901b70afaa00e15d4f7eaa14f53e6e8cf14af7a852ecc0658432c",
+        "bundle": "rust/archives/gtk-rs-core-aa0dee233fcefd2d938a9f8024eac0e4a2eeb0a3.bundle",
+        "bundleSha256": "6f4f273c0655f6b8d5a92e94be4ef44ada947a6182553bb46bbacf746f179a16",
+        "verification": "Git object hash equals Cargo.lock; bundle verify succeeded"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/glib-sys/LICENSE",
+          "sha256": "8cf56d10131ce201cf69ab74b111d3ebac1acca3833d7efb39ae357224b70edb"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "gobject-sys",
+      "version": "0.22.1",
+      "declaredLicense": "MIT",
+      "source": {
+        "url": "https://github.com/gtk-rs/gtk-rs-core",
+        "commit": "aa0dee233fcefd2d938a9f8024eac0e4a2eeb0a3",
+        "archive": "rust/archives/gtk-rs-core-aa0dee233fcefd2d938a9f8024eac0e4a2eeb0a3.tar.gz",
+        "archiveSha256": "2a3a3410f43901b70afaa00e15d4f7eaa14f53e6e8cf14af7a852ecc0658432c",
+        "bundle": "rust/archives/gtk-rs-core-aa0dee233fcefd2d938a9f8024eac0e4a2eeb0a3.bundle",
+        "bundleSha256": "6f4f273c0655f6b8d5a92e94be4ef44ada947a6182553bb46bbacf746f179a16",
+        "verification": "Git object hash equals Cargo.lock; bundle verify succeeded"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/gobject-sys/LICENSE",
+          "sha256": "8cf56d10131ce201cf69ab74b111d3ebac1acca3833d7efb39ae357224b70edb"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "gst-plugin-dav1d",
+      "version": "0.15.0",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "archive": "archives/5488965db0fbb491-gst-plugins-rs-gstreamer-1.28.1.tar.bz2",
+        "workspace": true
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/gst-plugin-dav1d/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/gst-plugin-dav1d/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "gst-plugin-version-helper",
+      "version": "0.8.1",
+      "declaredLicense": "MIT",
+      "source": {
+        "archive": "archives/5488965db0fbb491-gst-plugins-rs-gstreamer-1.28.1.tar.bz2",
+        "workspace": true
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/gst-plugin-version-helper/LICENSE",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "gstreamer",
+      "version": "0.25.0",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs",
+        "commit": "fc295232362082c654232fbd84e95d94bc296efe",
+        "archive": "rust/archives/gstreamer-rs-fc295232362082c654232fbd84e95d94bc296efe.tar.gz",
+        "archiveSha256": "3fa62cb80eaee41d4f00504235a9e01ce9c2b1192a87fce496561a280885c478",
+        "bundle": "rust/archives/gstreamer-rs-fc295232362082c654232fbd84e95d94bc296efe.bundle",
+        "bundleSha256": "7e5e9bb6763f1ee5fad8bcc12976fb4082b67124b9be8a03b6117417b35f3e1b",
+        "verification": "Git object hash equals Cargo.lock; bundle verify succeeded"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/gstreamer/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/gstreamer/COPYRIGHT",
+          "sha256": "09230790719b8034522109d0ec97ce72305c7a76cab07ef445e0732d456921f8"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/gstreamer/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/gstreamer/sys/LICENSE",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/gstreamer/sys/COPYRIGHT",
+          "sha256": "09230790719b8034522109d0ec97ce72305c7a76cab07ef445e0732d456921f8"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "gstreamer-base",
+      "version": "0.25.0",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs",
+        "commit": "fc295232362082c654232fbd84e95d94bc296efe",
+        "archive": "rust/archives/gstreamer-rs-fc295232362082c654232fbd84e95d94bc296efe.tar.gz",
+        "archiveSha256": "3fa62cb80eaee41d4f00504235a9e01ce9c2b1192a87fce496561a280885c478",
+        "bundle": "rust/archives/gstreamer-rs-fc295232362082c654232fbd84e95d94bc296efe.bundle",
+        "bundleSha256": "7e5e9bb6763f1ee5fad8bcc12976fb4082b67124b9be8a03b6117417b35f3e1b",
+        "verification": "Git object hash equals Cargo.lock; bundle verify succeeded"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/gstreamer-base/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/gstreamer-base/COPYRIGHT",
+          "sha256": "09230790719b8034522109d0ec97ce72305c7a76cab07ef445e0732d456921f8"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/gstreamer-base/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/gstreamer-base/sys/LICENSE",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/gstreamer-base/sys/COPYRIGHT",
+          "sha256": "09230790719b8034522109d0ec97ce72305c7a76cab07ef445e0732d456921f8"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "gstreamer-base-sys",
+      "version": "0.25.0",
+      "declaredLicense": "MIT",
+      "source": {
+        "url": "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs",
+        "commit": "fc295232362082c654232fbd84e95d94bc296efe",
+        "archive": "rust/archives/gstreamer-rs-fc295232362082c654232fbd84e95d94bc296efe.tar.gz",
+        "archiveSha256": "3fa62cb80eaee41d4f00504235a9e01ce9c2b1192a87fce496561a280885c478",
+        "bundle": "rust/archives/gstreamer-rs-fc295232362082c654232fbd84e95d94bc296efe.bundle",
+        "bundleSha256": "7e5e9bb6763f1ee5fad8bcc12976fb4082b67124b9be8a03b6117417b35f3e1b",
+        "verification": "Git object hash equals Cargo.lock; bundle verify succeeded"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/gstreamer-base-sys/LICENSE",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/gstreamer-base-sys/COPYRIGHT",
+          "sha256": "09230790719b8034522109d0ec97ce72305c7a76cab07ef445e0732d456921f8"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "gstreamer-sys",
+      "version": "0.25.0",
+      "declaredLicense": "MIT",
+      "source": {
+        "url": "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs",
+        "commit": "fc295232362082c654232fbd84e95d94bc296efe",
+        "archive": "rust/archives/gstreamer-rs-fc295232362082c654232fbd84e95d94bc296efe.tar.gz",
+        "archiveSha256": "3fa62cb80eaee41d4f00504235a9e01ce9c2b1192a87fce496561a280885c478",
+        "bundle": "rust/archives/gstreamer-rs-fc295232362082c654232fbd84e95d94bc296efe.bundle",
+        "bundleSha256": "7e5e9bb6763f1ee5fad8bcc12976fb4082b67124b9be8a03b6117417b35f3e1b",
+        "verification": "Git object hash equals Cargo.lock; bundle verify succeeded"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/gstreamer-sys/LICENSE",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/gstreamer-sys/COPYRIGHT",
+          "sha256": "09230790719b8034522109d0ec97ce72305c7a76cab07ef445e0732d456921f8"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "gstreamer-video",
+      "version": "0.25.0",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs",
+        "commit": "fc295232362082c654232fbd84e95d94bc296efe",
+        "archive": "rust/archives/gstreamer-rs-fc295232362082c654232fbd84e95d94bc296efe.tar.gz",
+        "archiveSha256": "3fa62cb80eaee41d4f00504235a9e01ce9c2b1192a87fce496561a280885c478",
+        "bundle": "rust/archives/gstreamer-rs-fc295232362082c654232fbd84e95d94bc296efe.bundle",
+        "bundleSha256": "7e5e9bb6763f1ee5fad8bcc12976fb4082b67124b9be8a03b6117417b35f3e1b",
+        "verification": "Git object hash equals Cargo.lock; bundle verify succeeded"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/gstreamer-video/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/gstreamer-video/COPYRIGHT",
+          "sha256": "09230790719b8034522109d0ec97ce72305c7a76cab07ef445e0732d456921f8"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/gstreamer-video/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/gstreamer-video/sys/LICENSE",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/gstreamer-video/sys/COPYRIGHT",
+          "sha256": "09230790719b8034522109d0ec97ce72305c7a76cab07ef445e0732d456921f8"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "gstreamer-video-sys",
+      "version": "0.25.0",
+      "declaredLicense": "MIT",
+      "source": {
+        "url": "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs",
+        "commit": "fc295232362082c654232fbd84e95d94bc296efe",
+        "archive": "rust/archives/gstreamer-rs-fc295232362082c654232fbd84e95d94bc296efe.tar.gz",
+        "archiveSha256": "3fa62cb80eaee41d4f00504235a9e01ce9c2b1192a87fce496561a280885c478",
+        "bundle": "rust/archives/gstreamer-rs-fc295232362082c654232fbd84e95d94bc296efe.bundle",
+        "bundleSha256": "7e5e9bb6763f1ee5fad8bcc12976fb4082b67124b9be8a03b6117417b35f3e1b",
+        "verification": "Git object hash equals Cargo.lock; bundle verify succeeded"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/gstreamer-video-sys/LICENSE",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/gstreamer-video-sys/COPYRIGHT",
+          "sha256": "09230790719b8034522109d0ec97ce72305c7a76cab07ef445e0732d456921f8"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "hashbrown",
+      "version": "0.15.5",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/hashbrown/hashbrown-0.15.5.crate",
+        "sha256": "9229cfe53dfd69f0609a49f65461bd93001ea1ef889cd5529dd176593f5338a1",
+        "file": "rust/archives/hashbrown-0.15.5.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/hashbrown/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/hashbrown/LICENSE-MIT",
+          "sha256": "ff8f68cb076caf8cefe7a6430d4ac086ce6af2ca8ce2c4e5a2004d4552ef52a2"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "hashbrown",
+      "version": "0.16.1",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/hashbrown/hashbrown-0.16.1.crate",
+        "sha256": "841d1cc9bed7f9236f321df977030373f4a4163ae1a7dbfe1a51a2c1a51d9100",
+        "file": "rust/archives/hashbrown-0.16.1.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/hashbrown/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/hashbrown/LICENSE-MIT",
+          "sha256": "ff8f68cb076caf8cefe7a6430d4ac086ce6af2ca8ce2c4e5a2004d4552ef52a2"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "heck",
+      "version": "0.5.0",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/heck/heck-0.5.0.crate",
+        "sha256": "2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea",
+        "file": "rust/archives/heck-0.5.0.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/heck/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/heck/LICENSE-MIT",
+          "sha256": "7b63ecd5f1902af1b63729947373683c32745c16a10e8e6292e2e2dcd7e90ae0"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "hermit-abi",
+      "version": "0.5.2",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/hermit-abi/hermit-abi-0.5.2.crate",
+        "sha256": "fc0fef456e4baa96da950455cd02c081ca953b141298e41db3fc7e36b1da849c",
+        "file": "rust/archives/hermit-abi-0.5.2.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/hermit-abi/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/hermit-abi/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "iana-time-zone",
+      "version": "0.1.65",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/iana-time-zone/iana-time-zone-0.1.65.crate",
+        "sha256": "e31bc9ad994ba00e440a8aa5c9ef0ec67d5cb5e5cb0cc7f8b744a35b389cc470",
+        "file": "rust/archives/iana-time-zone-0.1.65.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/iana-time-zone/LICENSE-APACHE",
+          "sha256": "696759d65dfe558ff7d9f031c76db19ec5c0767470fb67c4e8d990820d1e99c9"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/iana-time-zone/LICENSE-MIT",
+          "sha256": "da28ccc6b158fc2d8cccc74e99794b1cff1d29bd7bbeb019442fcf0c04c6cad9"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "iana-time-zone-haiku",
+      "version": "0.1.2",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/iana-time-zone-haiku/iana-time-zone-haiku-0.1.2.crate",
+        "sha256": "f31827a206f56af32e590ba56d5d2d085f558508192593743f16b2306495269f",
+        "file": "rust/archives/iana-time-zone-haiku-0.1.2.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/iana-time-zone-haiku/LICENSE-APACHE",
+          "sha256": "696759d65dfe558ff7d9f031c76db19ec5c0767470fb67c4e8d990820d1e99c9"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/iana-time-zone-haiku/LICENSE-MIT",
+          "sha256": "da28ccc6b158fc2d8cccc74e99794b1cff1d29bd7bbeb019442fcf0c04c6cad9"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "id-arena",
+      "version": "2.3.0",
+      "declaredLicense": "MIT/Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/id-arena/id-arena-2.3.0.crate",
+        "sha256": "3d3067d79b975e8844ca9eb072e16b31c3c1c36928edf9c6789548c524d0d954",
+        "file": "rust/archives/id-arena-2.3.0.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/id-arena/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/id-arena/LICENSE-MIT",
+          "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "indexmap",
+      "version": "2.13.0",
+      "declaredLicense": "Apache-2.0 OR MIT",
+      "source": {
+        "url": "https://static.crates.io/crates/indexmap/indexmap-2.13.0.crate",
+        "sha256": "7714e70437a7dc3ac8eb7e6f8df75fd8eb422675fc7678aff7364301092b1017",
+        "file": "rust/archives/indexmap-2.13.0.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/indexmap/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/indexmap/LICENSE-MIT",
+          "sha256": "ecc269ef87fd38a1d98e30bfac9ba964a9dbd9315c3770fed98d4d7cb5882055"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "itertools",
+      "version": "0.14.0",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/itertools/itertools-0.14.0.crate",
+        "sha256": "2b192c782037fadd9cfa75548310488aabdbf3d2da73885b31bd0abd03351285",
+        "file": "rust/archives/itertools-0.14.0.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/itertools/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/itertools/LICENSE-MIT",
+          "sha256": "7576269ea71f767b99297934c0b2367532690f8c4badc695edf8e04ab6a1e545"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "itoa",
+      "version": "1.0.17",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/itoa/itoa-1.0.17.crate",
+        "sha256": "92ecc6618181def0457392ccd0ee51198e065e016d1d527a7ac1b6dc7c1f09d2",
+        "file": "rust/archives/itoa-1.0.17.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/itoa/LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/itoa/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "jobserver",
+      "version": "0.1.34",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/jobserver/jobserver-0.1.34.crate",
+        "sha256": "9afb3de4395d6b3e67a780b6de64b51c978ecf11cb9a462c66be7d4ca9039d33",
+        "file": "rust/archives/jobserver-0.1.34.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/jobserver/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/jobserver/LICENSE-MIT",
+          "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "js-sys",
+      "version": "0.3.86",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/js-sys/js-sys-0.3.86.crate",
+        "sha256": "d36139f1c97c42c0c86a411910b04e48d4939a0376e6e0f989420cbdee0120e5",
+        "file": "rust/archives/js-sys-0.3.86.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/js-sys/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/js-sys/LICENSE-MIT",
+          "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "kstring",
+      "version": "2.0.2",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/kstring/kstring-2.0.2.crate",
+        "sha256": "558bf9508a558512042d3095138b1f7b8fe90c5467d94f9f1da28b3731c5dbd1",
+        "file": "rust/archives/kstring-2.0.2.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/kstring/LICENSE-APACHE",
+          "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/kstring/LICENSE-MIT",
+          "sha256": "6efb0476a1cc085077ed49357026d8c173bf33017278ef440f222fb9cbcb66e6"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "leb128fmt",
+      "version": "0.1.0",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/leb128fmt/leb128fmt-0.1.0.crate",
+        "sha256": "09edd9e8b54e49e587e4f6295a7d29c3ea94d469cb40ab8ca70b288248a81db2",
+        "file": "rust/archives/leb128fmt-0.1.0.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/leb128fmt/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/leb128fmt/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "libc",
+      "version": "0.2.182",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/libc/libc-0.2.182.crate",
+        "sha256": "6800badb6cb2082ffd7b6a67e6125bb39f18782f793520caee8cb8846be06112",
+        "file": "rust/archives/libc-0.2.182.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/libc/LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/libc/LICENSE-MIT",
+          "sha256": "123a331b5dbf04c30097fa43b8f858bc85df671fe776de498d01f3d6b7c1f69e"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "libm",
+      "version": "0.2.16",
+      "declaredLicense": "MIT",
+      "source": {
+        "url": "https://static.crates.io/crates/libm/libm-0.2.16.crate",
+        "sha256": "b6d2cec3eae94f9f509c767b45932f1ada8350c4bdb85af2fcab4a3c14807981",
+        "file": "rust/archives/libm-0.2.16.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/libm/LICENSE.txt",
+          "sha256": "3823dda7cf046602f4b4e77ec8e227863dc4736037cc85bb33d9f19febe16bb7"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "log",
+      "version": "0.4.29",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/log/log-0.4.29.crate",
+        "sha256": "5e5032e24019045c762d3c0f28f5b6b8bbf38563a65908389bf7978758920897",
+        "file": "rust/archives/log-0.4.29.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/log/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/log/LICENSE-MIT",
+          "sha256": "6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "memchr",
+      "version": "2.8.0",
+      "declaredLicense": "Unlicense OR MIT",
+      "source": {
+        "url": "https://static.crates.io/crates/memchr/memchr-2.8.0.crate",
+        "sha256": "f8ca58f447f06ed17d5fc4043ce1b10dd205e060fb3ce5b979b8ed8e59ff3f79",
+        "file": "rust/archives/memchr-2.8.0.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/memchr/COPYING",
+          "sha256": "01c266bced4a434da0051174d6bee16a4c82cf634e2679b6155d40d75012390f"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/memchr/LICENSE-MIT",
+          "sha256": "0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "muldiv",
+      "version": "1.0.1",
+      "declaredLicense": "MIT",
+      "source": {
+        "url": "https://static.crates.io/crates/muldiv/muldiv-1.0.1.crate",
+        "sha256": "956787520e75e9bd233246045d19f42fb73242759cc57fba9611d940ae96d4b0",
+        "file": "rust/archives/muldiv-1.0.1.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/muldiv/LICENSE",
+          "sha256": "c524732311819f888ce57b1b56148feaa6e9b1705fcb158e7e5d71554ccf39ed"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "num-bigint",
+      "version": "0.4.6",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/num-bigint/num-bigint-0.4.6.crate",
+        "sha256": "a5e44f723f1133c9deac646763579fdb3ac745e418f2a7af9cd0c431da1f20b9",
+        "file": "rust/archives/num-bigint-0.4.6.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/num-bigint/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/num-bigint/LICENSE-MIT",
+          "sha256": "6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "num-derive",
+      "version": "0.4.2",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/num-derive/num-derive-0.4.2.crate",
+        "sha256": "ed3955f1a9c7c0c15e092f9c887db08b1fc683305fdf6eb6684f22555355e202",
+        "file": "rust/archives/num-derive-0.4.2.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/num-derive/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/num-derive/LICENSE-MIT",
+          "sha256": "6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "num-integer",
+      "version": "0.1.46",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/num-integer/num-integer-0.1.46.crate",
+        "sha256": "7969661fd2958a5cb096e56c8e1ad0444ac2bbcd0061bd28660485a44879858f",
+        "file": "rust/archives/num-integer-0.1.46.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/num-integer/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/num-integer/LICENSE-MIT",
+          "sha256": "6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "num-rational",
+      "version": "0.4.2",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/num-rational/num-rational-0.4.2.crate",
+        "sha256": "f83d14da390562dca69fc84082e73e548e1ad308d24accdedd2720017cb37824",
+        "file": "rust/archives/num-rational-0.4.2.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/num-rational/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/num-rational/LICENSE-MIT",
+          "sha256": "6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "num-traits",
+      "version": "0.2.19",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/num-traits/num-traits-0.2.19.crate",
+        "sha256": "071dfc062690e90b734c0b2273ce72ad0ffa95f0c74596bc250dcfd960262841",
+        "file": "rust/archives/num-traits-0.2.19.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/num-traits/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/num-traits/LICENSE-MIT",
+          "sha256": "6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "num_cpus",
+      "version": "1.17.0",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/num_cpus/num_cpus-1.17.0.crate",
+        "sha256": "91df4bbde75afed763b708b7eee1e8e7651e02d97f6d5dd763e89367e957b23b",
+        "file": "rust/archives/num_cpus-1.17.0.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/num_cpus/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/num_cpus/LICENSE-MIT",
+          "sha256": "391a5396cec6230bfabd4ef4eb2350eb895bc5efce377a2218f5702ed020d3e3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "once_cell",
+      "version": "1.21.3",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/once_cell/once_cell-1.21.3.crate",
+        "sha256": "42f5e15c9953c5e4ccceeb2e7382a716482c34515315f7b03532b8b4e8393d2d",
+        "file": "rust/archives/once_cell-1.21.3.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/once_cell/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/once_cell/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "option-operations",
+      "version": "0.6.1",
+      "declaredLicense": "MIT/Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/option-operations/option-operations-0.6.1.crate",
+        "sha256": "aca39cf52b03268400c16eeb9b56382ea3c3353409309b63f5c8f0b1faf42754",
+        "file": "rust/archives/option-operations-0.6.1.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/option-operations/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/option-operations/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "pastey",
+      "version": "0.2.1",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/pastey/pastey-0.2.1.crate",
+        "sha256": "b867cad97c0791bbd3aaa6472142568c6c9e8f71937e98379f584cfb0cf35bec",
+        "file": "rust/archives/pastey-0.2.1.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/pastey/LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/pastey/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "pin-project-lite",
+      "version": "0.2.16",
+      "declaredLicense": "Apache-2.0 OR MIT",
+      "source": {
+        "url": "https://static.crates.io/crates/pin-project-lite/pin-project-lite-0.2.16.crate",
+        "sha256": "3b3cff922bd51709b605d9ead9aa71031d81447142d828eb4a6eba76fe619f9b",
+        "file": "rust/archives/pin-project-lite-0.2.16.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/pin-project-lite/LICENSE-APACHE",
+          "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/pin-project-lite/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "pkg-config",
+      "version": "0.3.32",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/pkg-config/pkg-config-0.3.32.crate",
+        "sha256": "7edddbd0b52d732b21ad9a5fab5c704c14cd949e5e9a1ec5929a24fded1b904c",
+        "file": "rust/archives/pkg-config-0.3.32.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/pkg-config/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/pkg-config/LICENSE-MIT",
+          "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "portable-atomic",
+      "version": "1.13.1",
+      "declaredLicense": "Apache-2.0 OR MIT",
+      "source": {
+        "url": "https://static.crates.io/crates/portable-atomic/portable-atomic-1.13.1.crate",
+        "sha256": "c33a9471896f1c69cecef8d20cbe2f7accd12527ce60845ff44c153bb2a21b49",
+        "file": "rust/archives/portable-atomic-1.13.1.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/portable-atomic/LICENSE-APACHE",
+          "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/portable-atomic/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "prettyplease",
+      "version": "0.2.37",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/prettyplease/prettyplease-0.2.37.crate",
+        "sha256": "479ca8adacdd7ce8f1fb39ce9ecccbfe93a3f1344b3d0d97f20bc0196208f62b",
+        "file": "rust/archives/prettyplease-0.2.37.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/prettyplease/LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/prettyplease/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "proc-macro2",
+      "version": "1.0.106",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/proc-macro2/proc-macro2-1.0.106.crate",
+        "sha256": "8fd00f0bb2e90d81d1044c2b32617f68fcb9fa3bb7640c23e9c748e53fb30934",
+        "file": "rust/archives/proc-macro2-1.0.106.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/proc-macro2/LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/proc-macro2/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "quote",
+      "version": "1.0.44",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/quote/quote-1.0.44.crate",
+        "sha256": "21b2ebcf727b7760c461f091f9f0f539b77b8e87f2fd88131e7f1b433b3cece4",
+        "file": "rust/archives/quote-1.0.44.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/quote/LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/quote/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "r-efi",
+      "version": "5.3.0",
+      "declaredLicense": "MIT OR Apache-2.0 OR LGPL-2.1-or-later",
+      "source": {
+        "url": "https://static.crates.io/crates/r-efi/r-efi-5.3.0.crate",
+        "sha256": "69cdb34c158ceb288df11e18b4bd39de994f6657d83847bdffdbd7f346754b0f",
+        "file": "rust/archives/r-efi-5.3.0.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/r-efi/AUTHORS",
+          "sha256": "ff92bed461f50338dd703a9ba9aee496a425957873df1d91192776e4bdf5dda7"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "rustversion",
+      "version": "1.0.22",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/rustversion/rustversion-1.0.22.crate",
+        "sha256": "b39cdef0fa800fc44525c84ccb54a029961a8215f9619753635a9c0d2538d46d",
+        "file": "rust/archives/rustversion-1.0.22.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/rustversion/LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/rustversion/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "semver",
+      "version": "1.0.27",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/semver/semver-1.0.27.crate",
+        "sha256": "d767eb0aabc880b29956c35734170f26ed551a859dbd361d140cdbeca61ab1e2",
+        "file": "rust/archives/semver-1.0.27.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/semver/LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/semver/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "serde",
+      "version": "1.0.228",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/serde/serde-1.0.228.crate",
+        "sha256": "9a8e94ea7f378bd32cbbd37198a4a91436180c5bb472411e48b5ec2e2124ae9e",
+        "file": "rust/archives/serde-1.0.228.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/serde/LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/serde/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "serde_bytes",
+      "version": "0.11.19",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/serde_bytes/serde_bytes-0.11.19.crate",
+        "sha256": "a5d440709e79d88e51ac01c4b72fc6cb7314017bb7da9eeff678aa94c10e3ea8",
+        "file": "rust/archives/serde_bytes-0.11.19.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/serde_bytes/LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/serde_bytes/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "serde_core",
+      "version": "1.0.228",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/serde_core/serde_core-1.0.228.crate",
+        "sha256": "41d385c7d4ca58e59fc732af25c3983b67ac852c1a25000afe1175de458b67ad",
+        "file": "rust/archives/serde_core-1.0.228.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/serde_core/LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/serde_core/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "serde_derive",
+      "version": "1.0.228",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/serde_derive/serde_derive-1.0.228.crate",
+        "sha256": "d540f220d3187173da220f885ab66608367b6574e925011a9353e4badda91d79",
+        "file": "rust/archives/serde_derive-1.0.228.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/serde_derive/LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/serde_derive/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "serde_json",
+      "version": "1.0.149",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/serde_json/serde_json-1.0.149.crate",
+        "sha256": "83fc039473c5595ace860d8c4fafa220ff474b3fc6bfdb4293327f1a37e94d86",
+        "file": "rust/archives/serde_json-1.0.149.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/serde_json/LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/serde_json/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "serde_spanned",
+      "version": "1.0.4",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/serde_spanned/serde_spanned-1.0.4.crate",
+        "sha256": "f8bbf91e5a4d6315eee45e704372590b30e260ee83af6639d64557f51b067776",
+        "file": "rust/archives/serde_spanned-1.0.4.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/serde_spanned/LICENSE-APACHE",
+          "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/serde_spanned/LICENSE-MIT",
+          "sha256": "6efb0476a1cc085077ed49357026d8c173bf33017278ef440f222fb9cbcb66e6"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "shlex",
+      "version": "1.3.0",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/shlex/shlex-1.3.0.crate",
+        "sha256": "0fda2ff0d084019ba4d7c6f371c95d8fd75ce3524c3cb8fb653a3023f6323e64",
+        "file": "rust/archives/shlex-1.3.0.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/shlex/LICENSE-APACHE",
+          "sha256": "553fffcd9b1cb158bc3e9edc35da85ca5c3b3d7d2e61c883ebcfa8a65814b583"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/shlex/LICENSE-MIT",
+          "sha256": "4455bf75a91154108304cb283e0fea9948c14f13e20d60887cf2552449dea3b1"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "slab",
+      "version": "0.4.12",
+      "declaredLicense": "MIT",
+      "source": {
+        "url": "https://static.crates.io/crates/slab/slab-0.4.12.crate",
+        "sha256": "0c790de23124f9ab44544d7ac05d60440adc586479ce501c1d6d7da3cd8c9cf5",
+        "file": "rust/archives/slab-0.4.12.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/slab/LICENSE",
+          "sha256": "8ce0830173fdac609dfb4ea603fdc002c2f4af0dc9b1a005653f5da9cf534b18"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "smallvec",
+      "version": "1.15.1",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/smallvec/smallvec-1.15.1.crate",
+        "sha256": "67b1b7a3b5fe4f1376887184045fcf45c69e92af734b7aaddc05fb777b6fbd03",
+        "file": "rust/archives/smallvec-1.15.1.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/smallvec/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/smallvec/LICENSE-MIT",
+          "sha256": "0b28172679e0009b655da42797c03fd163a3379d5cfa67ba1f1655e974a2a1a9"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "static_assertions",
+      "version": "1.1.0",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/static_assertions/static_assertions-1.1.0.crate",
+        "sha256": "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f",
+        "file": "rust/archives/static_assertions-1.1.0.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/static_assertions/LICENSE-APACHE",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/static_assertions/LICENSE-MIT",
+          "sha256": "ea084a2373ebc1f0902c09266e7bf25a05ab3814c1805bb017ffa7308f90c061"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "syn",
+      "version": "2.0.117",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/syn/syn-2.0.117.crate",
+        "sha256": "e665b8803e7b1d2a727f4023456bbbbe74da67099c585258af0ad9c5013b9b99",
+        "file": "rust/archives/syn-2.0.117.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/syn/LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/syn/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "system-deps",
+      "version": "7.0.7",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/system-deps/system-deps-7.0.7.crate",
+        "sha256": "48c8f33736f986f16d69b6cb8b03f55ddcad5c41acc4ccc39dd88e84aa805e7f",
+        "file": "rust/archives/system-deps-7.0.7.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/system-deps/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/system-deps/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "target-lexicon",
+      "version": "0.12.16",
+      "declaredLicense": "Apache-2.0 WITH LLVM-exception",
+      "source": {
+        "url": "https://static.crates.io/crates/target-lexicon/target-lexicon-0.12.16.crate",
+        "sha256": "61c41af27dd6d1e27b1b16b489db798443478cef1f06a660c96db617ba5de3b1",
+        "file": "rust/archives/target-lexicon-0.12.16.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/target-lexicon/LICENSE",
+          "sha256": "268872b9816f90fd8e85db5a28d33f8150ebb8dd016653fb39ef1f94f2686bc5"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "thiserror",
+      "version": "2.0.18",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/thiserror/thiserror-2.0.18.crate",
+        "sha256": "4288b5bcbc7920c07a1149a35cf9590a2aa808e0bc1eafaade0b80947865fbc4",
+        "file": "rust/archives/thiserror-2.0.18.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/thiserror/LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/thiserror/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "thiserror-impl",
+      "version": "2.0.18",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/thiserror-impl/thiserror-impl-2.0.18.crate",
+        "sha256": "ebc4ee7f67670e9b64d05fa4253e753e016c6c95ff35b89b7941d6b856dec1d5",
+        "file": "rust/archives/thiserror-impl-2.0.18.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/thiserror-impl/LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/thiserror-impl/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "toml",
+      "version": "0.9.12+spec-1.1.0",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/toml/toml-0.9.12+spec-1.1.0.crate",
+        "sha256": "cf92845e79fc2e2def6a5d828f0801e29a2f8acc037becc5ab08595c7d5e9863",
+        "file": "rust/archives/toml-0.9.12+spec-1.1.0.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/toml/LICENSE-APACHE",
+          "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/toml/LICENSE-MIT",
+          "sha256": "6efb0476a1cc085077ed49357026d8c173bf33017278ef440f222fb9cbcb66e6"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "toml_datetime",
+      "version": "0.7.5+spec-1.1.0",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/toml_datetime/toml_datetime-0.7.5+spec-1.1.0.crate",
+        "sha256": "92e1cfed4a3038bc5a127e35a2d360f145e1f4b971b551a2ba5fd7aedf7e1347",
+        "file": "rust/archives/toml_datetime-0.7.5+spec-1.1.0.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/toml_datetime/LICENSE-APACHE",
+          "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/toml_datetime/LICENSE-MIT",
+          "sha256": "6efb0476a1cc085077ed49357026d8c173bf33017278ef440f222fb9cbcb66e6"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "toml_edit",
+      "version": "0.24.1+spec-1.1.0",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/toml_edit/toml_edit-0.24.1+spec-1.1.0.crate",
+        "sha256": "01f2eadbbc6b377a847be05f60791ef1058d9f696ecb51d2c07fe911d8569d8e",
+        "file": "rust/archives/toml_edit-0.24.1+spec-1.1.0.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/toml_edit/LICENSE-APACHE",
+          "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/toml_edit/LICENSE-MIT",
+          "sha256": "6efb0476a1cc085077ed49357026d8c173bf33017278ef440f222fb9cbcb66e6"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "toml_parser",
+      "version": "1.0.9+spec-1.1.0",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/toml_parser/toml_parser-1.0.9+spec-1.1.0.crate",
+        "sha256": "702d4415e08923e7e1ef96cd5727c0dfed80b4d2fa25db9647fe5eb6f7c5a4c4",
+        "file": "rust/archives/toml_parser-1.0.9+spec-1.1.0.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/toml_parser/LICENSE-APACHE",
+          "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/toml_parser/LICENSE-MIT",
+          "sha256": "6efb0476a1cc085077ed49357026d8c173bf33017278ef440f222fb9cbcb66e6"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "toml_writer",
+      "version": "1.0.6+spec-1.1.0",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/toml_writer/toml_writer-1.0.6+spec-1.1.0.crate",
+        "sha256": "ab16f14aed21ee8bfd8ec22513f7287cd4a91aa92e44edfe2c17ddd004e92607",
+        "file": "rust/archives/toml_writer-1.0.6+spec-1.1.0.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/toml_writer/LICENSE-APACHE",
+          "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/toml_writer/LICENSE-MIT",
+          "sha256": "6efb0476a1cc085077ed49357026d8c173bf33017278ef440f222fb9cbcb66e6"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "unicode-ident",
+      "version": "1.0.24",
+      "declaredLicense": "(MIT OR Apache-2.0) AND Unicode-3.0",
+      "source": {
+        "url": "https://static.crates.io/crates/unicode-ident/unicode-ident-1.0.24.crate",
+        "sha256": "e6e4313cd5fcd3dad5cafa179702e2b244f760991f45397d14d4ebf38247da75",
+        "file": "rust/archives/unicode-ident-1.0.24.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/unicode-ident/LICENSE-UNICODE",
+          "sha256": "f7db81051789b729fea528a63ec4c938fdcb93d9d61d97dc8cc2e9df6d47f2a1"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/unicode-ident/LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/unicode-ident/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "unicode-xid",
+      "version": "0.2.6",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/unicode-xid/unicode-xid-0.2.6.crate",
+        "sha256": "ebc1c04c71510c7f702b52b7c350734c9ff1295c464a03335b00bb84fc54f853",
+        "file": "rust/archives/unicode-xid-0.2.6.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/unicode-xid/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/unicode-xid/COPYRIGHT",
+          "sha256": "23860c2a7b5d96b21569afedf033469bab9fe14a1b24a35068b8641c578ce24d"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/unicode-xid/LICENSE-MIT",
+          "sha256": "7b63ecd5f1902af1b63729947373683c32745c16a10e8e6292e2e2dcd7e90ae0"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "version-compare",
+      "version": "0.2.1",
+      "declaredLicense": "MIT",
+      "source": {
+        "url": "https://static.crates.io/crates/version-compare/version-compare-0.2.1.crate",
+        "sha256": "03c2856837ef78f57382f06b2b8563a2f512f7185d732608fd9176cb3b8edf0e",
+        "file": "rust/archives/version-compare-0.2.1.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/version-compare/LICENSE",
+          "sha256": "cedfcc7ace1639adb054bd4a19b6f8585ccb2429a60b4bf51bfeb0601058c22c"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "wasip2",
+      "version": "1.0.2+wasi-0.2.9",
+      "declaredLicense": "Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT",
+      "source": {
+        "url": "https://static.crates.io/crates/wasip2/wasip2-1.0.2+wasi-0.2.9.crate",
+        "sha256": "9517f9239f02c069db75e65f174b3da828fe5f5b945c4dd26bd25d89c03ebcf5",
+        "file": "rust/archives/wasip2-1.0.2+wasi-0.2.9.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/wasip2/upstream/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+          "upstreamUrl": "https://raw.githubusercontent.com/bytecodealliance/wasi-rs/06ce201370fcde0d1b0d47cac8ecb1b0b312c9f9/LICENSE-MIT",
+          "sourceCommit": "06ce201370fcde0d1b0d47cac8ecb1b0b312c9f9"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/wasip2/upstream/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+          "upstreamUrl": "https://raw.githubusercontent.com/bytecodealliance/wasi-rs/06ce201370fcde0d1b0d47cac8ecb1b0b312c9f9/LICENSE-APACHE",
+          "sourceCommit": "06ce201370fcde0d1b0d47cac8ecb1b0b312c9f9"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "wasm-bindgen",
+      "version": "0.2.109",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/wasm-bindgen/wasm-bindgen-0.2.109.crate",
+        "sha256": "9ff9c7baef35ac3c0e17d8bfc9ad75eb62f85a2f02bccc906699dadb0aa9c622",
+        "file": "rust/archives/wasm-bindgen-0.2.109.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/wasm-bindgen/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/wasm-bindgen/LICENSE-MIT",
+          "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "wasm-bindgen-macro",
+      "version": "0.2.109",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/wasm-bindgen-macro/wasm-bindgen-macro-0.2.109.crate",
+        "sha256": "39455e84ad887a0bbc93c116d72403f1bb0a39e37dd6f235a43e2128a0c7f1fd",
+        "file": "rust/archives/wasm-bindgen-macro-0.2.109.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/wasm-bindgen-macro/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/wasm-bindgen-macro/LICENSE-MIT",
+          "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "wasm-bindgen-macro-support",
+      "version": "0.2.109",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/wasm-bindgen-macro-support/wasm-bindgen-macro-support-0.2.109.crate",
+        "sha256": "dff4761f60b0b51fd13fec8764167b7bbcc34498ce3e52805fe1db6f2d56b6d6",
+        "file": "rust/archives/wasm-bindgen-macro-support-0.2.109.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/wasm-bindgen-macro-support/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/wasm-bindgen-macro-support/LICENSE-MIT",
+          "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "wasm-bindgen-shared",
+      "version": "0.2.109",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/wasm-bindgen-shared/wasm-bindgen-shared-0.2.109.crate",
+        "sha256": "bc6a171c53d98021a93a474c4a4579d76ba97f9517d871bc12e27640f218b6dd",
+        "file": "rust/archives/wasm-bindgen-shared-0.2.109.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/wasm-bindgen-shared/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/wasm-bindgen-shared/LICENSE-MIT",
+          "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "wasm-encoder",
+      "version": "0.244.0",
+      "declaredLicense": "Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT",
+      "source": {
+        "url": "https://static.crates.io/crates/wasm-encoder/wasm-encoder-0.244.0.crate",
+        "sha256": "990065f2fe63003fe337b932cfb5e3b80e0b4d0f5ff650e6985b1048f62c8319",
+        "file": "rust/archives/wasm-encoder-0.244.0.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/wasm-encoder/upstream/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+          "upstreamUrl": "https://raw.githubusercontent.com/bytecodealliance/wasm-tools/d4e317f22c3bace76cb3205003bcc34b4929037d/LICENSE-MIT",
+          "sourceCommit": "d4e317f22c3bace76cb3205003bcc34b4929037d"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/wasm-encoder/upstream/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+          "upstreamUrl": "https://raw.githubusercontent.com/bytecodealliance/wasm-tools/d4e317f22c3bace76cb3205003bcc34b4929037d/LICENSE-APACHE",
+          "sourceCommit": "d4e317f22c3bace76cb3205003bcc34b4929037d"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "wasm-metadata",
+      "version": "0.244.0",
+      "declaredLicense": "Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT",
+      "source": {
+        "url": "https://static.crates.io/crates/wasm-metadata/wasm-metadata-0.244.0.crate",
+        "sha256": "bb0e353e6a2fbdc176932bbaab493762eb1255a7900fe0fea1a2f96c296cc909",
+        "file": "rust/archives/wasm-metadata-0.244.0.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/wasm-metadata/src/oci_annotations/licenses.rs",
+          "sha256": "2c8aca896e6e398329499ccb47c43947ab89e6cd4bd6a2739fad80118df45881"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/wasm-metadata/src/oci_annotations/authors.rs",
+          "sha256": "241d116ecc7ec20e3c67cb8e9edb00ef98feab4af4a87f4f00b1f21bc3e8d1f2"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "wasmparser",
+      "version": "0.244.0",
+      "declaredLicense": "Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT",
+      "source": {
+        "url": "https://static.crates.io/crates/wasmparser/wasmparser-0.244.0.crate",
+        "sha256": "47b807c72e1bac69382b3a6fb3dbe8ea4c0ed87ff5629b8685ae6b9a611028fe",
+        "file": "rust/archives/wasmparser-0.244.0.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/wasmparser/upstream/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+          "upstreamUrl": "https://raw.githubusercontent.com/bytecodealliance/wasm-tools/d4e317f22c3bace76cb3205003bcc34b4929037d/LICENSE-MIT",
+          "sourceCommit": "d4e317f22c3bace76cb3205003bcc34b4929037d"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/wasmparser/upstream/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+          "upstreamUrl": "https://raw.githubusercontent.com/bytecodealliance/wasm-tools/d4e317f22c3bace76cb3205003bcc34b4929037d/LICENSE-APACHE",
+          "sourceCommit": "d4e317f22c3bace76cb3205003bcc34b4929037d"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "windows-core",
+      "version": "0.62.2",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/windows-core/windows-core-0.62.2.crate",
+        "sha256": "b8e83a14d34d0623b51dce9581199302a221863196a1dde71a7663a4c2be9deb",
+        "file": "rust/archives/windows-core-0.62.2.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/windows-core/license-apache-2.0",
+          "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/windows-core/license-mit",
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "windows-implement",
+      "version": "0.60.2",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/windows-implement/windows-implement-0.60.2.crate",
+        "sha256": "053e2e040ab57b9dc951b72c264860db7eb3b0200ba345b4e4c3b14f67855ddf",
+        "file": "rust/archives/windows-implement-0.60.2.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/windows-implement/license-apache-2.0",
+          "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/windows-implement/license-mit",
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "windows-interface",
+      "version": "0.59.3",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/windows-interface/windows-interface-0.59.3.crate",
+        "sha256": "3f316c4a2570ba26bbec722032c4099d8c8bc095efccdc15688708623367e358",
+        "file": "rust/archives/windows-interface-0.59.3.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/windows-interface/license-apache-2.0",
+          "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/windows-interface/license-mit",
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "windows-link",
+      "version": "0.2.1",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/windows-link/windows-link-0.2.1.crate",
+        "sha256": "f0805222e57f7521d6a62e36fa9163bc891acd422f971defe97d64e70d0a4fe5",
+        "file": "rust/archives/windows-link-0.2.1.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/windows-link/license-apache-2.0",
+          "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/windows-link/license-mit",
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "windows-result",
+      "version": "0.4.1",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/windows-result/windows-result-0.4.1.crate",
+        "sha256": "7781fa89eaf60850ac3d2da7af8e5242a5ea78d1a11c49bf2910bb5a73853eb5",
+        "file": "rust/archives/windows-result-0.4.1.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/windows-result/license-apache-2.0",
+          "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/windows-result/license-mit",
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "windows-strings",
+      "version": "0.5.1",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/windows-strings/windows-strings-0.5.1.crate",
+        "sha256": "7837d08f69c77cf6b07689544538e017c1bfcf57e34b4c0ff58e6c2cd3b37091",
+        "file": "rust/archives/windows-strings-0.5.1.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/windows-strings/license-apache-2.0",
+          "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/windows-strings/license-mit",
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "windows-sys",
+      "version": "0.61.2",
+      "declaredLicense": "MIT OR Apache-2.0",
+      "source": {
+        "url": "https://static.crates.io/crates/windows-sys/windows-sys-0.61.2.crate",
+        "sha256": "ae137229bcbd6cdf0f7b80a31df61766145077ddf49416a728b02cb3921ff3fc",
+        "file": "rust/archives/windows-sys-0.61.2.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/windows-sys/license-apache-2.0",
+          "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/windows-sys/license-mit",
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "winnow",
+      "version": "0.7.14",
+      "declaredLicense": "MIT",
+      "source": {
+        "url": "https://static.crates.io/crates/winnow/winnow-0.7.14.crate",
+        "sha256": "5a5364e9d77fcdeeaa6062ced926ee3381faa2ee02d3eb83a5c27a8825540829",
+        "file": "rust/archives/winnow-0.7.14.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/winnow/LICENSE-MIT",
+          "sha256": "cb5aedb296c5246d1f22e9099f925a65146f9f0d6b4eebba97fd27a6cdbbab2d"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "wit-bindgen",
+      "version": "0.51.0",
+      "declaredLicense": "Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT",
+      "source": {
+        "url": "https://static.crates.io/crates/wit-bindgen/wit-bindgen-0.51.0.crate",
+        "sha256": "d7249219f66ced02969388cf2bb044a09756a083d0fab1e566056b04d9fbcaa5",
+        "file": "rust/archives/wit-bindgen-0.51.0.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/wit-bindgen/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/wit-bindgen/LICENSE-Apache-2.0_WITH_LLVM-exception",
+          "sha256": "268872b9816f90fd8e85db5a28d33f8150ebb8dd016653fb39ef1f94f2686bc5"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/wit-bindgen/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "wit-bindgen-core",
+      "version": "0.51.0",
+      "declaredLicense": "Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT",
+      "source": {
+        "url": "https://static.crates.io/crates/wit-bindgen-core/wit-bindgen-core-0.51.0.crate",
+        "sha256": "ea61de684c3ea68cb082b7a88508a8b27fcc8b797d738bfc99a82facf1d752dc",
+        "file": "rust/archives/wit-bindgen-core-0.51.0.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/wit-bindgen-core/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/wit-bindgen-core/LICENSE-Apache-2.0_WITH_LLVM-exception",
+          "sha256": "268872b9816f90fd8e85db5a28d33f8150ebb8dd016653fb39ef1f94f2686bc5"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/wit-bindgen-core/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "wit-bindgen-rust",
+      "version": "0.51.0",
+      "declaredLicense": "Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT",
+      "source": {
+        "url": "https://static.crates.io/crates/wit-bindgen-rust/wit-bindgen-rust-0.51.0.crate",
+        "sha256": "b7c566e0f4b284dd6561c786d9cb0142da491f46a9fbed79ea69cdad5db17f21",
+        "file": "rust/archives/wit-bindgen-rust-0.51.0.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/wit-bindgen-rust/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/wit-bindgen-rust/LICENSE-Apache-2.0_WITH_LLVM-exception",
+          "sha256": "268872b9816f90fd8e85db5a28d33f8150ebb8dd016653fb39ef1f94f2686bc5"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/wit-bindgen-rust/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "wit-bindgen-rust-macro",
+      "version": "0.51.0",
+      "declaredLicense": "Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT",
+      "source": {
+        "url": "https://static.crates.io/crates/wit-bindgen-rust-macro/wit-bindgen-rust-macro-0.51.0.crate",
+        "sha256": "0c0f9bfd77e6a48eccf51359e3ae77140a7f50b1e2ebfe62422d8afdaffab17a",
+        "file": "rust/archives/wit-bindgen-rust-macro-0.51.0.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/wit-bindgen-rust-macro/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/wit-bindgen-rust-macro/LICENSE-Apache-2.0_WITH_LLVM-exception",
+          "sha256": "268872b9816f90fd8e85db5a28d33f8150ebb8dd016653fb39ef1f94f2686bc5"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/wit-bindgen-rust-macro/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "wit-component",
+      "version": "0.244.0",
+      "declaredLicense": "Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT",
+      "source": {
+        "url": "https://static.crates.io/crates/wit-component/wit-component-0.244.0.crate",
+        "sha256": "9d66ea20e9553b30172b5e831994e35fbde2d165325bec84fc43dbf6f4eb9cb2",
+        "file": "rust/archives/wit-component-0.244.0.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/wit-component/upstream/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+          "upstreamUrl": "https://raw.githubusercontent.com/bytecodealliance/wasm-tools/d4e317f22c3bace76cb3205003bcc34b4929037d/LICENSE-MIT",
+          "sourceCommit": "d4e317f22c3bace76cb3205003bcc34b4929037d"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/wit-component/upstream/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+          "upstreamUrl": "https://raw.githubusercontent.com/bytecodealliance/wasm-tools/d4e317f22c3bace76cb3205003bcc34b4929037d/LICENSE-APACHE",
+          "sourceCommit": "d4e317f22c3bace76cb3205003bcc34b4929037d"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "wit-parser",
+      "version": "0.244.0",
+      "declaredLicense": "Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT",
+      "source": {
+        "url": "https://static.crates.io/crates/wit-parser/wit-parser-0.244.0.crate",
+        "sha256": "ecc8ac4bc1dc3381b7f59c34f00b67e18f910c2c0f50015669dde7def656a736",
+        "file": "rust/archives/wit-parser-0.244.0.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/wit-parser/upstream/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+          "upstreamUrl": "https://raw.githubusercontent.com/bytecodealliance/wasm-tools/d4e317f22c3bace76cb3205003bcc34b4929037d/LICENSE-MIT",
+          "sourceCommit": "d4e317f22c3bace76cb3205003bcc34b4929037d"
+        },
+        {
+          "path": "notices/gst-plugins-rs/rust/wit-parser/upstream/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+          "upstreamUrl": "https://raw.githubusercontent.com/bytecodealliance/wasm-tools/d4e317f22c3bace76cb3205003bcc34b4929037d/LICENSE-APACHE",
+          "sourceCommit": "d4e317f22c3bace76cb3205003bcc34b4929037d"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    },
+    {
+      "name": "zmij",
+      "version": "1.0.21",
+      "declaredLicense": "MIT",
+      "source": {
+        "url": "https://static.crates.io/crates/zmij/zmij-1.0.21.crate",
+        "sha256": "b8848ee67ecc8aedbaf3e4122217aff892639231befc6a1b58d29fff4c2cabaa",
+        "file": "rust/archives/zmij-1.0.21.crate"
+      },
+      "notices": [
+        {
+          "path": "notices/gst-plugins-rs/rust/zmij/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "scope": "Cargo.lock dependency-closure superset; includes target-conditional and build dependencies"
+    }
+  ],
+  "gitSources": {
+    "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.22#aa0dee233fcefd2d938a9f8024eac0e4a2eeb0a3": {
+      "url": "https://github.com/gtk-rs/gtk-rs-core",
+      "commit": "aa0dee233fcefd2d938a9f8024eac0e4a2eeb0a3",
+      "archive": "rust/archives/gtk-rs-core-aa0dee233fcefd2d938a9f8024eac0e4a2eeb0a3.tar.gz",
+      "archiveSha256": "2a3a3410f43901b70afaa00e15d4f7eaa14f53e6e8cf14af7a852ecc0658432c",
+      "bundle": "rust/archives/gtk-rs-core-aa0dee233fcefd2d938a9f8024eac0e4a2eeb0a3.bundle",
+      "bundleSha256": "6f4f273c0655f6b8d5a92e94be4ef44ada947a6182553bb46bbacf746f179a16",
+      "verification": "Git object hash equals Cargo.lock; bundle verify succeeded"
+    },
+    "git+https://gitlab.freedesktop.org/gstreamer/gstreamer-rs?branch=0.25#fc295232362082c654232fbd84e95d94bc296efe": {
+      "url": "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs",
+      "commit": "fc295232362082c654232fbd84e95d94bc296efe",
+      "archive": "rust/archives/gstreamer-rs-fc295232362082c654232fbd84e95d94bc296efe.tar.gz",
+      "archiveSha256": "3fa62cb80eaee41d4f00504235a9e01ce9c2b1192a87fce496561a280885c478",
+      "bundle": "rust/archives/gstreamer-rs-fc295232362082c654232fbd84e95d94bc296efe.bundle",
+      "bundleSha256": "7e5e9bb6763f1ee5fad8bcc12976fb4082b67124b9be8a03b6117417b35f3e1b",
+      "verification": "Git object hash equals Cargo.lock; bundle verify succeeded"
+    }
+  }
+}

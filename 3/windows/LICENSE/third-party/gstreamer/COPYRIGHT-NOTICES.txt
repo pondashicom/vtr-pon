@@ -1,0 +1,1113 @@
+Copyright statements in the corresponding upstream source areas.
+Some files have platform or feature guards; this is an attribution index, not a list of linked object files.
+
+gst/glib-compat-private.h
+Copyright 2005 David Schleef <ds@schleef.org>
+
+gst/glib-compat.c
+Copyright 2005 David Schleef <ds@schleef.org>
+
+gst/glib-compat.h
+Copyright (C) 1995-1997  Peter Mattis, Spencer Kimball and Josh MacDonald
+
+gst/gst.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gst.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gst_private.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstallocator.c
+Copyright (C) 2011 Wim Taymans <wim.taymans@gmail.be>
+
+gst/gstallocator.h
+Copyright (C) 2009 Wim Taymans <wim.taymans@gmail.be>
+
+gst/gstatomicqueue.c
+Copyright (C) 2009 Edward Hervey <bilboed@bilboed.com>
+
+gst/gstatomicqueue.h
+Copyright (C) 2009-2010 Edward Hervey <bilboed@bilboed.com>
+
+gst/gstbin.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstbin.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstbuffer.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstbuffer.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstbufferlist.c
+Copyright (C) 2009 Axis Communications <dev-gstreamer at axis dot com>
+Copyright (C) 2014 Tim-Philipp Müller <tim at centricular dot com>
+
+gst/gstbufferlist.h
+Copyright (C) 2009 Axis Communications <dev-gstreamer at axis dot com>
+
+gst/gstbufferpool.c
+Copyright (C) 2010 Wim Taymans <wim.taymans@gmail.com>
+
+gst/gstbufferpool.h
+Copyright (C) 2010 Wim Taymans <wim.taymans@gmail.com>
+
+gst/gstbus.c
+Copyright (C) 2004 Wim Taymans <wim@fluendo.com>
+
+gst/gstbus.h
+Copyright (C) 2004 Wim Taymans <wim@fluendo.com>
+
+gst/gstbytearrayinterface.h
+Copyright (C) 2023 Netflix Inc.
+
+gst/gstcaps.c
+Copyright (C) <2003> David A. Schleef <ds@schleef.org>
+
+gst/gstcaps.h
+Copyright (C) 2003 David A. Schleef <ds@schleef.org>
+
+gst/gstcapsfeatures.c
+Copyright (C) 2013 Collabora Ltd.
+
+gst/gstcapsfeatures.h
+Copyright (C) 2013 Collabora Ltd.
+
+gst/gstchildproxy.c
+Copyright (C) 2005 Stefan Kost <ensonic@users.sf.net>
+
+gst/gstchildproxy.h
+Copyright (C) 2005 Stefan Kost <ensonic@users.sf.net>
+
+gst/gstclock.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstclock.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstcompat.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstcontext.c
+Copyright (C) 2013 Collabora Ltd.
+Copyright (C) 2013 Sebastian Dröge <slomo@circular-chaos.org>
+
+gst/gstcontext.h
+Copyright (C) 2013 Collabora Ltd.
+Copyright (C) 2013 Sebastian Dröge <slomo@circular-chaos.org>
+
+gst/gstcontrolbinding.c
+Copyright (C) 2011 Stefan Sauer <ensonic@users.sf.net>
+
+gst/gstcontrolbinding.h
+Copyright (C) 2011 Stefan Sauer <ensonic@users.sf.net>
+
+gst/gstcontrolsource.c
+Copyright (C) 2007 Sebastian Dröge <slomo@circular-chaos.org>
+
+gst/gstcontrolsource.h
+Copyright (C) 2007 Sebastian Dröge <slomo@circular-chaos.org>
+
+gst/gstcpuid.c
+Copyright (c) Johan Mabille, Sylvain Corlay, Wolf Vollprecht and
+Copyright (c) QuantStack
+Copyright (c) Serge Guelton
+
+gst/gstdatetime.c
+Copyright (C) 2010 Thiago Santos <thiago.sousa.santos@collabora.co.uk>
+
+gst/gstdatetime.h
+Copyright (C) 2010 Thiago Santos <thiago.sousa.santos@collabora.co.uk>
+
+gst/gstdebugutils.c
+Copyright (C) 2007 Stefan Kost <ensonic@users.sf.net>
+
+gst/gstdebugutils.h
+Copyright (C) 2007 Stefan Kost <ensonic@users.sf.net>
+
+gst/gstdevice.c
+Copyright (C) 2012 Olivier Crete <olivier.crete@collabora.com>
+
+gst/gstdevice.h
+Copyright (C) 2012 Olivier Crete <olivier.crete@collabora.com>
+
+gst/gstdevicemonitor.c
+Copyright (C) 2013 Olivier Crete <olivier.crete@collabora.com>
+
+gst/gstdevicemonitor.h
+Copyright (C) 2013 Olivier Crete <olivier.crete@collabora.com>
+
+gst/gstdeviceprovider.c
+Copyright (C) 2012 Olivier Crete <olivier.crete@collabora.com>
+
+gst/gstdeviceprovider.h
+Copyright (C) 2012 Olivier Crete <olivier.crete@collabora.com>
+
+gst/gstdeviceproviderfactory.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstdeviceproviderfactory.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstdynamictypefactory.c
+Copyright (C) 2015 Jan Schmidt <jan@centricular.com>
+
+gst/gstdynamictypefactory.h
+Copyright (C) 2015 Jan Schmidt <jan@centricular.com>
+
+gst/gstelement.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstelement.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstelementfactory.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstelementfactory.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstelementmetadata.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gsterror.c
+Copyright (C) <2003> David A. Schleef <ds@schleef.org>
+
+gst/gsterror.h
+Copyright (C) 2004 Thomas Vander Stichele <thomas at apestaart dot org>
+
+gst/gstevent.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstevent.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstformat.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstformat.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstghostpad.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstghostpad.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstidstr-private.h
+Copyright (C) 2024 Sebastian Dröge <sebastian@centricular.com>
+
+gst/gstidstr.c
+Copyright (C) 2024 Sebastian Dröge <sebastian@centricular.com>
+
+gst/gstidstr.h
+Copyright (C) 2024 Sebastian Dröge <sebastian@centricular.com>
+
+gst/gstinfo.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2008-2009 Tim-Philipp Müller <tim centricular net>
+
+gst/gstinfo.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstiterator.c
+Copyright (C) 2004 Wim Taymans <wim@fluendo.com>
+Copyright (C) 2011 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/gstiterator.h
+Copyright (C) 2004 Wim Taymans <wim@fluendo.com>
+Copyright (C) 2011 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/gstmacros.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstmemory.c
+Copyright (C) 2011 Wim Taymans <wim.taymans@gmail.be>
+
+gst/gstmemory.h
+Copyright (C) 2009 Wim Taymans <wim.taymans@gmail.be>
+
+gst/gstmessage.c
+Copyright (C) 2004 Wim Taymans <wim@fluendo.com>
+
+gst/gstmessage.h
+Copyright (C) 2004 Wim Taymans <wim@fluendo.com>
+
+gst/gstmeta.c
+Copyright (C) 2011 Wim Taymans <wim.taymans@gmail.com>
+
+gst/gstmeta.h
+Copyright (C) 2009 Wim Taymans <wim.taymans@gmail.be>
+
+gst/gstmetafactory.c
+Copyright (C) 2025 Netflix Inc.
+
+gst/gstmetafactory.h
+Copyright (C) 2025 Netflix Inc.
+
+gst/gstminiobject.c
+Copyright (C) 2005 David Schleef <ds@schleef.org>
+
+gst/gstminiobject.h
+Copyright (C) 2005 David Schleef <ds@schleef.org>
+
+gst/gstobject.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstobject.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstpad.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstpad.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstpadtemplate.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstpadtemplate.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstparamspecs.c
+Copyright (C) 2007 Tim-Philipp Müller  <tim centricular net>
+
+gst/gstparamspecs.h
+Copyright (C) 2007 Tim-Philipp Müller  <tim centricular net>
+
+gst/gstparse.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstparse.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstpipeline.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstpipeline.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstplugin.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstplugin.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstpluginfeature.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstpluginfeature.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstpluginloader-win32.c
+Copyright (C) 2023 Seungha Yang <seungha@centricular.com>
+
+gst/gstpluginloader.c
+Copyright (C) 2008 Jan Schmidt <jan.schmidt@sun.com>
+
+gst/gstpluginloader.h
+Copyright (C) 2008 Jan Schmidt <jan.schmidt@sun.com>
+
+gst/gstpoll.c
+Copyright (C) 1999 Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2004 Wim Taymans <wim.taymans@gmail.com>
+Copyright (C) 2007 Peter Kjellerstedt <pkj@axis.com>
+Copyright (C) 2008 Ole André Vadla Ravnås <ole.andre.ravnas@tandberg.com>
+
+gst/gstpoll.h
+Copyright (C) 1999 Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2004 Wim Taymans <wim.taymans@gmail.com>
+Copyright (C) 2007 Peter Kjellerstedt <pkj@axis.com>
+
+gst/gstpreset.c
+Copyright (C) 2006 Stefan Kost <ensonic@users.sf.net>
+
+gst/gstpreset.h
+Copyright (C) 2006 Stefan Kost <ensonic@users.sf.net>
+
+gst/gstpromise.c
+Copyright (C) 2017 Matthew Waters <matthew@centricular.com>
+
+gst/gstpromise.h
+Copyright (C) 2017 Matthew Waters <matthew@centricular.com>
+
+gst/gstprotection.c
+Copyright (C) <2013> YouView TV Ltd.
+
+gst/gstprotection.h
+Copyright (C) <2015> YouView TV Ltd.
+
+gst/gstquery.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstquery.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstregistry.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstregistry.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstregistrybinary.c
+Copyright (C) 2006 Josep Torra <josep@fluendo.com>
+
+gst/gstregistrybinary.h
+Copyright (C) 2006 Josep Torra <josep@fluendo.com>
+Copyright (C) 2006 Mathieu Garcia  <matthieu@fluendo.com>
+Copyright (C) 2006 Stefan Kost <ensonic@sonicpulse.de>
+
+gst/gstregistrychunks.c
+Copyright (C) 2006 Josep Torra <josep@fluendo.com>
+
+gst/gstregistrychunks.h
+Copyright (C) 2006 Josep Torra <josep@fluendo.com>
+Copyright (C) 2006 Mathieu Garcia  <matthieu@fluendo.com>
+Copyright (C) 2006 Stefan Kost <ensonic@sonicpulse.de>
+
+gst/gstsample.c
+Copyright (C) 2011 Wim Taymans <wim.taymans@gmail.com>
+
+gst/gstsample.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstsegment.c
+Copyright (C) 2005 Wim Taymans <wim@fluendo.com>
+
+gst/gstsegment.h
+Copyright (C) 2005 Wim Taymans <wim@fluendo.com>
+
+gst/gststreamcollection.c
+Copyright (C) 2015 Centricular Ltd
+
+gst/gststreamcollection.h
+Copyright (C) 2015 Centricular Ltd
+
+gst/gststreams.c
+Copyright (C) 2015 Centricular Ltd
+
+gst/gststreams.h
+Copyright (C) 2015 Centricular Ltd
+
+gst/gststructure.c
+Copyright (C) 2003 David A. Schleef <ds@schleef.org>
+
+gst/gststructure.h
+Copyright (C) 2003 David A. Schleef <ds@schleef.org>
+
+gst/gstsystemclock.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstsystemclock.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gsttaglist.c
+Copyright (C) 2003 Benjamin Otte <in7y118@public.uni-hamburg.de>
+
+gst/gsttaglist.h
+Copyright (C) 2003 Benjamin Otte <in7y118@public.uni-hamburg.de>
+
+gst/gsttagsetter.c
+Copyright (C) 2003 Benjamin Otte <in7y118@public.uni-hamburg.de>
+
+gst/gsttagsetter.h
+Copyright (C) 2003 Benjamin Otte <in7y118@public.uni-hamburg.de>
+
+gst/gsttask.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gsttask.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gsttaskpool.c
+Copyright (C) 2009 Wim Taymans <wim.taymans@gmail.com>
+
+gst/gsttaskpool.h
+Copyright (C) <2009> Wim Taymans <wim.taymans@gmail.com>
+
+gst/gsttocsetter.c
+Copyright (C) 2010, 2012 Alexander Saprykin <xelfium@gmail.com>
+
+gst/gsttocsetter.h
+Copyright (C) 2010, 2012 Alexander Saprykin <xelfium@gmail.com>
+
+gst/gsttracer.c
+Copyright (C) 2013 Stefan Sauer <ensonic@users.sf.net>
+
+gst/gsttracer.h
+Copyright (C) 2013 Stefan Sauer <ensonic@users.sf.net>
+
+gst/gsttracerfactory.c
+Copyright (C) 2013 Stefan Sauer <ensonic@users.sf.net>
+
+gst/gsttracerfactory.h
+Copyright (C) 2013 Stefan Sauer <ensonic@users.sf.net>
+
+gst/gsttracerrecord.c
+Copyright (C) 2016 Stefan Sauer <ensonic@users.sf.net>
+
+gst/gsttracerrecord.h
+Copyright (C) 2016 Stefan Sauer <ensonic@users.sf.net>
+
+gst/gsttracerutils.c
+Copyright (C) 2013 Stefan Sauer <ensonic@users.sf.net>
+
+gst/gsttracerutils.h
+Copyright (C) 2013 Stefan Sauer <ensonic@users.sf.net>
+
+gst/gsttypefind.c
+Copyright (C) 2003 Benjamin Otte <in7y118@public.uni-hamburg.de>
+
+gst/gsttypefind.h
+Copyright (C) 2003 Benjamin Otte <in7y118@public.uni-hamburg.de>
+
+gst/gsttypefindfactory.c
+Copyright (C) 2003 Benjamin Otte <in7y118@public.uni-hamburg.de>
+
+gst/gsttypefindfactory.h
+Copyright (C) 2003 Benjamin Otte <in7y118@public.uni-hamburg.de>
+
+gst/gsturi.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2011 Tim-Philipp Müller <tim centricular net>
+Copyright (C) 2014 David Waring, British Broadcasting Corporation
+Copyright (c) 1990, 1993
+
+gst/gsturi.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstutils.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstutils.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/gstvalue.c
+Copyright (C) <2003> David A. Schleef <ds@schleef.org>
+
+gst/gstvalue.h
+Copyright (C) <2003> David A. Schleef <ds@schleef.org>
+
+gst/gstvecdeque.c
+Copyright (C) 2009 Edward Hervey <bilboed@bilboed.com>
+Copyright (C) 2015 Tim-Philipp Müller <tim@centricular.com>
+
+gst/gstvecdeque.h
+Copyright (C) 2009-2010 Edward Hervey <bilboed@bilboed.com>
+
+gst/math-compat.h
+Copyright (C) 2010 Tim-Philipp Müller <tim centricular net>
+
+gst/printf/asnprintf.c
+Copyright (C) 1999, 2002 Free Software Foundation, Inc.
+
+gst/printf/gst-printf.h
+Copyright (C) 2003  Matthias Clasen
+
+gst/printf/printf-args.c
+Copyright (C) 1999, 2002-2003 Free Software Foundation, Inc.
+
+gst/printf/printf-args.h
+Copyright (C) 1999, 2002-2003 Free Software Foundation, Inc.
+
+gst/printf/printf-extension.c
+Copyright (C) 2013 Tim-Philipp Müller <tim centricular net>
+
+gst/printf/printf-extension.h
+Copyright (C) 2013 Tim-Philipp Müller <tim centricular net>
+
+gst/printf/printf-parse.c
+Copyright (C) 1999-2000, 2002-2003 Free Software Foundation, Inc.
+
+gst/printf/printf-parse.h
+Copyright (C) 1999, 2002 Free Software Foundation, Inc.
+
+gst/printf/printf.c
+Copyright (C) 2003 Matthias Clasen
+
+gst/printf/printf.h
+Copyright (C) 2003  Matthias Clasen
+
+gst/printf/vasnprintf.c
+Copyright (C) 1999, 2002-2003 Free Software Foundation, Inc.
+
+gst/printf/vasnprintf.h
+Copyright (C) 2002-2003 Free Software Foundation, Inc.
+
+libs/gst/base/base-prelude.h
+Copyright (C) 2018 GStreamer developers
+
+libs/gst/base/base.h
+Copyright (C) 2012 GStreamer developers
+
+libs/gst/base/gstadapter.c
+Copyright (C) 2004 Benjamin Otte <otte@gnome.org>
+
+libs/gst/base/gstadapter.h
+Copyright (C) 2004 Benjamin Otte <otte@gnome.org>
+
+libs/gst/base/gstaggregator.c
+Copyright (C) 2014 Mathieu Duponchelle <mathieu.duponchelle@opencreed.com>
+Copyright (C) 2014 Thibault Saunier <tsaunier@gnome.org>
+
+libs/gst/base/gstaggregator.h
+Copyright (C) 2014 Mathieu Duponchelle <mathieu.duponchelle@oencreed.com>
+Copyright (C) 2014 Thibault Saunier <tsaunier@gnome.org>
+
+libs/gst/base/gstbaseparse.c
+Copyright (C) 2008 Nokia Corporation. All rights reserved.
+Copyright (C) 2008 Sebastian Dröge <sebastian.droege@collabora.co.uk>.
+Copyright (C) 2011, Hewlett-Packard Development Company, L.P.
+
+libs/gst/base/gstbaseparse.h
+Copyright (C) 2008 Nokia Corporation. All rights reserved.
+
+libs/gst/base/gstbasesink.c
+Copyright (C) 2005-2007 Wim Taymans <wim.taymans@gmail.com>
+
+libs/gst/base/gstbasesink.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+libs/gst/base/gstbasesrc.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+libs/gst/base/gstbasesrc.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+libs/gst/base/gstbasetransform.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+libs/gst/base/gstbasetransform.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+libs/gst/base/gstbitreader-docs.h
+Copyright (C) 2010 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+libs/gst/base/gstbitreader.c
+Copyright (C) 2008 Sebastian Dröge <sebastian.droege@collabora.co.uk>.
+
+libs/gst/base/gstbitreader.h
+Copyright (C) 2008 Sebastian Dröge <sebastian.droege@collabora.co.uk>.
+
+libs/gst/base/gstbitwriter-docs.h
+Copyright (C) 2013 Intel Corporation
+
+libs/gst/base/gstbitwriter.c
+Copyright (C) 2013 Intel Corporation
+Copyright (C) 2018 Igalia, S.L.
+
+libs/gst/base/gstbitwriter.h
+Copyright (C) 2013 Intel Corporation
+Copyright (C) 2018 Igalia, S. L.
+
+libs/gst/base/gstbytereader-docs.h
+Copyright (C) 2009 Tim-Philipp Müller <tim centricular net>
+
+libs/gst/base/gstbytereader.c
+Copyright (C) 2008 Sebastian Dröge <sebastian.droege@collabora.co.uk>.
+Copyright (C) 2009,2014 Tim-Philipp Müller <tim centricular net>
+
+libs/gst/base/gstbytereader.h
+Copyright (C) 2008 Sebastian Dröge <sebastian.droege@collabora.co.uk>.
+Copyright (C) 2009 Tim-Philipp Müller <tim centricular net>
+
+libs/gst/base/gstbytewriter-docs.h
+Copyright (C) 2010 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+libs/gst/base/gstbytewriter.c
+Copyright (C) 2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>.
+
+libs/gst/base/gstbytewriter.h
+Copyright (C) 2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>.
+
+libs/gst/base/gstcollectpads.c
+Copyright (C) 2005 Wim Taymans <wim@fluendo.com>
+Copyright (C) 2008 Mark Nauwelaerts <mnauw@users.sourceforge.net>
+Copyright (C) 2010 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+libs/gst/base/gstcollectpads.h
+Copyright (C) 2005 Wim Taymans <wim@fluendo.com>
+Copyright (C) 2008 Mark Nauwelaerts <mnauw@users.sourceforge.net>
+
+libs/gst/base/gstdataqueue.c
+Copyright (C) 2006 Edward Hervey <edward@fluendo.com>
+
+libs/gst/base/gstdataqueue.h
+Copyright (C) 2006 Edward Hervey <edward@fluendo.com>
+
+libs/gst/base/gstflowcombiner.c
+Copyright (C) 2014 Samsung Electronics. All rights reserved.
+
+libs/gst/base/gstflowcombiner.h
+Copyright (C) 2014 Samsung Electronics. All rights reserved.
+
+libs/gst/base/gstindex.c
+Copyright (C) 2001 RidgeRun (http://www.ridgerun.com/)
+
+libs/gst/base/gstindex.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+libs/gst/base/gstmemindex.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+libs/gst/base/gstpushsrc.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+libs/gst/base/gstpushsrc.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+libs/gst/base/gstqueuearray.c
+Copyright (C) 2009 Edward Hervey <bilboed@bilboed.com>
+Copyright (C) 2015 Tim-Philipp Müller <tim@centricular.com>
+
+libs/gst/base/gstqueuearray.h
+Copyright (C) 2009-2010 Edward Hervey <bilboed@bilboed.com>
+
+libs/gst/base/gsttypefindhelper.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2000,2005 Wim Taymans <wim@fluendo.com>
+Copyright (C) 2006      Tim-Philipp Müller <tim centricular net>
+
+libs/gst/base/gsttypefindhelper.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2000,2005 Wim Taymans <wim@fluendo.com>
+Copyright (C) 2006      Tim-Philipp Müller <tim centricular net>
+
+libs/gst/check/check-prelude.h
+Copyright (C) 2018 GStreamer developers
+
+libs/gst/check/check.h
+Copyright (C) 2012 GStreamer developers
+
+libs/gst/check/gstbufferstraw.c
+Copyright (C) 2006 Andy Wingo <wingo at pobox.com>
+
+libs/gst/check/gstbufferstraw.h
+Copyright (C) 2006 Andy Wingo <wingo at pobox.com>
+
+libs/gst/check/gstcheck.c
+Copyright (C) 2004,2006 Thomas Vander Stichele <thomas at apestaart dot org>
+Copyright (C) 2008 Thijs Vermeir <thijsvermeir@gmail.com>
+
+libs/gst/check/gstcheck.h
+Copyright (C) <2004> Thomas Vander Stichele <thomas at apestaart dot org>
+Copyright (C) <2008> Thijs Vermeir <thijsvermeir@gmail.com>
+
+libs/gst/check/gstconsistencychecker.c
+Copyright (C) 2009 Edward Hervey <bilboed@bilboed.com>
+Copyright (C) 2012 Stefan Sauer <ensonic@users.sf.net>
+
+libs/gst/check/gstconsistencychecker.h
+Copyright (C) 2009 Edward Hervey <bilboed@bilboed.com>
+
+libs/gst/check/gstharness.c
+Copyright (C) 2012-2015 Pexip <pexip.com>
+
+libs/gst/check/gstharness.h
+Copyright (C) 2012-2015 Pexip <pexip.com>
+
+libs/gst/check/gstharnesslink.c
+Copyright (C) 2023 Igalia S.L.
+Copyright (C) 2023 Metrological
+
+libs/gst/check/gstharnesslink.h
+Copyright (C) 2023 Igalia S.L.
+Copyright (C) 2023 Metrological
+
+libs/gst/check/gsttestclock.c
+Copyright (C) 2008 Ole André Vadla Ravnås <ole.andre.ravnas@tandberg.com>
+Copyright (C) 2012 Sebastian Rasmussen <sebastian.rasmussen@axis.com>
+Copyright (C) 2012 Havard Graff <havard@pexip.com>
+Copyright (C) 2013 Haakon Sporsheim <haakon@pexip.com>
+
+libs/gst/check/gsttestclock.h
+Copyright (C) 2008 Ole André Vadla Ravnås <ole.andre.ravnas@tandberg.com>
+Copyright (C) 2012 Sebastian Rasmussen <sebastian.rasmussen@axis.com>
+Copyright (C) 2012 Havard Graff <havard@pexip.com>
+Copyright (C) 2013 Haakon Sporsheim <haakon@pexip.com>
+
+libs/gst/check/libcheck/check.c
+Copyright (C) 2001, 2002 Arien Malec
+
+libs/gst/check/libcheck/check_error.c
+Copyright (C) 2001, 2002 Arien Malec
+
+libs/gst/check/libcheck/check_error.h
+Copyright (C) 2001, 2002 Arien Malec
+
+libs/gst/check/libcheck/check_impl.h
+Copyright (C) 2001, 2002 Arien Malec
+
+libs/gst/check/libcheck/check_list.c
+Copyright (C) 2001, 2002 Arien Malec
+
+libs/gst/check/libcheck/check_list.h
+Copyright (C) 2001, 2002 Arien Malec
+
+libs/gst/check/libcheck/check_log.c
+Copyright (C) 2001, 2002 Arien Malec
+
+libs/gst/check/libcheck/check_log.h
+Copyright (C) 2001, 2002 Arien Malec
+
+libs/gst/check/libcheck/check_msg.c
+Copyright (C) 2001, 2002 Arien Malec
+
+libs/gst/check/libcheck/check_msg.h
+Copyright (C) 2001, 2002 Arien Malec
+
+libs/gst/check/libcheck/check_pack.c
+Copyright (C) 2001, 2002 Arien Malec
+
+libs/gst/check/libcheck/check_pack.h
+Copyright (C) 2001, 2002 Arien Malec
+
+libs/gst/check/libcheck/check_print.c
+Copyright (C) 2001, 2002 Arien Malec
+
+libs/gst/check/libcheck/check_print.h
+Copyright (C) 2001, 2002 Arien Malec
+
+libs/gst/check/libcheck/check_run.c
+Copyright (C) 2001, 2002 Arien Malec
+
+libs/gst/check/libcheck/check_str.c
+Copyright (C) 2001, 2002 Arien Malec
+
+libs/gst/check/libcheck/check_str.h
+Copyright (C) 2001, 2002 Arien Malec
+
+libs/gst/check/libcheck/libcompat/alarm.c
+Copyright (C) 2001, 2002 Arien Malec
+
+libs/gst/check/libcheck/libcompat/clock_gettime.c
+Copyright (C) 2001, 2002 Arien Malec
+
+libs/gst/check/libcheck/libcompat/getline.c
+Copyright (C) 2001, 2002 Arien Malec
+
+libs/gst/check/libcheck/libcompat/gettimeofday.c
+Copyright (C) 2001, 2002 Arien Malec
+
+libs/gst/check/libcheck/libcompat/libcompat.c
+Copyright (C) 2001, 2002 Arien Malec
+
+libs/gst/check/libcheck/libcompat/libcompat.h
+Copyright (C) 2001, 2002 Arien Malec
+
+libs/gst/check/libcheck/libcompat/localtime_r.c
+Copyright (C) 2001, 2002 Arien Malec
+
+libs/gst/check/libcheck/libcompat/strdup.c
+Copyright (C) 2001, 2002 Arien Malec
+
+libs/gst/check/libcheck/libcompat/strsignal.c
+Copyright (C) 2001, 2002 Arien Malec
+
+libs/gst/check/libcheck/libcompat/timer_create.c
+Copyright (C) 2001, 2002 Arien Malec
+
+libs/gst/check/libcheck/libcompat/timer_delete.c
+Copyright (C) 2001, 2002 Arien Malec
+
+libs/gst/check/libcheck/libcompat/timer_settime.c
+Copyright (C) 2001, 2002 Arien Malec
+
+libs/gst/controller/controller-prelude.h
+Copyright (C) 2018 GStreamer developers
+
+libs/gst/controller/controller.h
+Copyright (C) 2012 GStreamer developers
+
+libs/gst/controller/gstargbcontrolbinding.c
+Copyright (C) 2011 Stefan Sauer <ensonic@users.sf.net>
+
+libs/gst/controller/gstargbcontrolbinding.h
+Copyright (C) 2011 Stefan Sauer <ensonic@users.sf.net>
+
+libs/gst/controller/gstdirectcontrolbinding.c
+Copyright (C) 2011 Stefan Sauer <ensonic@users.sf.net>
+
+libs/gst/controller/gstdirectcontrolbinding.h
+Copyright (C) 2011 Stefan Sauer <ensonic@users.sf.net>
+
+libs/gst/controller/gstinterpolationcontrolsource.c
+Copyright (C) 2007,2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+libs/gst/controller/gstinterpolationcontrolsource.h
+Copyright (C) 2007 Sebastian Dröge <slomo@circular-chaos.org>
+
+libs/gst/controller/gstlfocontrolsource.c
+Copyright (C) 2007,2010 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+libs/gst/controller/gstlfocontrolsource.h
+Copyright (C) 2007 Sebastian Dröge <slomo@circular-chaos.org>
+
+libs/gst/controller/gstproxycontrolbinding.c
+Copyright (C) 2016 Matthew Waters <matthew@centricular.com>
+
+libs/gst/controller/gstproxycontrolbinding.h
+Copyright (C) 2016 Matthew Waters <matthew@centricular.com>
+
+libs/gst/controller/gsttimedvaluecontrolsource.c
+Copyright (C) 2007,2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+libs/gst/controller/gsttimedvaluecontrolsource.h
+Copyright (C) 2007 Sebastian Dröge <slomo@circular-chaos.org>
+
+libs/gst/controller/gsttriggercontrolsource.c
+Copyright (C) 2007,2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+libs/gst/controller/gsttriggercontrolsource.h
+Copyright (C) 2007 Sebastian Dröge <slomo@circular-chaos.org>
+
+libs/gst/helpers/gst-completion-helper.c
+Copyright (C) 2015 Mathieu Duponchelle <mathieu.duponchelle@opencreed.com>
+
+libs/gst/helpers/gst-plugin-scanner.c
+Copyright (C) 2008 Jan Schmidt <jan.schmidt@sun.com>
+
+libs/gst/net/gstnet.h
+Copyright (C) 2005 Andy Wingo <wingo@pobox.com>
+
+libs/gst/net/gstnetaddressmeta.c
+Copyright (C) <2011> Wim Taymans <wim.taymans@gmail.com>
+
+libs/gst/net/gstnetaddressmeta.h
+Copyright (C) <2011> Wim Taymans <wim.taymans@gmail.com>
+
+libs/gst/net/gstnetclientclock.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2012 Collabora Ltd. <tim.muller@collabora.co.uk>
+Copyright (C) 2015 Sebastian Dröge <sebastian@centricular.com>
+
+libs/gst/net/gstnetclientclock.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2012 Collabora Ltd. <tim.muller@collabora.co.uk>
+
+libs/gst/net/gstnetcontrolmessagemeta.c
+Copyright (C) <2014> William Manley <will@williammanley.net>
+
+libs/gst/net/gstnetcontrolmessagemeta.h
+Copyright (C) <2014> William Manley <will@williammanley.net>
+
+libs/gst/net/gstnettimepacket.c
+Copyright (C) 2005 Andy Wingo <wingo@pobox.com>
+Copyright (C) 2010 Tim-Philipp Müller <tim centricular net>
+Copyright (C) 2012 Collabora Ltd. <tim.muller@collabora.co.uk>
+
+libs/gst/net/gstnettimepacket.h
+Copyright (C) 2005 Andy Wingo <wingo@pobox.com>
+
+libs/gst/net/gstnettimeprovider.c
+Copyright (C) 2005 Andy Wingo <wingo@pobox.com>
+
+libs/gst/net/gstnettimeprovider.h
+Copyright (C) 2005 Andy Wingo <wingo@pobox.com>
+Copyright (C) 2012 Collabora Ltd. <tim.muller@collabora.co.uk>
+
+libs/gst/net/gstnetutils.c
+Copyright (C) 2017 Sebastian Dröge <sebastian@centricular.com>
+Copyright (C) 2017 Robert Rosengren <robertr@axis.com>
+
+libs/gst/net/gstnetutils.h
+Copyright (C) 2017 Sebastian Dröge <sebastian@centricular.com>
+Copyright (C) 2017 Robert Rosengren <robertr@axis.com>
+
+libs/gst/net/gstntppacket.c
+Copyright (C) 2005 Andy Wingo <wingo@pobox.com>
+Copyright (C) 2010 Tim-Philipp Müller <tim centricular net>
+Copyright (C) 2012 Collabora Ltd. <tim.muller@collabora.co.uk>
+Copyright (C) 2015 Sebastian Dröge <sebastian@centricular.com>
+
+libs/gst/net/gstntppacket.h
+Copyright (C) 2005 Andy Wingo <wingo@pobox.com>
+Copyright (C) 2015 Sebastian Dröge <sebastian@centricular.com>
+
+libs/gst/net/gstptpclock.c
+Copyright (C) 2015 Sebastian Dröge <sebastian@centricular.com>
+
+libs/gst/net/gstptpclock.h
+Copyright (C) 2015 Sebastian Dröge <sebastian@centricular.com>
+
+libs/gst/net/net-prelude.h
+Copyright (C) 2018 GStreamer developers
+
+libs/gst/net/net.h
+Copyright (C) 2012 GStreamer developers
+
+plugins/elements/gstcapsfilter.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+plugins/elements/gstcapsfilter.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+plugins/elements/gstclocksync.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2020 Jan Schmidt <jan@centricular.com>
+
+plugins/elements/gstclocksync.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2020 Jan Schmidt <jan@centricular.com>
+
+plugins/elements/gstconcat.c
+Copyright (c) 2014 Sebastian Dröge <sebastian@centricular.com>
+
+plugins/elements/gstconcat.h
+Copyright (c) 2014 Sebastian Dröge <sebastian@centricular.com>
+
+plugins/elements/gstcoreelementselements.h
+Copyright (C) 2020 Huawei Technologies Co., Ltd.
+
+plugins/elements/gstcoreelementsplugin.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+plugins/elements/gstdataurisrc.c
+Copyright (C) 2009 Igalia S.L
+Copyright (C) 2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+plugins/elements/gstdataurisrc.h
+Copyright (C) 2009 Igalia S.L
+Copyright (C) 2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+plugins/elements/gstdownloadbuffer.c
+Copyright (C) 2014 Wim Taymans <wim.taymans@gmail.com>
+
+plugins/elements/gstdownloadbuffer.h
+Copyright (C) 2014 Wim Taymans <wim.taymans@gmail.com>
+
+plugins/elements/gstelements_private.c
+Copyright (C) 2011 David Schleef <ds@schleef.org>
+Copyright (C) 2011 Tim-Philipp Müller <tim.muller@collabora.co.uk>
+Copyright (C) 2014 Tim-Philipp Müller <tim@centricular.com>
+Copyright (C) 2014 Vincent Penquerc'h <vincent@collabora.co.uk>
+
+plugins/elements/gstelements_private.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+plugins/elements/gstfakesink.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+plugins/elements/gstfakesink.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+plugins/elements/gstfakesrc.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+plugins/elements/gstfakesrc.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+plugins/elements/gstfdsink.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+plugins/elements/gstfdsink.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+plugins/elements/gstfdsrc.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+plugins/elements/gstfdsrc.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+plugins/elements/gstfilesink.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+plugins/elements/gstfilesink.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+plugins/elements/gstfilesrc.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+plugins/elements/gstfilesrc.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+plugins/elements/gstfunnel.c
+Copyright 2007 Collabora Ltd.
+Copyright 2007 Nokia Corp.
+
+plugins/elements/gstfunnel.h
+Copyright 2007 Collabora Ltd.
+Copyright 2007 Nokia Corp.
+
+plugins/elements/gstidentity.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+plugins/elements/gstidentity.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+plugins/elements/gstinputselector.c
+Copyright (C) 2003 Julien Moutte <julien@moutte.net>
+Copyright (C) 2005 Ronald S. Bultje <rbultje@ronald.bitfreak.net>
+Copyright (C) 2005 Jan Schmidt <thaytan@mad.scientist.com>
+Copyright (C) 2007 Wim Taymans <wim.taymans@gmail.com>
+Copyright (C) 2007 Andy Wingo <wingo@pobox.com>
+Copyright (C) 2008 Nokia Corporation. (contact <stefan.kost@nokia.com>)
+Copyright (C) 2011 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+plugins/elements/gstinputselector.h
+Copyright (C) 2003 Julien Moutte <julien@moutte.net>
+Copyright (C) 2005 Ronald S. Bultje <rbultje@ronald.bitfreak.net>
+Copyright (C) 2008 Nokia Corporation. (contact <stefan.kost@nokia.com>)
+
+plugins/elements/gstmultiqueue.c
+Copyright (C) 2006 Edward Hervey <edward@fluendo.com>
+Copyright (C) 2007 Jan Schmidt <jan@fluendo.com>
+Copyright (C) 2007 Wim Taymans <wim@fluendo.com>
+Copyright (C) 2011 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+plugins/elements/gstmultiqueue.h
+Copyright (C) 2006 Edward Hervey <edward@fluendo.com>
+
+plugins/elements/gstoutputselector.c
+Copyright (C) 2008 Nokia Corporation. (contact <stefan.kost@nokia.com>)
+
+plugins/elements/gstoutputselector.h
+Copyright (C) 2008 Nokia Corporation. (contact <stefan.kost@nokia.com>)
+
+plugins/elements/gstqueue.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+plugins/elements/gstqueue.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+plugins/elements/gstqueue2.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+plugins/elements/gstqueue2.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+plugins/elements/gstsparsefile.c
+Copyright (C) 2014 Wim Taymans <wtaymans@redhat.com>
+
+plugins/elements/gstsparsefile.h
+Copyright (C) 2014 Wim Taymans <wtaymans@redhat.com>
+
+plugins/elements/gststreamiddemux.c
+Copyright 2013 LGE Corporation.
+
+plugins/elements/gststreamiddemux.h
+Copyright 2013 LGE Corporation.
+
+plugins/elements/gsttee.c
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+plugins/elements/gsttee.h
+Copyright (C) 1999,2000 Erik Walthinsen <omega@cse.ogi.edu>
+
+plugins/elements/gsttypefindelement.c
+Copyright (C) 2003 Benjamin Otte <in7y118@public.uni-hamburg.de>
+
+plugins/elements/gsttypefindelement.h
+Copyright (C) 2003 Benjamin Otte <in7y118@public.uni-hamburg.de>
+
+plugins/elements/gstvalve.c
+Copyright 2007-2009 Collabora Ltd
+Copyright 2007-2009 Nokia Corporation
+
+plugins/elements/gstvalve.h
+Copyright 2007 Collabora Ltd,
+Copyright 2007 Nokia Corporation

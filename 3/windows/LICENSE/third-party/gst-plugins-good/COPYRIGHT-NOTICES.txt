@@ -1,0 +1,620 @@
+Copyright statements in the corresponding upstream source areas.
+Some files have platform or feature guards; this is an attribution index, not a list of linked object files.
+
+ext/flac/gstflac.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+ext/flac/gstflacdec.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) <2006,2011> Tim-Philipp Müller <tim centricular net>
+Copyright (C) <2006> Jan Schmidt <thaytan at mad scientist com>
+
+ext/flac/gstflacdec.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) <2011> Tim-Philipp Müller <tim centricular net>
+
+ext/flac/gstflacelement.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+ext/flac/gstflacelements.h
+Copyright (C) 2020 Huawei Technologies Co., Ltd.
+
+ext/flac/gstflacenc.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+ext/flac/gstflacenc.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+ext/flac/gstflactag.c
+Copyright (C) 2003 Christophe Fergeau <teuf@gnome.org>
+Copyright (C) 2008 Jonathan Matthew <jonathan@d14n.org>
+Copyright (C) 2008 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+ext/flac/gstflactag.h
+Copyright (C) 2003 Christophe Fergeau <teuf@gnome.org>
+Copyright (C) 2008 Jonathan Matthew <jonathan@d14n.org>
+Copyright (C) 2008 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+ext/jpeg/gstjpeg.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+ext/jpeg/gstjpeg.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+ext/jpeg/gstjpegdec.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) <2009> Tim-Philipp Müller <tim centricular net>
+Copyright (C) 2012 Collabora Ltd.
+
+ext/jpeg/gstjpegdec.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2012 Collabora Ltd.
+
+ext/jpeg/gstjpegelements.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2020 Huawei Technologies Co., Ltd.
+
+ext/jpeg/gstjpegenc.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2012 Collabora Ltd.
+
+ext/jpeg/gstjpegenc.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2012 Collabora Ltd.
+
+ext/jpeg/gstjpegplugin.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+ext/jpeg/gstsmokedec.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+ext/jpeg/gstsmokedec.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+ext/jpeg/gstsmokeenc.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+ext/jpeg/gstsmokeenc.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+ext/jpeg/smokecodec.c
+Copyright (C) <2004> Wim Taymans <wim@fluendo.com>
+
+ext/jpeg/smokecodec.h
+Copyright (C) <2004> Wim Taymans <wim@fluendo.com>
+
+ext/jpeg/smokeformat.h
+Copyright (C) <2004> Wim Taymans <wim@fluendo.com>
+
+ext/mpg123/gstmpg123audiodec.c
+Copyright (C) 2012 Carlos Rafael Giani
+
+ext/mpg123/gstmpg123audiodec.h
+Copyright (C) 2012 Carlos Rafael Giani
+
+gst/audiofx/audioamplify.c
+Copyright (C) 2007 Sebastian Dröge <slomo@circular-chaos.org>
+Copyright (C) 2006 Stefan Kost <ensonic@users.sf.net>
+
+gst/audiofx/audioamplify.h
+Copyright (C) 2007 Sebastian Dröge <slomo@circular-chaos.org>
+Copyright (C) 2006 Stefan Kost <ensonic@users.sf.net>
+
+gst/audiofx/audiochebband.c
+Copyright (C) 2007-2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/audiofx/audiochebband.h
+Copyright (C) 2007-2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/audiofx/audiocheblimit.c
+Copyright (C) 2007-2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/audiofx/audiocheblimit.h
+Copyright (C) 2007-2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/audiofx/audiodynamic.c
+Copyright (C) 2007 Sebastian Dröge <slomo@circular-chaos.org>
+
+gst/audiofx/audiodynamic.h
+Copyright (C) 2007 Sebastian Dröge <slomo@circular-chaos.org>
+
+gst/audiofx/audioecho.c
+Copyright (C) 2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/audiofx/audioecho.h
+Copyright (C) 2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/audiofx/audiofirfilter.c
+Copyright (C) 2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/audiofx/audiofirfilter.h
+Copyright (C) 2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/audiofx/audiofx.c
+Copyright (C) 2006 Stefan Kost <ensonic@users.sf.net>
+
+gst/audiofx/audiofxbasefirfilter.c
+Copyright (C) 1999-2001 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/audiofx/audiofxbasefirfilter.h
+Copyright (C) 1999-2001 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/audiofx/audiofxbaseiirfilter.c
+Copyright (C) 2007-2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/audiofx/audiofxbaseiirfilter.h
+Copyright (C) 2007-2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/audiofx/audioiirfilter.c
+Copyright (C) 2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/audiofx/audioiirfilter.h
+Copyright (C) 2009 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/audiofx/audioinvert.c
+Copyright (C) 2007 Sebastian Dröge <slomo@circular-chaos.org>
+Copyright (C) 2006 Stefan Kost <ensonic@users.sf.net>
+
+gst/audiofx/audioinvert.h
+Copyright (C) 2007 Sebastian Dröge <slomo@circular-chaos.org>
+Copyright (C) 2006 Stefan Kost <ensonic@users.sf.net>
+
+gst/audiofx/audiokaraoke.c
+Copyright (C) 2008 Wim Taymans <wim.taymans@gmail.com>
+
+gst/audiofx/audiokaraoke.h
+Copyright (C) 2008 Wim Taymans <wim.taymans@gmail.com>
+
+gst/audiofx/audiopanorama.c
+Copyright (C) 2006 Stefan Kost <ensonic@users.sf.net>
+Copyright (C) 2006 Sebastian Dröge <slomo@circular-chaos.org>
+
+gst/audiofx/audiopanorama.h
+Copyright (C) 2006 Stefan Kost <ensonic@users.sf.net>
+
+gst/audiofx/audiowsincband.c
+Copyright (C) 1999-2001 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/audiofx/audiowsincband.h
+Copyright (C) 1999-2001 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/audiofx/audiowsinclimit.c
+Copyright (C) 1999-2001 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/audiofx/audiowsinclimit.h
+Copyright (C) 1999-2001 Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/audiofx/gstscaletempo.c
+Copyright (C) 2008 Rov Juvano <rovjuvano@users.sourceforge.net>
+
+gst/audiofx/gstscaletempo.h
+Copyright (C) 2008 Rov Juvano <rovjuvano@users.sourceforge.net>
+
+gst/audiofx/gstscaletempoplugin.c
+Copyright (C) 2008 Rov Juvano <rovjuvano@users.sourceforge.net>
+
+gst/audiofx/gststereo.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/audiofx/gststereo.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/audiofx/math_compat.h
+Copyright (C) 2008 Sebastian Dröge <slomo@circular-chaos.org>
+
+gst/audioparsers/gstaacparse.c
+Copyright (C) 2008 Nokia Corporation. All rights reserved.
+
+gst/audioparsers/gstaacparse.h
+Copyright (C) 2008 Nokia Corporation. All rights reserved.
+
+gst/audioparsers/gstac3parse.c
+Copyright (C) 2009 Tim-Philipp Müller <tim centricular net>
+Copyright (C) 2009 Mark Nauwelaerts <mnauw users sf net>
+Copyright (C) 2009 Nokia Corporation. All rights reserved.
+
+gst/audioparsers/gstac3parse.h
+Copyright (C) 2009 Tim-Philipp Müller <tim centricular net>
+Copyright (C) 2009 Mark Nauwelaerts <mnauw users sf net>
+Copyright (C) 2009 Nokia Corporation. All rights reserved.
+
+gst/audioparsers/gstamrparse.c
+Copyright (C) 2006 Edgard Lima <edgard.lima@gmail.com>
+Copyright (C) 2008 Nokia Corporation. All rights reserved.
+
+gst/audioparsers/gstamrparse.h
+Copyright (C) 2004 Ronald Bultje <rbultje@ronald.bitfreak.net>
+Copyright (C) 2008 Nokia Corporation. All rights reserved.
+
+gst/audioparsers/gstaudioparserselements.h
+Copyright (C) 2009 Tim-Philipp Müller <tim centricular net>
+Copyright (C) 2020 Huawei Technologies Co., Ltd.
+
+gst/audioparsers/gstdcaparse.c
+Copyright (C) 2010 Tim-Philipp Müller <tim centricular net>
+
+gst/audioparsers/gstdcaparse.h
+Copyright (C) 2010 Tim-Philipp Müller <tim centricular net>
+
+gst/audioparsers/gstflacparse.c
+Copyright (C) 2008 Sebastian Dröge <sebastian.droege@collabora.co.uk>.
+Copyright (C) 2009 Mark Nauwelaerts <mark.nauwelaerts@collabora.co.uk>
+Copyright (C) 2009 Nokia Corporation. All rights reserved.
+
+gst/audioparsers/gstflacparse.h
+Copyright (C) 2008 Sebastian Dröge <sebastian.droege@collabora.co.uk>.
+Copyright (C) 2009 Mark Nauwelaerts <mark.nauwelaerts@collabora.co.uk>
+Copyright (C) 2009 Nokia Corporation. All rights reserved.
+
+gst/audioparsers/gstmpegaudioparse.c
+Copyright (C) 2006-2007 Jan Schmidt <thaytan@mad.scientist.com>
+Copyright (C) 2010 Mark Nauwelaerts <mnauw users sf net>
+Copyright (C) 2010 Nokia Corporation. All rights reserved.
+
+gst/audioparsers/gstmpegaudioparse.h
+Copyright (C) 2006-2007 Jan Schmidt <thaytan@mad.scientist.com>
+Copyright (C) 2010 Mark Nauwelaerts <mnauw users sf net>
+Copyright (C) 2010 Nokia Corporation. All rights reserved.
+
+gst/audioparsers/gstsbcparse.c
+Copyright (C) 2012 Collabora Ltd. <tim.muller@collabora.co.uk>
+
+gst/audioparsers/gstsbcparse.h
+Copyright (C) 2012 Collabora Ltd. <tim.muller@collabora.co.uk>
+
+gst/audioparsers/gstwavpackparse.c
+Copyright (C) 2012 Mark Nauwelaerts <mark.nauwelaerts@collabora.co.uk>
+Copyright (C) 2012 Nokia Corporation. All rights reserved.
+
+gst/audioparsers/gstwavpackparse.h
+Copyright (C) 2012 Mark Nauwelaerts <mark.nauwelaerts@collabora.co.uk>
+Copyright (C) 2012 Nokia Corporation. All rights reserved.
+
+gst/audioparsers/plugin.c
+Copyright (C) 2009 Tim-Philipp Müller <tim centricular net>
+
+gst/autodetect/gstautodetectelements.h
+Copyright (C) 2020 Huawei Technologies Co., Ltd.
+
+gst/avi/avi-ids.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/avi/gstavi.c
+Copyright (C) <1999> Erik Walthinsen <omega@temple-baptist.com>
+
+gst/avi/gstavidemux.c
+Copyright (C) <1999> Erik Walthinsen <omega@temple-baptist.com>
+Copyright (C) <2006> Nokia Corporation (contact <stefan.kost@nokia.com>)
+Copyright (C) <2009-2010> STEricsson <benjamin.gaignard@stericsson.com>
+
+gst/avi/gstavidemux.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) <2006> Nokia Corporation (contact <stefan.kost@nokia.com>)
+
+gst/avi/gstavielement.c
+Copyright (C) <1999> Erik Walthinsen <omega@temple-baptist.com>
+Copyright (C) 2020 Huawei Technologies Co., Ltd.
+
+gst/avi/gstavielements.h
+Copyright (C) <1999> Erik Walthinsen <omega@temple-baptist.com>
+Copyright (C) 2020 Huawei Technologies Co., Ltd.
+
+gst/avi/gstavimux.c
+Copyright (C) 2002 Ronald Bultje <rbultje@ronald.bitfreak.net>
+
+gst/avi/gstavimux.h
+Copyright (C) 2002 Ronald Bultje <rbultje@ronald.bitfreak.net>
+
+gst/avi/gstavisubtitle.c
+Copyright (C) <2007> Thijs Vermeir <thijsvermeir@gmail.com>
+Copyright (C) <2007> Tim-Philipp Müller <tim centricular net>
+
+gst/deinterlace/gstdeinterlace.c
+Copyright (C) 2005 Martin Eikermann <meiker@upb.de>
+Copyright (C) 2008-2010 Sebastian Dröge <slomo@collabora.co.uk>
+Copyright (C) 2011 Robert Swain <robert.swain@collabora.co.uk>
+
+gst/deinterlace/gstdeinterlace.h
+Copyright (C) 2005 Martin Eikermann <meiker@upb.de>
+Copyright (C) 2008-2010 Sebastian Dröge <slomo@collabora.co.uk>
+
+gst/deinterlace/gstdeinterlacemethod.c
+Copyright (C) 2008-2010 Sebastian Dröge <slomo@collabora.co.uk>
+
+gst/deinterlace/gstdeinterlacemethod.h
+Copyright (C) 2008-2010 Sebastian Dröge <slomo@collabora.co.uk>
+
+gst/deinterlace/tvtime/greedy.c
+Copyright (c) 2000 Tom Barry  All rights reserved.
+mmx.h port copyright (c) 2002 Billy Biggs <vektor@dumbterm.net>.
+Copyright (C) 2008,2010 Sebastian Dröge <slomo@collabora.co.uk>
+
+gst/deinterlace/tvtime/greedyh.c
+Copyright (C) 2004 Billy Biggs <vektor@dumbterm.net>
+Copyright (C) 2008,2010 Sebastian Dröge <slomo@collabora.co.uk>
+
+gst/deinterlace/tvtime/greedyhmacros.h
+Copyright (c) 2001 Tom Barry  All rights reserved.
+
+gst/deinterlace/tvtime/linear.c
+Copyright (C) 2002 Billy Biggs <vektor@dumbterm.net>.
+Copyright (C) 2008,2010 Sebastian Dröge <slomo@collabora.co.uk>
+
+gst/deinterlace/tvtime/linearblend.c
+Copyright (C) 2002 Billy Biggs <vektor@dumbterm.net>.
+Copyright (C) 2008,2010 Sebastian Dröge <slomo@collabora.co.uk>
+
+gst/deinterlace/tvtime/plugins.h
+Copyright (C) 2004 Billy Biggs <vektor@dumbterm.net>
+Copyright (C) 2008 Sebastian Dröge <slomo@collabora.co.uk>
+
+gst/deinterlace/tvtime/scalerbob.c
+Copyright (C) 2008,2010 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/deinterlace/tvtime/tomsmocomp.c
+Copyright (C) 2004 Billy Biggs <vektor@dumbterm.net>
+Copyright (C) 2008,2010 Sebastian Dröge <slomo@collabora.co.uk>
+
+gst/deinterlace/tvtime/vfir.c
+Copyright (C) 2004 Billy Biggs <vektor@dumbterm.net>
+Copyright (c) 2001, 2002, 2003 Fabrice Bellard.
+Copyright (C) 2008,2010 Sebastian Dröge <slomo@collabora.co.uk>
+
+gst/deinterlace/tvtime/weave.c
+Copyright (C) 2002 Billy Biggs <vektor@dumbterm.net>.
+Copyright (C) 2008,2010 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/deinterlace/tvtime/weavebff.c
+Copyright (C) 2003 Billy Biggs <vektor@dumbterm.net>.
+Copyright (C) 2008,2010 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/deinterlace/tvtime/weavetff.c
+Copyright (C) 2003 Billy Biggs <vektor@dumbterm.net>.
+Copyright (C) 2008,2010 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/deinterlace/yadif.c
+Copyright (C) 2019 Jan Schmidt <jan@centricular.com>
+Copyright (C) 2006 Michael Niedermayer <michaelni@gmx.at>
+
+gst/deinterlace/yadif.h
+Copyright (C) 2019 Jan Schmidt <jan@centricular.com>
+
+gst/id3demux/gstid3demux.c
+Copyright (C) 2005 Jan Schmidt <thaytan@mad.scientist.com>
+Copyright (C) 2003-2004 Benjamin Otte <otte@gnome.org>
+
+gst/id3demux/gstid3demux.h
+Copyright (C) 2005 Jan Schmidt <thaytan@mad.scientist.com>
+Copyright (C) 2003-2004 Benjamin Otte <otte@gnome.org>
+
+gst/id3demux/gstid3metaparse.c
+Copyright (C) <2025> Jan Schmidt <jan@centricular.com>
+
+gst/id3demux/gstid3metaparse.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) <2008> Sebastian Dröge <sebastian.droege@collabora.co.uk>
+Copyright (C) <2011-2012> Vincent Penquerc'h <vincent.penquerch@collabora.co.uk>
+Copyright (C) <2025> Jan Schmidt <jan@centricular.com>
+
+gst/imagefreeze/gstimagefreeze.c
+Copyright (c) 2005 Edward Hervey <bilboed@bilboed.com>
+Copyright (C) 2010 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+Copyright (C) 2020 Sebastian Dröge <sebastian@centricular.com>
+
+gst/imagefreeze/gstimagefreeze.h
+Copyright (C) 2010 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/isomp4/atoms.c
+Copyright (C) 2008-2010 Thiago Santos <thiagoss@embedded.ufcg.edu.br>
+Copyright (C) 2008 Mark Nauwelaerts <mnauw@users.sf.net>
+
+gst/isomp4/atoms.h
+Copyright (C) 2008-2010 Thiago Santos <thiagoss@embedded.ufcg.edu.br>
+
+gst/isomp4/atomsrecovery.c
+Copyright (C) 2010 Thiago Santos <thiago.sousa.santos@collabora.co.uk>
+
+gst/isomp4/atomsrecovery.h
+Copyright (C) 2010 Thiago Santos <thiago.sousa.santos@collabora.co.uk>
+
+gst/isomp4/descriptors.c
+Copyright (C) 2008 Thiago Sousa Santos <thiagoss@embedded.ufcg.edu.br>
+
+gst/isomp4/descriptors.h
+Copyright (C) 2008 Thiago Sousa Santos <thiagoss@embedded.ufcg.edu.br>
+
+gst/isomp4/fourcc.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/isomp4/gstisoff.c
+Copyright (C) 2015 Samsung Electronics. All rights reserved.
+
+gst/isomp4/gstisoff.h
+Copyright (C) 2015 Samsung Electronics. All rights reserved.
+
+gst/isomp4/gstisomp4element.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) <2003> David A. Schleef <ds@schleef.org>
+Copyright (C) <2006> Wim Taymans <wim@fluendo.com>
+
+gst/isomp4/gstisomp4elements.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) <2003> David A. Schleef <ds@schleef.org>
+Copyright (C) <2006> Wim Taymans <wim@fluendo.com>
+Copyright (C) 2020 Huawei Technologies Co., Ltd.
+
+gst/isomp4/gstqtmoovrecover.c
+Copyright (C) 2010 Thiago Santos <thiago.sousa.santos@collabora.co.uk>
+
+gst/isomp4/gstqtmoovrecover.h
+Copyright (C) 2010 Thiago Santos <thiago.sousa.santos@collabora.co.uk>
+
+gst/isomp4/gstqtmux-doc.c
+Copyright (C) 2008-2010 Thiago Santos <thiagoss@embedded.ufcg.edu.br>
+Copyright (C) 2008 Mark Nauwelaerts <mnauw@users.sf.net>
+Copyright (C) 2010 Nokia Corporation. All rights reserved.
+
+gst/isomp4/gstqtmux-doc.h
+Copyright (C) 2008-2010 Thiago Santos <thiagoss@embedded.ufcg.edu.br>
+Copyright (C) 2008 Mark Nauwelaerts <mnauw@users.sf.net>
+Copyright (C) 2010 Nokia Corporation. All rights reserved.
+
+gst/isomp4/gstqtmux.c
+Copyright (C) 2008-2010 Thiago Santos <thiagoss@embedded.ufcg.edu.br>
+Copyright (C) 2008 Mark Nauwelaerts <mnauw@users.sf.net>
+Copyright (C) 2010 Nokia Corporation. All rights reserved.
+Copyright (C) 2014 Jan Schmidt <jan@centricular.com>
+
+gst/isomp4/gstqtmux.h
+Copyright (C) 2008-2010 Thiago Santos <thiagoss@embedded.ufcg.edu.br>
+
+gst/isomp4/gstqtmuxmap.c
+Copyright (C) 2008 Thiago Sousa Santos <thiagoss@embedded.ufcg.edu.br>
+Copyright (C) 2008 Mark Nauwelaerts <mnauw@users.sf.net>
+
+gst/isomp4/gstqtmuxmap.h
+Copyright (C) 2008 Thiago Sousa Santos <thiagoss@embedded.ufcg.edu.br>
+Copyright (C) 2008 Mark Nauwelaerts <mnauw@users.sf.net>
+
+gst/isomp4/gstrtpxqtdepay.c
+Copyright (C) <2006> Wim Taymans <wim@fluendo.com>
+
+gst/isomp4/gstrtpxqtdepay.h
+Copyright (C) <2005> Wim Taymans <wim@fluendo.com>
+
+gst/isomp4/isomp4-plugin.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) <2003> David A. Schleef <ds@schleef.org>
+Copyright (C) <2006> Wim Taymans <wim@fluendo.com>
+
+gst/isomp4/properties.c
+Copyright (C) 2008 Thiago Sousa Santos <thiagoss@embedded.ufcg.edu.br>
+
+gst/isomp4/properties.h
+Copyright (C) 2008 Thiago Sousa Santos <thiagoss@embedded.ufcg.edu.br>
+
+gst/isomp4/qtatomparser.h
+Copyright (C) 2009 Tim-Philipp Müller <tim centricular net>
+Copyright (C) <2009> STEricsson <benjamin.gaignard@stericsson.com>
+
+gst/isomp4/qtdemux-webvtt.c
+Copyright (C) 2008 Thijs Vermeir <thijsvermeir@gmail.com>
+Copyright (C) 2011 David Schleef <ds@schleef.org>
+Copyright (C) 2021 Jan Schmidt <jan@centricular.com>
+
+gst/isomp4/qtdemux-webvtt.h
+Copyright (C) <2021> Jan Schmidt <jan@centricular.com>
+
+gst/isomp4/qtdemux.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) <2003> David A. Schleef <ds@schleef.org>
+Copyright (C) <2006> Wim Taymans <wim@fluendo.com>
+Copyright (C) <2007> Julien Moutte <julien@fluendo.com>
+Copyright (C) <2009> Tim-Philipp Müller <tim centricular net>
+Copyright (C) <2009> STEricsson <benjamin.gaignard@stericsson.com>
+Copyright (C) <2013> Sreerenj Balachandran <sreerenj.balachandran@intel.com>
+Copyright (C) <2013> Intel Corporation
+Copyright (C) <2014> Centricular Ltd
+Copyright (C) <2015> YouView TV Ltd.
+Copyright (C) <2016> British Broadcasting Corporation
+
+gst/isomp4/qtdemux.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/isomp4/qtdemux_dump.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2009 Tim-Philipp Müller <tim centricular net>
+Copyright (C) <2009> STEricsson <benjamin.gaignard@stericsson.com>
+
+gst/isomp4/qtdemux_dump.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) <2009> STEricsson <benjamin.gaignard@stericsson.com>
+
+gst/isomp4/qtdemux_lang.c
+Copyright (C) 2010 Tim-Philipp Müller <tim centricular net>
+
+gst/isomp4/qtdemux_lang.h
+Copyright (C) 2010 Tim-Philipp Müller <tim centricular net>
+
+gst/isomp4/qtdemux_tags.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) <2003> David A. Schleef <ds@schleef.org>
+Copyright (C) <2006> Wim Taymans <wim@fluendo.com>
+Copyright (C) <2007> Julien Moutte <julien@fluendo.com>
+Copyright (C) <2009> Tim-Philipp Müller <tim centricular net>
+Copyright (C) <2009> STEricsson <benjamin.gaignard@stericsson.com>
+Copyright (C) <2013> Sreerenj Balachandran <sreerenj.balachandran@intel.com>
+Copyright (C) <2013> Intel Corporation
+Copyright (C) <2014> Centricular Ltd
+Copyright (C) <2015> YouView TV Ltd.
+Copyright (C) <2016> British Broadcasting Corporation
+
+gst/isomp4/qtdemux_tags.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/isomp4/qtdemux_tree.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) <2003> David A. Schleef <ds@schleef.org>
+Copyright (C) <2006> Wim Taymans <wim@fluendo.com>
+Copyright (C) <2007> Julien Moutte <julien@fluendo.com>
+Copyright (C) <2009> Tim-Philipp Müller <tim centricular net>
+Copyright (C) <2009> STEricsson <benjamin.gaignard@stericsson.com>
+Copyright (C) <2013> Sreerenj Balachandran <sreerenj.balachandran@intel.com>
+Copyright (C) <2013> Intel Corporation
+Copyright (C) <2014> Centricular Ltd
+Copyright (C) <2015> YouView TV Ltd.
+Copyright (C) <2016> British Broadcasting Corporation
+
+gst/isomp4/qtdemux_tree.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) <2003> David A. Schleef <ds@schleef.org>
+Copyright (C) <2006> Wim Taymans <wim@fluendo.com>
+Copyright (C) <2007> Julien Moutte <julien@fluendo.com>
+Copyright (C) <2009> Tim-Philipp Müller <tim centricular net>
+Copyright (C) <2009> STEricsson <benjamin.gaignard@stericsson.com>
+Copyright (C) <2013> Sreerenj Balachandran <sreerenj.balachandran@intel.com>
+Copyright (C) <2013> Intel Corporation
+Copyright (C) <2014> Centricular Ltd
+Copyright (C) <2015> YouView TV Ltd.
+Copyright (C) <2016> British Broadcasting Corporation
+
+gst/isomp4/qtdemux_types.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/isomp4/qtdemux_types.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) <2009> STEricsson <benjamin.gaignard@stericsson.com>
+
+gst/isomp4/qtpalette.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+gst/level/gstlevel.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2000,2001,2002,2003,2005
+
+gst/level/gstlevel.h
+Copyright (C) 1999 Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2000,2001,2002,2003,2005
+
+gst/matroska/gstmatroskaelements.h
+Copyright (C) 2020 Huawei Technologies Co., Ltd.
+
+gst/matroska/lzo.c
+Copyright (c) 2006 Reimar Doeffinger
+
+gst/matroska/lzo.h
+copyright (c) 2006 Reimar Doeffinger
+
+gst/matroska/webm-mux.c
+Copyright (c) 2010 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/matroska/webm-mux.h
+Copyright (c) 2010 Sebastian Dröge <sebastian.droege@collabora.co.uk>
+
+gst/wavparse/gstwavparse.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) <2006> Nokia Corporation, Stefan Kost <stefan.kost@nokia.com>.
+
+gst/wavparse/gstwavparse.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) <2006> Nokia Corporation, Stefan Kost <stefan.kost@nokia.com>.

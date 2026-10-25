@@ -1,0 +1,5 @@
+# Preserve upstream notice bytes; the provenance manifest verifies SHA-256.
+LICENSE/third-party/** -text -whitespace
+LICENSE/macOS/notices/** -text -whitespace
+LICENSE/macOS/supplemental/** -text -whitespace
+*.sh text eol=lf

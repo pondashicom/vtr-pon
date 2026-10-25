@@ -1,0 +1,1249 @@
+/*
+ * Material Dark Controller skin
+ *
+ * Surface roles:
+ *   background       #111318
+ *   surface          #1B1D23
+ *   surface-high     #24262D
+ *   surface-highest  #2F3038
+ *   outline          #45474F
+ *   on-surface       #E3E2E8
+ *   on-surface-muted #C4C6D0
+ *   primary          #A8C7FA
+ *
+ * Operational state colors remain distinct from selection/primary colors.
+ */
+
+QWidget#controllerWindow,
+QDialog#operatorTimerSettingsDialog,
+QDialog#programMasterEqWindow,
+QDialog[itemEqWindow="true"] {
+  color: #E3E2E8;
+  background: #111318;
+  font-family: "Segoe UI";
+  font-size: 9pt;
+}
+
+QDialog#operatorTimerSettingsDialog QLabel,
+QDialog#programMasterEqWindow QLabel,
+QDialog[itemEqWindow="true"] QLabel {
+    color: #E3E2E8;
+    background: transparent;
+}
+
+QDialog#operatorTimerSettingsDialog QLabel,
+QDialog#operatorTimerSettingsDialog QLineEdit,
+QDialog#operatorTimerSettingsDialog QSpinBox,
+QDialog#operatorTimerSettingsDialog QPushButton {
+    font-size: 12px;
+}
+
+QDialog#operatorTimerSettingsDialog QPushButton {
+    min-height: 22px;
+    padding: 4px 12px;
+}
+
+QDialog#operatorTimerSettingsDialog QSpinBox,
+QLineEdit#operatorMonitorCueInput {
+    min-height: 22px;
+}
+
+QWidget#controllerWoodTrim {
+  background: #17191E;
+  border: none;
+  border-top: 1px solid #2F3038;
+}
+
+QWidget#systemLoadWidget QLabel {
+  color: #C4C6D0;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+QWidget#systemLoadWidget QLabel[loadWarning="true"] {
+  color: #FFB4AB;
+}
+
+QMenuBar#applicationMenuBar {
+  color: #C4C6D0;
+  background: #17191E;
+  border: none;
+  border-bottom: 1px solid #2F3038;
+  spacing: 2px;
+}
+
+QMenuBar#applicationMenuBar::item {
+  color: #C4C6D0;
+  background: transparent;
+  border-radius: 4px;
+  padding: 5px 10px;
+}
+
+QMenuBar#applicationMenuBar::item:selected,
+QMenuBar#applicationMenuBar::item:pressed {
+  color: #FFFFFF;
+  background: #2F3038;
+}
+
+QMenu#fileMenu {
+  color: #E3E2E8;
+  background: #24262D;
+  border: 1px solid #45474F;
+  padding: 5px;
+}
+
+QMenu#fileMenu::item {
+  border-radius: 4px;
+  padding: 7px 28px 7px 12px;
+}
+
+QMenu#fileMenu::item:selected {
+  color: #FFFFFF;
+  background: #0B57D0;
+}
+
+QMenu#fileMenu::item:disabled {
+  color: #73757E;
+}
+
+QMenu#fileMenu::separator {
+  height: 1px;
+  background: #45474F;
+  margin: 5px 8px;
+}
+
+QWidget#editControlPanel,
+QWidget#programControlPanel,
+QWidget#playlistPanel,
+QWidget#inputControlPanel {
+  color: #E3E2E8;
+  background: #1B1D23;
+  border: 1px solid #45474F;
+  border-radius: 10px;
+}
+
+QWidget#editNominalVolumeStrip,
+QWidget#programMasterAudioStrip {
+  background: #17191E;
+  border: 1px solid #3A3C44;
+  border-radius: 8px;
+}
+
+QLabel#editSectionTitle,
+QLabel#playlistTitle,
+QLabel#programSectionTitle,
+QLabel#inputControlTitle {
+  background: #24262D;
+  border: none;
+  border-bottom: 1px solid #45474F;
+  border-radius: 6px;
+  padding: 1px 6px;
+  font-size: 9px;
+  font-weight: 500;
+}
+
+QLabel#editSectionTitle {
+  color: #B7DCC2;
+}
+
+QLabel#playlistTitle {
+  color: #E3E2E8;
+}
+
+QLabel#programSectionTitle {
+  color: #F2B8B5;
+}
+
+QLabel#inputControlTitle {
+  color: #C2E7FF;
+}
+
+QWidget#editMonitor,
+QWidget#onAirMonitor,
+QWidget#programVideoWindow {
+  background: #000000;
+  border: 1px solid #45474F;
+  border-radius: 8px;
+}
+
+QWidget#editMonitor {
+  border-color: #587562;
+}
+
+QWidget#onAirMonitor,
+QWidget#programVideoWindow {
+  border-color: #7D4444;
+}
+
+QPushButton {
+  color: #E3E2E8;
+  background: #2F3038;
+  border: 1px solid #5F636D;
+  border-radius: 6px;
+  padding: 1px 8px;
+  font-weight: bold;
+}
+
+QPushButton:hover {
+  color: #FFFFFF;
+  background: #3A3C44;
+  border-color: #8E9099;
+}
+
+QPushButton:pressed {
+  color: #FFFFFF;
+  background: #202127;
+  border-color: #A8C7FA;
+}
+
+QPushButton:focus {
+  border: 2px solid #A8C7FA;
+}
+
+QPushButton:disabled {
+  color: #73757E;
+  background: #202127;
+  border-color: #34363D;
+}
+
+QPushButton:checked {
+  color: #FFFFFF;
+  background: #137333;
+  border-color: #81C995;
+}
+
+QPushButton:checked:hover {
+  background: #188038;
+}
+
+QLabel#operatorTimerTitle,
+QLabel#editControlModuleTitle,
+QLabel#programControlModuleTitle,
+QLabel#inputControlModuleTitle {
+  color: #C4C6D0;
+  background: transparent;
+  padding: 0 5px;
+  font-weight: bold;
+}
+
+QPushButton[remainingModeButton="true"] {
+  color: #C4C6D0;
+  background: #24262D;
+  border: 1px solid #45474F;
+  border-radius: 4px;
+  padding: 0 4px;
+  font-size: 9px;
+  font-weight: bold;
+}
+
+QPushButton[remainingModeButton="true"]:hover {
+  color: #FFFFFF;
+  background: #2F3038;
+  border-color: #8E9099;
+}
+
+QPushButton[remainingModeButton="true"]:checked {
+  color: #FFFFFF;
+  background: #0B57D0;
+  border-color: #A8C7FA;
+}
+
+QPushButton[remainingModeButton="true"]:focus {
+  border: 2px solid #A8C7FA;
+}
+
+QLabel#programBgmItemLabel {
+  color: #C4C6D0;
+  background: transparent;
+  border: none;
+  font-size: 10px;
+}
+
+QLabel#programBgmSignalIndicator {
+  color: #73757E;
+  background: #17191E;
+  border: 1px solid #5F6368;
+  border-radius: 3px;
+  font-size: 8px;
+  font-weight: bold;
+}
+
+QLabel#programBgmSignalIndicator[active="true"] {
+  color: #102216;
+  background: #81C995;
+  border-color: #A8DAB5;
+}
+
+QLabel#programBgmSignalIndicator[clipped="true"] {
+  color: #FFFFFF;
+  background: #B3261E;
+  border-color: #F28B82;
+}
+
+QPushButton[bgmTransportButton="true"] {
+  padding: 1px 5px;
+  font-size: 10px;
+}
+
+QCheckBox#editFadeInCheckBox,
+QCheckBox#editFadeOutCheckBox,
+QCheckBox#editEndCrossfadeCheckBox,
+QCheckBox#playlistCrossfadeCheckBox {
+  color: #C4C6D0;
+  spacing: 6px;
+}
+
+QCheckBox#editFadeInCheckBox::indicator,
+QCheckBox#editFadeOutCheckBox::indicator,
+QCheckBox#editEndCrossfadeCheckBox::indicator,
+QCheckBox#playlistCrossfadeCheckBox::indicator {
+  width: 15px;
+  height: 15px;
+  background: #17191E;
+  border: 1px solid #8E9099;
+  border-radius: 3px;
+}
+
+QCheckBox#editFadeInCheckBox::indicator:hover,
+QCheckBox#editFadeOutCheckBox::indicator:hover,
+QCheckBox#editEndCrossfadeCheckBox::indicator:hover,
+QCheckBox#playlistCrossfadeCheckBox::indicator:hover {
+  border-color: #A8C7FA;
+}
+
+QCheckBox#editFadeInCheckBox::indicator:checked,
+QCheckBox#editFadeOutCheckBox::indicator:checked,
+QCheckBox#editEndCrossfadeCheckBox::indicator:checked,
+QCheckBox#playlistCrossfadeCheckBox::indicator:checked {
+  background: #0B57D0;
+  border-color: #A8C7FA;
+  image: url(:/vtrpon/apps/desktop/skins/material-dark/check.svg);
+}
+
+QCheckBox#editFadeInCheckBox:focus,
+QCheckBox#editFadeOutCheckBox:focus,
+QCheckBox#editEndCrossfadeCheckBox:focus,
+QCheckBox#playlistCrossfadeCheckBox:focus {
+  color: #FFFFFF;
+}
+
+QDoubleSpinBox[fadeDurationSpinBox="true"],
+QSpinBox[audioDelayControl="true"],
+QDoubleSpinBox#editFadeInDurationSpinBox,
+QDoubleSpinBox#editFadeOutDurationSpinBox,
+QDoubleSpinBox#editEndCrossfadeDurationSpinBox,
+QDoubleSpinBox#playlistCrossfadeDurationSpinBox,
+QDialog#operatorTimerSettingsDialog QSpinBox,
+QLineEdit#operatorMonitorCueInput,
+QSpinBox#editRepeatCountSpinBox,
+QComboBox#editGotoTargetComboBox,
+QComboBox#editRepeatEndModeComboBox,
+QComboBox#inputUvcDeviceComboBox,
+QComboBox#playlistBulkOperationComboBox,
+QLineEdit#playlistNameEdit {
+  color: #E3E2E8;
+  background: #17191E;
+  border: 1px solid #5F636D;
+  border-radius: 5px;
+  padding: 3px 7px;
+  selection-color: #FFFFFF;
+  selection-background-color: #0B57D0;
+}
+
+QDoubleSpinBox[fadeDurationSpinBox="true"],
+QSpinBox[audioDelayControl="true"],
+QDoubleSpinBox#editFadeInDurationSpinBox,
+QDoubleSpinBox#editFadeOutDurationSpinBox,
+QDoubleSpinBox#editEndCrossfadeDurationSpinBox,
+QDoubleSpinBox#playlistCrossfadeDurationSpinBox,
+QDialog#operatorTimerSettingsDialog QSpinBox,
+QLineEdit#operatorMonitorCueInput,
+QSpinBox#editRepeatCountSpinBox {
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+QDoubleSpinBox[fadeDurationSpinBox="true"],
+QSpinBox[audioDelayControl="true"],
+QDoubleSpinBox#editFadeInDurationSpinBox,
+QDoubleSpinBox#editFadeOutDurationSpinBox,
+QDoubleSpinBox#editEndCrossfadeDurationSpinBox,
+QDoubleSpinBox#playlistCrossfadeDurationSpinBox,
+QDialog#operatorTimerSettingsDialog QSpinBox,
+QLineEdit#operatorMonitorCueInput,
+QSpinBox#editRepeatCountSpinBox,
+QDoubleSpinBox[fadeDurationSpinBox="true"] QLineEdit,
+QSpinBox[audioDelayControl="true"] QLineEdit,
+QDoubleSpinBox#editFadeInDurationSpinBox QLineEdit,
+QDoubleSpinBox#editFadeOutDurationSpinBox QLineEdit,
+QDoubleSpinBox#editEndCrossfadeDurationSpinBox QLineEdit,
+QDoubleSpinBox#playlistCrossfadeDurationSpinBox QLineEdit,
+QDialog#operatorTimerSettingsDialog QSpinBox QLineEdit,
+QSpinBox#editRepeatCountSpinBox QLineEdit {
+  selection-color: #F5F6FA;
+  selection-background-color: #4A5360;
+}
+
+QDoubleSpinBox[fadeDurationSpinBox="true"]:hover,
+QSpinBox[audioDelayControl="true"]:hover,
+QDoubleSpinBox#editFadeInDurationSpinBox:hover,
+QDoubleSpinBox#editFadeOutDurationSpinBox:hover,
+QDoubleSpinBox#editEndCrossfadeDurationSpinBox:hover,
+QDoubleSpinBox#playlistCrossfadeDurationSpinBox:hover,
+QDialog#operatorTimerSettingsDialog QSpinBox:hover,
+QLineEdit#operatorMonitorCueInput:hover,
+QSpinBox#editRepeatCountSpinBox:hover,
+QComboBox#editGotoTargetComboBox:hover,
+QComboBox#editRepeatEndModeComboBox:hover,
+QComboBox#inputUvcDeviceComboBox:hover,
+QComboBox#playlistBulkOperationComboBox:hover,
+QLineEdit#playlistNameEdit:hover {
+  border-color: #8E9099;
+}
+
+QDoubleSpinBox[fadeDurationSpinBox="true"]:focus,
+QSpinBox[audioDelayControl="true"]:focus,
+QDoubleSpinBox#editFadeInDurationSpinBox:focus,
+QDoubleSpinBox#editFadeOutDurationSpinBox:focus,
+QDoubleSpinBox#editEndCrossfadeDurationSpinBox:focus,
+QDoubleSpinBox#playlistCrossfadeDurationSpinBox:focus,
+QDialog#operatorTimerSettingsDialog QSpinBox:focus,
+QLineEdit#operatorMonitorCueInput:focus,
+QSpinBox#editRepeatCountSpinBox:focus,
+QComboBox#editGotoTargetComboBox:focus,
+QComboBox#editRepeatEndModeComboBox:focus,
+QComboBox#inputUvcDeviceComboBox:focus,
+QComboBox#playlistBulkOperationComboBox:focus,
+QLineEdit#playlistNameEdit:focus {
+  border: 2px solid #A8C7FA;
+}
+
+QDoubleSpinBox[fadeDurationSpinBox="true"]:disabled,
+QSpinBox[audioDelayControl="true"]:disabled,
+QDoubleSpinBox#editFadeInDurationSpinBox:disabled,
+QDoubleSpinBox#editFadeOutDurationSpinBox:disabled,
+QDoubleSpinBox#editEndCrossfadeDurationSpinBox:disabled,
+QDoubleSpinBox#playlistCrossfadeDurationSpinBox:disabled,
+QDialog#operatorTimerSettingsDialog QSpinBox:disabled,
+QLineEdit#operatorMonitorCueInput:disabled,
+QSpinBox#editRepeatCountSpinBox:disabled,
+QComboBox#editGotoTargetComboBox:disabled,
+QComboBox#editRepeatEndModeComboBox:disabled,
+QComboBox#inputUvcDeviceComboBox:disabled,
+QComboBox#playlistBulkOperationComboBox:disabled,
+QLineEdit#playlistNameEdit:disabled {
+  color: #73757E;
+  background: #17191E;
+  border-color: #34363D;
+}
+
+QToolButton[fadeDurationStepButton="true"] {
+  color: #C4C6D0;
+  background: #24262D;
+  border: 1px solid #45474F;
+  border-radius: 2px;
+  padding: 0;
+}
+
+QToolButton[fadeDurationStepButton="true"]:hover {
+  color: #F5F6FA;
+  background: #2B2D34;
+  border-color: #73757E;
+}
+
+QToolButton[fadeDurationStepButton="true"]:pressed {
+  color: #FFFFFF;
+  background: #17191E;
+  border-color: #5F636D;
+}
+
+QToolButton[fadeDurationStepButton="true"]:focus {
+  border: 1px solid #A8C7FA;
+}
+
+QToolButton[fadeDurationStepButton="true"]:disabled {
+  color: #73757E;
+  background: #202127;
+  border-color: #34363D;
+}
+
+QLineEdit#editInPointTimeEdit,
+QLineEdit#editOutPointTimeEdit {
+  color: #E3E2E8;
+  background: #17191E;
+  border: 1px solid #5F636D;
+  border-radius: 5px;
+  padding: 2px 5px;
+  font-family: Consolas;
+  selection-color: #FFFFFF;
+  selection-background-color: #137333;
+}
+
+QLineEdit#editInPointTimeEdit:hover,
+QLineEdit#editOutPointTimeEdit:hover {
+  border-color: #8E9099;
+}
+
+QLineEdit#editInPointTimeEdit:focus,
+QLineEdit#editOutPointTimeEdit:focus {
+  border: 2px solid #A8C7FA;
+  padding: 1px 4px;
+}
+
+QLineEdit#editInPointTimeEdit:disabled,
+QLineEdit#editOutPointTimeEdit:disabled {
+  color: #73757E;
+  background: #17191E;
+  border-color: #34363D;
+}
+
+QComboBox#editGotoTargetComboBox::drop-down,
+QComboBox#editRepeatEndModeComboBox::drop-down,
+QComboBox#inputUvcDeviceComboBox::drop-down,
+QComboBox#playlistBulkOperationComboBox::drop-down {
+  background: #2F3038;
+  border: none;
+  border-left: 1px solid #45474F;
+  width: 20px;
+}
+
+QComboBox#editGotoTargetComboBox::down-arrow,
+QComboBox#editRepeatEndModeComboBox::down-arrow,
+QComboBox#inputUvcDeviceComboBox::down-arrow,
+QComboBox#playlistBulkOperationComboBox::down-arrow {
+  width: 10px;
+  height: 6px;
+  image: url(:/vtrpon/apps/desktop/skins/material-dark/chevron_down.svg);
+}
+
+QComboBox#editGotoTargetComboBox QAbstractItemView,
+QComboBox#editRepeatEndModeComboBox QAbstractItemView,
+QComboBox#inputUvcDeviceComboBox QAbstractItemView,
+QComboBox#playlistBulkOperationComboBox QAbstractItemView {
+  color: #E3E2E8;
+  background: #24262D;
+  border: 1px solid #5F636D;
+  selection-color: #FFFFFF;
+  selection-background-color: #0B57D0;
+  outline: 0;
+}
+
+QLabel#editNominalVolumeLabel {
+  color: #C4C6D0;
+  background: transparent;
+  font-size: 9px;
+  font-weight: bold;
+}
+
+QPushButton#editStartModePauseButton,
+QPushButton#editStartModePlayButton,
+QPushButton#editEndModeStopButton,
+QPushButton#editEndModePauseButton,
+QPushButton#editEndModeRepeatButton,
+QPushButton#editEndModeNextButton,
+QPushButton#editEndModeGotoButton {
+  color: #C4C6D0;
+  background: #24262D;
+  border-color: #45474F;
+}
+
+QPushButton#editStartModePauseButton:checked,
+QPushButton#editStartModePlayButton:checked,
+QPushButton#editEndModeStopButton:checked,
+QPushButton#editEndModePauseButton:checked,
+QPushButton#editEndModeRepeatButton:checked,
+QPushButton#editEndModeNextButton:checked,
+QPushButton#editEndModeGotoButton:checked,
+QPushButton#editSetInButton[active="true"],
+QPushButton#editSetOutButton[active="true"],
+QPushButton#editRewindButton[active="true"],
+QPushButton#editPauseButton[active="true"],
+QPushButton#editPlayButton[active="true"],
+QPushButton#editForwardButton[active="true"] {
+  color: #FFFFFF;
+  background: #137333;
+  border-color: #81C995;
+}
+
+QPushButton#editJumpToStartButton:disabled,
+QPushButton#editJumpToInButton:disabled,
+QPushButton#editRewindButton:disabled,
+QPushButton#editPauseButton:disabled,
+QPushButton#editPlayButton:disabled,
+QPushButton#editForwardButton:disabled,
+QPushButton#editJumpToOutButton:disabled,
+QPushButton#editJumpToEndButton:disabled,
+QPushButton#editSetInButton:disabled,
+QPushButton#editSetOutButton:disabled,
+QPushButton#editStartModePauseButton:disabled,
+QPushButton#editStartModePlayButton:disabled,
+QPushButton#editEndModeStopButton:disabled,
+QPushButton#editEndModePauseButton:disabled,
+QPushButton#editEndModeRepeatButton:disabled,
+QPushButton#editEndModeNextButton:disabled,
+QPushButton#editEndModeGotoButton:disabled,
+QPushButton#inputUvcAddButton:disabled,
+QPushButton[stillCaptureButton="true"]:disabled {
+  color: #73757E;
+  background: #202127;
+  border-color: #34363D;
+}
+
+QPushButton#editJumpToOutButton {
+  padding: 2px;
+  font-size: 8px;
+}
+
+QSlider#editSeekBar::groove:horizontal,
+QSlider#programSeekBar::groove:horizontal {
+  height: 6px;
+  background: #3A3C44;
+  border: none;
+  border-radius: 3px;
+}
+
+QSlider#editSeekBar::sub-page:horizontal {
+  background: #81C995;
+  border-radius: 3px;
+}
+
+QSlider#programSeekBar::sub-page:horizontal {
+  background: #F28B82;
+  border-radius: 3px;
+}
+
+QSlider#editSeekBar::add-page:horizontal,
+QSlider#programSeekBar::add-page:horizontal {
+  background: #3A3C44;
+  border-radius: 3px;
+}
+
+QSlider#editSeekBar::handle:horizontal,
+QSlider#programSeekBar::handle:horizontal {
+  width: 16px;
+  margin: -5px 0;
+  background: #E3E2E8;
+  border: 2px solid #1B1D23;
+  border-radius: 8px;
+}
+
+QSlider#editSeekBar::handle:horizontal {
+  background: #81C995;
+}
+
+QSlider#programSeekBar::handle:horizontal {
+  background: #F28B82;
+}
+
+QSlider#editSeekBar::handle:horizontal:hover,
+QSlider#programSeekBar::handle:horizontal:hover {
+  border-color: #A8C7FA;
+}
+
+QSlider#editSeekBar:focus,
+QSlider#programSeekBar:focus {
+  border: 1px solid #A8C7FA;
+  border-radius: 5px;
+}
+
+QLabel#onAirFileLabel,
+QLabel#editFileLabel {
+  color: #E3E2E8;
+  background: #17191E;
+  border: 1px solid #45474F;
+  border-radius: 5px;
+  padding: 4px 8px;
+}
+
+QLabel#onAirFileLabel[fault="true"] {
+  color: #FFDAD6;
+  background: #4A1111;
+  border-color: #F2B8B5;
+}
+
+QLabel#operatorTimerRemaining,
+QLabel#programRemainingTime {
+  color: #FFFFFF;
+  background: transparent;
+  font-family: "Consolas";
+  font-size: 22pt;
+  font-weight: bold;
+}
+
+QLabel#programRemainingTime[endingSoon="true"] {
+  color: #FF4A40;
+}
+
+QLabel#programEndModeValue {
+  color: #E3E2E8;
+  background: #17191E;
+  border: 1px solid #45474F;
+  border-radius: 5px;
+  padding: 4px 8px;
+  font-weight: 600;
+}
+
+QWidget#programEffectsActionPanel,
+QWidget#programFtbActionPanel,
+QWidget#programTransportActionPanel,
+QWidget#playlistActionPanel {
+  background: #17191E;
+  border: 1px solid #3A3C44;
+  border-radius: 8px;
+}
+
+QPushButton[playbackRateButton="true"],
+QPushButton[programFadeButton="true"] {
+  padding: 1px 4px;
+}
+
+QPushButton#programItemFadeInButton,
+QPushButton#programItemFadeOutButton,
+QPushButton#programMasterFadeInButton,
+QPushButton#programMasterFadeOutButton,
+QPushButton#programItemEqButton,
+QPushButton#programMasterEqButton,
+QPushButton#editNominalEqButton {
+  padding: 1px 4px;
+}
+
+QPushButton#offAirButton[active="true"],
+QPushButton#ftbButton[active="true"],
+QPushButton#programPauseButton[active="true"],
+QPushButton#programPlayButton[active="true"],
+QPushButton#dskPlayButton[active="true"],
+QPushButton#dskPauseButton[active="true"],
+QPushButton[bgmTransportButton="true"][active="true"],
+QPushButton[operatorTimerButton="true"][active="true"],
+QPushButton[programFadeButton="true"][active="true"],
+QPushButton#programItemEqButton[eqAdjusted="true"],
+QPushButton#editNominalEqButton[eqAdjusted="true"],
+QPushButton#programMasterEqButton[eqAdjusted="true"],
+QPushButton#dskOnButton:checked {
+  color: #FFFFFF;
+  background: #137333;
+  border-color: #81C995;
+}
+
+QPushButton#offAirButton:disabled,
+QPushButton#ftbButton:disabled,
+QPushButton#dskOnButton:disabled,
+QPushButton#dskPlayButton:disabled,
+QPushButton#dskPauseButton:disabled,
+QPushButton#programPauseButton:disabled,
+QPushButton#programPlayButton:disabled {
+  color: #73757E;
+  background: #202127;
+  border-color: #34363D;
+}
+
+QWidget#transparentOverlay {
+  background: transparent;
+  border: none;
+}
+
+QListWidget#playlistList {
+  color: #E3E2E8;
+  background: #111318;
+  alternate-background-color: #17191E;
+  border: 1px solid #45474F;
+  border-radius: 7px;
+  padding: 4px;
+  outline: 0;
+}
+
+QListWidget#playlistList::item {
+  color: #E3E2E8;
+  background: #24262D;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  min-height: 88px;
+  padding: 4px 6px;
+  margin: 2px;
+}
+
+QListWidget#playlistList::item:hover {
+  background: #2F3038;
+  border-color: #5F636D;
+}
+
+QListWidget#playlistList::item:selected {
+  color: #FFFFFF;
+  background: #24262D;
+  border: 2px solid #A8C7FA;
+}
+
+QLabel#playlistItemCount {
+  color: #A8C7FA;
+  background: #24262D;
+  border: 1px solid #45474F;
+  border-radius: 10px;
+  padding: 1px 7px;
+  font-weight: bold;
+}
+
+QLabel#playlistNameLabel {
+  color: #C4C6D0;
+  background: transparent;
+  font-weight: bold;
+}
+
+QLineEdit#playlistNameEdit[empty="true"] {
+  color: #8E9099;
+}
+
+QTabWidget#playlistTabs::pane {
+  background: #17191E;
+  border: 1px solid #45474F;
+  border-radius: 6px;
+  top: -1px;
+}
+
+QTabBar#playlistTabs {
+  font-size: 9pt;
+}
+
+QTabBar#playlistTabs QToolButton,
+QTabBar#playlistTabs::tab {
+  color: #C4C6D0;
+  background: #24262D;
+  border: 1px solid #45474F;
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin-right: 3px;
+}
+
+QTabBar#playlistTabs QToolButton:hover,
+QTabBar#playlistTabs::tab:hover {
+  color: #FFFFFF;
+  background: #2F3038;
+  border-color: #8E9099;
+}
+
+QTabBar#playlistTabs::tab:selected {
+  color: #FFFFFF;
+  background: #0B57D0;
+  border-color: #A8C7FA;
+}
+
+QToolButton[playlistViewModeButton="true"] {
+  color: #C4C6D0;
+  background: #24262D;
+  border: 1px solid #45474F;
+  border-radius: 5px;
+  padding: 0;
+}
+
+QToolButton[playlistViewModeButton="true"]:hover {
+  color: #FFFFFF;
+  background: #2F3038;
+  border-color: #8E9099;
+}
+
+QToolButton[playlistViewModeButton="true"]:checked {
+  color: #FFFFFF;
+  background: #0B57D0;
+  border-color: #A8C7FA;
+}
+
+QToolButton[playlistViewModeButton="true"]:focus {
+  border: 2px solid #A8C7FA;
+}
+
+QWidget#userInfoBar {
+  color: #C4C6D0;
+  background: #17191E;
+  border: 1px solid #3A3C44;
+  border-radius: 6px;
+}
+
+QWidget#playlistClockRow {
+  color: #E3E2E8;
+  background: #17191E;
+  border: 1px solid #3A3C44;
+  border-radius: 5px;
+}
+
+QLabel#playlistClockTitle {
+  color: #C4C6D0;
+  background: transparent;
+  border: none;
+  font-size: 9pt;
+  font-weight: 500;
+}
+
+QLabel#playlistCurrentTime {
+  color: #8AB4F8;
+  background: transparent;
+  border: none;
+}
+
+QLabel#userInfoSeverityLabel,
+QLabel#userInfoSourceLabel,
+QLabel#userInfoMessageLabel {
+  color: #C4C6D0;
+  background: transparent;
+}
+
+QWidget#userInfoBar[severity="info"] QLabel#userInfoSeverityLabel {
+  color: #A8C7FA;
+}
+
+QWidget#userInfoBar[severity="warning"] QLabel#userInfoSeverityLabel {
+  color: #FDD663;
+}
+
+QWidget#userInfoBar[severity="error"] QLabel#userInfoSeverityLabel {
+  color: #F2B8B5;
+}
+
+QWidget#userInfoBar[severity="success"] QLabel#userInfoSeverityLabel {
+  color: #81C995;
+}
+
+QPushButton#playlistMoveUpButton,
+QPushButton#playlistMoveDownButton,
+QPushButton#playlistDeleteButton {
+  color: #C4C6D0;
+  background: #24262D;
+  border-color: #45474F;
+  padding: 0;
+  margin: 0;
+  font-size: 8px;
+}
+
+QPushButton#playlistDeleteButton:hover {
+  color: #FFDAD6;
+  background: #4A1111;
+  border-color: #F2B8B5;
+}
+
+QPushButton#playlistEditButton,
+QPushButton#playlistAddButton {
+  color: #D3E3FD;
+  background: #24304A;
+  border-color: #7C9DD6;
+}
+
+QPushButton#playlistEditButton:hover,
+QPushButton#playlistAddButton:hover {
+  color: #FFFFFF;
+  background: #30466F;
+  border-color: #A8C7FA;
+}
+
+QPushButton#playlistOnAirButton {
+  color: #E3E2E8;
+  background: #2F3038;
+  border-color: #5F636D;
+}
+
+QPushButton#playlistOnAirButton:hover {
+  color: #FFFFFF;
+  background: #3A3C44;
+  border-color: #8E9099;
+}
+
+QPushButton#playlistOnAirButton[onAirActive="true"] {
+  color: #FFFFFF;
+  background: #C5221F;
+  border-color: #FFDAD6;
+}
+
+QPushButton#programMasterMute {
+  color: #E3E2E8;
+  background: #2F3038;
+  border-color: #5F636D;
+  padding: 0;
+  font-size: 7px;
+  font-weight: bold;
+}
+
+QPushButton#programMasterMute:hover {
+  color: #FFFFFF;
+  background: #3A3C44;
+  border-color: #8E9099;
+}
+
+QPushButton#programMasterMute[effectivelyMuted="true"],
+QPushButton#programMasterMute:checked {
+  color: #FFFFFF;
+  background: #C5221F;
+  border-color: #FFDAD6;
+}
+
+QPushButton#programMasterMute:disabled,
+QPushButton#programMasterMute[effectivelyMuted="true"]:disabled,
+QPushButton#programMasterMute:checked:disabled {
+  color: #73757E;
+  background: #202127;
+  border-color: #34363D;
+}
+
+QLabel#editInputSignal,
+QLabel#programItemInputSignal {
+  color: #73757E;
+  background: #202127;
+  border: 1px solid #45474F;
+  border-radius: 4px;
+  padding: 0;
+  font-size: 7px;
+  font-weight: bold;
+}
+
+QLabel#editInputSignal[signalActive="true"],
+QLabel#programItemInputSignal[signalActive="true"] {
+  color: #FFFFFF;
+  background: #137333;
+  border-color: #81C995;
+}
+
+QLabel#editInputSignal[signalClipped="true"],
+QLabel#programItemInputSignal[signalClipped="true"] {
+  color: #FFFFFF;
+  background: #C5221F;
+  border-color: #F2B8B5;
+}
+
+QFrame#faderSeparator {
+  color: #45474F;
+  background: #45474F;
+  border: none;
+}
+
+QLabel#itemFaderLabel,
+QLabel#masterFaderLabel {
+  color: #C4C6D0;
+  background: transparent;
+  font-size: 8pt;
+  font-weight: bold;
+}
+
+QScrollBar:vertical {
+  background: #17191E;
+  border: none;
+  width: 10px;
+  margin: 2px;
+}
+
+QScrollBar::handle:vertical {
+  background: #5F636D;
+  border-radius: 4px;
+  min-height: 24px;
+}
+
+QScrollBar::handle:vertical:hover {
+  background: #8E9099;
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical,
+QScrollBar::add-page:vertical,
+QScrollBar::sub-page:vertical {
+  background: transparent;
+  border: none;
+  height: 0;
+}
+
+QToolTip {
+  color: #E3E2E8;
+  background: #2F3038;
+  border: 1px solid #5F636D;
+  border-radius: 4px;
+  padding: 4px 7px;
+}
+
+/* EDIT PFL appearance follows the confirmed output state. */
+QPushButton#editPflButton {
+    min-width: 42px;
+    min-height: 20px;
+    padding: 0px;
+    margin: 0px;
+    border: 1px solid #45474F;
+    border-radius: 4px;
+    background: #24262D;
+    color: #C4C6D0;
+    font-size: 10px;
+    font-weight: bold;
+}
+QPushButton#editPflButton:hover { background: #2F3038; }
+QPushButton#editPflButton:pressed { background: #17191E; }
+QPushButton#editPflButton[pflActive="true"] {
+    background: #137333;
+    border-color: #81C995;
+    color: #ffffff;
+}
+QPushButton#editPflButton:disabled {
+    background: #24262D;
+    color: #73757E;
+    border-color: #3A3C44;
+}
+QPushButton#editPflButton:focus { border: 2px solid #A8C7FA; }
+
+/* Compact player background selector in the existing PROGRAM header. */
+QToolButton#programBackgroundColorButton {
+    padding: 1px 12px 1px 2px;
+    border: 1px solid #586269;
+    border-radius: 3px;
+    background: #262a2d;
+}
+QToolButton#programBackgroundColorButton:hover,
+QToolButton#programBackgroundColorButton:pressed {
+    background: #343b40;
+}
+QToolButton#programBackgroundColorButton:focus {
+    border: 1px solid #8ab4f8;
+}
+QToolButton#programBackgroundColorButton::menu-indicator {
+    subcontrol-origin: padding;
+    subcontrol-position: right center;
+    right: 2px;
+}
+
+QMenu#programBackgroundColorMenu {
+    background: #262a2d;
+    color: #eeeeee;
+    border: 1px solid #586269;
+    padding: 4px;
+}
+QMenu#programBackgroundColorMenu::item {
+    padding: 5px 20px 5px 28px;
+}
+QMenu#programBackgroundColorMenu::item:selected {
+    background: #343b40;
+}
+QMenu#programBackgroundColorMenu::separator {
+    height: 1px;
+    background: #586269;
+    margin: 4px;
+}
+
+QMenu#programBackgroundColorMenu::item:disabled {
+    color: #b8c1c7;
+}
+
+/* Keep the DELAY placeholder legible in the compact duration-sized field. */
+QSpinBox[audioDelayControl="true"] {
+    font-size: 9px;
+    padding-left: 1px;
+    padding-right: 1px;
+}
+
+QLabel#operatorTimerRemaining {
+    background: transparent;
+    border-color: transparent;
+    border-width: 2px;
+    border-style: solid;
+    padding: 0px 6px;
+}
+
+QPushButton[stillCaptureButton="true"] {
+    padding: 1px 4px;
+}
+
+
+/* The update window uses this skin's existing surface/control roles. */
+QWidget#updateWindow {
+    color: #E3E2E8;
+    background: #111318;
+}
+QWidget#updateWindow QLabel {
+    color: #E3E2E8;
+    background: transparent;
+}
+QWidget#updateWindow QLabel#updateHeading {
+    font-size: 16px;
+    font-weight: bold;
+}
+QWidget#updateWindow QPlainTextEdit {
+    color: #E3E2E8;
+    background: #24262D;
+    border: 1px solid #45474F;
+    border-radius: 2px;
+}
+
+/* The modeless macro editor uses this skin's existing surface/control roles. */
+QWidget#macroEditorWindow {
+    color: #E3E2E8;
+    background: #111318;
+}
+QWidget#macroEditorWindow QLabel,
+QWidget#macroEditorWindow QCheckBox,
+QWidget#macroEditorWindow QGroupBox {
+    color: #E3E2E8;
+}
+QWidget#macroEditorWindow QLabel {
+    background: transparent;
+}
+QWidget#macroEditorWindow QGroupBox {
+    background: #1B1D23;
+    border: 1px solid #45474F;
+    border-radius: 4px;
+    margin-top: 12px;
+    padding-top: 8px;
+}
+QWidget#macroEditorWindow QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    padding: 0 6px;
+}
+QWidget#macroEditorWindow QScrollArea,
+QWidget#macroEditorWindow QWidget#macroStepDetailsBody {
+    background: #1B1D23;
+    border: none;
+}
+QWidget#macroEditorWindow QLineEdit,
+QWidget#macroEditorWindow QComboBox,
+QWidget#macroEditorWindow QAbstractSpinBox,
+QWidget#macroEditorWindow QTableView,
+QWidget#macroEditorWindow QListWidget,
+QWidget#macroEditorWindow QPlainTextEdit {
+    color: #E3E2E8;
+    background: #24262D;
+    border: 1px solid #45474F;
+    border-radius: 2px;
+    selection-color: #E3E2E8;
+    selection-background-color: #0B57D0;
+}
+QWidget#macroEditorWindow QLineEdit,
+QWidget#macroEditorWindow QComboBox,
+QWidget#macroEditorWindow QAbstractSpinBox {
+    min-height: 22px;
+    padding: 2px 4px;
+}
+QWidget#macroEditorWindow QAbstractSpinBox QLineEdit {
+    border: none;
+    min-height: 0;
+    padding: 0;
+}
+QWidget#macroEditorWindow QComboBox QAbstractItemView {
+    color: #E3E2E8;
+    background: #24262D;
+    selection-background-color: #0B57D0;
+}
+QWidget#macroEditorWindow QHeaderView::section {
+    color: #E3E2E8;
+    background: #1B1D23;
+    border: none;
+    border-right: 1px solid #45474F;
+    border-bottom: 1px solid #45474F;
+    padding: 5px;
+}
+QWidget#macroEditorWindow QLineEdit:focus,
+QWidget#macroEditorWindow QComboBox:focus,
+QWidget#macroEditorWindow QAbstractSpinBox:focus,
+QWidget#macroEditorWindow QTableView:focus,
+QWidget#macroEditorWindow QListWidget:focus {
+    border: 1px solid #A8C7FA;
+}
+QWidget#macroEditorWindow QLineEdit:disabled,
+QWidget#macroEditorWindow QComboBox:disabled,
+QWidget#macroEditorWindow QAbstractSpinBox:disabled,
+QWidget#macroEditorWindow QCheckBox:disabled {
+    color: #73757E;
+}
+QWidget#macroEditorWindow QLabel#macroClockStatus,
+QWidget#macroEditorWindow QLabel#macroNextSchedule {
+    color: #C4C6D0;
+}

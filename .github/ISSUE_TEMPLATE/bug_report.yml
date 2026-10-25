@@ -17,8 +17,8 @@ body:
   - type: input
     id: environment
     attributes:
-      label: Windows と関連機器
-      description: Windows 11 の版、映像・音声機器、関連アドオンを記入してください。
+      label: OS と関連機器
+      description: Windows 11 または macOS の版、CPU、映像・音声機器、関連アドオンを記入してください。ソースから構築した場合はコミットも記入してください。
     validations:
       required: true
   - type: textarea

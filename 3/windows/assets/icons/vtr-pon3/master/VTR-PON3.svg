@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#435168"/>
+      <stop offset="0.45" stop-color="#243249"/>
+      <stop offset="1" stop-color="#121b29"/>
+    </linearGradient>
+    <linearGradient id="orange" x1="0" y1="0" x2="1" y2="0.25">
+      <stop offset="0" stop-color="#ff8612"/>
+      <stop offset="0.58" stop-color="#ffad16"/>
+      <stop offset="1" stop-color="#ffd329"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="180%">
+      <feDropShadow dx="0" dy="22" stdDeviation="18" flood-color="#000" flood-opacity=".34"/>
+    </filter>
+  </defs>
+
+  <rect x="40" y="40" width="944" height="944" rx="186" fill="url(#bg)"/>
+
+  <!-- stage -->
+  <path fill="url(#orange)"
+        d="M185 665
+           Q175 665 169 678
+           L91 846
+           Q84 861 102 861
+           H922
+           Q940 861 933 846
+           L855 678
+           Q849 665 839 665
+           Z"/>
+
+  <!-- play -->
+  <path fill="url(#orange)" filter="url(#shadow)"
+        d="M305 198
+           Q305 170 329 156
+           Q351 144 374 158
+           L746 390
+           Q772 406 772 436
+           Q772 466 746 482
+           L374 714
+           Q351 728 329 716
+           Q305 702 305 674
+           Z"/>
+</svg>

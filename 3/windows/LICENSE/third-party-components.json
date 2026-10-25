@@ -1,0 +1,1463 @@
+{
+  "schemaVersion": 1,
+  "auditedOn": "2026-09-26",
+  "payloadVersion": "3.0.0-beta.1",
+  "components": {
+    "qtbase": {
+      "version": "6.8.3",
+      "license": "LGPL-3.0-only",
+      "sources": [
+        "qtbase"
+      ],
+      "notices": [
+        "third-party/qt/ATTRIBUTIONS.md",
+        "third-party/qt/BSD-3-Clause.txt",
+        "third-party/qt/GPL-3.0-only.txt",
+        "third-party/qt/LGPL-3.0-only.txt",
+        "third-party/qt/aglfn/AGLFN_LICENSE.txt",
+        "third-party/qt/aglfn/attribution.json",
+        "third-party/qt/blake2/COPYING",
+        "third-party/qt/blake2/attribution.json",
+        "third-party/qt/d3d12memoryallocator/LICENSE.txt",
+        "third-party/qt/d3d12memoryallocator/attribution.json",
+        "third-party/qt/doubleconversion/LICENSE",
+        "third-party/qt/doubleconversion/attribution.json",
+        "third-party/qt/easing/LICENSE",
+        "third-party/qt/easing/attribution.json",
+        "third-party/qt/freetype-bdf/BDF-LICENSE.txt",
+        "third-party/qt/freetype-bdf/attribution.json",
+        "third-party/qt/freetype-pcf/PCF-LICENSE.txt",
+        "third-party/qt/freetype-pcf/attribution.json",
+        "third-party/qt/freetype-zlib/ZLIB-LICENSE.txt",
+        "third-party/qt/freetype-zlib/attribution.json",
+        "third-party/qt/freetype/LICENSE.txt",
+        "third-party/qt/freetype/attribution.json",
+        "third-party/qt/grayraster/LICENSE.txt",
+        "third-party/qt/grayraster/attribution.json",
+        "third-party/qt/harfbuzz-ng/COPYING",
+        "third-party/qt/harfbuzz-ng/attribution.json",
+        "third-party/qt/iaccessible2/LICENSE",
+        "third-party/qt/iaccessible2/attribution.json",
+        "third-party/qt/icc-srgb-color-profile/LICENSE.txt",
+        "third-party/qt/icc-srgb-color-profile/attribution.json",
+        "third-party/qt/libjpeg/BSD-3-Clause.txt",
+        "third-party/qt/libjpeg/COPYRIGHT.txt",
+        "third-party/qt/libjpeg/IJG.txt",
+        "third-party/qt/libjpeg/LICENSE",
+        "third-party/qt/libjpeg/attribution.json",
+        "third-party/qt/libjpeg/ijg-license.txt",
+        "third-party/qt/libpng/LICENSE",
+        "third-party/qt/libpng/attribution.json",
+        "third-party/qt/libpsl/LICENSE.chromium",
+        "third-party/qt/libpsl/attribution.json",
+        "third-party/qt/md4/CC0-1.0.txt",
+        "third-party/qt/md4/attribution.json",
+        "third-party/qt/md4c/LICENSE.md",
+        "third-party/qt/md4c/attribution.json",
+        "third-party/qt/md5/CC0-1.0.txt",
+        "third-party/qt/md5/attribution.json",
+        "third-party/qt/opengl-es2-headers/KHRONOS_LICENSE.txt",
+        "third-party/qt/opengl-es2-headers/attribution.json",
+        "third-party/qt/opengl-headers/KHRONOS_LICENSE.txt",
+        "third-party/qt/opengl-headers/attribution.json",
+        "third-party/qt/pcre2-sljit/LICENCE-SLJIT",
+        "third-party/qt/pcre2-sljit/attribution.json",
+        "third-party/qt/pcre2/LICENCE.md",
+        "third-party/qt/pcre2/attribution.json",
+        "third-party/qt/psl-data/PSL-LICENSE.txt",
+        "third-party/qt/psl-data/attribution.json",
+        "third-party/qt/rfc6234/LICENSE",
+        "third-party/qt/rfc6234/attribution.json",
+        "third-party/qt/rhi-miniengine-d3d12-mipmap/MiniEngine_LICENSE.txt",
+        "third-party/qt/rhi-miniengine-d3d12-mipmap/attribution.json",
+        "third-party/qt/sha1/LicenseRef-SHA1-Public-Domain.txt",
+        "third-party/qt/sha1/attribution.json",
+        "third-party/qt/sha3_endian/BRG_ENDIAN_LICENSE",
+        "third-party/qt/sha3_endian/attribution.json",
+        "third-party/qt/sha3_keccak/CC0_LICENSE",
+        "third-party/qt/sha3_keccak/attribution.json",
+        "third-party/qt/siphash/CC0-1.0.txt",
+        "third-party/qt/siphash/attribution.json",
+        "third-party/qt/smooth-scaling-algorithm/QIMAGETRANSFORM_LICENSE.txt",
+        "third-party/qt/smooth-scaling-algorithm/attribution.json",
+        "third-party/qt/tika-mimetypes/Apache-2.0.txt",
+        "third-party/qt/tika-mimetypes/attribution.json",
+        "third-party/qt/tinycbor/LICENSE",
+        "third-party/qt/tinycbor/attribution.json",
+        "third-party/qt/unicode-character-database/Unicode-3.0.txt",
+        "third-party/qt/unicode-character-database/attribution.json",
+        "third-party/qt/unicode-cldr/Unicode-3.0.txt",
+        "third-party/qt/unicode-cldr/attribution.json",
+        "third-party/qt/vulkan-xml-spec/LICENSE.txt",
+        "third-party/qt/vulkan-xml-spec/attribution.json",
+        "third-party/qt/vulkanmemoryallocator/LICENSE.txt",
+        "third-party/qt/vulkanmemoryallocator/attribution.json",
+        "third-party/qt/webgradients/WEBGRADIENTS_LICENSE.txt",
+        "third-party/qt/webgradients/attribution.json",
+        "third-party/qt/wintab/LicenseRef-Lcs-Telegraphics.txt",
+        "third-party/qt/wintab/attribution.json",
+        "third-party/qt/xserverhelper/XCONSORTIUM_LICENSE.txt",
+        "third-party/qt/xserverhelper/attribution.json",
+        "third-party/qt/xsvg/XSVG_LICENSE.txt",
+        "third-party/qt/xsvg/attribution.json",
+        "third-party/qt/zlib/LICENSE",
+        "third-party/qt/zlib/attribution.json"
+      ],
+      "notes": "Qt EntryPoint is BSD-3-Clause. Bundled code has the separate notices in qt/ATTRIBUTIONS.md."
+    },
+    "qtsvg": {
+      "version": "6.8.3",
+      "license": "LGPL-3.0-only",
+      "sources": [
+        "qtsvg"
+      ],
+      "notices": [
+        "third-party/qt/ATTRIBUTIONS.md",
+        "third-party/qt/BSD-3-Clause.txt",
+        "third-party/qt/GPL-3.0-only.txt",
+        "third-party/qt/LGPL-3.0-only.txt",
+        "third-party/qt/aglfn/AGLFN_LICENSE.txt",
+        "third-party/qt/aglfn/attribution.json",
+        "third-party/qt/blake2/COPYING",
+        "third-party/qt/blake2/attribution.json",
+        "third-party/qt/d3d12memoryallocator/LICENSE.txt",
+        "third-party/qt/d3d12memoryallocator/attribution.json",
+        "third-party/qt/doubleconversion/LICENSE",
+        "third-party/qt/doubleconversion/attribution.json",
+        "third-party/qt/easing/LICENSE",
+        "third-party/qt/easing/attribution.json",
+        "third-party/qt/freetype-bdf/BDF-LICENSE.txt",
+        "third-party/qt/freetype-bdf/attribution.json",
+        "third-party/qt/freetype-pcf/PCF-LICENSE.txt",
+        "third-party/qt/freetype-pcf/attribution.json",
+        "third-party/qt/freetype-zlib/ZLIB-LICENSE.txt",
+        "third-party/qt/freetype-zlib/attribution.json",
+        "third-party/qt/freetype/LICENSE.txt",
+        "third-party/qt/freetype/attribution.json",
+        "third-party/qt/grayraster/LICENSE.txt",
+        "third-party/qt/grayraster/attribution.json",
+        "third-party/qt/harfbuzz-ng/COPYING",
+        "third-party/qt/harfbuzz-ng/attribution.json",
+        "third-party/qt/iaccessible2/LICENSE",
+        "third-party/qt/iaccessible2/attribution.json",
+        "third-party/qt/icc-srgb-color-profile/LICENSE.txt",
+        "third-party/qt/icc-srgb-color-profile/attribution.json",
+        "third-party/qt/libjpeg/BSD-3-Clause.txt",
+        "third-party/qt/libjpeg/COPYRIGHT.txt",
+        "third-party/qt/libjpeg/IJG.txt",
+        "third-party/qt/libjpeg/LICENSE",
+        "third-party/qt/libjpeg/attribution.json",
+        "third-party/qt/libjpeg/ijg-license.txt",
+        "third-party/qt/libpng/LICENSE",
+        "third-party/qt/libpng/attribution.json",
+        "third-party/qt/libpsl/LICENSE.chromium",
+        "third-party/qt/libpsl/attribution.json",
+        "third-party/qt/md4/CC0-1.0.txt",
+        "third-party/qt/md4/attribution.json",
+        "third-party/qt/md4c/LICENSE.md",
+        "third-party/qt/md4c/attribution.json",
+        "third-party/qt/md5/CC0-1.0.txt",
+        "third-party/qt/md5/attribution.json",
+        "third-party/qt/opengl-es2-headers/KHRONOS_LICENSE.txt",
+        "third-party/qt/opengl-es2-headers/attribution.json",
+        "third-party/qt/opengl-headers/KHRONOS_LICENSE.txt",
+        "third-party/qt/opengl-headers/attribution.json",
+        "third-party/qt/pcre2-sljit/LICENCE-SLJIT",
+        "third-party/qt/pcre2-sljit/attribution.json",
+        "third-party/qt/pcre2/LICENCE.md",
+        "third-party/qt/pcre2/attribution.json",
+        "third-party/qt/psl-data/PSL-LICENSE.txt",
+        "third-party/qt/psl-data/attribution.json",
+        "third-party/qt/rfc6234/LICENSE",
+        "third-party/qt/rfc6234/attribution.json",
+        "third-party/qt/rhi-miniengine-d3d12-mipmap/MiniEngine_LICENSE.txt",
+        "third-party/qt/rhi-miniengine-d3d12-mipmap/attribution.json",
+        "third-party/qt/sha1/LicenseRef-SHA1-Public-Domain.txt",
+        "third-party/qt/sha1/attribution.json",
+        "third-party/qt/sha3_endian/BRG_ENDIAN_LICENSE",
+        "third-party/qt/sha3_endian/attribution.json",
+        "third-party/qt/sha3_keccak/CC0_LICENSE",
+        "third-party/qt/sha3_keccak/attribution.json",
+        "third-party/qt/siphash/CC0-1.0.txt",
+        "third-party/qt/siphash/attribution.json",
+        "third-party/qt/smooth-scaling-algorithm/QIMAGETRANSFORM_LICENSE.txt",
+        "third-party/qt/smooth-scaling-algorithm/attribution.json",
+        "third-party/qt/tika-mimetypes/Apache-2.0.txt",
+        "third-party/qt/tika-mimetypes/attribution.json",
+        "third-party/qt/tinycbor/LICENSE",
+        "third-party/qt/tinycbor/attribution.json",
+        "third-party/qt/unicode-character-database/Unicode-3.0.txt",
+        "third-party/qt/unicode-character-database/attribution.json",
+        "third-party/qt/unicode-cldr/Unicode-3.0.txt",
+        "third-party/qt/unicode-cldr/attribution.json",
+        "third-party/qt/vulkan-xml-spec/LICENSE.txt",
+        "third-party/qt/vulkan-xml-spec/attribution.json",
+        "third-party/qt/vulkanmemoryallocator/LICENSE.txt",
+        "third-party/qt/vulkanmemoryallocator/attribution.json",
+        "third-party/qt/webgradients/WEBGRADIENTS_LICENSE.txt",
+        "third-party/qt/webgradients/attribution.json",
+        "third-party/qt/wintab/LicenseRef-Lcs-Telegraphics.txt",
+        "third-party/qt/wintab/attribution.json",
+        "third-party/qt/xserverhelper/XCONSORTIUM_LICENSE.txt",
+        "third-party/qt/xserverhelper/attribution.json",
+        "third-party/qt/xsvg/XSVG_LICENSE.txt",
+        "third-party/qt/xsvg/attribution.json",
+        "third-party/qt/zlib/LICENSE",
+        "third-party/qt/zlib/attribution.json"
+      ]
+    },
+    "qtwebengine": {
+      "version": "6.8.3",
+      "license": "LGPL-3.0-only",
+      "sources": [
+        "qtwebengine"
+      ],
+      "notices": [
+        "third-party/qt/ATTRIBUTIONS.md",
+        "third-party/qt/BSD-3-Clause.txt",
+        "third-party/qt/GPL-3.0-only.txt",
+        "third-party/qt/LGPL-3.0-only.txt",
+        "third-party/qt/aglfn/AGLFN_LICENSE.txt",
+        "third-party/qt/aglfn/attribution.json",
+        "third-party/qt/blake2/COPYING",
+        "third-party/qt/blake2/attribution.json",
+        "third-party/qt/d3d12memoryallocator/LICENSE.txt",
+        "third-party/qt/d3d12memoryallocator/attribution.json",
+        "third-party/qt/doubleconversion/LICENSE",
+        "third-party/qt/doubleconversion/attribution.json",
+        "third-party/qt/easing/LICENSE",
+        "third-party/qt/easing/attribution.json",
+        "third-party/qt/freetype-bdf/BDF-LICENSE.txt",
+        "third-party/qt/freetype-bdf/attribution.json",
+        "third-party/qt/freetype-pcf/PCF-LICENSE.txt",
+        "third-party/qt/freetype-pcf/attribution.json",
+        "third-party/qt/freetype-zlib/ZLIB-LICENSE.txt",
+        "third-party/qt/freetype-zlib/attribution.json",
+        "third-party/qt/freetype/LICENSE.txt",
+        "third-party/qt/freetype/attribution.json",
+        "third-party/qt/grayraster/LICENSE.txt",
+        "third-party/qt/grayraster/attribution.json",
+        "third-party/qt/harfbuzz-ng/COPYING",
+        "third-party/qt/harfbuzz-ng/attribution.json",
+        "third-party/qt/iaccessible2/LICENSE",
+        "third-party/qt/iaccessible2/attribution.json",
+        "third-party/qt/icc-srgb-color-profile/LICENSE.txt",
+        "third-party/qt/icc-srgb-color-profile/attribution.json",
+        "third-party/qt/libjpeg/BSD-3-Clause.txt",
+        "third-party/qt/libjpeg/COPYRIGHT.txt",
+        "third-party/qt/libjpeg/IJG.txt",
+        "third-party/qt/libjpeg/LICENSE",
+        "third-party/qt/libjpeg/attribution.json",
+        "third-party/qt/libjpeg/ijg-license.txt",
+        "third-party/qt/libpng/LICENSE",
+        "third-party/qt/libpng/attribution.json",
+        "third-party/qt/libpsl/LICENSE.chromium",
+        "third-party/qt/libpsl/attribution.json",
+        "third-party/qt/md4/CC0-1.0.txt",
+        "third-party/qt/md4/attribution.json",
+        "third-party/qt/md4c/LICENSE.md",
+        "third-party/qt/md4c/attribution.json",
+        "third-party/qt/md5/CC0-1.0.txt",
+        "third-party/qt/md5/attribution.json",
+        "third-party/qt/opengl-es2-headers/KHRONOS_LICENSE.txt",
+        "third-party/qt/opengl-es2-headers/attribution.json",
+        "third-party/qt/opengl-headers/KHRONOS_LICENSE.txt",
+        "third-party/qt/opengl-headers/attribution.json",
+        "third-party/qt/pcre2-sljit/LICENCE-SLJIT",
+        "third-party/qt/pcre2-sljit/attribution.json",
+        "third-party/qt/pcre2/LICENCE.md",
+        "third-party/qt/pcre2/attribution.json",
+        "third-party/qt/psl-data/PSL-LICENSE.txt",
+        "third-party/qt/psl-data/attribution.json",
+        "third-party/qt/rfc6234/LICENSE",
+        "third-party/qt/rfc6234/attribution.json",
+        "third-party/qt/rhi-miniengine-d3d12-mipmap/MiniEngine_LICENSE.txt",
+        "third-party/qt/rhi-miniengine-d3d12-mipmap/attribution.json",
+        "third-party/qt/sha1/LicenseRef-SHA1-Public-Domain.txt",
+        "third-party/qt/sha1/attribution.json",
+        "third-party/qt/sha3_endian/BRG_ENDIAN_LICENSE",
+        "third-party/qt/sha3_endian/attribution.json",
+        "third-party/qt/sha3_keccak/CC0_LICENSE",
+        "third-party/qt/sha3_keccak/attribution.json",
+        "third-party/qt/siphash/CC0-1.0.txt",
+        "third-party/qt/siphash/attribution.json",
+        "third-party/qt/smooth-scaling-algorithm/QIMAGETRANSFORM_LICENSE.txt",
+        "third-party/qt/smooth-scaling-algorithm/attribution.json",
+        "third-party/qt/tika-mimetypes/Apache-2.0.txt",
+        "third-party/qt/tika-mimetypes/attribution.json",
+        "third-party/qt/tinycbor/LICENSE",
+        "third-party/qt/tinycbor/attribution.json",
+        "third-party/qt/unicode-character-database/Unicode-3.0.txt",
+        "third-party/qt/unicode-character-database/attribution.json",
+        "third-party/qt/unicode-cldr/Unicode-3.0.txt",
+        "third-party/qt/unicode-cldr/attribution.json",
+        "third-party/qt/vulkan-xml-spec/LICENSE.txt",
+        "third-party/qt/vulkan-xml-spec/attribution.json",
+        "third-party/qt/vulkanmemoryallocator/LICENSE.txt",
+        "third-party/qt/vulkanmemoryallocator/attribution.json",
+        "third-party/qt/webgradients/WEBGRADIENTS_LICENSE.txt",
+        "third-party/qt/webgradients/attribution.json",
+        "third-party/qt/wintab/LicenseRef-Lcs-Telegraphics.txt",
+        "third-party/qt/wintab/attribution.json",
+        "third-party/qt/xserverhelper/XCONSORTIUM_LICENSE.txt",
+        "third-party/qt/xserverhelper/attribution.json",
+        "third-party/qt/xsvg/XSVG_LICENSE.txt",
+        "third-party/qt/xsvg/attribution.json",
+        "third-party/qt/zlib/LICENSE",
+        "third-party/qt/zlib/attribution.json",
+        "third-party/qtpdf/README.md",
+        "third-party/qtpdf/abseil.txt",
+        "third-party/qtpdf/freetype.txt",
+        "third-party/qtpdf/harfbuzz-ng.txt",
+        "third-party/qtpdf/icu.txt",
+        "third-party/qtpdf/libjpeg-turbo.txt",
+        "third-party/qtpdf/libpng.txt",
+        "third-party/qtpdf/pdfium.txt",
+        "third-party/qtpdf/the-chromium-project.txt",
+        "third-party/qtpdf/zlib.txt"
+      ],
+      "notes": "Qt PDF only (Qt6Pdf.dll and qpdf.dll), including PDFium; no Qt WebEngine browser runtime."
+    },
+    "gstreamer": {
+      "version": "1.28.5",
+      "license": "LGPL-2.1-or-later",
+      "sources": [
+        "gstreamer",
+        "cerbero"
+      ],
+      "notices": [
+        "third-party/gstreamer-distribution/gst-plugins-bad-1.0/LGPL-2.0-or-later.txt",
+        "third-party/gstreamer-distribution/gst-plugins-bad-1.0/README-LICENSE-INFO.txt",
+        "third-party/gstreamer-distribution/gst-plugins-base-1.0/LGPL-2.0-or-later.txt",
+        "third-party/gstreamer-distribution/gst-plugins-base-1.0/README-LICENSE-INFO.txt",
+        "third-party/gstreamer-distribution/gstreamer-1.0/LGPL-2.0-or-later.txt",
+        "third-party/gstreamer-distribution/gstreamer-1.0/README-LICENSE-INFO.txt",
+        "third-party/gstreamer/COPYING",
+        "third-party/gstreamer/COPYRIGHT-NOTICES.txt"
+      ]
+    },
+    "gst-plugins-base": {
+      "version": "1.28.5",
+      "license": "LGPL-2.1-or-later",
+      "sources": [
+        "gst-plugins-base",
+        "cerbero"
+      ],
+      "notices": [
+        "third-party/gst-plugins-base/COPYING",
+        "third-party/gst-plugins-base/COPYRIGHT-NOTICES.txt",
+        "third-party/gstreamer-distribution/gst-plugins-bad-1.0/LGPL-2.0-or-later.txt",
+        "third-party/gstreamer-distribution/gst-plugins-bad-1.0/README-LICENSE-INFO.txt",
+        "third-party/gstreamer-distribution/gst-plugins-base-1.0/LGPL-2.0-or-later.txt",
+        "third-party/gstreamer-distribution/gst-plugins-base-1.0/README-LICENSE-INFO.txt",
+        "third-party/gstreamer-distribution/gstreamer-1.0/LGPL-2.0-or-later.txt",
+        "third-party/gstreamer-distribution/gstreamer-1.0/README-LICENSE-INFO.txt"
+      ]
+    },
+    "gst-plugins-good": {
+      "version": "1.28.5",
+      "license": "LGPL-2.1-or-later",
+      "sources": [
+        "gst-plugins-good",
+        "cerbero"
+      ],
+      "notices": [
+        "third-party/gst-plugins-good/COPYING",
+        "third-party/gst-plugins-good/COPYRIGHT-NOTICES.txt",
+        "third-party/gstreamer-distribution/gst-plugins-bad-1.0/LGPL-2.0-or-later.txt",
+        "third-party/gstreamer-distribution/gst-plugins-bad-1.0/README-LICENSE-INFO.txt",
+        "third-party/gstreamer-distribution/gst-plugins-base-1.0/LGPL-2.0-or-later.txt",
+        "third-party/gstreamer-distribution/gst-plugins-base-1.0/README-LICENSE-INFO.txt",
+        "third-party/gstreamer-distribution/gstreamer-1.0/LGPL-2.0-or-later.txt",
+        "third-party/gstreamer-distribution/gstreamer-1.0/README-LICENSE-INFO.txt"
+      ]
+    },
+    "gst-plugins-bad": {
+      "version": "1.28.5",
+      "license": "LGPL-2.1-or-later",
+      "sources": [
+        "gst-plugins-bad",
+        "cerbero"
+      ],
+      "notices": [
+        "third-party/gst-plugins-bad/COPYING",
+        "third-party/gst-plugins-bad/COPYRIGHT-NOTICES.txt",
+        "third-party/gst-plugins-bad/gst-libs/gst/codecparsers/dboolhuff.AUTHORS",
+        "third-party/gst-plugins-bad/gst-libs/gst/codecparsers/dboolhuff.LICENSE",
+        "third-party/gstreamer-distribution/gst-plugins-bad-1.0/LGPL-2.0-or-later.txt",
+        "third-party/gstreamer-distribution/gst-plugins-bad-1.0/README-LICENSE-INFO.txt",
+        "third-party/gstreamer-distribution/gst-plugins-base-1.0/LGPL-2.0-or-later.txt",
+        "third-party/gstreamer-distribution/gst-plugins-base-1.0/README-LICENSE-INFO.txt",
+        "third-party/gstreamer-distribution/gstreamer-1.0/LGPL-2.0-or-later.txt",
+        "third-party/gstreamer-distribution/gstreamer-1.0/README-LICENSE-INFO.txt"
+      ]
+    },
+    "gst-libav": {
+      "version": "1.28.5",
+      "license": "LGPL-2.1-or-later",
+      "sources": [
+        "gst-libav",
+        "cerbero"
+      ],
+      "notices": [
+        "third-party/gst-libav/COPYING",
+        "third-party/gst-libav/COPYRIGHT-NOTICES.txt",
+        "third-party/gstreamer-distribution/gst-plugins-bad-1.0/LGPL-2.0-or-later.txt",
+        "third-party/gstreamer-distribution/gst-plugins-bad-1.0/README-LICENSE-INFO.txt",
+        "third-party/gstreamer-distribution/gst-plugins-base-1.0/LGPL-2.0-or-later.txt",
+        "third-party/gstreamer-distribution/gst-plugins-base-1.0/README-LICENSE-INFO.txt",
+        "third-party/gstreamer-distribution/gstreamer-1.0/LGPL-2.0-or-later.txt",
+        "third-party/gstreamer-distribution/gstreamer-1.0/README-LICENSE-INFO.txt"
+      ]
+    },
+    "bzip2": {
+      "version": "1.0.8",
+      "license": "bzip2-1.0.6",
+      "sources": [
+        "bzip2",
+        "cerbero"
+      ],
+      "notices": [
+        "third-party/bzip2/LICENSE"
+      ]
+    },
+    "ffmpeg": {
+      "version": "7.1",
+      "license": "LGPL-2.1-or-later",
+      "sources": [
+        "ffmpeg",
+        "cerbero"
+      ],
+      "notices": [
+        "third-party/ffmpeg/COPYING.LGPLv2.1",
+        "third-party/ffmpeg/COPYRIGHT-NOTICES.txt",
+        "third-party/ffmpeg/LICENSE.md",
+        "third-party/ffmpeg/doc/authors.texi"
+      ],
+      "runtimeEvidence": [
+        {
+          "file": "avcodec-61.dll",
+          "license": "LGPL version 2.1 or later",
+          "configuration": "-Ddebug=true -Doptimization=2 -Dpkgconfig.relocatable=true -Db_vscrt=md -Davdevice=disabled -Dprograms=disabled -Dflac_encoder=disabled -Dprotocols=disabled -Ddevices=disabled -Dnetwork=disabled -Dhwaccels=disabled -Ddxva2=disabled -Dvdpau=disabled -Dfilters=disabled -Dpsnr_filter=enabled -Dssim_filter=enabled -Dscale_filter=enabled -Dyadif_filter=enabled -Dd3d11va=disabled -Daudiotoolbox=disabled -Dvideotoolbox=disabled -Dvaapi=disabled -Dcrystalhd=disabled -Dmediacodec=disabled -Dmediafoundation=disabled -Dnvenc=disabled -Dmmal=disabled -Domx=disabled -Domx_rpi=disabled -Dcuda=disabled -Dcuvid=disabled -Dlibmfx=disabled -Dlibnpp=disabled -Diconv=disabled -Djni=disabled -Dv4l2_m2m=disabled -Dvulkan=disabled -Dtests=disabled -Dnonfree=disabled -Dversion3=disabled -Dprefix=C:/projects/repos/cerbero.git/1.28/build/dist/msvc_x86_64 -Dlibdir=lib -Dbackend=ninja -Ddefault_library=both -Dwrap_mode=nodownload --native-file=C:/projects/repos/cerbero.git/1.28/build/sources/msvc_x86_64/ffmpeg-7.1/b/meson-native-file.txt",
+          "libraryVersion": "61.19.100"
+        },
+        {
+          "file": "avfilter-10.dll",
+          "license": "LGPL version 2.1 or later",
+          "configuration": "-Ddebug=true -Doptimization=2 -Dpkgconfig.relocatable=true -Db_vscrt=md -Davdevice=disabled -Dprograms=disabled -Dflac_encoder=disabled -Dprotocols=disabled -Ddevices=disabled -Dnetwork=disabled -Dhwaccels=disabled -Ddxva2=disabled -Dvdpau=disabled -Dfilters=disabled -Dpsnr_filter=enabled -Dssim_filter=enabled -Dscale_filter=enabled -Dyadif_filter=enabled -Dd3d11va=disabled -Daudiotoolbox=disabled -Dvideotoolbox=disabled -Dvaapi=disabled -Dcrystalhd=disabled -Dmediacodec=disabled -Dmediafoundation=disabled -Dnvenc=disabled -Dmmal=disabled -Domx=disabled -Domx_rpi=disabled -Dcuda=disabled -Dcuvid=disabled -Dlibmfx=disabled -Dlibnpp=disabled -Diconv=disabled -Djni=disabled -Dv4l2_m2m=disabled -Dvulkan=disabled -Dtests=disabled -Dnonfree=disabled -Dversion3=disabled -Dprefix=C:/projects/repos/cerbero.git/1.28/build/dist/msvc_x86_64 -Dlibdir=lib -Dbackend=ninja -Ddefault_library=both -Dwrap_mode=nodownload --native-file=C:/projects/repos/cerbero.git/1.28/build/sources/msvc_x86_64/ffmpeg-7.1/b/meson-native-file.txt",
+          "libraryVersion": "10.4.100"
+        },
+        {
+          "file": "avformat-61.dll",
+          "license": "LGPL version 2.1 or later",
+          "configuration": "-Ddebug=true -Doptimization=2 -Dpkgconfig.relocatable=true -Db_vscrt=md -Davdevice=disabled -Dprograms=disabled -Dflac_encoder=disabled -Dprotocols=disabled -Ddevices=disabled -Dnetwork=disabled -Dhwaccels=disabled -Ddxva2=disabled -Dvdpau=disabled -Dfilters=disabled -Dpsnr_filter=enabled -Dssim_filter=enabled -Dscale_filter=enabled -Dyadif_filter=enabled -Dd3d11va=disabled -Daudiotoolbox=disabled -Dvideotoolbox=disabled -Dvaapi=disabled -Dcrystalhd=disabled -Dmediacodec=disabled -Dmediafoundation=disabled -Dnvenc=disabled -Dmmal=disabled -Domx=disabled -Domx_rpi=disabled -Dcuda=disabled -Dcuvid=disabled -Dlibmfx=disabled -Dlibnpp=disabled -Diconv=disabled -Djni=disabled -Dv4l2_m2m=disabled -Dvulkan=disabled -Dtests=disabled -Dnonfree=disabled -Dversion3=disabled -Dprefix=C:/projects/repos/cerbero.git/1.28/build/dist/msvc_x86_64 -Dlibdir=lib -Dbackend=ninja -Ddefault_library=both -Dwrap_mode=nodownload --native-file=C:/projects/repos/cerbero.git/1.28/build/sources/msvc_x86_64/ffmpeg-7.1/b/meson-native-file.txt",
+          "libraryVersion": "61.7.100"
+        },
+        {
+          "file": "avutil-59.dll",
+          "license": "LGPL version 2.1 or later",
+          "configuration": "-Ddebug=true -Doptimization=2 -Dpkgconfig.relocatable=true -Db_vscrt=md -Davdevice=disabled -Dprograms=disabled -Dflac_encoder=disabled -Dprotocols=disabled -Ddevices=disabled -Dnetwork=disabled -Dhwaccels=disabled -Ddxva2=disabled -Dvdpau=disabled -Dfilters=disabled -Dpsnr_filter=enabled -Dssim_filter=enabled -Dscale_filter=enabled -Dyadif_filter=enabled -Dd3d11va=disabled -Daudiotoolbox=disabled -Dvideotoolbox=disabled -Dvaapi=disabled -Dcrystalhd=disabled -Dmediacodec=disabled -Dmediafoundation=disabled -Dnvenc=disabled -Dmmal=disabled -Domx=disabled -Domx_rpi=disabled -Dcuda=disabled -Dcuvid=disabled -Dlibmfx=disabled -Dlibnpp=disabled -Diconv=disabled -Djni=disabled -Dv4l2_m2m=disabled -Dvulkan=disabled -Dtests=disabled -Dnonfree=disabled -Dversion3=disabled -Dprefix=C:/projects/repos/cerbero.git/1.28/build/dist/msvc_x86_64 -Dlibdir=lib -Dbackend=ninja -Ddefault_library=both -Dwrap_mode=nodownload --native-file=C:/projects/repos/cerbero.git/1.28/build/sources/msvc_x86_64/ffmpeg-7.1/b/meson-native-file.txt",
+          "libraryVersion": "59.39.100"
+        },
+        {
+          "file": "swresample-5.dll",
+          "license": "LGPL version 2.1 or later",
+          "configuration": "-Ddebug=true -Doptimization=2 -Dpkgconfig.relocatable=true -Db_vscrt=md -Davdevice=disabled -Dprograms=disabled -Dflac_encoder=disabled -Dprotocols=disabled -Ddevices=disabled -Dnetwork=disabled -Dhwaccels=disabled -Ddxva2=disabled -Dvdpau=disabled -Dfilters=disabled -Dpsnr_filter=enabled -Dssim_filter=enabled -Dscale_filter=enabled -Dyadif_filter=enabled -Dd3d11va=disabled -Daudiotoolbox=disabled -Dvideotoolbox=disabled -Dvaapi=disabled -Dcrystalhd=disabled -Dmediacodec=disabled -Dmediafoundation=disabled -Dnvenc=disabled -Dmmal=disabled -Domx=disabled -Domx_rpi=disabled -Dcuda=disabled -Dcuvid=disabled -Dlibmfx=disabled -Dlibnpp=disabled -Diconv=disabled -Djni=disabled -Dv4l2_m2m=disabled -Dvulkan=disabled -Dtests=disabled -Dnonfree=disabled -Dversion3=disabled -Dprefix=C:/projects/repos/cerbero.git/1.28/build/dist/msvc_x86_64 -Dlibdir=lib -Dbackend=ninja -Ddefault_library=both -Dwrap_mode=nodownload --native-file=C:/projects/repos/cerbero.git/1.28/build/sources/msvc_x86_64/ffmpeg-7.1/b/meson-native-file.txt",
+          "libraryVersion": "5.3.100"
+        },
+        {
+          "file": "swscale-8.dll",
+          "license": "LGPL version 2.1 or later",
+          "configuration": "-Ddebug=true -Doptimization=2 -Dpkgconfig.relocatable=true -Db_vscrt=md -Davdevice=disabled -Dprograms=disabled -Dflac_encoder=disabled -Dprotocols=disabled -Ddevices=disabled -Dnetwork=disabled -Dhwaccels=disabled -Ddxva2=disabled -Dvdpau=disabled -Dfilters=disabled -Dpsnr_filter=enabled -Dssim_filter=enabled -Dscale_filter=enabled -Dyadif_filter=enabled -Dd3d11va=disabled -Daudiotoolbox=disabled -Dvideotoolbox=disabled -Dvaapi=disabled -Dcrystalhd=disabled -Dmediacodec=disabled -Dmediafoundation=disabled -Dnvenc=disabled -Dmmal=disabled -Domx=disabled -Domx_rpi=disabled -Dcuda=disabled -Dcuvid=disabled -Dlibmfx=disabled -Dlibnpp=disabled -Diconv=disabled -Djni=disabled -Dv4l2_m2m=disabled -Dvulkan=disabled -Dtests=disabled -Dnonfree=disabled -Dversion3=disabled -Dprefix=C:/projects/repos/cerbero.git/1.28/build/dist/msvc_x86_64 -Dlibdir=lib -Dbackend=ninja -Ddefault_library=both -Dwrap_mode=nodownload --native-file=C:/projects/repos/cerbero.git/1.28/build/sources/msvc_x86_64/ffmpeg-7.1/b/meson-native-file.txt",
+          "libraryVersion": "8.3.100"
+        }
+      ],
+      "notes": "Cerbero 1.28.5 builds FFmpeg 7.1 with its Meson port patches. The upstream tarball alone omits those patches; obtain Cerbero too. VTR-PON does not modify these DLLs."
+    },
+    "glib": {
+      "version": "2.82.4",
+      "license": "LGPL-2.1-or-later",
+      "sources": [
+        "glib",
+        "cerbero"
+      ],
+      "notices": [
+        "third-party/glib/COPYRIGHT-NOTICES.txt",
+        "third-party/glib/LICENSES/LGPL-2.1-or-later.txt",
+        "third-party/glib/docs/reference/AUTHORS",
+        "third-party/glib/subprojects/gvdb/COPYING"
+      ]
+    },
+    "libffi": {
+      "version": "3.2.9999.5",
+      "license": "MIT",
+      "sources": [
+        "libffi",
+        "cerbero"
+      ],
+      "notices": [
+        "third-party/libffi/LICENSE"
+      ]
+    },
+    "proxy-libintl": {
+      "version": "0.5",
+      "license": "LGPL-2.1-or-later",
+      "sources": [
+        "proxy-libintl",
+        "cerbero"
+      ],
+      "notices": [
+        "third-party/proxy-libintl/COPYING",
+        "third-party/proxy-libintl/COPYRIGHT-NOTICES.txt"
+      ]
+    },
+    "libjpeg-turbo": {
+      "version": "3.1.0",
+      "license": "IJG AND BSD-3-Clause AND Zlib",
+      "sources": [
+        "libjpeg-turbo",
+        "cerbero"
+      ],
+      "notices": [
+        "third-party/libjpeg-turbo/LICENSE.md",
+        "third-party/libjpeg-turbo/README.ijg"
+      ]
+    },
+    "libogg": {
+      "version": "1.3.5",
+      "license": "BSD-3-Clause",
+      "sources": [
+        "libogg",
+        "cerbero"
+      ],
+      "notices": [
+        "third-party/libogg/AUTHORS",
+        "third-party/libogg/COPYING"
+      ]
+    },
+    "libpng": {
+      "version": "1.6.56",
+      "license": "libpng-2.0",
+      "sources": [
+        "libpng",
+        "cerbero"
+      ],
+      "notices": [
+        "third-party/libpng/AUTHORS",
+        "third-party/libpng/LICENSE"
+      ]
+    },
+    "libvorbis": {
+      "version": "1.3.7",
+      "license": "BSD-3-Clause",
+      "sources": [
+        "libvorbis",
+        "cerbero"
+      ],
+      "notices": [
+        "third-party/libvorbis/AUTHORS",
+        "third-party/libvorbis/COPYING"
+      ]
+    },
+    "mpg123": {
+      "version": "1.32.7",
+      "license": "LGPL-2.1-or-later",
+      "sources": [
+        "mpg123",
+        "cerbero"
+      ],
+      "notices": [
+        "third-party/mpg123/AUTHORS",
+        "third-party/mpg123/COPYING"
+      ]
+    },
+    "openh264": {
+      "version": "2.6.0",
+      "license": "BSD-2-Clause",
+      "sources": [
+        "openh264",
+        "cerbero"
+      ],
+      "notices": [
+        "third-party/openh264/LICENSE"
+      ]
+    },
+    "opus": {
+      "version": "1.5.2",
+      "license": "BSD-3-Clause",
+      "sources": [
+        "opus",
+        "cerbero"
+      ],
+      "notices": [
+        "third-party/opus/AUTHORS",
+        "third-party/opus/COPYING"
+      ]
+    },
+    "orc": {
+      "version": "0.4.42",
+      "license": "BSD-2-Clause AND BSD-3-Clause",
+      "sources": [
+        "orc",
+        "cerbero"
+      ],
+      "notices": [
+        "third-party/orc/COPYING"
+      ]
+    },
+    "pcre2": {
+      "version": "10.42",
+      "license": "BSD-3-Clause WITH PCRE2-exception",
+      "sources": [
+        "pcre2",
+        "cerbero"
+      ],
+      "notices": [
+        "third-party/pcre2/AUTHORS",
+        "third-party/pcre2/COPYING",
+        "third-party/pcre2/LICENCE"
+      ]
+    },
+    "zlib": {
+      "version": "1.3.1",
+      "license": "Zlib",
+      "sources": [
+        "zlib",
+        "cerbero"
+      ],
+      "notices": [
+        "third-party/zlib/LICENSE"
+      ]
+    },
+    "flac": {
+      "version": "1.4.3",
+      "license": "BSD-3-Clause",
+      "sources": [
+        "flac",
+        "cerbero"
+      ],
+      "notices": [
+        "third-party/flac/AUTHORS",
+        "third-party/flac/COPYING.Xiph"
+      ]
+    },
+    "mesa": {
+      "version": "11.2.2 / LLVM 3.6.2",
+      "license": "MIT AND NCSA",
+      "sources": [
+        "mesa",
+        "llvm"
+      ],
+      "notices": [
+        "third-party/llvm/LICENSE.TXT",
+        "third-party/llvm/include/llvm/Support/LICENSE.TXT",
+        "third-party/llvm/lib/Support/COPYRIGHT.regex",
+        "third-party/mesa/NOTICE-HEADERS.txt",
+        "third-party/mesa/docs/license.html"
+      ],
+      "notes": "opengl32sw.dll matches Qt official opengl32sw-64-mesa_11_2_2-signed_sha256.7z byte for byte."
+    },
+    "msvc": {
+      "version": "14.42.34438.0",
+      "license": "Microsoft Visual Studio redistribution terms",
+      "sources": [],
+      "notices": [
+        "third-party/microsoft/Visual-Studio-2022-Community-License-EN.docx"
+      ]
+    },
+    "d3dcompiler": {
+      "version": "6.3.9600.16384",
+      "license": "Microsoft Windows 8.1 SDK redistribution terms",
+      "sources": [],
+      "notices": [
+        "third-party/microsoft/DirectXShaderCompiler-NOTICES.txt",
+        "third-party/microsoft/Windows 8.1 SDK License.rtf",
+        "third-party/microsoft/Windows-10-SDK-license.rtf"
+      ]
+    },
+    "dxc": {
+      "version": "dxcompiler 1.7.2308.16 / dxil 101.7.2308.24",
+      "license": "Microsoft Windows SDK redistribution terms; included LLVM/MIT notices",
+      "sources": [],
+      "notices": [
+        "third-party/microsoft/DirectXShaderCompiler-NOTICES.txt",
+        "third-party/microsoft/Windows 8.1 SDK License.rtf",
+        "third-party/microsoft/Windows-10-SDK-license.rtf"
+      ]
+    },
+    "inno-setup": {
+      "version": "6.7.3",
+      "license": "Inno Setup License",
+      "sources": [],
+      "notices": [
+        "third-party/inno-setup/LICENSE.txt"
+      ],
+      "notes": "Used by the installer only; not a DLL dependency of the application."
+    }
+  },
+  "projectBinaries": [
+    "vtr-pon.exe",
+    "vtr-pon-pfl-output.exe",
+    "vtr-pon-operator-monitor.exe",
+    "vtr-pon-addon-manager.exe",
+    "vtr-pon-addon-runtime-probe.exe",
+    "virtual-camera/vtr-pon-virtual-camera.dll"
+  ],
+  "files": [
+    {
+      "path": "concrt140.dll",
+      "sha256": "1cccd0f5553d6c4eaf452c5524b4312db7edb206c5d06fdcb6052e9586f6c611",
+      "component": "msvc"
+    },
+    {
+      "path": "D3Dcompiler_47.dll",
+      "sha256": "e994847e01a6f1e4cbdc5a864616ac262f67ee4f14db194984661a8d927ab7f4",
+      "component": "d3dcompiler"
+    },
+    {
+      "path": "dxcompiler.dll",
+      "sha256": "8a13ce09d8c836285c6a89011e4d5d6a32ab3e490d90785932e45f1fbcca2701",
+      "component": "dxc"
+    },
+    {
+      "path": "dxil.dll",
+      "sha256": "0daf173c97c81641632976de55ff6a7a5259799f34a2bc46edc9d71386f38053",
+      "component": "dxc"
+    },
+    {
+      "path": "generic/qtuiotouchplugin.dll",
+      "sha256": "8e123c011d13ddf884d33f6fba50182d6525a3a7504b7eac0788ef45ab2f2cb1",
+      "component": "qtbase"
+    },
+    {
+      "path": "gstreamer/bin/avcodec-61.dll",
+      "sha256": "49c79fabc5f5932b750f927bf6e332d2b5c2d874f9c23111950693efd84235e6",
+      "component": "ffmpeg"
+    },
+    {
+      "path": "gstreamer/bin/avfilter-10.dll",
+      "sha256": "ca771d0e4ae246f17d757d18c6df463b3094408b9f1c694008577e21e31925db",
+      "component": "ffmpeg"
+    },
+    {
+      "path": "gstreamer/bin/avformat-61.dll",
+      "sha256": "7dbbbdb625017ad63125e15ca8339ee82c675907211f6af8b86a013e4c9e366c",
+      "component": "ffmpeg"
+    },
+    {
+      "path": "gstreamer/bin/avutil-59.dll",
+      "sha256": "4b3538588a416037d3a48969f3e9cd543191e40c128647713d8a4cebf6da7d85",
+      "component": "ffmpeg"
+    },
+    {
+      "path": "gstreamer/bin/bz2.dll",
+      "sha256": "b1a3f1634e990e69de459050406cd49817ccadada1a4688ee0151967d64ca004",
+      "component": "bzip2"
+    },
+    {
+      "path": "gstreamer/bin/ffi-7.dll",
+      "sha256": "60b7f8d0af769c918f1c6f322aeeaf38ef21bbbefbe3e5694277d6cd60048916",
+      "component": "libffi"
+    },
+    {
+      "path": "gstreamer/bin/FLAC-8.dll",
+      "sha256": "f8f19f94d86094325095cf50048f4a0a44fa9c99a1123e44879575693f9fa516",
+      "component": "flac"
+    },
+    {
+      "path": "gstreamer/bin/gio-2.0-0.dll",
+      "sha256": "4014285663d3dabc4ba330ce425f923c81e598ac87c3f573edf674f357da192e",
+      "component": "glib"
+    },
+    {
+      "path": "gstreamer/bin/glib-2.0-0.dll",
+      "sha256": "07f89b27e9af9c58b28953cb3f9d3254e2e076ce372a00603b80e438d4410636",
+      "component": "glib"
+    },
+    {
+      "path": "gstreamer/bin/gmodule-2.0-0.dll",
+      "sha256": "0d67a80aa08710415383a50819ed6191d62e5fc679ba8f4c47db08e7da70147a",
+      "component": "glib"
+    },
+    {
+      "path": "gstreamer/bin/gobject-2.0-0.dll",
+      "sha256": "2ee27c5a520f8b83533ba9ba47bf7a42269c4ae3872dadb3ccdc3bab3376c39b",
+      "component": "glib"
+    },
+    {
+      "path": "gstreamer/bin/gstapp-1.0-0.dll",
+      "sha256": "defcc209729aea2f96d027ba545a43991485364b3c5b8a65d62073a14b3c6be6",
+      "component": "gst-plugins-base"
+    },
+    {
+      "path": "gstreamer/bin/gstaudio-1.0-0.dll",
+      "sha256": "d558d441ad4bc36f1c78d376c70734af93e64934c2d0b51da5acd6aaec275326",
+      "component": "gst-plugins-base"
+    },
+    {
+      "path": "gstreamer/bin/gstbase-1.0-0.dll",
+      "sha256": "73abf2c274312a312af2ea336e27dfc15c3063a2eca16b8b495d0a5d7f53911f",
+      "component": "gstreamer"
+    },
+    {
+      "path": "gstreamer/bin/gstcodecparsers-1.0-0.dll",
+      "sha256": "ac5de01ec78eae158211156a773664d927d490806d4ba12a48bb10ccfdadf8d7",
+      "component": "gst-plugins-bad"
+    },
+    {
+      "path": "gstreamer/bin/gstcodecs-1.0-0.dll",
+      "sha256": "7a2a4c0d34b51c8f3b51b61fd74e3531712ba410e4fca7f8d036d5cef544f422",
+      "component": "gst-plugins-bad"
+    },
+    {
+      "path": "gstreamer/bin/gstd3d11-1.0-0.dll",
+      "sha256": "1f4c94560dc0f89a688146a195be5693d7a705def724c50c5fc49513107581ec",
+      "component": "gst-plugins-bad"
+    },
+    {
+      "path": "gstreamer/bin/gstd3dshader-1.0-0.dll",
+      "sha256": "1ad6665ee1dcc1de621d712c4ff3cb95763bb7e0d313a681ea6bb3dbe38ee451",
+      "component": "gst-plugins-bad"
+    },
+    {
+      "path": "gstreamer/bin/gstdxva-1.0-0.dll",
+      "sha256": "8fb6806624d4e549e8cf3fc153737ec26f52c9ce56ae4e9feb5b2e0925db54f9",
+      "component": "gst-plugins-bad"
+    },
+    {
+      "path": "gstreamer/bin/gstfft-1.0-0.dll",
+      "sha256": "eb0448969ce6c0e9d7a196147e5d0f3e27dd42d54439d8b2ca1ba4ba4c07f658",
+      "component": "gst-plugins-base"
+    },
+    {
+      "path": "gstreamer/bin/gstpbutils-1.0-0.dll",
+      "sha256": "5b8fb6a3e6dbe03e93365584c8b35f40fc3f52bc2c6cd53d54fb2e92d0692473",
+      "component": "gst-plugins-base"
+    },
+    {
+      "path": "gstreamer/bin/gstreamer-1.0-0.dll",
+      "sha256": "7ef7f69b6d482bd8644c0e45b7b64e434092dc38376f097845322037ec6f42f3",
+      "component": "gstreamer"
+    },
+    {
+      "path": "gstreamer/bin/gstriff-1.0-0.dll",
+      "sha256": "73446b9594b695965e4c08e597d78b2236cccad1180287d63e4a3baaccf497b4",
+      "component": "gst-plugins-base"
+    },
+    {
+      "path": "gstreamer/bin/gstrtp-1.0-0.dll",
+      "sha256": "b165d454b8dc7cb746644abbd9dd5f8b9d778c1eab5789272e1dd67b975509fa",
+      "component": "gst-plugins-base"
+    },
+    {
+      "path": "gstreamer/bin/gsttag-1.0-0.dll",
+      "sha256": "60b03b918fc1a46efee525bd2c6a505312370d0620c7debdc72d122d1c883413",
+      "component": "gst-plugins-base"
+    },
+    {
+      "path": "gstreamer/bin/gstvideo-1.0-0.dll",
+      "sha256": "370d47ffb13eeed3622448642717952be103c8b0b8e875f806402741c7371f80",
+      "component": "gst-plugins-base"
+    },
+    {
+      "path": "gstreamer/bin/gstwinrt-1.0-0.dll",
+      "sha256": "42ed06740581d69d8c85023216b70a73bbab5ae5d3a38ac985ea6455f3cd88f5",
+      "component": "gst-plugins-bad"
+    },
+    {
+      "path": "gstreamer/bin/intl-8.dll",
+      "sha256": "b00dbf0b1201a449d42feaa3c16540aa9809e212d2ea09f59286980db53f7c6a",
+      "component": "proxy-libintl"
+    },
+    {
+      "path": "gstreamer/bin/jpeg8.dll",
+      "sha256": "1a429d647481450047e2541b476bef8d14581038ca903bea27f4c54efe936b6b",
+      "component": "libjpeg-turbo"
+    },
+    {
+      "path": "gstreamer/bin/libmpg123-1.dll",
+      "sha256": "aab19554908e339117116d57790a7b970c3ed2f1312d3393e961aba4153d8eeb",
+      "component": "mpg123"
+    },
+    {
+      "path": "gstreamer/bin/ogg-0.dll",
+      "sha256": "44decca42e8564357261d705a324604cf501f5d5ba4a5d6e9e52c0054dd1d5fb",
+      "component": "libogg"
+    },
+    {
+      "path": "gstreamer/bin/openh264-7.dll",
+      "sha256": "a8379b4859f10c38cac1c24a55cb9d15cabca5b968e7deb6d8aa93a25e484413",
+      "component": "openh264"
+    },
+    {
+      "path": "gstreamer/bin/opus-0.dll",
+      "sha256": "f4f9487d1a6134582f844babe28f900d7bd3c532758a202753c8e5c6647e374e",
+      "component": "opus"
+    },
+    {
+      "path": "gstreamer/bin/orc-0.4-0.dll",
+      "sha256": "f846ed2ab6dbe4228447c775e9d5131cb486a867956c3f0f323dcce5a9b3e26b",
+      "component": "orc"
+    },
+    {
+      "path": "gstreamer/bin/pcre2-8-0.dll",
+      "sha256": "4ceba5f3e17246d114f3669325cce21a371746fd88c3fd2cdd143eac5adcf303",
+      "component": "pcre2"
+    },
+    {
+      "path": "gstreamer/bin/png16.dll",
+      "sha256": "f76b35d5ec83287263528531c2ada09cd54b035bbac6fee3c32c785794b2d464",
+      "component": "libpng"
+    },
+    {
+      "path": "gstreamer/bin/swresample-5.dll",
+      "sha256": "124329969288c00dfa3004f234cb81853642e660c2456e679f2d7335e976da14",
+      "component": "ffmpeg"
+    },
+    {
+      "path": "gstreamer/bin/swscale-8.dll",
+      "sha256": "2c7ff2ac390e1a9e153bc020acf6f2eed6a702ea3ea919b227e62da26ccfa229",
+      "component": "ffmpeg"
+    },
+    {
+      "path": "gstreamer/bin/vorbis-0.dll",
+      "sha256": "9ee54a6fdac5e66b1a18865a6686da1bcf11a58b8fa806e394a23c5147de44bb",
+      "component": "libvorbis"
+    },
+    {
+      "path": "gstreamer/bin/vorbisenc-2.dll",
+      "sha256": "a1fdaf8be6b8505131906c4031458713c0ca699550f53ef8c8caa1e53525f144",
+      "component": "libvorbis"
+    },
+    {
+      "path": "gstreamer/bin/z-1.dll",
+      "sha256": "db191f582a4a6ad27b13390deceba3c332ecb2cc734c41f8b2d9250bbe06c4cb",
+      "component": "zlib"
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstapp.dll",
+      "sha256": "ad24beeb034410fadc3cab0791f9b23c76d44a8749743449b101faadd8fe44e7",
+      "component": "gst-plugins-base",
+      "gstInspect": {
+        "source": "gst-plugins-base",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstaudioconvert.dll",
+      "sha256": "0d8f5b800b8008dea883e9a7324448b1cd2b92c015a21fd36a19d6a3ad9c196f",
+      "component": "gst-plugins-base",
+      "gstInspect": {
+        "source": "gst-plugins-base",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstaudiofx.dll",
+      "sha256": "2e58a41820101cafb638d4382c303ea33c901342d5e2158fa48332b57402e7ba",
+      "component": "gst-plugins-good",
+      "gstInspect": {
+        "source": "gst-plugins-good",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstaudiomixer.dll",
+      "sha256": "7cb8f50dc0a323fb8539447e8f7d9be28535227d0ebb785b9b94fbce9f2ea41d",
+      "component": "gst-plugins-base",
+      "gstInspect": {
+        "source": "gst-plugins-base",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstaudioparsers.dll",
+      "sha256": "b3367df666f85b4ffed8e607e208fa2339328385facfed4f24ac29981977cadb",
+      "component": "gst-plugins-good",
+      "gstInspect": {
+        "source": "gst-plugins-good",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstaudioresample.dll",
+      "sha256": "c3f4ac7ccbc300b55b5d1dd54a6901cf9576146035c2fe970c289f35d9066668",
+      "component": "gst-plugins-base",
+      "gstInspect": {
+        "source": "gst-plugins-base",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstautodetect.dll",
+      "sha256": "a5ffeff36b7203e1e718fee10cb930495474ad1a3d9a9362ffa53e237ab338f5",
+      "component": "gst-plugins-good",
+      "gstInspect": {
+        "source": "gst-plugins-good",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstavi.dll",
+      "sha256": "cf3cc1261c6dd928c6a9174cb19e161147afad84a35c194e15dabe9b3dc8dd87",
+      "component": "gst-plugins-good",
+      "gstInspect": {
+        "source": "gst-plugins-good",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstcompositor.dll",
+      "sha256": "6e0f22f2d2759fd17a181d4e20843b3d12f3a4a3672b8ffda3f1950d0ba84179",
+      "component": "gst-plugins-base",
+      "gstInspect": {
+        "source": "gst-plugins-base",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstcoreelements.dll",
+      "sha256": "9203e712654dd9de5290546b41f28d38bad8b1c803eda6a0cd0a82f5b7ec7a4c",
+      "component": "gstreamer",
+      "gstInspect": {
+        "source": "gstreamer",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstd3d11.dll",
+      "sha256": "8432610bd8e966a8f16f82f3173a32e2d6814050ccd0dea33508f4555fd9a789",
+      "component": "gst-plugins-bad",
+      "gstInspect": {
+        "source": "gst-plugins-bad",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstdeinterlace.dll",
+      "sha256": "265f7af1256df302221a3a45529cf56c4591d6bfed29e2f6c71fd419f2d32662",
+      "component": "gst-plugins-good",
+      "gstInspect": {
+        "source": "gst-plugins-good",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstflac.dll",
+      "sha256": "015821cbbeb0bc2abd8677b80ceb9e6f68c496d0c3a5a5b3c3e08c31077c2a4d",
+      "component": "gst-plugins-good",
+      "gstInspect": {
+        "source": "gst-plugins-good",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstid3demux.dll",
+      "sha256": "87149d14b6890b06200c6b5a6e55c10d73ca94161f4532cb736c09df0555e193",
+      "component": "gst-plugins-good",
+      "gstInspect": {
+        "source": "gst-plugins-good",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstimagefreeze.dll",
+      "sha256": "de578288a78b4f43d5cd931dffbadebca5d196d21788c94b290a47a6a09bc740",
+      "component": "gst-plugins-good",
+      "gstInspect": {
+        "source": "gst-plugins-good",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstisomp4.dll",
+      "sha256": "3eb0ab6af2025e231fb5098c416e22a1f996cb85278d9e037c8d67f0e169075e",
+      "component": "gst-plugins-good",
+      "gstInspect": {
+        "source": "gst-plugins-good",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstjpeg.dll",
+      "sha256": "3d1460d4fccf9ed5e713eecf9a078caa883750cf1b0a9459af38c3b637f52470",
+      "component": "gst-plugins-good",
+      "gstInspect": {
+        "source": "gst-plugins-good",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstlevel.dll",
+      "sha256": "7ab576df5f453acad7b673b61232792e362373e4f922930dcb2e6a4d5bd64d41",
+      "component": "gst-plugins-good",
+      "gstInspect": {
+        "source": "gst-plugins-good",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstlibav.dll",
+      "sha256": "e250af1a54550bd0f47cdaa963add9e41524e81cbae29132dd5264738e3110b2",
+      "component": "gst-libav",
+      "gstInspect": {
+        "source": "gst-libav",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstmatroska.dll",
+      "sha256": "a7def8093555bc172943c6ff4fed2ad237da14b88efb999b680bba16be633cb1",
+      "component": "gst-plugins-good",
+      "gstInspect": {
+        "source": "gst-plugins-good",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstmediafoundation.dll",
+      "sha256": "4c03d3ba371e32dcaac37da813f41a8c19c797dfee5850383d684875b2bc702c",
+      "component": "gst-plugins-bad",
+      "gstInspect": {
+        "source": "gst-plugins-bad",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstmpg123.dll",
+      "sha256": "ba78ee1c527839cba73f2a3c7ecb88a6920a2c676b631cd8b24c212e3d9e315e",
+      "component": "gst-plugins-good",
+      "gstInspect": {
+        "source": "gst-plugins-good",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstogg.dll",
+      "sha256": "6f5228bb96409839d7efb683cc36f10c576cf03c8cec2c4f23357b25be296f13",
+      "component": "gst-plugins-base",
+      "gstInspect": {
+        "source": "gst-plugins-base",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstopenh264.dll",
+      "sha256": "d3350b0f31359ba8ac58c03cd6df886e4ad7314a08beaf664dd845e833211d7a",
+      "component": "gst-plugins-bad",
+      "gstInspect": {
+        "source": "gst-plugins-bad",
+        "version": "1.28.5",
+        "license": "BSD"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstopus.dll",
+      "sha256": "d7ca906a87a59d88f5ec399342a15dd142b629b65fe817ca9a1e4558c46ae031",
+      "component": "gst-plugins-base",
+      "gstInspect": {
+        "source": "gst-plugins-base",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstplayback.dll",
+      "sha256": "2848074b2fc7460daf338f826c351f25757e5e3996e914eeba73b6f6febb88c0",
+      "component": "gst-plugins-base",
+      "gstInspect": {
+        "source": "gst-plugins-base",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstpng.dll",
+      "sha256": "def5cdb617c22c60a7898fdf570641bbad1a1a90a1bd02babd7f7474e236a896",
+      "component": "gst-plugins-good",
+      "gstInspect": {
+        "source": "gst-plugins-good",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gsttypefindfunctions.dll",
+      "sha256": "be192cc071d5995249d8b66095d9909dca617081fd18ada9e4b01bcbdd1401a6",
+      "component": "gst-plugins-base",
+      "gstInspect": {
+        "source": "gst-plugins-base",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstvideoconvertscale.dll",
+      "sha256": "37871c12d5d7f41f98517a9d7f0ad9ca4406eaebffa436d53e9be2096bd504b5",
+      "component": "gst-plugins-base",
+      "gstInspect": {
+        "source": "gst-plugins-base",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstvideoparsersbad.dll",
+      "sha256": "ddf73e8c1788910e8ad04364859c1e42c3ec8d39c4b678839380e26f19a83fd2",
+      "component": "gst-plugins-bad",
+      "gstInspect": {
+        "source": "gst-plugins-bad",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstvideorate.dll",
+      "sha256": "7d08087a3417c99b1c876ef0dacf70298264c7c0448e243353f24c9dc947db9b",
+      "component": "gst-plugins-base",
+      "gstInspect": {
+        "source": "gst-plugins-base",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstvideotestsrc.dll",
+      "sha256": "a4772cd4118bbf90fcd2bb4fd823d31ee01aae5a54bb9f0293a18fa1c5f6351d",
+      "component": "gst-plugins-base",
+      "gstInspect": {
+        "source": "gst-plugins-base",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstvolume.dll",
+      "sha256": "e86c00df824f668d9a5acc0ee11e29216a887af697f86311db1e2752d4ba04e5",
+      "component": "gst-plugins-base",
+      "gstInspect": {
+        "source": "gst-plugins-base",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstvorbis.dll",
+      "sha256": "c8c098e49e4ea19f45dfee9386a8a15a49e0b55081868b318b81479b88a592ec",
+      "component": "gst-plugins-base",
+      "gstInspect": {
+        "source": "gst-plugins-base",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstwasapi.dll",
+      "sha256": "9171de8d9235e68fac16c67d988742b9e430272a0d018504195f3dff1b4a0eaa",
+      "component": "gst-plugins-bad",
+      "gstInspect": {
+        "source": "gst-plugins-bad",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstwasapi2.dll",
+      "sha256": "37e8e3db6b039db03aa043a739c3c91ee3fb89e810f1fe4e191bd5fc0d710df8",
+      "component": "gst-plugins-bad",
+      "gstInspect": {
+        "source": "gst-plugins-bad",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstwavparse.dll",
+      "sha256": "5170c914612b8fe9d7b60ce9b29655855f6459b43ad71e79f9470a8e93428c86",
+      "component": "gst-plugins-good",
+      "gstInspect": {
+        "source": "gst-plugins-good",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/lib/gstreamer-1.0/gstwinks.dll",
+      "sha256": "cf2f876034820715ac30a8edb6992976d3d8d2ba0a902fd2ed56e98a179d94de",
+      "component": "gst-plugins-bad",
+      "gstInspect": {
+        "source": "gst-plugins-bad",
+        "version": "1.28.5",
+        "license": "LGPL"
+      }
+    },
+    {
+      "path": "gstreamer/libexec/gstreamer-1.0/gst-plugin-scanner.exe",
+      "sha256": "133354a75cf3ffbb095452e0f8f98f0ff0d1bdfbc7a906c577ef7dbfa8b5e8b1",
+      "component": "gstreamer"
+    },
+    {
+      "path": "iconengines/qsvgicon.dll",
+      "sha256": "6418cb7f188af89fc6876059692d3940377a80bbdb55d70ab907406b46f671d0",
+      "component": "qtsvg"
+    },
+    {
+      "path": "imageformats/qgif.dll",
+      "sha256": "0ee32e5b48bf1404532842862045c523e0c915f223e34ea900c709e7c72b0b1e",
+      "component": "qtbase"
+    },
+    {
+      "path": "imageformats/qico.dll",
+      "sha256": "30b344703bccbf4bf70809cb9b6ce0075b74bdc765d18e539339190b095bb552",
+      "component": "qtbase"
+    },
+    {
+      "path": "imageformats/qjpeg.dll",
+      "sha256": "1c3f3996b18b9a6d3f2690ef333843c9195bec2a4eb08f6e68a3b3bc7f097c32",
+      "component": "qtbase"
+    },
+    {
+      "path": "imageformats/qpdf.dll",
+      "sha256": "cd0829b5ed8082f015bf43e52c3bfd4e2250203d63f276a3879b8fb09e14ca5e",
+      "component": "qtwebengine"
+    },
+    {
+      "path": "imageformats/qsvg.dll",
+      "sha256": "d901931d7f5da8b408f9fcfcfe9e53a4d2247b5fa391fd67ac22a9e9f13c1636",
+      "component": "qtsvg"
+    },
+    {
+      "path": "msvcp140.dll",
+      "sha256": "b99eb28a471311113f5c4109cb3c463f39cfd9bdb3b07f706204dedddb4516a1",
+      "component": "msvc"
+    },
+    {
+      "path": "msvcp140_1.dll",
+      "sha256": "576d2ab235e32acc129eda78a3b9a3d3e78b0c97a01940d962cb8502acd030d1",
+      "component": "msvc"
+    },
+    {
+      "path": "msvcp140_2.dll",
+      "sha256": "9c9e06d56add83e08f0c530de6f0a82c5bfbee2b6ffa8b71e7b0446ec08e8970",
+      "component": "msvc"
+    },
+    {
+      "path": "msvcp140_atomic_wait.dll",
+      "sha256": "5ec85a18501af700e3ee748daed242b8e33040f090371a2759217cb71ff26469",
+      "component": "msvc"
+    },
+    {
+      "path": "msvcp140_codecvt_ids.dll",
+      "sha256": "a12581d37f291121346e8ba2fdfec64a3d72c07aec6350ea0cd2f7aac2f750a4",
+      "component": "msvc"
+    },
+    {
+      "path": "networkinformation/qnetworklistmanager.dll",
+      "sha256": "9950a4a34df745df88b84bb605982999332f27217cba5802c2c30df5197db247",
+      "component": "qtbase"
+    },
+    {
+      "path": "opengl32sw.dll",
+      "sha256": "b04de4541863bc7d8879040a78889c4849c1b1da2784c4630f734c146c2998ce",
+      "component": "mesa"
+    },
+    {
+      "path": "platforms/qwindows.dll",
+      "sha256": "12577a7c4f2230bbea53f279573d7e3d1a08d631197855481e1e1580f61bb877",
+      "component": "qtbase"
+    },
+    {
+      "path": "Qt6Core.dll",
+      "sha256": "0cc62e841959fb8f6d366ea116c6f6bbc273e30f0ef90d8aa2e4adeb81fd63f8",
+      "component": "qtbase"
+    },
+    {
+      "path": "Qt6Gui.dll",
+      "sha256": "ca9f20d9b59d5bc321a87005b926b853ebcd6a2394823e14d3c8b5fc5702fa8c",
+      "component": "qtbase"
+    },
+    {
+      "path": "Qt6Network.dll",
+      "sha256": "2c2f65c70989646f06d668883c031f06fac3f8de1f459278c94cc50dfe89988d",
+      "component": "qtbase"
+    },
+    {
+      "path": "Qt6Pdf.dll",
+      "sha256": "b1e59033fbfe86080d914050c7674ff312e57b0f39aaa1adeed46a5b3e9b564d",
+      "component": "qtwebengine"
+    },
+    {
+      "path": "Qt6Svg.dll",
+      "sha256": "efaf94c5c757a430ec5b89fc209089b14171b5cce945db961c32264f1cc99f80",
+      "component": "qtsvg"
+    },
+    {
+      "path": "Qt6Widgets.dll",
+      "sha256": "d34ef78b3d3b5506ee8279ce6efbfc263d773b74860af76e66b0715346897a3a",
+      "component": "qtbase"
+    },
+    {
+      "path": "styles/qmodernwindowsstyle.dll",
+      "sha256": "33f30e3ed3159b607cac9fb13c478f3e1059b63b39201194ee5f67d239180f01",
+      "component": "qtbase"
+    },
+    {
+      "path": "tls/qcertonlybackend.dll",
+      "sha256": "063f369b7975c97fb989eda88f7a78896e7c6d5de2b73cccf30aefa92b608aff",
+      "component": "qtbase"
+    },
+    {
+      "path": "tls/qschannelbackend.dll",
+      "sha256": "c58ab3c5873d3d5187ff1e6703662810f555ebe60c532e025250c47bbac2e50c",
+      "component": "qtbase"
+    },
+    {
+      "path": "vccorlib140.dll",
+      "sha256": "dca072ee3c9f5dae8c0de6b432600dd766c5d851a1a14a572185ed48ebcf37aa",
+      "component": "msvc"
+    },
+    {
+      "path": "vcruntime140.dll",
+      "sha256": "052ad6a20d375957e82aa6a3c441ea548d89be0981516ca7eb306e063d5027f4",
+      "component": "msvc"
+    },
+    {
+      "path": "vcruntime140_1.dll",
+      "sha256": "6a99bc0128e0c7d6cbbf615fcc26909565e17d4ca3451b97f8987f9c6acbc6c8",
+      "component": "msvc"
+    },
+    {
+      "path": "vcruntime140_threads.dll",
+      "sha256": "fcf24d7fdea131ec60e59e281fe4cebd0b5f54a49180c40bba43f859f7bc47f3",
+      "component": "msvc"
+    },
+    {
+      "path": "z-1.dll",
+      "sha256": "db191f582a4a6ad27b13390deceba3c332ecb2cc734c41f8b2d9250bbe06c4cb",
+      "component": "zlib"
+    }
+  ]
+}

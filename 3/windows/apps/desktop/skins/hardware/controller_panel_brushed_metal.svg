@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="64"
+     viewBox="0 0 128 64">
+  <rect width="128" height="64" fill="#111d21"/>
+
+  <g fill="#b4c7cb">
+    <rect y="1" width="128" height="1" opacity="0.035"/>
+    <rect y="7" width="128" height="1" opacity="0.025"/>
+    <rect y="13" width="128" height="1" opacity="0.045"/>
+    <rect y="21" width="128" height="1" opacity="0.025"/>
+    <rect y="28" width="128" height="1" opacity="0.040"/>
+    <rect y="36" width="128" height="1" opacity="0.030"/>
+    <rect y="43" width="128" height="1" opacity="0.045"/>
+    <rect y="52" width="128" height="1" opacity="0.025"/>
+    <rect y="59" width="128" height="1" opacity="0.040"/>
+  </g>
+
+  <g fill="#000000">
+    <rect y="4" width="128" height="1" opacity="0.14"/>
+    <rect y="10" width="128" height="1" opacity="0.09"/>
+    <rect y="17" width="128" height="1" opacity="0.16"/>
+    <rect y="24" width="128" height="1" opacity="0.10"/>
+    <rect y="32" width="128" height="1" opacity="0.13"/>
+    <rect y="40" width="128" height="1" opacity="0.09"/>
+    <rect y="47" width="128" height="1" opacity="0.16"/>
+    <rect y="56" width="128" height="1" opacity="0.11"/>
+    <rect y="63" width="128" height="1" opacity="0.13"/>
+  </g>
+</svg>

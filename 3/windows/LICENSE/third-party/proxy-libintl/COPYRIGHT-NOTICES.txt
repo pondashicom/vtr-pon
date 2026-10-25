@@ -1,0 +1,8 @@
+Copyright statements in the corresponding upstream source areas.
+Some files have platform or feature guards; this is an attribution index, not a list of linked object files.
+
+libintl.c
+Copyright (C) 2008 Tor Lillqvist
+
+libintl.h
+Copyright (C) 2008 Tor Lillqvist

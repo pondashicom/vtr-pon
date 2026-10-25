@@ -1,0 +1,19 @@
+{
+  "Id": "freetype-pcf",
+  "Name": "Freetype 2 - Portable Compiled Format (PCF) support",
+  "QDocModule": "qtgui",
+  "QtUsage": "Optionally used in Qt GUI and platform plugins. Configure with -no-freetype, or -system-freetype to avoid.",
+  "Path": "src/pcf",
+  "Description": "FreeType is a freely available software library to render fonts.",
+  "Homepage": "http://www.freetype.org",
+  "License": "MIT License and MIT Open Group variant",
+  "LicenseId": "MIT AND MIT-open-group",
+  "LicenseFile": "PCF-LICENSE.txt",
+  "Copyright": [
+    "Copyright (c) 2001, 2012 David Turner, Robert Wilhelm, and Werner Lemberg",
+    "Copyright (c) 2000-2014 Francesco Zappa Nardelli",
+    "Copyright (c) 1990, 1994, 1998 The Open Group"
+  ],
+  "sourceModule": "qtbase",
+  "attributionFile": "src/3rdparty/freetype/qt_attribution.json"
+}

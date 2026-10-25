@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "status": "verification candidate; final distribution notices and relocation pending",
+  "qtVersion": "6.11.0",
+  "gstreamerVersion": "1.28.1",
+  "qtPlugins": [
+    "platforms/libqcocoa.dylib",
+    "imageformats/libqjpeg.dylib",
+    "imageformats/libqgif.dylib",
+    "imageformats/libqtiff.dylib",
+    "imageformats/libqwebp.dylib",
+    "imageformats/libqsvg.dylib",
+    "iconengines/libqsvgicon.dylib",
+    "tls/libqsecuretransportbackend.dylib"
+  ],
+  "gstreamerPlugins": [
+    "coreelements",
+    "app",
+    "playback",
+    "typefindfunctions",
+    "audioconvert",
+    "audioresample",
+    "audiomixer",
+    "audiofx",
+    "level",
+    "volume",
+    "videoconvertscale",
+    "videorate",
+    "deinterlace",
+    "imagefreeze",
+    "applemedia",
+    "osxaudio",
+    "autodetect",
+    "isomp4",
+    "matroska",
+    "avi",
+    "mxf",
+    "ogg",
+    "wavparse",
+    "wavenc",
+    "aiff",
+    "id3demux",
+    "apetag",
+    "audioparsers",
+    "videoparsersbad",
+    "mpg123",
+    "flac",
+    "vorbis",
+    "opus",
+    "vpx",
+    "dav1d",
+    "png",
+    "jpeg",
+    "libav"
+  ],
+  "ffmpeg": {
+    "version": "8.1",
+    "sourceSha256": "b072aed6871998cce9b36e7774033105ca29e33632be5b6347f3206898e0756a",
+    "requiredRuntimeLicense": "LGPL version 2.1 or later",
+    "buildScript": "scripts/macos/build-lgpl-ffmpeg.sh"
+  },
+  "forbiddenPluginNames": [
+    "faad",
+    "x264",
+    "x265",
+    "fdkaac",
+    "faac"
+  ],
+  "requiredFormats": [
+    "MP4/H.264+AAC",
+    "MP4/HEVC+AAC",
+    "MOV/ProRes+PCM",
+    "MOV/H.264+PCM",
+    "WebM/VP8+Vorbis",
+    "WebM/VP9+Opus",
+    "MKV/H.264+FLAC",
+    "AVI/MJPEG+PCM",
+    "MXF/MPEG-2+PCM",
+    "WAV",
+    "MP3",
+    "FLAC",
+    "M4A/AAC",
+    "AAC/ADTS",
+    "OGG/Vorbis",
+    "OGG/Opus",
+    "AIFF/PCM",
+    "M4A/ALAC"
+  ],
+  "limitations": [
+    "Container extensions do not guarantee every codec combination",
+    "No Homebrew GPL FFmpeg binary may be linked by the candidate libav plugin",
+    "Core Qt/GStreamer libraries still use Homebrew paths in this verification stage"
+  ],
+  "pluginVersionOverrides": {
+    "dav1d": "0.15.0-RELEASE"
+  },
+  "gstLibavBuild": {
+    "version": "1.28.1",
+    "sourceSha256": "bfa91aaca38d0fd8addcdd559e35b7541e3f32a5f410194ec4ba18040defee9b",
+    "buildScript": "scripts/macos/build-lgpl-gst-libav.sh"
+  },
+  "featureRanks": {
+    "avdec_aac": 320
+  },
+  "releaseReady": false
+}

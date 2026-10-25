@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="64"
+     viewBox="0 0 256 64">
+  <rect width="256" height="64" fill="#454a4c"/>
+
+  <g fill="#ffffff">
+    <rect y="1" width="256" height="1" opacity="0.09"/>
+    <rect y="6" width="256" height="1" opacity="0.05"/>
+    <rect y="11" width="256" height="1" opacity="0.11"/>
+    <rect y="18" width="256" height="1" opacity="0.04"/>
+    <rect y="23" width="256" height="1" opacity="0.08"/>
+    <rect y="31" width="256" height="1" opacity="0.06"/>
+    <rect y="37" width="256" height="1" opacity="0.10"/>
+    <rect y="45" width="256" height="1" opacity="0.04"/>
+    <rect y="51" width="256" height="1" opacity="0.07"/>
+    <rect y="59" width="256" height="1" opacity="0.09"/>
+  </g>
+
+  <g fill="#111416">
+    <rect y="3" width="256" height="1" opacity="0.12"/>
+    <rect y="8" width="256" height="1" opacity="0.08"/>
+    <rect y="14" width="256" height="1" opacity="0.15"/>
+    <rect y="20" width="256" height="1" opacity="0.10"/>
+    <rect y="27" width="256" height="1" opacity="0.13"/>
+    <rect y="34" width="256" height="1" opacity="0.07"/>
+    <rect y="40" width="256" height="1" opacity="0.15"/>
+    <rect y="48" width="256" height="1" opacity="0.09"/>
+    <rect y="55" width="256" height="1" opacity="0.13"/>
+    <rect y="62" width="256" height="1" opacity="0.08"/>
+  </g>
+</svg>

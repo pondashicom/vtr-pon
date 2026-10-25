@@ -1,0 +1,2892 @@
+{
+  "schemaVersion": 1,
+  "platform": "macOS-arm64",
+  "baseCommit": "d7a21084ab6a7d3f2accd0fb93bca93c37d83b15",
+  "releaseReady": false,
+  "components": [
+    {
+      "id": "brotli",
+      "version": "1.2.0",
+      "selectedLicense": "MIT",
+      "scope": "",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/libbrotlidec.1.2.0.dylib",
+        "Contents/Frameworks/libbrotlicommon.1.2.0.dylib"
+      ],
+      "notices": [
+        "notices/brotli/816c96e8e8f1/LICENSE"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://github.com/google/brotli/archive/refs/tags/v1.2.0.tar.gz",
+          "sha256": "816c96e8e8f193b40151dad7e8ff37b1221d019dbcb9c35cd3fadbfe6477dfec",
+          "file": "archives/816c96e8e8f193b4-v1.2.0.tar.gz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/brotli/brotli.rb",
+      "recipeSha256": "2d0050036dfa720d8357fa8d7ddcbb2abb88cdc79f34b438a1f10dd4e1c72366",
+      "receiptSha256": "3699ff172eca1a366fc99096d8e99852a80d113df5bc85319f029607b96a7013"
+    },
+    {
+      "id": "dav1d",
+      "version": "1.5.3",
+      "selectedLicense": "BSD-2-Clause",
+      "scope": "",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/libdav1d.7.dylib"
+      ],
+      "notices": [
+        "notices/dav1d/e099f53253f6/COPYING",
+        "notices/dav1d/e099f53253f6/doc/PATENTS"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://code.videolan.org/videolan/dav1d/-/archive/1.5.3/dav1d-1.5.3.tar.bz2",
+          "sha256": "e099f53253f6c247580c554d53a13f1040638f2066edc3c740e4c2f15174ce22",
+          "file": "archives/e099f53253f6c247-dav1d-1.5.3.tar.bz2",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/dav1d/dav1d.rb",
+      "recipeSha256": "6b7c613a508d10e580d786f8560a6b80939c6e861ebba9948efd417558b82a97",
+      "receiptSha256": "e65c1b5d9208f461db1a9de79493dceba763b4fc8353deebb33c12bac6b98066"
+    },
+    {
+      "id": "dbus",
+      "version": "1.16.2_1",
+      "selectedLicense": "AFL-2.1",
+      "scope": "Select the AFL-2.1 alternative for libdbus, retain upstream notices.",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/libdbus-1.3.dylib"
+      ],
+      "notices": [
+        "notices/dbus/0ba2a1a4b16a/AUTHORS",
+        "notices/dbus/0ba2a1a4b16a/COPYING",
+        "notices/dbus/0ba2a1a4b16a/LICENSES/AFL-2.0.txt",
+        "notices/dbus/0ba2a1a4b16a/LICENSES/AFL-2.1.txt",
+        "notices/dbus/0ba2a1a4b16a/LICENSES/Apache-2.0.txt",
+        "notices/dbus/0ba2a1a4b16a/LICENSES/BSD-3-Clause.txt",
+        "notices/dbus/0ba2a1a4b16a/LICENSES/GPL-2.0-or-later.txt",
+        "notices/dbus/0ba2a1a4b16a/LICENSES/LGPL-2.1-or-later.txt",
+        "notices/dbus/0ba2a1a4b16a/LICENSES/LicenseRef-CMakeScripts.txt",
+        "notices/dbus/0ba2a1a4b16a/LICENSES/LicenseRef-GAP.txt",
+        "notices/dbus/0ba2a1a4b16a/LICENSES/LicenseRef-pycrypto-orig.txt",
+        "notices/dbus/0ba2a1a4b16a/LICENSES/MIT.txt",
+        "notices/dbus/0ba2a1a4b16a/LICENSES/TCL.txt"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://dbus.freedesktop.org/releases/dbus/dbus-1.16.2.tar.xz",
+          "sha256": "0ba2a1a4b16afe7bceb2c07e9ce99a8c2c3508e5dec290dbb643384bd6beb7e2",
+          "file": "archives/0ba2a1a4b16afe7b-dbus-1.16.2.tar.xz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/dbus/dbus.rb",
+      "recipeSha256": "0ccf3ea6dd594140eaeaecc7dbd5810af6a6ca94885311501cd4bdabd5f843df",
+      "receiptSha256": "ffad327c0cc9b1008ccda133ac72f394958c1c60a75603a45c872b1432193939"
+    },
+    {
+      "id": "double-conversion",
+      "version": "3.4.0",
+      "selectedLicense": "BSD-3-Clause",
+      "scope": "",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/libdouble-conversion.3.4.0.dylib"
+      ],
+      "notices": [
+        "notices/double-conversion/42fd4d980ea8/AUTHORS",
+        "notices/double-conversion/42fd4d980ea8/COPYING",
+        "notices/double-conversion/42fd4d980ea8/LICENSE"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://github.com/google/double-conversion/archive/refs/tags/v3.4.0.tar.gz",
+          "sha256": "42fd4d980ea86426e457b24bdfa835a6f5ad9517ddb01cdb42b99ab9c8dd5dc9",
+          "file": "archives/42fd4d980ea86426-v3.4.0.tar.gz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/double-conversion/double-conversion.rb",
+      "recipeSha256": "e5fa484ea27ae32a1dd2ecab92a2dcde38f00ffa47b073310ff1768ceba501c5",
+      "receiptSha256": "dedce4ba34fdef4ce34011ea278d2ba670f1671fc92606b756e43988a5ddef27"
+    },
+    {
+      "id": "ffmpeg",
+      "version": "8.1",
+      "selectedLicense": "LGPL-2.1-or-later",
+      "scope": "8.1 shared decoder build, GPL/nonfree/version3/autodetection disabled; embedded permissive-code notices retained.",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/ffmpeg/libavcodec.62.28.100.dylib",
+        "Contents/Frameworks/ffmpeg/libavfilter.11.14.100.dylib",
+        "Contents/Frameworks/ffmpeg/libavformat.62.12.100.dylib",
+        "Contents/Frameworks/ffmpeg/libavutil.60.26.100.dylib",
+        "Contents/Frameworks/ffmpeg/libswresample.6.3.100.dylib",
+        "Contents/Frameworks/ffmpeg/libswscale.9.5.100.dylib"
+      ],
+      "notices": [
+        "notices/ffmpeg/COMPILED-PERMISSIVE-HEADERS.txt",
+        "notices/ffmpeg/b072aed68719/COPYING.GPLv2",
+        "notices/ffmpeg/b072aed68719/COPYING.GPLv3",
+        "notices/ffmpeg/b072aed68719/COPYING.LGPLv2.1",
+        "notices/ffmpeg/b072aed68719/COPYING.LGPLv3",
+        "notices/ffmpeg/b072aed68719/LICENSE.md",
+        "notices/ffmpeg/b072aed68719/doc/authors.texi"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://ffmpeg.org/releases/ffmpeg-8.1.tar.xz",
+          "sha256": "b072aed6871998cce9b36e7774033105ca29e33632be5b6347f3206898e0756a",
+          "file": "archives/b072aed6871998cc-ffmpeg-8.1.tar.xz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": null,
+      "recipeSha256": null,
+      "receiptSha256": null
+    },
+    {
+      "id": "flac",
+      "version": "1.5.0",
+      "selectedLicense": "BSD-3-Clause",
+      "scope": "Only libFLAC; command-line programs are not bundled.",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/libFLAC.14.dylib"
+      ],
+      "notices": [
+        "notices/flac/f2c1c76592a8/AUTHORS",
+        "notices/flac/f2c1c76592a8/COPYING.FDL",
+        "notices/flac/f2c1c76592a8/COPYING.GPL",
+        "notices/flac/f2c1c76592a8/COPYING.LGPL",
+        "notices/flac/f2c1c76592a8/COPYING.Xiph"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://downloads.xiph.org/releases/flac/flac-1.5.0.tar.xz",
+          "sha256": "f2c1c76592a82ffff8413ba3c4a1299b6c7ab06c734dee03fd88630485c2b920",
+          "file": "archives/f2c1c76592a82fff-flac-1.5.0.tar.xz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/flac/flac.rb",
+      "recipeSha256": "86c7e641b84c2030e00b8f263bef77c1e8e04e249a195cd284c70eeb91f23311",
+      "receiptSha256": "198f0124ff852ab53be4c1d7da4ecceb4f01cf9226b7e2b2fc4a159144547998"
+    },
+    {
+      "id": "freetype",
+      "version": "2.14.3",
+      "selectedLicense": "FTL",
+      "scope": "Select the FreeType License; retain embedded-code notices.",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/libfreetype.6.dylib"
+      ],
+      "notices": [
+        "notices/freetype/36bc4f1cc413/LICENSE.TXT",
+        "notices/freetype/36bc4f1cc413/docs/FTL.TXT",
+        "notices/freetype/36bc4f1cc413/docs/GPLv2.TXT"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://downloads.sourceforge.net/project/freetype/freetype2/2.14.3/freetype-2.14.3.tar.xz",
+          "sha256": "36bc4f1cc413335368ee656c42afca65c5a3987e8768cc28cf11ba775e785a5f",
+          "file": "archives/36bc4f1cc4133353-freetype-2.14.3.tar.xz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/freetype/freetype.rb",
+      "recipeSha256": "cc500226718264185ecf4b0560e0d9daee933c3e40622dd936b955536d025613",
+      "receiptSha256": "7c232c20e3f531a673812538bca5b4c9b73136e4a7abef03318bcbf48d29f566"
+    },
+    {
+      "id": "gettext",
+      "version": "1.0",
+      "selectedLicense": "LGPL-2.1-or-later",
+      "scope": "Only libintl; GNU gettext programs under GPL are not bundled.",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/libintl.8.dylib"
+      ],
+      "notices": [
+        "notices/gettext/85d99b79c981/AUTHORS",
+        "notices/gettext/85d99b79c981/COPYING",
+        "notices/gettext/85d99b79c981/gettext-runtime/AUTHORS",
+        "notices/gettext/85d99b79c981/gettext-runtime/COPYING",
+        "notices/gettext/85d99b79c981/gettext-runtime/intl/AUTHORS",
+        "notices/gettext/85d99b79c981/gettext-runtime/intl/COPYING.LIB",
+        "notices/gettext/85d99b79c981/gettext-runtime/libasprintf/AUTHORS",
+        "notices/gettext/85d99b79c981/gettext-runtime/libasprintf/COPYING",
+        "notices/gettext/85d99b79c981/gettext-runtime/libasprintf/COPYING.LIB",
+        "notices/gettext/85d99b79c981/gettext-tools/AUTHORS",
+        "notices/gettext/85d99b79c981/gettext-tools/COPYING",
+        "notices/gettext/85d99b79c981/gettext-tools/gnulib-lib/libxml/COPYING",
+        "notices/gettext/85d99b79c981/gettext-tools/tree-sitter-0.23.2/LICENSE",
+        "notices/gettext/85d99b79c981/gettext-tools/tree-sitter-0.23.2/lib/src/unicode/LICENSE",
+        "notices/gettext/85d99b79c981/gettext-tools/tree-sitter-d-0.8.2/LICENSE",
+        "notices/gettext/85d99b79c981/gettext-tools/tree-sitter-go-0.23.4/LICENSE",
+        "notices/gettext/85d99b79c981/gettext-tools/tree-sitter-ocaml-0.23.2/LICENSE",
+        "notices/gettext/85d99b79c981/gettext-tools/tree-sitter-rust-0.23.2/LICENSE",
+        "notices/gettext/85d99b79c981/gettext-tools/tree-sitter-typescript-0.23.2/LICENSE",
+        "notices/gettext/85d99b79c981/gnulib-local/lib/libxml/COPYING",
+        "notices/gettext/85d99b79c981/libtextstyle/AUTHORS",
+        "notices/gettext/85d99b79c981/libtextstyle/COPYING",
+        "notices/gettext/85d99b79c981/libtextstyle/lib/libxml/COPYING"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://ftpmirror.gnu.org/gnu/gettext/gettext-1.0.tar.gz",
+          "sha256": "85d99b79c981a404874c02e0342176cf75c7698e2b51fe41031cf6526d974f1a",
+          "file": "archives/85d99b79c981a404-gettext-1.0.tar.gz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/gettext/gettext.rb",
+      "recipeSha256": "170f5a29d2eb95b9dd1f1f754c0f9b90692c3d5dcf6db02c199c93e2c445177d",
+      "receiptSha256": "404e685b74157f3f7ebd7f85ce84bf92c78bf9c58e43da9ae21ac1b904c7f9f1"
+    },
+    {
+      "id": "glib",
+      "version": "2.88.0",
+      "selectedLicense": "LGPL-2.1-or-later",
+      "scope": "GLib/GObject/GIO/GModule/GThread; retain bundled-code notices.",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/libgobject-2.0.0.dylib",
+        "Contents/Frameworks/libglib-2.0.0.dylib",
+        "Contents/Frameworks/libgio-2.0.0.dylib",
+        "Contents/Frameworks/libgmodule-2.0.0.dylib",
+        "Contents/Frameworks/libgthread-2.0.0.dylib"
+      ],
+      "notices": [
+        "notices/glib/3546251ccbb3/LICENSES/AFL-2.0.txt",
+        "notices/glib/3546251ccbb3/LICENSES/Apache-2.0.txt",
+        "notices/glib/3546251ccbb3/LICENSES/CC-BY-SA-3.0.txt",
+        "notices/glib/3546251ccbb3/LICENSES/CC0-1.0.txt",
+        "notices/glib/3546251ccbb3/LICENSES/GPL-2.0-or-later.txt",
+        "notices/glib/3546251ccbb3/LICENSES/LGPL-2.1-only.txt",
+        "notices/glib/3546251ccbb3/LICENSES/LGPL-2.1-or-later.txt",
+        "notices/glib/3546251ccbb3/LICENSES/LLVM-exception.txt",
+        "notices/glib/3546251ccbb3/LICENSES/LicenseRef-old-glib-tests.txt",
+        "notices/glib/3546251ccbb3/LICENSES/MIT.txt",
+        "notices/glib/3546251ccbb3/LICENSES/MPL-1.1.txt",
+        "notices/glib/3546251ccbb3/docs/reference/AUTHORS",
+        "notices/glib/3546251ccbb3/docs/reference/COPYING",
+        "notices/glib/3546251ccbb3/gmodule/AUTHORS",
+        "notices/glib/3546251ccbb3/subprojects/gvdb/COPYING",
+        "notices/glib/3546251ccbb3/subprojects/gvdb/LICENSES/LGPL-2.1-or-later.txt",
+        "notices/glib/920d1a3fcede/COPYING",
+        "notices/glib/920d1a3fcede/COPYING.GPL",
+        "notices/glib/920d1a3fcede/COPYING.LGPL",
+        "notices/glib/920d1a3fcede/gobject-introspection-tests/LICENSES/CC0-1.0.txt",
+        "notices/glib/920d1a3fcede/gobject-introspection-tests/LICENSES/GPL-2.0-or-later.txt",
+        "notices/glib/920d1a3fcede/gobject-introspection-tests/LICENSES/LGPL-2.0-or-later.txt",
+        "notices/glib/920d1a3fcede/gobject-introspection-tests/LICENSES/LGPL-2.1-or-later.txt",
+        "notices/glib/920d1a3fcede/gobject-introspection-tests/LICENSES/MIT.txt"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://download.gnome.org/sources/glib/2.88/glib-2.88.0.tar.xz",
+          "sha256": "3546251ccbb3744d4bc4eb48354540e1f6200846572bab68e3a2b7b2b64dfd07",
+          "file": "archives/3546251ccbb3744d-glib-2.88.0.tar.xz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        },
+        {
+          "url": "https://download.gnome.org/sources/gobject-introspection/1.86/gobject-introspection-1.86.0.tar.xz",
+          "sha256": "920d1a3fcedeadc32acff95c2e203b319039dd4b4a08dd1a2dfd283d19c0b9ae",
+          "file": "archives/920d1a3fcedeadc3-gobject-introspection-1.86.0.tar.xz",
+          "role": "recipe-resource-or-patch",
+          "includeInSourceBundle": true
+        },
+        {
+          "url": "https://raw.githubusercontent.com/Homebrew/homebrew-core/1cf441a0/Patches/glib/hardcoded-paths.diff",
+          "sha256": "d846efd0bf62918350da94f850db33b0f8727fece9bfaf8164566e3094e80c97",
+          "file": "archives/d846efd0bf629183-hardcoded-paths.diff",
+          "role": "recipe-resource-or-patch",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/glib/glib.rb",
+      "recipeSha256": "c04fc99c94def73fe485baf64698c865a51afcc3aaefa1c6565a500c1b2dae38",
+      "receiptSha256": "b48ddffc1c8ac792fd4e215afaeccec275d4b315273de60c0c1a8fcd541bb7ad"
+    },
+    {
+      "id": "graphite2",
+      "version": "1.3.14",
+      "selectedLicense": "LGPL-2.1-or-later",
+      "scope": "Select LGPL alternative; preserve original COPYING and header notices.",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/libgraphite2.3.2.1.dylib"
+      ],
+      "notices": [
+        "notices/graphite2/f99d1c13aa5f/COPYING",
+        "notices/graphite2/f99d1c13aa5f/LICENSE",
+        "notices/graphite2/f99d1c13aa5f/debian-src/copyright"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://github.com/silnrsi/graphite/releases/download/1.3.14/graphite2-1.3.14.tgz",
+          "sha256": "f99d1c13aa5fa296898a181dff9b82fb25f6cc0933dbaa7a475d8109bd54209d",
+          "file": "archives/f99d1c13aa5fa296-graphite2-1.3.14.tgz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        },
+        {
+          "url": "https://scripts.sil.org/pub/woff/fonts/Simple-Graphite-Font.ttf",
+          "sha256": "7e573896bbb40088b3a8490f83d6828fb0fd0920ac4ccdfdd7edb804e852186a",
+          "file": "archives/7e573896bbb40088-Simple-Graphite-Font.ttf",
+          "role": "recipe-resource-or-patch",
+          "includeInSourceBundle": false
+        }
+      ],
+      "recipe": "recipes/graphite2/graphite2.rb",
+      "recipeSha256": "45474d74486c748f27de500cae165754198e9643ce266e0098241fb2aed3fcdf",
+      "receiptSha256": "cd28698f5a737fabce4852b56b5a51c9c369780f1bbc3f809f969801387eac17"
+    },
+    {
+      "id": "gst-libav",
+      "version": "1.28.1",
+      "selectedLicense": "LGPL-2.1-or-later",
+      "scope": "Rebuilt against the isolated LGPL FFmpeg; do not substitute Homebrew libav or FFmpeg.",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/PlugIns/gstreamer/libgstlibav.dylib"
+      ],
+      "notices": [
+        "notices/gst-libav/bfa91aaca38d/COPYING"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.28.1.tar.xz",
+          "sha256": "bfa91aaca38d0fd8addcdd559e35b7541e3f32a5f410194ec4ba18040defee9b",
+          "file": "archives/bfa91aaca38d0fd8-gst-libav-1.28.1.tar.xz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": null,
+      "recipeSha256": null,
+      "receiptSha256": null
+    },
+    {
+      "id": "gst-plugins-rs",
+      "version": "0.15.0-RELEASE",
+      "selectedLicense": "MIT",
+      "scope": "dav1d plugin, version 0.15.0-RELEASE; Rust dependency notices also apply.",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/PlugIns/gstreamer/libgstdav1d.dylib"
+      ],
+      "notices": [
+        "notices/gst-plugins-rs/5488965db0fb/LICENSE-APACHE",
+        "notices/gst-plugins-rs/5488965db0fb/LICENSE-MIT",
+        "notices/gst-plugins-rs/5488965db0fb/LICENSE-MPL-2.0",
+        "notices/gst-plugins-rs/rust/allocator-api2/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/allocator-api2/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/android_system_properties/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/android_system_properties/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/anyhow/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/anyhow/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/atomic_refcell/LICENSE.APACHE",
+        "notices/gst-plugins-rs/rust/atomic_refcell/LICENSE.MIT",
+        "notices/gst-plugins-rs/rust/autocfg/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/autocfg/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/av-data/LICENSE",
+        "notices/gst-plugins-rs/rust/bitflags/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/bitflags/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/bumpalo/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/bumpalo/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/byte-slice-cast/LICENSE",
+        "notices/gst-plugins-rs/rust/bytes/LICENSE",
+        "notices/gst-plugins-rs/rust/cc/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/cc/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/cfg-expr/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/cfg-expr/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/cfg-if/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/cfg-if/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/chrono/LICENSE.txt",
+        "notices/gst-plugins-rs/rust/core-foundation-sys/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/core-foundation-sys/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/dav1d-sys/LICENSE",
+        "notices/gst-plugins-rs/rust/dav1d/LICENSE",
+        "notices/gst-plugins-rs/rust/either/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/either/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/equivalent/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/equivalent/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/find-msvc-tools/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/find-msvc-tools/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/foldhash/LICENSE",
+        "notices/gst-plugins-rs/rust/futures-channel/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/futures-channel/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/futures-core/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/futures-core/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/futures-executor/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/futures-executor/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/futures-io/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/futures-io/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/futures-macro/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/futures-macro/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/futures-sink/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/futures-sink/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/futures-task/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/futures-task/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/futures-util/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/futures-util/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/getrandom/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/getrandom/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/gio-sys/LICENSE",
+        "notices/gst-plugins-rs/rust/glib-macros/COPYRIGHT",
+        "notices/gst-plugins-rs/rust/glib-macros/LICENSE",
+        "notices/gst-plugins-rs/rust/glib-sys/LICENSE",
+        "notices/gst-plugins-rs/rust/glib/COPYRIGHT",
+        "notices/gst-plugins-rs/rust/glib/LICENSE",
+        "notices/gst-plugins-rs/rust/glib/gobject-sys/LICENSE",
+        "notices/gst-plugins-rs/rust/glib/sys/LICENSE",
+        "notices/gst-plugins-rs/rust/gobject-sys/LICENSE",
+        "notices/gst-plugins-rs/rust/gst-plugin-dav1d/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/gst-plugin-dav1d/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/gst-plugin-version-helper/LICENSE",
+        "notices/gst-plugins-rs/rust/gstreamer-base-sys/COPYRIGHT",
+        "notices/gst-plugins-rs/rust/gstreamer-base-sys/LICENSE",
+        "notices/gst-plugins-rs/rust/gstreamer-base/COPYRIGHT",
+        "notices/gst-plugins-rs/rust/gstreamer-base/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/gstreamer-base/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/gstreamer-base/sys/COPYRIGHT",
+        "notices/gst-plugins-rs/rust/gstreamer-base/sys/LICENSE",
+        "notices/gst-plugins-rs/rust/gstreamer-sys/COPYRIGHT",
+        "notices/gst-plugins-rs/rust/gstreamer-sys/LICENSE",
+        "notices/gst-plugins-rs/rust/gstreamer-video-sys/COPYRIGHT",
+        "notices/gst-plugins-rs/rust/gstreamer-video-sys/LICENSE",
+        "notices/gst-plugins-rs/rust/gstreamer-video/COPYRIGHT",
+        "notices/gst-plugins-rs/rust/gstreamer-video/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/gstreamer-video/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/gstreamer-video/sys/COPYRIGHT",
+        "notices/gst-plugins-rs/rust/gstreamer-video/sys/LICENSE",
+        "notices/gst-plugins-rs/rust/gstreamer/COPYRIGHT",
+        "notices/gst-plugins-rs/rust/gstreamer/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/gstreamer/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/gstreamer/sys/COPYRIGHT",
+        "notices/gst-plugins-rs/rust/gstreamer/sys/LICENSE",
+        "notices/gst-plugins-rs/rust/hashbrown/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/hashbrown/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/heck/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/heck/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/hermit-abi/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/hermit-abi/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/iana-time-zone-haiku/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/iana-time-zone-haiku/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/iana-time-zone/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/iana-time-zone/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/id-arena/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/id-arena/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/indexmap/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/indexmap/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/itertools/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/itertools/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/itoa/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/itoa/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/jobserver/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/jobserver/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/js-sys/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/js-sys/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/kstring/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/kstring/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/leb128fmt/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/leb128fmt/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/libc/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/libc/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/libm/LICENSE.txt",
+        "notices/gst-plugins-rs/rust/log/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/log/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/memchr/COPYING",
+        "notices/gst-plugins-rs/rust/memchr/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/muldiv/LICENSE",
+        "notices/gst-plugins-rs/rust/num-bigint/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/num-bigint/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/num-derive/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/num-derive/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/num-integer/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/num-integer/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/num-rational/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/num-rational/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/num-traits/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/num-traits/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/num_cpus/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/num_cpus/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/once_cell/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/once_cell/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/option-operations/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/option-operations/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/pastey/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/pastey/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/pin-project-lite/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/pin-project-lite/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/pkg-config/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/pkg-config/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/portable-atomic/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/portable-atomic/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/prettyplease/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/prettyplease/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/proc-macro2/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/proc-macro2/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/quote/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/quote/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/r-efi/AUTHORS",
+        "notices/gst-plugins-rs/rust/rustversion/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/rustversion/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/semver/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/semver/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/serde/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/serde/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/serde_bytes/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/serde_bytes/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/serde_core/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/serde_core/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/serde_derive/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/serde_derive/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/serde_json/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/serde_json/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/serde_spanned/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/serde_spanned/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/shlex/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/shlex/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/slab/LICENSE",
+        "notices/gst-plugins-rs/rust/smallvec/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/smallvec/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/static_assertions/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/static_assertions/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/syn/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/syn/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/system-deps/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/system-deps/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/target-lexicon/LICENSE",
+        "notices/gst-plugins-rs/rust/thiserror-impl/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/thiserror-impl/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/thiserror/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/thiserror/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/toml/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/toml/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/toml_datetime/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/toml_datetime/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/toml_edit/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/toml_edit/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/toml_parser/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/toml_parser/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/toml_writer/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/toml_writer/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/unicode-ident/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/unicode-ident/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/unicode-ident/LICENSE-UNICODE",
+        "notices/gst-plugins-rs/rust/unicode-xid/COPYRIGHT",
+        "notices/gst-plugins-rs/rust/unicode-xid/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/unicode-xid/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/version-compare/LICENSE",
+        "notices/gst-plugins-rs/rust/wasip2/upstream/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/wasip2/upstream/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/wasm-bindgen-macro-support/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/wasm-bindgen-macro-support/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/wasm-bindgen-macro/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/wasm-bindgen-macro/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/wasm-bindgen-shared/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/wasm-bindgen-shared/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/wasm-bindgen/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/wasm-bindgen/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/wasm-encoder/upstream/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/wasm-encoder/upstream/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/wasm-metadata/src/oci_annotations/authors.rs",
+        "notices/gst-plugins-rs/rust/wasm-metadata/src/oci_annotations/licenses.rs",
+        "notices/gst-plugins-rs/rust/wasmparser/upstream/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/wasmparser/upstream/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/windows-core/license-apache-2.0",
+        "notices/gst-plugins-rs/rust/windows-core/license-mit",
+        "notices/gst-plugins-rs/rust/windows-implement/license-apache-2.0",
+        "notices/gst-plugins-rs/rust/windows-implement/license-mit",
+        "notices/gst-plugins-rs/rust/windows-interface/license-apache-2.0",
+        "notices/gst-plugins-rs/rust/windows-interface/license-mit",
+        "notices/gst-plugins-rs/rust/windows-link/license-apache-2.0",
+        "notices/gst-plugins-rs/rust/windows-link/license-mit",
+        "notices/gst-plugins-rs/rust/windows-result/license-apache-2.0",
+        "notices/gst-plugins-rs/rust/windows-result/license-mit",
+        "notices/gst-plugins-rs/rust/windows-strings/license-apache-2.0",
+        "notices/gst-plugins-rs/rust/windows-strings/license-mit",
+        "notices/gst-plugins-rs/rust/windows-sys/license-apache-2.0",
+        "notices/gst-plugins-rs/rust/windows-sys/license-mit",
+        "notices/gst-plugins-rs/rust/winnow/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/wit-bindgen-core/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/wit-bindgen-core/LICENSE-Apache-2.0_WITH_LLVM-exception",
+        "notices/gst-plugins-rs/rust/wit-bindgen-core/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/wit-bindgen-rust-macro/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/wit-bindgen-rust-macro/LICENSE-Apache-2.0_WITH_LLVM-exception",
+        "notices/gst-plugins-rs/rust/wit-bindgen-rust-macro/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/wit-bindgen-rust/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/wit-bindgen-rust/LICENSE-Apache-2.0_WITH_LLVM-exception",
+        "notices/gst-plugins-rs/rust/wit-bindgen-rust/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/wit-bindgen/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/wit-bindgen/LICENSE-Apache-2.0_WITH_LLVM-exception",
+        "notices/gst-plugins-rs/rust/wit-bindgen/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/wit-component/upstream/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/wit-component/upstream/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/wit-parser/upstream/LICENSE-APACHE",
+        "notices/gst-plugins-rs/rust/wit-parser/upstream/LICENSE-MIT",
+        "notices/gst-plugins-rs/rust/zmij/LICENSE-MIT",
+        "supplemental/gst-plugins-rs/rust-stdlib-1.94.1/COPYRIGHT-library.html"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/archive/gstreamer-1.28.1/gst-plugins-rs-gstreamer-1.28.1.tar.bz2",
+          "sha256": "5488965db0fbb491810188ff144ec5a43055a6a5fc3412bef6b7a81cb504e60d",
+          "file": "archives/5488965db0fbb491-gst-plugins-rs-gstreamer-1.28.1.tar.bz2",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        },
+        {
+          "url": "https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/commit/a69aa05e92cf4ae6bbe17bdc1f19b741d1c34ed8.diff",
+          "sha256": "90ee916968c8cc764813f2b380a483292e2949d0fa303cb48250a825db0e13d9",
+          "file": "archives/90ee916968c8cc76-a69aa05e92cf4ae6bbe17bdc1f19b741d1c34ed8.diff",
+          "role": "recipe-resource-or-patch",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/gst-plugins-rs/gstreamer.rb",
+      "recipeSha256": "32d20c3b961782f487c399bff667f9efe8f873551a200767de94ce5d25b3a894",
+      "receiptSha256": "e36d68db2c58525273806b1d5d1f862c883157477517889f00685f52569fa8af"
+    },
+    {
+      "id": "gstreamer",
+      "version": "1.28.1",
+      "selectedLicense": "LGPL-2.0-or-later AND LGPL-2.1-or-later AND MIT",
+      "scope": "Selected libraries/plugins and scanner only. The build recipe also builds GPL plugins, but they are excluded from this .app.",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/PlugIns/gstreamer/libgstcoreelements.dylib",
+        "Contents/PlugIns/gstreamer/libgstapp.dylib",
+        "Contents/PlugIns/gstreamer/libgstplayback.dylib",
+        "Contents/PlugIns/gstreamer/libgsttypefindfunctions.dylib",
+        "Contents/PlugIns/gstreamer/libgstaudioconvert.dylib",
+        "Contents/PlugIns/gstreamer/libgstaudioresample.dylib",
+        "Contents/PlugIns/gstreamer/libgstaudiomixer.dylib",
+        "Contents/PlugIns/gstreamer/libgstaudiofx.dylib",
+        "Contents/PlugIns/gstreamer/libgstlevel.dylib",
+        "Contents/PlugIns/gstreamer/libgstvolume.dylib",
+        "Contents/PlugIns/gstreamer/libgstvideoconvertscale.dylib",
+        "Contents/PlugIns/gstreamer/libgstvideorate.dylib",
+        "Contents/PlugIns/gstreamer/libgstdeinterlace.dylib",
+        "Contents/PlugIns/gstreamer/libgstimagefreeze.dylib",
+        "Contents/PlugIns/gstreamer/libgstapplemedia.dylib",
+        "Contents/PlugIns/gstreamer/libgstosxaudio.dylib",
+        "Contents/PlugIns/gstreamer/libgstautodetect.dylib",
+        "Contents/PlugIns/gstreamer/libgstisomp4.dylib",
+        "Contents/PlugIns/gstreamer/libgstmatroska.dylib",
+        "Contents/PlugIns/gstreamer/libgstavi.dylib",
+        "Contents/PlugIns/gstreamer/libgstmxf.dylib",
+        "Contents/PlugIns/gstreamer/libgstogg.dylib",
+        "Contents/PlugIns/gstreamer/libgstwavparse.dylib",
+        "Contents/PlugIns/gstreamer/libgstwavenc.dylib",
+        "Contents/PlugIns/gstreamer/libgstaiff.dylib",
+        "Contents/PlugIns/gstreamer/libgstid3demux.dylib",
+        "Contents/PlugIns/gstreamer/libgstapetag.dylib",
+        "Contents/PlugIns/gstreamer/libgstaudioparsers.dylib",
+        "Contents/PlugIns/gstreamer/libgstvideoparsersbad.dylib",
+        "Contents/PlugIns/gstreamer/libgstmpg123.dylib",
+        "Contents/PlugIns/gstreamer/libgstflac.dylib",
+        "Contents/PlugIns/gstreamer/libgstvorbis.dylib",
+        "Contents/PlugIns/gstreamer/libgstopus.dylib",
+        "Contents/PlugIns/gstreamer/libgstvpx.dylib",
+        "Contents/PlugIns/gstreamer/libgstpng.dylib",
+        "Contents/PlugIns/gstreamer/libgstjpeg.dylib",
+        "Contents/Helpers/gst-plugin-scanner",
+        "Contents/Frameworks/libgstpbutils-1.0.0.dylib",
+        "Contents/Frameworks/libgstvideo-1.0.0.dylib",
+        "Contents/Frameworks/libgstapp-1.0.0.dylib",
+        "Contents/Frameworks/libgstaudio-1.0.0.dylib",
+        "Contents/Frameworks/libgstbase-1.0.0.dylib",
+        "Contents/Frameworks/libgstreamer-1.0.0.dylib",
+        "Contents/Frameworks/libgstfft-1.0.0.dylib",
+        "Contents/Frameworks/libgstgl-1.0.0.dylib",
+        "Contents/Frameworks/libgstcodecparsers-1.0.0.dylib",
+        "Contents/Frameworks/libgstriff-1.0.0.dylib",
+        "Contents/Frameworks/libgsttag-1.0.0.dylib",
+        "Contents/Frameworks/libgstrtp-1.0.0.dylib"
+      ],
+      "notices": [
+        "notices/gstreamer/5488965db0fb/LICENSE-APACHE",
+        "notices/gstreamer/5488965db0fb/LICENSE-MIT",
+        "notices/gstreamer/5488965db0fb/LICENSE-MPL-2.0",
+        "notices/gstreamer/86ec01791046/LICENSE",
+        "notices/gstreamer/86ec01791046/subprojects/gst-plugins-bad/COPYING",
+        "notices/gstreamer/86ec01791046/subprojects/gst-plugins-base/COPYING",
+        "notices/gstreamer/86ec01791046/subprojects/gst-plugins-good/COPYING",
+        "notices/gstreamer/86ec01791046/subprojects/gstreamer/COPYING",
+        "supplemental/gstreamer/kissfft/BSD-3-Clause",
+        "supplemental/gstreamer/kissfft/COPYING",
+        "supplemental/gstreamer/kissfft/GSTREAMER-COPYRIGHTS.txt"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://gitlab.freedesktop.org/gstreamer/gstreamer/-/archive/1.28.1/gstreamer-1.28.1.tar.bz2",
+          "sha256": "86ec0179104664a1ca6de57d7c886d3a8aa0491d1a243d02514b306885272b91",
+          "file": "archives/86ec0179104664a1-gstreamer-1.28.1.tar.bz2",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        },
+        {
+          "url": "https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/archive/gstreamer-1.28.1/gst-plugins-rs-gstreamer-1.28.1.tar.bz2",
+          "sha256": "5488965db0fbb491810188ff144ec5a43055a6a5fc3412bef6b7a81cb504e60d",
+          "file": "archives/5488965db0fbb491-gst-plugins-rs-gstreamer-1.28.1.tar.bz2",
+          "role": "recipe-resource-or-patch",
+          "includeInSourceBundle": true
+        },
+        {
+          "url": "https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/commit/a69aa05e92cf4ae6bbe17bdc1f19b741d1c34ed8.diff",
+          "sha256": "90ee916968c8cc764813f2b380a483292e2949d0fa303cb48250a825db0e13d9",
+          "file": "archives/90ee916968c8cc76-a69aa05e92cf4ae6bbe17bdc1f19b741d1c34ed8.diff",
+          "role": "recipe-resource-or-patch",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/gstreamer/gstreamer.rb",
+      "recipeSha256": "32d20c3b961782f487c399bff667f9efe8f873551a200767de94ce5d25b3a894",
+      "receiptSha256": "e36d68db2c58525273806b1d5d1f862c883157477517889f00685f52569fa8af"
+    },
+    {
+      "id": "harfbuzz",
+      "version": "14.0.0",
+      "selectedLicense": "MIT",
+      "scope": "",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/libharfbuzz.0.dylib"
+      ],
+      "notices": [
+        "notices/harfbuzz/d4aa31272813/AUTHORS",
+        "notices/harfbuzz/d4aa31272813/COPYING",
+        "notices/harfbuzz/d4aa31272813/src/ms-use/COPYING",
+        "notices/harfbuzz/d4aa31272813/test/COPYING",
+        "notices/harfbuzz/d4aa31272813/test/shape/data/aots/COPYING",
+        "notices/harfbuzz/d4aa31272813/test/shape/data/text-rendering-tests/COPYING"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://github.com/harfbuzz/harfbuzz/releases/download/14.0.0/harfbuzz-14.0.0.tar.xz",
+          "sha256": "d4aa312728136e3dc7c3cda47b871614ce0d12bbb19f9dcac2ea70de836dc307",
+          "file": "archives/d4aa312728136e3d-harfbuzz-14.0.0.tar.xz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/harfbuzz/harfbuzz.rb",
+      "recipeSha256": "79d5b97e34f25991d444e7b749da2817f89afe8bdd7ea28c09a5c71fd1e1f24b",
+      "receiptSha256": "b8548d390b177dcff829cfd63813113e1cd0dd86c44241c7a3480b2989c0a7d0"
+    },
+    {
+      "id": "icu4c@78",
+      "version": "78.3",
+      "selectedLicense": "Unicode-3.0",
+      "scope": "ICU 78.3 original license and data notices.",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/libicui18n.78.3.dylib",
+        "Contents/Frameworks/libicuuc.78.3.dylib",
+        "Contents/Frameworks/libicudata.78.3.dylib"
+      ],
+      "notices": [
+        "notices/icu4c@78/3a2e7a47604b/LICENSE",
+        "notices/icu4c@78/3a2e7a47604b/license.html"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://github.com/unicode-org/icu/releases/download/release-78.3/icu4c-78.3-sources.tgz",
+          "sha256": "3a2e7a47604ba702f345878308e6fefeca612ee895cf4a5f222e7955fabfe0c0",
+          "file": "archives/3a2e7a47604ba702-icu4c-78.3-sources.tgz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/icu4c@78/icu4c@78.rb",
+      "recipeSha256": "db6d475bc93d9138f6ec7272dcc2718614e3df68dc0edeb2ab63054493eec04b",
+      "receiptSha256": "78596bd3c3a46c318391eaf15b1864113a4d213ff8da5c1dac1de75ac9dff868"
+    },
+    {
+      "id": "jpeg-turbo",
+      "version": "3.1.4.1",
+      "selectedLicense": "IJG AND BSD-3-Clause AND Zlib",
+      "scope": "Only libjpeg; upstream license describes each part.",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/libjpeg.8.3.2.dylib"
+      ],
+      "notices": [
+        "notices/jpeg-turbo/ecae8008e2cc/LICENSE.md",
+        "notices/jpeg-turbo/ecae8008e2cc/README.ijg",
+        "notices/jpeg-turbo/ecae8008e2cc/java/doc/legal/LICENSE",
+        "notices/jpeg-turbo/ecae8008e2cc/release/License.rtf"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/3.1.4.1/libjpeg-turbo-3.1.4.1.tar.gz",
+          "sha256": "ecae8008e2cc9ade2f2c1bb9d5e6d4fb73e7c433866a056bd82980741571a022",
+          "file": "archives/ecae8008e2cc9ade-libjpeg-turbo-3.1.4.1.tar.gz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/jpeg-turbo/jpeg-turbo.rb",
+      "recipeSha256": "6c1c2039f51fda1013d2370f6ae87bc4f4f162e18d440627af0406fdb3d1f466",
+      "receiptSha256": "afce8a2a3871f6a6e0cc798d922e38c2ef8d78ea044ebf3a6b3fd85a951dc5e5"
+    },
+    {
+      "id": "libb2",
+      "version": "0.98.1",
+      "selectedLicense": "CC0-1.0",
+      "scope": "",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/libb2.1.dylib"
+      ],
+      "notices": [
+        "notices/libb2/53626fddce75/COPYING"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://github.com/BLAKE2/libb2/releases/download/v0.98.1/libb2-0.98.1.tar.gz",
+          "sha256": "53626fddce753c454a3fea581cbbc7fe9bbcf0bc70416d48fdbbf5d87ef6c72e",
+          "file": "archives/53626fddce753c45-libb2-0.98.1.tar.gz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        },
+        {
+          "url": "https://raw.githubusercontent.com/Homebrew/formula-patches/03cf8088210822aa2c1ab544ed58ea04c897d9c4/libtool/configure-big_sur.diff",
+          "sha256": "35acd6aebc19843f1a2b3a63e880baceb0f5278ab1ace661e57a502d9d78c93c",
+          "file": "archives/35acd6aebc19843f-configure-big_sur.diff",
+          "role": "recipe-resource-or-patch",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/libb2/libb2.rb",
+      "recipeSha256": "e0c353e17c03fa5cb4aea32d8ed9cd299d2ee77d950c6a32ccd61082f0f9355c",
+      "receiptSha256": "205cba75c0d4c17fe3057f281228b744d92cb54d5a87289bb0d808f19437f633"
+    },
+    {
+      "id": "libogg",
+      "version": "1.3.6",
+      "selectedLicense": "BSD-3-Clause",
+      "scope": "",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/libogg.0.8.6.dylib"
+      ],
+      "notices": [
+        "notices/libogg/83e670473068/AUTHORS",
+        "notices/libogg/83e670473068/COPYING"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://ftp.osuosl.org/pub/xiph/releases/ogg/libogg-1.3.6.tar.gz",
+          "sha256": "83e6704730683d004d20e21b8f7f55dcb3383cdf84c0daedf30bde175f774638",
+          "file": "archives/83e6704730683d00-libogg-1.3.6.tar.gz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/libogg/libogg.rb",
+      "recipeSha256": "e31fcdaf937004b95262421789f2d9c749dc74cdd47f84e15f2cdd974a0b3bf0",
+      "receiptSha256": "0218259e39d149417c6653edb7201983db0fbb3938881479f309e1b228d82d91"
+    },
+    {
+      "id": "libpng",
+      "version": "1.6.56",
+      "selectedLicense": "Libpng-2.0",
+      "scope": "",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/libpng16.16.dylib"
+      ],
+      "notices": [
+        "notices/libpng/f7d8bf1601b7/AUTHORS",
+        "notices/libpng/f7d8bf1601b7/LICENSE",
+        "notices/libpng/f7d8bf1601b7/ci/LICENSE_MIT.txt",
+        "notices/libpng/f7d8bf1601b7/contrib/gregbook/COPYING",
+        "notices/libpng/f7d8bf1601b7/contrib/gregbook/LICENSE",
+        "notices/libpng/f7d8bf1601b7/contrib/pngexif/LICENSE_MIT.txt",
+        "notices/libpng/f7d8bf1601b7/contrib/pngminus/LICENSE.txt",
+        "notices/libpng/f7d8bf1601b7/scripts/cmake/AUTHORS.md"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://downloads.sourceforge.net/project/libpng/libpng16/1.6.56/libpng-1.6.56.tar.xz",
+          "sha256": "f7d8bf1601b7804f583a254ab343a6549ca6cf27d255c302c47af2d9d36a6f18",
+          "file": "archives/f7d8bf1601b7804f-libpng-1.6.56.tar.xz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        },
+        {
+          "url": "https://src.fedoraproject.org/rpms/libpng/raw/49e9a06ca115aaa911dd3419ee79c1870d1428fb/f/pngtest.png",
+          "sha256": "f925a657a5343cfb724414c01e87afd4d60b1f82a46edc0e11f016a126f84064",
+          "file": "archives/f925a657a5343cfb-pngtest.png",
+          "role": "recipe-resource-or-patch",
+          "includeInSourceBundle": false
+        }
+      ],
+      "recipe": "recipes/libpng/libpng.rb",
+      "recipeSha256": "b02ef80f1c5a2b5c4fcc7edf1f8c899bafdaeb4db5763a08931b68f9fe09632b",
+      "receiptSha256": "3837075c4c4b345a45834e82411d8653c68a14096cfca77edbf2a9d381f7dc36"
+    },
+    {
+      "id": "libtiff",
+      "version": "4.7.1_1",
+      "selectedLicense": "libtiff",
+      "scope": "",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/libtiff.6.dylib"
+      ],
+      "notices": [
+        "notices/libtiff/f698d94f3103/LICENSE.md",
+        "notices/libtiff/f698d94f3103/doc/html-prebuilt/_sources/project/license.rst.txt",
+        "notices/libtiff/f698d94f3103/doc/html-prebuilt/project/license.html",
+        "notices/libtiff/f698d94f3103/doc/project/license.rst"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://download.osgeo.org/libtiff/tiff-4.7.1.tar.gz",
+          "sha256": "f698d94f3103da8ca7438d84e0344e453fe0ba3b7486e04c5bf7a9a3fabe9b69",
+          "file": "archives/f698d94f3103da8c-tiff-4.7.1.tar.gz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/libtiff/libtiff.rb",
+      "recipeSha256": "f9324614e0299a32c1ed64d00e8f009befb6af116ad79a4c897223151dfd693c",
+      "receiptSha256": "8acea54364a5db4c414135341b61689dcac1699937bcad7c229ddd4cac00de82"
+    },
+    {
+      "id": "libvorbis",
+      "version": "1.3.7",
+      "selectedLicense": "BSD-3-Clause",
+      "scope": "",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/libvorbis.0.dylib",
+        "Contents/Frameworks/libvorbisenc.2.dylib"
+      ],
+      "notices": [
+        "notices/libvorbis/b33cc4934322/AUTHORS",
+        "notices/libvorbis/b33cc4934322/COPYING"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://downloads.xiph.org/releases/vorbis/libvorbis-1.3.7.tar.xz",
+          "sha256": "b33cc4934322bcbf6efcbacf49e3ca01aadbea4114ec9589d1b1e9d20f72954b",
+          "file": "archives/b33cc4934322bcbf-libvorbis-1.3.7.tar.xz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        },
+        {
+          "url": "https://upload.wikimedia.org/wikipedia/commons/c/c8/Example.ogg",
+          "sha256": "f57b56d8aae4c847cf01224fb45293610d801cfdac43d932b5eeab1cd318182a",
+          "file": "archives/f57b56d8aae4c847-Example.ogg",
+          "role": "recipe-resource-or-patch",
+          "includeInSourceBundle": false
+        }
+      ],
+      "recipe": "recipes/libvorbis/libvorbis.rb",
+      "recipeSha256": "57a1a4b15d0023b582bdce81759e5e34f0dd186641d77676fd98998b212e71a9",
+      "receiptSha256": "60da071cb1fea9f0eac1f2f32ce8011f616622f0cee69428bbc86ff046c8cd58"
+    },
+    {
+      "id": "libvpx",
+      "version": "1.16.0",
+      "selectedLicense": "BSD-3-Clause",
+      "scope": "Include PATENTS and additional patent grant text as applicable.",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/libvpx.12.dylib"
+      ],
+      "notices": [
+        "notices/libvpx/7a479a3c66b9/AUTHORS",
+        "notices/libvpx/7a479a3c66b9/LICENSE",
+        "notices/libvpx/7a479a3c66b9/PATENTS",
+        "notices/libvpx/7a479a3c66b9/third_party/googletest/src/LICENSE",
+        "notices/libvpx/7a479a3c66b9/third_party/libwebm/AUTHORS.TXT",
+        "notices/libvpx/7a479a3c66b9/third_party/libwebm/LICENSE.TXT",
+        "notices/libvpx/7a479a3c66b9/third_party/libwebm/PATENTS.TXT",
+        "notices/libvpx/7a479a3c66b9/third_party/libyuv/LICENSE",
+        "notices/libvpx/7a479a3c66b9/third_party/nalloc/LICENSE",
+        "notices/libvpx/7a479a3c66b9/third_party/x86inc/LICENSE"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://github.com/webmproject/libvpx/archive/refs/tags/v1.16.0.tar.gz",
+          "sha256": "7a479a3c66b9f5d5542a4c6a1b7d3768a983b1e5c14c60a9396edc9b649e015c",
+          "file": "archives/7a479a3c66b9f5d5-v1.16.0.tar.gz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/libvpx/libvpx.rb",
+      "recipeSha256": "c221276a228e690c9e97e857e2573e7b4ce4c840b13befdb4283ee22b5c6aefd",
+      "receiptSha256": "1a2ed5d9c24539c1ecbf96f9fcf74943b8957fca9fa50e3b7bc4b868caa4f0fc"
+    },
+    {
+      "id": "libx11",
+      "version": "1.8.13",
+      "selectedLicense": "MIT",
+      "scope": "X11-style notices differ by source file; original COPYING retained.",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/libX11.6.dylib",
+        "Contents/Frameworks/libX11-xcb.1.dylib"
+      ],
+      "notices": [
+        "notices/libx11/acf0e7cd7541/AUTHORS",
+        "notices/libx11/acf0e7cd7541/COPYING",
+        "notices/libx11/acf0e7cd7541/src/xlibi18n/lcUniConv/COPYRIGHT",
+        "supplemental/libx11/xtrans-1.5.2-COPYING",
+        "supplemental/libx11/xtrans-1.6.0-COPYING"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://www.x.org/archive/individual/lib/libX11-1.8.13.tar.gz",
+          "sha256": "acf0e7cd7541110e6330ecb539441a2d53061f386ec7be6906dfde0de2598470",
+          "file": "archives/acf0e7cd7541110e-libX11-1.8.13.tar.gz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/libx11/libx11.rb",
+      "recipeSha256": "223d2e493e3dabe4fe7ca1b3a05576025e8d89cd43027f6bee5bf8644b2dfc42",
+      "receiptSha256": "d29979b1b9e1fbdfcaa2a79e3a63711c455292253f6f8c2d9ae38a2974539c42"
+    },
+    {
+      "id": "libxau",
+      "version": "1.0.12",
+      "selectedLicense": "MIT",
+      "scope": "",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/libXau.6.dylib"
+      ],
+      "notices": [
+        "notices/libxau/74d0e4dfa3d3/AUTHORS",
+        "notices/libxau/74d0e4dfa3d3/COPYING"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://www.x.org/archive/individual/lib/libXau-1.0.12.tar.xz",
+          "sha256": "74d0e4dfa3d39ad8939e99bda37f5967aba528211076828464d2777d477fc0fb",
+          "file": "archives/74d0e4dfa3d39ad8-libXau-1.0.12.tar.xz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/libxau/libxau.rb",
+      "recipeSha256": "9c71744bb76db44bba40e0017edc3a398c1fdec4df6772dfa76ce4b21c441e7c",
+      "receiptSha256": "a68719641d4c602fe6cf7d6484d0516a36f159ca5f82b4ab540c45b733ffbfdd"
+    },
+    {
+      "id": "libxcb",
+      "version": "1.17.0",
+      "selectedLicense": "MIT",
+      "scope": "",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/libxcb.1.1.0.dylib"
+      ],
+      "notices": [
+        "notices/libxcb/599ebf999671/COPYING"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://xorg.freedesktop.org/archive/individual/lib/libxcb-1.17.0.tar.xz",
+          "sha256": "599ebf9996710fea71622e6e184f3a8ad5b43d0e5fa8c4e407123c88a59a6d55",
+          "file": "archives/599ebf9996710fea-libxcb-1.17.0.tar.xz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/libxcb/libxcb.rb",
+      "recipeSha256": "a8ee1a5299cf7cdadeffb384debbd1f434487c928b71ddbef8cb9f2acc31e7b2",
+      "receiptSha256": "aa5a661de670e0b6a415c750df7e4473c588dee2449993c113f55d8876048b60"
+    },
+    {
+      "id": "libxdmcp",
+      "version": "1.1.5",
+      "selectedLicense": "MIT",
+      "scope": "",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/libXdmcp.6.dylib"
+      ],
+      "notices": [
+        "notices/libxdmcp/d8a5222828c3/AUTHORS",
+        "notices/libxdmcp/d8a5222828c3/COPYING"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://www.x.org/archive/individual/lib/libXdmcp-1.1.5.tar.xz",
+          "sha256": "d8a5222828c3adab70adf69a5583f1d32eb5ece04304f7f8392b6a353aa2228c",
+          "file": "archives/d8a5222828c3adab-libXdmcp-1.1.5.tar.xz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/libxdmcp/libxdmcp.rb",
+      "recipeSha256": "a2b8f9ceca5ad35f70b0f84503137b422031ce67b0431fb2d1c71d9c64881eee",
+      "receiptSha256": "36612f58a04edcda4042b84891d353b016ce7eda3b6a61226f80f0fd694dc21c"
+    },
+    {
+      "id": "md4c",
+      "version": "0.5.2",
+      "selectedLicense": "MIT",
+      "scope": "",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/libmd4c.0.5.2.dylib"
+      ],
+      "notices": [
+        "notices/md4c/55d0111d48fb/LICENSE.md",
+        "notices/md4c/55d0111d48fb/test/LICENSE.md"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://github.com/mity/md4c/archive/refs/tags/release-0.5.2.tar.gz",
+          "sha256": "55d0111d48fb11883aaee91465e642b8b640775a4d6993c2d0e7a8092758ef21",
+          "file": "archives/55d0111d48fb1188-release-0.5.2.tar.gz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/md4c/md4c.rb",
+      "recipeSha256": "27968da260adbd4186ebe158bd3de3e85cddd14f586d66c98717abc8d49221f1",
+      "receiptSha256": "09f77463b7dfa73445dc96507b571acafd217d85771b9c1b2a89649b4ac9e471"
+    },
+    {
+      "id": "mpg123",
+      "version": "1.33.4",
+      "selectedLicense": "LGPL-2.1-or-later",
+      "scope": "Only libmpg123 decoder; retain original notice and license.",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/libmpg123.0.dylib"
+      ],
+      "notices": [
+        "notices/mpg123/3ae8c9ff80a9/AUTHORS",
+        "notices/mpg123/3ae8c9ff80a9/COPYING",
+        "notices/mpg123/3ae8c9ff80a9/doc/LICENSE",
+        "notices/mpg123/3ae8c9ff80a9/doc/PATENTS"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://www.mpg123.de/download/mpg123-1.33.4.tar.bz2",
+          "sha256": "3ae8c9ff80a97bfc0e22e89fbcd74687eca4fc1db315b12607f27f01cb5a47d9",
+          "file": "archives/3ae8c9ff80a97bfc-mpg123-1.33.4.tar.bz2",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/mpg123/mpg123.rb",
+      "recipeSha256": "e7cd8c24e5cb7449ec6ce2199d0592846cae7cf1c46e5a1eb0d00527bf9c2686",
+      "receiptSha256": "19fdc0c2dd8f79ea84d4d0e8cd76cb270b0a3984ab82548a4e2e393f6ca591db"
+    },
+    {
+      "id": "openssl@3",
+      "version": "3.6.1",
+      "selectedLicense": "Apache-2.0",
+      "scope": "Include NOTICE and Apache 2.0 original text.",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/libssl.3.dylib",
+        "Contents/Frameworks/libcrypto.3.dylib"
+      ],
+      "notices": [
+        "notices/openssl@3/420600911230/LICENSE",
+        "notices/openssl@3/b1bfedcd5b28/AUTHORS.md",
+        "notices/openssl@3/b1bfedcd5b28/LICENSE.txt",
+        "notices/openssl@3/b1bfedcd5b28/external/perl/Text-Template-1.56/LICENSE",
+        "notices/openssl@3/b1bfedcd5b28/util/perl/OpenSSL/copyright.pm"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://github.com/openssl/openssl/releases/download/openssl-3.6.1/openssl-3.6.1.tar.gz",
+          "sha256": "b1bfedcd5b289ff22aee87c9d600f515767ebf45f77168cb6d64f231f518a82e",
+          "file": "archives/b1bfedcd5b289ff2-openssl-3.6.1.tar.gz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        },
+        {
+          "url": "https://cpan.metacpan.org/authors/id/L/LE/LEONT/Test-Harness-3.52.tar.gz",
+          "sha256": "8fe65cfc0261ed3c8a4395f0524286f5719669fe305f9b03b16cf3684d62cd70",
+          "file": "archives/8fe65cfc0261ed3c-Test-Harness-3.52.tar.gz",
+          "role": "recipe-resource-or-patch",
+          "includeInSourceBundle": true
+        },
+        {
+          "url": "https://cpan.metacpan.org/authors/id/E/EX/EXODIST/Test-Simple-1.302219.tar.gz",
+          "sha256": "420600911230de768427f6646758d89b6c07977b565e5b40118e5b8440dbb30b",
+          "file": "archives/420600911230de76-Test-Simple-1.302219.tar.gz",
+          "role": "recipe-resource-or-patch",
+          "includeInSourceBundle": true
+        },
+        {
+          "url": "https://cpan.metacpan.org/authors/id/B/BI/BINGOS/ExtUtils-MakeMaker-7.76.tar.gz",
+          "sha256": "30bcfd75fec4d512e9081c792f7cb590009d9de2fe285ffa8eec1be35a5ae7ca",
+          "file": "archives/30bcfd75fec4d512-ExtUtils-MakeMaker-7.76.tar.gz",
+          "role": "recipe-resource-or-patch",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/openssl@3/openssl@3.rb",
+      "recipeSha256": "0d17d2cf7930b61e921d4a2ff63fbdbeb70c608e9e169ee52601e7d08d72254f",
+      "receiptSha256": "cd7d8e226e092c63569bc7a7b8a3456b12722d7147656a0706d05dc9da8d07e3"
+    },
+    {
+      "id": "opus",
+      "version": "1.6.1",
+      "selectedLicense": "BSD-3-Clause",
+      "scope": "Retain included third-party notices and patent grants.",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/libopus.0.dylib"
+      ],
+      "notices": [
+        "notices/opus/6ffcb593207b/AUTHORS",
+        "notices/opus/6ffcb593207b/COPYING"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://ftp.osuosl.org/pub/xiph/releases/opus/opus-1.6.1.tar.gz",
+          "sha256": "6ffcb593207be92584df15b32466ed64bbec99109f007c82205f0194572411a1",
+          "file": "archives/6ffcb593207be925-opus-1.6.1.tar.gz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/opus/opus.rb",
+      "recipeSha256": "7ebe72e9352ceb9236cfb49c8ba7134556295ca330ea9054135b1401257f03c4",
+      "receiptSha256": "8d77c91299d9d51272c8fe9de00878bd27020b8b18c7e986f098249a4f80cab9"
+    },
+    {
+      "id": "orc",
+      "version": "0.4.42",
+      "selectedLicense": "BSD-2-Clause",
+      "scope": "Original notices cover differently licensed source fragments.",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/liborc-0.4.0.dylib"
+      ],
+      "notices": [
+        "notices/orc/7ec912ab59af/COPYING"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://gstreamer.freedesktop.org/src/orc/orc-0.4.42.tar.xz",
+          "sha256": "7ec912ab59af3cc97874c456a56a8ae1eec520c385ec447e8a102b2bd122c90c",
+          "file": "archives/7ec912ab59af3cc9-orc-0.4.42.tar.xz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/orc/orc.rb",
+      "recipeSha256": "fd35e46a1a609fc6d23be34e532006f8db55cf17124d48875cb503132ebb568e",
+      "receiptSha256": "241131ca3f05dc9830900aadba04598c7aedb45a7d187314354b2bab01d61b2f"
+    },
+    {
+      "id": "pcre2",
+      "version": "10.47_1",
+      "selectedLicense": "BSD-3-Clause",
+      "scope": "Retain additional upstream notices, including historical contributions.",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/libpcre2-8.0.dylib",
+        "Contents/Frameworks/libpcre2-16.0.dylib"
+      ],
+      "notices": [
+        "notices/pcre2/47fe8c994612/AUTHORS.md",
+        "notices/pcre2/47fe8c994612/COPYING",
+        "notices/pcre2/47fe8c994612/LICENCE.md",
+        "notices/pcre2/47fe8c994612/cmake/COPYING-CMAKE-SCRIPTS",
+        "notices/pcre2/47fe8c994612/deps/sljit/LICENSE"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.47/pcre2-10.47.tar.bz2",
+          "sha256": "47fe8c99461250d42f89e6e8fdaeba9da057855d06eb7fc08d9ca03fd08d7bc7",
+          "file": "archives/47fe8c99461250d4-pcre2-10.47.tar.bz2",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/pcre2/pcre2.rb",
+      "recipeSha256": "40d07c0619cc42e570dfe34e22f02841254777c8a7eab72da2a4af5d60a5310e",
+      "receiptSha256": "bdc69800e550bbe837decbc8d17bfb95543278e0664e6c76e89f5581db27311b"
+    },
+    {
+      "id": "qtbase",
+      "version": "6.11.0",
+      "selectedLicense": "LGPL-3.0-only",
+      "scope": "Core, Gui, Widgets, Network, DBus and selected Cocoa/image/TLS plugins; embedded notices follow the reviewed SBOM/source/feature conditions.",
+      "copyrightNotice": "Copyright (C) The Qt Company Ltd. and other contributors.",
+      "files": [
+        "Contents/PlugIns/qt/platforms/libqcocoa.dylib",
+        "Contents/PlugIns/qt/imageformats/libqjpeg.dylib",
+        "Contents/PlugIns/qt/imageformats/libqgif.dylib",
+        "Contents/PlugIns/qt/tls/libqsecuretransportbackend.dylib",
+        "Contents/Frameworks/QtWidgets.framework/Versions/A/QtWidgets",
+        "Contents/Frameworks/QtNetwork.framework/Versions/A/QtNetwork",
+        "Contents/Frameworks/QtGui.framework/Versions/A/QtGui",
+        "Contents/Frameworks/QtCore.framework/Versions/A/QtCore",
+        "Contents/Frameworks/QtDBus.framework/Versions/A/QtDBus"
+      ],
+      "notices": [
+        "notices/qtbase/231ad8597986/LICENSES/BSD-3-Clause.txt",
+        "notices/qtbase/231ad8597986/LICENSES/GPL-2.0-only.txt",
+        "notices/qtbase/231ad8597986/LICENSES/GPL-3.0-only.txt",
+        "notices/qtbase/231ad8597986/LICENSES/LGPL-3.0-only.txt",
+        "notices/qtbase/231ad8597986/src/3rdparty/VulkanMemoryAllocator/LICENSE.txt",
+        "notices/qtbase/231ad8597986/src/3rdparty/VulkanMemoryAllocator/qt_attribution.json",
+        "notices/qtbase/231ad8597986/src/3rdparty/blake2/COPYING",
+        "notices/qtbase/231ad8597986/src/3rdparty/blake2/qt_attribution.json",
+        "notices/qtbase/231ad8597986/src/3rdparty/easing/LICENSE",
+        "notices/qtbase/231ad8597986/src/3rdparty/easing/qt_attribution.json",
+        "notices/qtbase/231ad8597986/src/3rdparty/emoji-segmenter/qt_attribution.json",
+        "notices/qtbase/231ad8597986/src/3rdparty/forkfd/LICENSE",
+        "notices/qtbase/231ad8597986/src/3rdparty/forkfd/qt_attribution.json",
+        "notices/qtbase/231ad8597986/src/3rdparty/freetype/LICENSE.txt",
+        "notices/qtbase/231ad8597986/src/3rdparty/icc/LICENSE.txt",
+        "notices/qtbase/231ad8597986/src/3rdparty/icc/qt_attribution.json",
+        "notices/qtbase/231ad8597986/src/3rdparty/libpsl/PSL-LICENSE.txt",
+        "notices/qtbase/231ad8597986/src/3rdparty/libpsl/qt_attribution.json",
+        "notices/qtbase/231ad8597986/src/3rdparty/libpsl/src/LICENSE.chromium",
+        "notices/qtbase/231ad8597986/src/3rdparty/md4/qt_attribution.json",
+        "notices/qtbase/231ad8597986/src/3rdparty/md5/qt_attribution.json",
+        "notices/qtbase/231ad8597986/src/3rdparty/rfc6234/LICENSE",
+        "notices/qtbase/231ad8597986/src/3rdparty/rfc6234/qt_attribution.json",
+        "notices/qtbase/231ad8597986/src/3rdparty/sha1/qt_attribution.json",
+        "notices/qtbase/231ad8597986/src/3rdparty/sha3/BRG_ENDIAN_LICENSE",
+        "notices/qtbase/231ad8597986/src/3rdparty/sha3/CC0_LICENSE",
+        "notices/qtbase/231ad8597986/src/3rdparty/sha3/qt_attribution.json",
+        "notices/qtbase/231ad8597986/src/3rdparty/siphash/qt_attribution.json",
+        "notices/qtbase/231ad8597986/src/3rdparty/tinycbor/LICENSE",
+        "notices/qtbase/231ad8597986/src/3rdparty/tinycbor/qt_attribution.json",
+        "notices/qtbase/231ad8597986/src/corelib/global/qt_attribution.json",
+        "notices/qtbase/231ad8597986/src/corelib/kernel/LICENSE.QEVENTDISPATCHER_CF.txt",
+        "notices/qtbase/231ad8597986/src/corelib/kernel/qt_attribution.json",
+        "notices/qtbase/231ad8597986/src/corelib/mimetypes/3rdparty/qt_attribution.json",
+        "notices/qtbase/231ad8597986/src/corelib/text/qt_attribution.json",
+        "notices/qtbase/231ad8597986/src/dbus/LICENSE.LIBDBUS-1.txt",
+        "notices/qtbase/231ad8597986/src/dbus/qt_attribution.json",
+        "notices/qtbase/231ad8597986/src/gui/opengl/LICENSE.KHRONOS.txt",
+        "notices/qtbase/231ad8597986/src/gui/opengl/qt_attribution.json",
+        "notices/qtbase/231ad8597986/src/gui/painting/LICENSE.QIMAGETRANSFORM.txt",
+        "notices/qtbase/231ad8597986/src/gui/painting/LICENSE.XCONSORTIUM.txt",
+        "notices/qtbase/231ad8597986/src/gui/painting/qt_attribution.json",
+        "notices/qtbase/231ad8597986/src/gui/text/LICENSE.AGLFN.txt",
+        "notices/qtbase/231ad8597986/src/gui/text/qt_attribution.json",
+        "notices/qtbase/231ad8597986/src/gui/vulkan/LICENSE.txt",
+        "notices/qtbase/231ad8597986/src/gui/vulkan/qt_attribution.json",
+        "notices/qtbase/231ad8597986/src/plugins/platforms/cocoa/LICENSE.COCOA.txt",
+        "notices/qtbase/231ad8597986/src/plugins/platforms/cocoa/qt_attribution.json",
+        "notices/qtbase/231ad8597986/util/gradientgen/LICENSE.WEBGRADIENTS.txt",
+        "notices/qtbase/231ad8597986/util/gradientgen/qt_attribution.json"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://download.qt.io/official_releases/qt/6.11/6.11.0/submodules/qtbase-everywhere-src-6.11.0.tar.xz",
+          "sha256": "231ad85979864d914dc9568a1b71c91d6cf20d7b2021d059103bf0eb51cb755e",
+          "file": "archives/231ad85979864d91-qtbase-everywhere-src-6.11.0.tar.xz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/qtbase/qtbase.rb",
+      "recipeSha256": "6612c02f2644d15c0daff9c1515d3372f95dc8292ac375d622079685cfcf6946",
+      "receiptSha256": "5fa70d889226d6a1b2a12bdbfc5852acb25b9aac5576ba710b85dd84d344be11"
+    },
+    {
+      "id": "qtimageformats",
+      "version": "6.11.0",
+      "selectedLicense": "LGPL-3.0-only",
+      "scope": "Only TIFF and WebP plugins; their separately linked libraries are separate components.",
+      "copyrightNotice": "Copyright (C) The Qt Company Ltd. and other contributors.",
+      "files": [
+        "Contents/PlugIns/qt/imageformats/libqtiff.dylib",
+        "Contents/PlugIns/qt/imageformats/libqwebp.dylib"
+      ],
+      "notices": [
+        "notices/qtimageformats/d3adb02ac5e2/LICENSES/BSD-3-Clause.txt",
+        "notices/qtimageformats/d3adb02ac5e2/LICENSES/GPL-2.0-only.txt",
+        "notices/qtimageformats/d3adb02ac5e2/LICENSES/GPL-3.0-only.txt",
+        "notices/qtimageformats/d3adb02ac5e2/LICENSES/LGPL-3.0-only.txt"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://download.qt.io/official_releases/qt/6.11/6.11.0/submodules/qtimageformats-everywhere-src-6.11.0.tar.xz",
+          "sha256": "d3adb02ac5e2fe24068dbdaee0d7cc68cc3fa8553291c1bfce77c9fe8e940cc8",
+          "file": "archives/d3adb02ac5e2fe24-qtimageformats-everywhere-src-6.11.0.tar.xz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/qtimageformats/qtimageformats.rb",
+      "recipeSha256": "2931341354cfd134aaa12af2a4fbff8ec941a090af22e8ca052652e77ecd8802",
+      "receiptSha256": "9a8c6f8b73701fa672ef059c11c146f1f9a0c5bdcb29387542a896c0526f507d"
+    },
+    {
+      "id": "qtsvg",
+      "version": "6.11.0",
+      "selectedLicense": "LGPL-3.0-only",
+      "scope": "Svg framework, SVG image and icon plugins; includes XSVG notice.",
+      "copyrightNotice": "Copyright (C) The Qt Company Ltd. and other contributors.",
+      "files": [
+        "Contents/PlugIns/qt/imageformats/libqsvg.dylib",
+        "Contents/PlugIns/qt/iconengines/libqsvgicon.dylib",
+        "Contents/Frameworks/QtSvg.framework/Versions/A/QtSvg"
+      ],
+      "notices": [
+        "notices/qtsvg/dfa8d653be07/LICENSES/BSD-3-Clause.txt",
+        "notices/qtsvg/dfa8d653be07/LICENSES/GPL-2.0-only.txt",
+        "notices/qtsvg/dfa8d653be07/LICENSES/GPL-3.0-only.txt",
+        "notices/qtsvg/dfa8d653be07/LICENSES/LGPL-3.0-only.txt",
+        "notices/qtsvg/dfa8d653be07/src/svg/LICENSE.XSVG.txt",
+        "notices/qtsvg/dfa8d653be07/src/svg/qt_attribution.json"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://download.qt.io/official_releases/qt/6.11/6.11.0/submodules/qtsvg-everywhere-src-6.11.0.tar.xz",
+          "sha256": "dfa8d653be07087d9407ed4a4ebae847f8953e0b7abd829f089803ab652a30e6",
+          "file": "archives/dfa8d653be07087d-qtsvg-everywhere-src-6.11.0.tar.xz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/qtsvg/qtsvg.rb",
+      "recipeSha256": "4216940028472fdafb2d239d2a011ffae01855d077e2a7f3157ec4b0183d7835",
+      "receiptSha256": "a29c277476f2b2eea604b05973d64fe5db06c89a55793394550159ff427c8796"
+    },
+    {
+      "id": "qtwebengine",
+      "version": "6.11.0",
+      "selectedLicense": "LGPL-3.0-only",
+      "scope": "Only QtPdf; PDFium and its embedded third-party code also apply. QtWebEngine browser modules are not bundled.",
+      "copyrightNotice": "Copyright (C) The Qt Company Ltd. and other contributors.",
+      "files": [
+        "Contents/Frameworks/QtPdf.framework/Versions/A/QtPdf"
+      ],
+      "notices": [
+        "notices/qtwebengine/63b921c8b2dd/LICENSES/BSD-3-Clause.txt",
+        "notices/qtwebengine/63b921c8b2dd/LICENSES/GPL-2.0-only.txt",
+        "notices/qtwebengine/63b921c8b2dd/LICENSES/GPL-3.0-only.txt",
+        "notices/qtwebengine/63b921c8b2dd/LICENSES/LGPL-3.0-only.txt",
+        "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/LICENSE",
+        "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/base/third_party/icu/LICENSE",
+        "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/abseil-cpp/AUTHORS",
+        "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/abseil-cpp/LICENSE",
+        "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/fast_float/src/AUTHORS",
+        "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/fast_float/src/LICENSE-APACHE",
+        "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/fast_float/src/LICENSE-BOOST",
+        "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/fast_float/src/LICENSE-MIT",
+        "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/freetype/src/LICENSE.TXT",
+        "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/freetype/src/docs/FTL.TXT",
+        "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/icu/LICENSE",
+        "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/icu/license.html",
+        "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/icu/scripts/LICENSE",
+        "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/libjpeg_turbo/LICENSE.md",
+        "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/libjpeg_turbo/README.ijg",
+        "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/pdfium/AUTHORS",
+        "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/pdfium/LICENSE",
+        "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/pdfium/third_party/agg23/copying",
+        "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/pdfium/third_party/lcms/LICENSE",
+        "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/pdfium/third_party/libopenjpeg/LICENSE",
+        "notices/qtwebengine/PRODUCTION-SOURCE-COPYRIGHTS.txt"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://download.qt.io/official_releases/qt/6.11/6.11.0/submodules/qtwebengine-everywhere-src-6.11.0.tar.xz",
+          "sha256": "63b921c8b2dd59152ced9a796676010166df044588ee00ef9429dc2fd2146736",
+          "file": "archives/63b921c8b2dd5915-qtwebengine-everywhere-src-6.11.0.tar.xz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        },
+        {
+          "url": "https://files.pythonhosted.org/packages/ac/b6/b55c3f49042f1df3dcd422b7f224f939892ee94f22abcf503a9b7339eaf2/html5lib-1.1.tar.gz",
+          "sha256": "b2e5b40261e20f354d198eae92afc10d750afb487ed5e50f9c4eaf07c184146f",
+          "file": "archives/b2e5b40261e20f35-html5lib-1.1.tar.gz",
+          "role": "recipe-resource-or-patch",
+          "includeInSourceBundle": true
+        },
+        {
+          "url": "https://github.com/html5lib/html5lib-python/commit/379f9476c2a5ee370cd7ec856ee9092cace88499.patch?full_index=1",
+          "sha256": "97ae2474704eedf72dc5d5c46ad86e2144c10022ea950cb1c42a9ad894705014",
+          "file": "archives/97ae2474704eedf7-379f9476c2a5ee370cd7ec856ee9092cace88499.patch",
+          "role": "recipe-resource-or-patch",
+          "includeInSourceBundle": true
+        },
+        {
+          "url": "https://github.com/html5lib/html5lib-python/commit/1dbc19cd6db72cb919885827bc4883423e0cb647.patch?full_index=1",
+          "sha256": "5951b823f353dd70806ad6e163ab8f46899496c1e8bb53970c99abe8d1df1a78",
+          "file": "archives/5951b823f353dd70-1dbc19cd6db72cb919885827bc4883423e0cb647.patch",
+          "role": "recipe-resource-or-patch",
+          "includeInSourceBundle": true
+        },
+        {
+          "url": "https://files.pythonhosted.org/packages/94/e7/b2c673351809dca68a0e064b6af791aa332cf192da575fd474ed7d6f16a2/six-1.17.0.tar.gz",
+          "sha256": "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81",
+          "file": "archives/ff70335d468e7eb6-six-1.17.0.tar.gz",
+          "role": "recipe-resource-or-patch",
+          "includeInSourceBundle": true
+        },
+        {
+          "url": "https://files.pythonhosted.org/packages/0b/02/ae6ceac1baeda530866a85075641cec12989bd8d31af6d5ab4a3e8c92f47/webencodings-0.5.1.tar.gz",
+          "sha256": "b36a1c245f2d304965eb4e0a82848379241dc04b865afcc4aab16748587e1923",
+          "file": "archives/b36a1c245f2d3049-webencodings-0.5.1.tar.gz",
+          "role": "recipe-resource-or-patch",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/qtwebengine/qtwebengine.rb",
+      "recipeSha256": "e269bd982f85a96b943fc22dcd3b2972ad7d51e17805c2f3e5bf535c85d25506",
+      "receiptSha256": "780fb3649123a0ac5bf550fc73259bbc5f8f2a5d4d7a175909d01a1b479b0c26"
+    },
+    {
+      "id": "vtr-pon",
+      "version": "d7a21084ab6a7d3f2accd0fb93bca93c37d83b15",
+      "selectedLicense": "MPL-2.0; self-authored test patterns CC0-1.0",
+      "scope": "Main application, helpers, test executables and build scripts; bundled self-authored test-pattern media separately CC0.",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/MacOS/vtr-pon",
+        "Contents/MacOS/vtr-pon-audio-devices",
+        "Contents/MacOS/vtr-pon-pfl-output",
+        "Contents/MacOS/vtr-pon-addon-runtime-probe",
+        "Contents/MacOS/vtr-pon-addon-manager",
+        "Contents/Helpers/vtr-pon-operator-monitor.app/Contents/MacOS/vtr-pon-operator-monitor",
+        "Contents/Helpers/vtr-pon-camera-output.app/Contents/MacOS/vtr-pon-camera-output",
+        "Contents/Library/SystemExtensions/com.pondashi.vtrpon3.development.CameraExtension.systemextension/Contents/MacOS/com.pondashi.vtrpon3.development.CameraExtension",
+        "Contents/MacOS/mac-pdf-test",
+        "Contents/MacOS/mac-pdf-import-test",
+        "Contents/MacOS/mac-pdf-conversion-test"
+      ],
+      "notices": [
+        "notices/vtr-pon/CC0-1.0.txt",
+        "notices/vtr-pon/MIT.txt",
+        "notices/vtr-pon/MPL-2.0.txt"
+      ],
+      "sourceDownloads": [],
+      "recipe": null,
+      "recipeSha256": null,
+      "receiptSha256": null,
+      "sourceCommit": "d7a21084ab6a7d3f2accd0fb93bca93c37d83b15"
+    },
+    {
+      "id": "webp",
+      "version": "1.6.0",
+      "selectedLicense": "BSD-3-Clause",
+      "scope": "Include PATENTS and AUTHORS.",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/libwebpdemux.2.0.17.dylib",
+        "Contents/Frameworks/libwebpmux.3.1.2.dylib",
+        "Contents/Frameworks/libwebp.7.2.0.dylib",
+        "Contents/Frameworks/libsharpyuv.0.1.2.dylib"
+      ],
+      "notices": [
+        "notices/webp/e4ab7009bf06/AUTHORS",
+        "notices/webp/e4ab7009bf06/COPYING",
+        "notices/webp/e4ab7009bf06/PATENTS"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-1.6.0.tar.gz",
+          "sha256": "e4ab7009bf0629fd11982d4c2aa83964cf244cffba7347ecd39019a9e38c4564",
+          "file": "archives/e4ab7009bf0629fd-libwebp-1.6.0.tar.gz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/webp/webp.rb",
+      "recipeSha256": "c2daf79de310f5aa1a3c8a2e412c6fcec1cc1ff47ba506e4bbddcaffbf7dc90c",
+      "receiptSha256": "ad85f9e5260fa01ab6e8bec8aa732e3976d8d934c297286ca4f477e23d4ae1cb"
+    },
+    {
+      "id": "xz",
+      "version": "5.8.3",
+      "selectedLicense": "0BSD",
+      "scope": "Only liblzma; source package has other licenses for tools/tests.",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/liblzma.5.dylib"
+      ],
+      "notices": [
+        "notices/xz/3d3a1b973af2/AUTHORS",
+        "notices/xz/3d3a1b973af2/COPYING",
+        "notices/xz/3d3a1b973af2/COPYING.0BSD",
+        "notices/xz/3d3a1b973af2/COPYING.GPLv2",
+        "notices/xz/3d3a1b973af2/COPYING.GPLv3",
+        "notices/xz/3d3a1b973af2/COPYING.LGPLv2.1",
+        "notices/xz/3d3a1b973af2/build-aux/license-check.sh"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://github.com/tukaani-project/xz/releases/download/v5.8.3/xz-5.8.3.tar.gz",
+          "sha256": "3d3a1b973af218114f4f889bbaa2f4c037deaae0c8e815eec381c3d546b974a0",
+          "file": "archives/3d3a1b973af21811-xz-5.8.3.tar.gz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/xz/xz.rb",
+      "recipeSha256": "0812ffeca3c6631a261e87c76ff26368eee0df6ecedfe0f458d67494fdf6e9cc",
+      "receiptSha256": "8ebe30ff93741eaaeb14c91c8f26c3ae1ce0342b7d04c6bce241c916fb7cd0c6"
+    },
+    {
+      "id": "zlib",
+      "version": "1.3.2",
+      "selectedLicense": "Zlib",
+      "scope": "",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/libz.1.3.2.dylib"
+      ],
+      "notices": [
+        "notices/zlib/bb329a0a2cd0/LICENSE",
+        "notices/zlib/bb329a0a2cd0/contrib/dotzlib/LICENSE_1_0.txt",
+        "notices/zlib/bb329a0a2cd0/contrib/minizip/LICENSE.Info-Zip"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://zlib.net/zlib-1.3.2.tar.gz",
+          "sha256": "bb329a0a2cd0274d05519d61c667c062e06990d72e125ee2dfa8de64f0119d16",
+          "file": "archives/bb329a0a2cd0274d-zlib-1.3.2.tar.gz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/zlib/zlib.rb",
+      "recipeSha256": "42bf8d820736047ff22a2099c247b58861c431f0ad28b565a52f14e719f8e4d7",
+      "receiptSha256": "8918c51009e691e4f1c2de03dd1f74188de452f44eea4a8a2b3590ac9010b45d"
+    },
+    {
+      "id": "zstd",
+      "version": "1.5.7_1",
+      "selectedLicense": "BSD-3-Clause",
+      "scope": "Select the BSD alternative for shared libzstd.",
+      "copyrightNotice": "See the original notices and corresponding source files.",
+      "files": [
+        "Contents/Frameworks/libzstd.1.5.7.dylib"
+      ],
+      "notices": [
+        "notices/zstd/37d7284556b2/COPYING",
+        "notices/zstd/37d7284556b2/LICENSE",
+        "notices/zstd/37d7284556b2/build/LICENSE",
+        "supplemental/zstd/BORROWED-COPYRIGHTS.txt"
+      ],
+      "sourceDownloads": [
+        {
+          "url": "https://github.com/facebook/zstd/archive/refs/tags/v1.5.7.tar.gz",
+          "sha256": "37d7284556b20954e56e1ca85b80226768902e2edabd3b649e9e72c0c9012ee3",
+          "file": "archives/37d7284556b20954-v1.5.7.tar.gz",
+          "role": "primary-source",
+          "includeInSourceBundle": true
+        }
+      ],
+      "recipe": "recipes/zstd/zstd.rb",
+      "recipeSha256": "9a9b0183896886e82b915af4db576f27d34d1cee7757d6c5beb0e1eb74c68e0d",
+      "receiptSha256": "e2363732b0a1da51a18037ee3e7a6d07d1c895377283ed1c68a0a972933d99f3"
+    }
+  ],
+  "files": [
+    {
+      "path": "Contents/MacOS/vtr-pon",
+      "component": "vtr-pon",
+      "contentSha256": "3896e9fa9a533ec623a17ce0e53b4a45c6e14e88d2b9bffe5f5afc812120ba28"
+    },
+    {
+      "path": "Contents/MacOS/vtr-pon-audio-devices",
+      "component": "vtr-pon",
+      "contentSha256": "e9c3133949a960da21d16ae14bd91dd05b95d9300f1287401d28c7d18a8583cc"
+    },
+    {
+      "path": "Contents/MacOS/vtr-pon-pfl-output",
+      "component": "vtr-pon",
+      "contentSha256": "0569303f6f95201216ef90a44aa93bee81d298ed8429ae10519cef684930fff8"
+    },
+    {
+      "path": "Contents/MacOS/vtr-pon-addon-runtime-probe",
+      "component": "vtr-pon",
+      "contentSha256": "73919bce4b635d6d2f8ab4ea23ae9badf0759f3d654da7f2bdf0fdb4de41f66d"
+    },
+    {
+      "path": "Contents/MacOS/vtr-pon-addon-manager",
+      "component": "vtr-pon",
+      "contentSha256": "f38e316e60e86e044c22c7b25abd0791c4c15f028af38735429db3cd759f5ec1"
+    },
+    {
+      "path": "Contents/Helpers/vtr-pon-operator-monitor.app/Contents/MacOS/vtr-pon-operator-monitor",
+      "component": "vtr-pon",
+      "contentSha256": "70df6feb66ad21c61dc9ae47dbc74e19bdf907f4f21eff4f79e24720f09d4ffa"
+    },
+    {
+      "path": "Contents/Helpers/vtr-pon-camera-output.app/Contents/MacOS/vtr-pon-camera-output",
+      "component": "vtr-pon",
+      "contentSha256": "e488acdf8469380f22919b51b24c2d01c05555467e77144f527240821fc0b6d6"
+    },
+    {
+      "path": "Contents/Library/SystemExtensions/com.pondashi.vtrpon3.development.CameraExtension.systemextension/Contents/MacOS/com.pondashi.vtrpon3.development.CameraExtension",
+      "component": "vtr-pon",
+      "contentSha256": "4f5c8052f8689c6add8af9456acf8f7b964fa00a8004f92edc9e136880199ee9"
+    },
+    {
+      "path": "Contents/PlugIns/qt/platforms/libqcocoa.dylib",
+      "component": "qtbase",
+      "contentSha256": "d783ef2495b8af8d74c6f5eaa618276a39a0fce4e339a5c841b8fd9516307658"
+    },
+    {
+      "path": "Contents/PlugIns/qt/imageformats/libqjpeg.dylib",
+      "component": "qtbase",
+      "contentSha256": "0bfdc65e1da8dcee3ab0a32680417efab1971646ba906e1a53195c7267962cf5"
+    },
+    {
+      "path": "Contents/PlugIns/qt/imageformats/libqgif.dylib",
+      "component": "qtbase",
+      "contentSha256": "9f323fedcef4f6b64bcd66deb52298163677a869e922d12e09cdeb90a9b277b1"
+    },
+    {
+      "path": "Contents/PlugIns/qt/imageformats/libqtiff.dylib",
+      "component": "qtimageformats",
+      "contentSha256": "25a0395f94c9cd5d5518fabf3e70c11c8974973b7e09017bd5d56132eb6f5fae"
+    },
+    {
+      "path": "Contents/PlugIns/qt/imageformats/libqwebp.dylib",
+      "component": "qtimageformats",
+      "contentSha256": "3d1c4dd5d27cf06ac3addca40e2807b67ce276dd454cd84e569af50113975bcd"
+    },
+    {
+      "path": "Contents/PlugIns/qt/imageformats/libqsvg.dylib",
+      "component": "qtsvg",
+      "contentSha256": "0942b6f3e5c16f69872079d1b80ea13b99b848b518a2953f345c2de86a8acaec"
+    },
+    {
+      "path": "Contents/PlugIns/qt/iconengines/libqsvgicon.dylib",
+      "component": "qtsvg",
+      "contentSha256": "b74bedd07de4dee6190d8d9e5d4a7ec5ec72cb678abfa044542df173e46af9ca"
+    },
+    {
+      "path": "Contents/PlugIns/qt/tls/libqsecuretransportbackend.dylib",
+      "component": "qtbase",
+      "contentSha256": "5a71de502d11b7ac587c18b8585c57101bc8d3ca28045089db581b2d221c68bc"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstcoreelements.dylib",
+      "component": "gstreamer",
+      "contentSha256": "a20bb6d672fa8ae029ce9db9be0791e7351ccdc4d95e9552ceb87a6b929d34f4"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstapp.dylib",
+      "component": "gstreamer",
+      "contentSha256": "4589b6019d0ff7879c7a1378c575ee72faf2ffb93d6020d13e1ccc0c0f3183a7"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstplayback.dylib",
+      "component": "gstreamer",
+      "contentSha256": "1c7b532cac4d29c4e956e116b819851d16326b4d844dad64737f0320df945ddf"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgsttypefindfunctions.dylib",
+      "component": "gstreamer",
+      "contentSha256": "41dfc9f0a80c5c8da505611a3df4eaf3a4fe64c5535d1d80eea03a50905fd9f6"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstaudioconvert.dylib",
+      "component": "gstreamer",
+      "contentSha256": "f7445db5e0acff9a5c91452b068eadc27f96cfa34db768d8e9c6f36fc303fcb0"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstaudioresample.dylib",
+      "component": "gstreamer",
+      "contentSha256": "37dadbbe48668a2071e3e89a7a44d51bc29295d848f247577d88aaad7ccbe269"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstaudiomixer.dylib",
+      "component": "gstreamer",
+      "contentSha256": "f1120d118d16757e902e7528355ca993e357b2a781cb867a1d32f85290b561e2"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstaudiofx.dylib",
+      "component": "gstreamer",
+      "contentSha256": "1510f6991b5094a59ec578ddd17450d2843e1a8fd05fc9d7bd750cf39ec48d92"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstlevel.dylib",
+      "component": "gstreamer",
+      "contentSha256": "3785342235e1312bb757b403797c69a89cd7a25d8f2c1f83586ca37ddf7e8777"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstvolume.dylib",
+      "component": "gstreamer",
+      "contentSha256": "f3b91c392ea28dd1c9a9931e27a07a89c6ab3206feabf83239a48851848df32b"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstvideoconvertscale.dylib",
+      "component": "gstreamer",
+      "contentSha256": "9163ad9497e5784fe0e909b049d1de7234f965637a2f3d0733eca01b3d112da1"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstvideorate.dylib",
+      "component": "gstreamer",
+      "contentSha256": "2555debdac9ce15343aa6a0cb9c63ed6821071859cc2c44a207fa8ff302c2598"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstdeinterlace.dylib",
+      "component": "gstreamer",
+      "contentSha256": "06f84638c624a83b9cf0b91f52a1097ced42ea641debb91881bb11380ebe24cd"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstimagefreeze.dylib",
+      "component": "gstreamer",
+      "contentSha256": "261488e8aff6ded2180876be7db8669158111a6b31eb31be79185ea0d2c259ab"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstapplemedia.dylib",
+      "component": "gstreamer",
+      "contentSha256": "9dc492d701fcbdda6abe975a7559838850207dffc98a492a1b3cc29772ae1cf6"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstosxaudio.dylib",
+      "component": "gstreamer",
+      "contentSha256": "d224b2f019710f7c33c83bde866d2e52a9c97e605dbdc7b3f51a833386de643f"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstautodetect.dylib",
+      "component": "gstreamer",
+      "contentSha256": "ebcf898963bdca496271c111d843419512a5bdee9fbe78f1989421004b84b723"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstisomp4.dylib",
+      "component": "gstreamer",
+      "contentSha256": "40ed16e666385329c3a027333c9818a664015bca02c42722d45e254d3441f664"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstmatroska.dylib",
+      "component": "gstreamer",
+      "contentSha256": "36860a6c3184fa45c22a1c6fe91a90795545fd0e3a1d4d68a2b4af67244d6af7"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstavi.dylib",
+      "component": "gstreamer",
+      "contentSha256": "cfff6648dae2c963058cee566f539094df3329ea7e77c8463934bc5eb87c7d6e"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstmxf.dylib",
+      "component": "gstreamer",
+      "contentSha256": "2d2459192f86226d08c18e116f64d8e7f4337bcb859550a7f27e02a0d44abea3"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstogg.dylib",
+      "component": "gstreamer",
+      "contentSha256": "6865a76e7f718a578c8bb36945989ea046e309461df2bd57052b676c16d89fdf"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstwavparse.dylib",
+      "component": "gstreamer",
+      "contentSha256": "f2b30ceb0afadb3afe6836501227c93f5ea04e18f839028be05ff0e92e573d59"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstwavenc.dylib",
+      "component": "gstreamer",
+      "contentSha256": "1e304c269df40849496f5e9b90b83076ea87368f865a05246507980a99145692"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstaiff.dylib",
+      "component": "gstreamer",
+      "contentSha256": "2b733b52ff640d12c0d46293cba6bc77cd7d990d851bf734a070ae6cb6eeb08f"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstid3demux.dylib",
+      "component": "gstreamer",
+      "contentSha256": "b5a37136e9eea823f9717921c1e6f4ae82808312dbf0a46c98f68238eedc3d7a"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstapetag.dylib",
+      "component": "gstreamer",
+      "contentSha256": "2ced7f165cfd85317a154604e27caca6d8d84624d5ab5f69b23242c89c3fa559"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstaudioparsers.dylib",
+      "component": "gstreamer",
+      "contentSha256": "8480d9dd9193d01a81f8a2a340b3aa409948a4f10674bd4cceb06b4a9ba7d51e"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstvideoparsersbad.dylib",
+      "component": "gstreamer",
+      "contentSha256": "738546617b3a23427e0cef6ed02b87ba3de72c12b1c624aba34b723f627829cf"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstmpg123.dylib",
+      "component": "gstreamer",
+      "contentSha256": "13e9e489798f2c969a6fdd393750db60231c9c4ae57aec838813b272e7d11411"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstflac.dylib",
+      "component": "gstreamer",
+      "contentSha256": "e2c0dc29528921fdbe6fd0bad8f4f0f78ce123b79fd8254591aaf2e98d0f7e1b"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstvorbis.dylib",
+      "component": "gstreamer",
+      "contentSha256": "6b692ec7f56228aa27df67e3477c324f0ed875cc05cf9a0e0df4958d32827e67"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstopus.dylib",
+      "component": "gstreamer",
+      "contentSha256": "1a138a6df8d08bbb72f8cd224e205ae0b793f49db4f93f88bc70fc6379436d7d"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstvpx.dylib",
+      "component": "gstreamer",
+      "contentSha256": "6bc87654fcb9587212cb0f807daa08b87f9b47da8f99768ffe09b0e32cde2c11"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstdav1d.dylib",
+      "component": "gst-plugins-rs",
+      "contentSha256": "c722e2bdb5bbee9751d7dee24b03d594fe02de12bf2fda259625649356337d91"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstpng.dylib",
+      "component": "gstreamer",
+      "contentSha256": "262cb9195e25a922f6df45aa290adb1c6a3ece2ea11113beb4cbaeb4512ed99d"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstjpeg.dylib",
+      "component": "gstreamer",
+      "contentSha256": "73d177a2267147dedd0c7a19c87dbbfaad3a6071b201e8a53b3d9321ead365d5"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstlibav.dylib",
+      "component": "gst-libav",
+      "contentSha256": "9c6105b4bb1be45a0adad817939251e1e934cb98f586945ed1a684d0a35df5c9"
+    },
+    {
+      "path": "Contents/Frameworks/ffmpeg/libavcodec.62.28.100.dylib",
+      "component": "ffmpeg",
+      "contentSha256": "479c44686b6bb6706e243aea2ad5a800d0be0ad5584f9c92bf3613411980185f"
+    },
+    {
+      "path": "Contents/Frameworks/ffmpeg/libavfilter.11.14.100.dylib",
+      "component": "ffmpeg",
+      "contentSha256": "80e815fdbcff2719e84ca29355b7355bca486191c74b82d0d21fff837a074794"
+    },
+    {
+      "path": "Contents/Frameworks/ffmpeg/libavformat.62.12.100.dylib",
+      "component": "ffmpeg",
+      "contentSha256": "a88716df2dcf37258e9bf09364bfb08c83e1377f01f35aace4e504728e435d26"
+    },
+    {
+      "path": "Contents/Frameworks/ffmpeg/libavutil.60.26.100.dylib",
+      "component": "ffmpeg",
+      "contentSha256": "4e114ad7d7c8e6526075854cfe6942ee85170db502348ce7ba2cdc393505006e"
+    },
+    {
+      "path": "Contents/Frameworks/ffmpeg/libswresample.6.3.100.dylib",
+      "component": "ffmpeg",
+      "contentSha256": "1cbcc45b07a6b4d7cd263bc0d0554c702f74820b7b270880d38d608b377cef28"
+    },
+    {
+      "path": "Contents/Frameworks/ffmpeg/libswscale.9.5.100.dylib",
+      "component": "ffmpeg",
+      "contentSha256": "68aa7ae2046b49280612814ea42c4b4b8afba943111e693bb0537acb66fd72d5"
+    },
+    {
+      "path": "Contents/Helpers/gst-plugin-scanner",
+      "component": "gstreamer",
+      "contentSha256": "fbd34d8eac57bdf86f1959ab514d75ab8460eb4fa47eaab324db0afd90c3e5a4"
+    },
+    {
+      "path": "Contents/MacOS/mac-pdf-test",
+      "component": "vtr-pon",
+      "contentSha256": "6c06bca4bfb438fa499bfe02259004317b2a32d0f90bb4df6c1bdb2ac73e8840"
+    },
+    {
+      "path": "Contents/MacOS/mac-pdf-import-test",
+      "component": "vtr-pon",
+      "contentSha256": "1b7f3b2af36a67fcca467270b6ea2a005f6e8d0b8fae927a9c5ded9ed66d85de"
+    },
+    {
+      "path": "Contents/MacOS/mac-pdf-conversion-test",
+      "component": "vtr-pon",
+      "contentSha256": "1c909f7385fb313e259cddc6139795fbd251c8071bcfc1ede69d9d110780c1e8"
+    },
+    {
+      "path": "Contents/Frameworks/QtPdf.framework/Versions/A/QtPdf",
+      "component": "qtwebengine",
+      "contentSha256": "3b7c241cb8348756a41e812c447d33efb49bbe863312278d4b0b7e32cff1c36a"
+    },
+    {
+      "path": "Contents/Frameworks/QtWidgets.framework/Versions/A/QtWidgets",
+      "component": "qtbase",
+      "contentSha256": "d722bafbecf3b85a8c73657c5a85c6f24054bdbe663a59778ce4bb27df8e6372"
+    },
+    {
+      "path": "Contents/Frameworks/QtNetwork.framework/Versions/A/QtNetwork",
+      "component": "qtbase",
+      "contentSha256": "cc5ced5e3f94257adf16d4c0d92a4dc534b454c571a74098b6d51300511757eb"
+    },
+    {
+      "path": "Contents/Frameworks/libz.1.3.2.dylib",
+      "component": "zlib",
+      "contentSha256": "c4bd5f0d5ac9c87f034f8f46e4e311ad4a10b0f6399b784ec67af654bb1e8ca3"
+    },
+    {
+      "path": "Contents/Frameworks/libgstpbutils-1.0.0.dylib",
+      "component": "gstreamer",
+      "contentSha256": "15e77a3d636704e35d7186b4f6e356abd58bc7fd5403800e967fa9962dabdb9e"
+    },
+    {
+      "path": "Contents/Frameworks/libgstvideo-1.0.0.dylib",
+      "component": "gstreamer",
+      "contentSha256": "28fb70dbb5250b2d4870b3ddd12518adfe536ffbdc0463965b7660b0e1c38c7d"
+    },
+    {
+      "path": "Contents/Frameworks/libgstapp-1.0.0.dylib",
+      "component": "gstreamer",
+      "contentSha256": "18d595bf7d9e1fa2b263707e53ef9b396d0982ca12c2d7aa11302dca776cc171"
+    },
+    {
+      "path": "Contents/Frameworks/libgstaudio-1.0.0.dylib",
+      "component": "gstreamer",
+      "contentSha256": "0d4b64a1b7584b6f1634fa805013c1a1a3f8551f1b3be5bdce58eeb145cfaac1"
+    },
+    {
+      "path": "Contents/Frameworks/libgstbase-1.0.0.dylib",
+      "component": "gstreamer",
+      "contentSha256": "024092fba04db3a5af478ddc6f511001f5f7f1e8c811287e66c708b8632817e3"
+    },
+    {
+      "path": "Contents/Frameworks/libgstreamer-1.0.0.dylib",
+      "component": "gstreamer",
+      "contentSha256": "0914a20e4bc237030cc5f23041dfc9c48ee8aab63e1e37b74bfd305a5a60ac66"
+    },
+    {
+      "path": "Contents/Frameworks/libgobject-2.0.0.dylib",
+      "component": "glib",
+      "contentSha256": "456a5a678f48c7258907f619ee14bf4fc5d8e7d90baa4b08f86782cfde7e5a3e"
+    },
+    {
+      "path": "Contents/Frameworks/libglib-2.0.0.dylib",
+      "component": "glib",
+      "contentSha256": "2304d94949f04c5c45a6ecf368d2f492f91e9ec4bb9ca046de6b6330ce761e29"
+    },
+    {
+      "path": "Contents/Frameworks/libintl.8.dylib",
+      "component": "gettext",
+      "contentSha256": "e07b5762330798768499fe51342e3a971de4564567d5dbcc105ea24fe3e83148"
+    },
+    {
+      "path": "Contents/Frameworks/QtGui.framework/Versions/A/QtGui",
+      "component": "qtbase",
+      "contentSha256": "ad4dc992174dc7a3f9192044deee10620262c31d917816dc95b480c5835329c4"
+    },
+    {
+      "path": "Contents/Frameworks/QtCore.framework/Versions/A/QtCore",
+      "component": "qtbase",
+      "contentSha256": "aae18364558d32d6f6d3a00ca401b90b822aebf443c99204a971c09f82965a9f"
+    },
+    {
+      "path": "Contents/Frameworks/libjpeg.8.3.2.dylib",
+      "component": "jpeg-turbo",
+      "contentSha256": "63515a1b50a85f0891794f2a39add42a187ce17d2e617939bbe75d153315d8da"
+    },
+    {
+      "path": "Contents/Frameworks/libtiff.6.dylib",
+      "component": "libtiff",
+      "contentSha256": "ce8eeb177c5c32f9ac14a710e9c6d021af4751982bd173185aac2a1dc010acd1"
+    },
+    {
+      "path": "Contents/Frameworks/libwebpdemux.2.0.17.dylib",
+      "component": "webp",
+      "contentSha256": "6e90190b2663502f7430b2eb9ca0df14bd6202a9621b822f10d865e09ae081d7"
+    },
+    {
+      "path": "Contents/Frameworks/libwebpmux.3.1.2.dylib",
+      "component": "webp",
+      "contentSha256": "7fb90e6157908c02525671117b711329b0570b7fe5eced0b308e10db59946d2e"
+    },
+    {
+      "path": "Contents/Frameworks/libwebp.7.2.0.dylib",
+      "component": "webp",
+      "contentSha256": "1f61dca188c9c2dc46fecd490c4c28ac38ffd3b2c748fa92fd0138f120416a4f"
+    },
+    {
+      "path": "Contents/Frameworks/libsharpyuv.0.1.2.dylib",
+      "component": "webp",
+      "contentSha256": "b76733194ada59ffa72edce970c816eeeab9b0640084eb062c4c7978843ef0d2"
+    },
+    {
+      "path": "Contents/Frameworks/QtSvg.framework/Versions/A/QtSvg",
+      "component": "qtsvg",
+      "contentSha256": "d4090e28237da0afb3c179944b9941e17bb0443e147a404568076bd7b180bd30"
+    },
+    {
+      "path": "Contents/Frameworks/libgio-2.0.0.dylib",
+      "component": "glib",
+      "contentSha256": "72372a04c1e92a39f8d9893e925c8385cedb37dae022ff0ad13f793aeea95d09"
+    },
+    {
+      "path": "Contents/Frameworks/liborc-0.4.0.dylib",
+      "component": "orc",
+      "contentSha256": "17ac16f0cef5023022d78cc9d392915a8af3ac9de8f0e9ea3087c49823452df0"
+    },
+    {
+      "path": "Contents/Frameworks/libgstfft-1.0.0.dylib",
+      "component": "gstreamer",
+      "contentSha256": "a7a1987589150c1ba4d82590e265527dd8afd8dc16a2ed1c9aee8813a114f023"
+    },
+    {
+      "path": "Contents/Frameworks/libgstgl-1.0.0.dylib",
+      "component": "gstreamer",
+      "contentSha256": "87ec27b423491dd6efcb7700f412933900cb92b154f39bd9838e7236261148c8"
+    },
+    {
+      "path": "Contents/Frameworks/libgstcodecparsers-1.0.0.dylib",
+      "component": "gstreamer",
+      "contentSha256": "6309ffde22b25278697da76d17c7d0283a2f5c150bb06b4ecc188c90e0a6fe7a"
+    },
+    {
+      "path": "Contents/Frameworks/libgstriff-1.0.0.dylib",
+      "component": "gstreamer",
+      "contentSha256": "36d883030a0ed7e63cf20b4ce5f22422f23b92960c72f8e9096d33994ff49346"
+    },
+    {
+      "path": "Contents/Frameworks/libgsttag-1.0.0.dylib",
+      "component": "gstreamer",
+      "contentSha256": "b57d966e25ca34b8659278afd257a6ba69874d90b4e502c3d8777565dd2f98e9"
+    },
+    {
+      "path": "Contents/Frameworks/libgstrtp-1.0.0.dylib",
+      "component": "gstreamer",
+      "contentSha256": "08e8f484d7afb1aa01049b277b282c6f81c40c4a6adb191914e40fd1a75111fe"
+    },
+    {
+      "path": "Contents/Frameworks/libogg.0.8.6.dylib",
+      "component": "libogg",
+      "contentSha256": "6c4158ba02ed0a96532e23e738ed3f023fcc88360c440da32bd916ff80511300"
+    },
+    {
+      "path": "Contents/Frameworks/libmpg123.0.dylib",
+      "component": "mpg123",
+      "contentSha256": "5d938a49344ee72025dec07855d516f0b2461564c09ed49ffe88f4c6d0d28bab"
+    },
+    {
+      "path": "Contents/Frameworks/libFLAC.14.dylib",
+      "component": "flac",
+      "contentSha256": "ce0872e724b90716504879c1b6cae55040287adc00d99dfcf401a5f87a373c00"
+    },
+    {
+      "path": "Contents/Frameworks/libvorbis.0.dylib",
+      "component": "libvorbis",
+      "contentSha256": "24f61e1d87a936166776c37196011a6ac8b8386b781bb06be554b06bdc4f94c2"
+    },
+    {
+      "path": "Contents/Frameworks/libvorbisenc.2.dylib",
+      "component": "libvorbis",
+      "contentSha256": "5f074bd699a6751bae1516489470d81ff7a7d265a83ba890cf930cbe374acc6d"
+    },
+    {
+      "path": "Contents/Frameworks/libopus.0.dylib",
+      "component": "opus",
+      "contentSha256": "96326f08a2ef2dcfb61037671da928d0ef23554e3fad4f971da54c04295b8d63"
+    },
+    {
+      "path": "Contents/Frameworks/libvpx.12.dylib",
+      "component": "libvpx",
+      "contentSha256": "bb935852092cec92014ccb8c218d46e56d2edc4fc7703c742353055732f56d9b"
+    },
+    {
+      "path": "Contents/Frameworks/libdav1d.7.dylib",
+      "component": "dav1d",
+      "contentSha256": "61b5d4275f8e8095347c88952cdf3b7886294de52224048781f5885ef82e3c2c"
+    },
+    {
+      "path": "Contents/Frameworks/libpng16.16.dylib",
+      "component": "libpng",
+      "contentSha256": "00001e462eb1ab5c2d90d09e6d134c73111a9a248ac1f3a28ab377c5fe4908b7"
+    },
+    {
+      "path": "Contents/Frameworks/libbrotlidec.1.2.0.dylib",
+      "component": "brotli",
+      "contentSha256": "adcc79d87b957f3ee06bcb8c817cb73648059c634da53b9386e40ebcb38ad0de"
+    },
+    {
+      "path": "Contents/Frameworks/libzstd.1.5.7.dylib",
+      "component": "zstd",
+      "contentSha256": "d7244a36f41ce32f0eaf3007b239036937b2cff61b0b14f5159d5e5fe6e3592d"
+    },
+    {
+      "path": "Contents/Frameworks/libssl.3.dylib",
+      "component": "openssl@3",
+      "contentSha256": "3370880085309c910c555bf35b509ff7e0a1f0d870602da27fb0999241ab6797"
+    },
+    {
+      "path": "Contents/Frameworks/libcrypto.3.dylib",
+      "component": "openssl@3",
+      "contentSha256": "588117508b7f0d6d053e91bc6d0df77aaf48a4bbf5c79ba0dee9e9a0d64d70c2"
+    },
+    {
+      "path": "Contents/Frameworks/libgmodule-2.0.0.dylib",
+      "component": "glib",
+      "contentSha256": "275bc4eddf09effdc3c104d3d943190c268b60484a5cd8d85c815a9bd6a55aa4"
+    },
+    {
+      "path": "Contents/Frameworks/libpcre2-8.0.dylib",
+      "component": "pcre2",
+      "contentSha256": "2021908ae6d6a31b890e8e9bf2c56f737ee1353399aeb88e04f3a501ee0e69f9"
+    },
+    {
+      "path": "Contents/Frameworks/QtDBus.framework/Versions/A/QtDBus",
+      "component": "qtbase",
+      "contentSha256": "6a8e4acd1564a4df8274b51e6307992cf13517b4f4d8189723b6edf13aaf3ad5"
+    },
+    {
+      "path": "Contents/Frameworks/libharfbuzz.0.dylib",
+      "component": "harfbuzz",
+      "contentSha256": "1d30aa6240f11b4db1aaa0d24e96febce4294bd29f078f83f8b15ff65e8874a7"
+    },
+    {
+      "path": "Contents/Frameworks/libmd4c.0.5.2.dylib",
+      "component": "md4c",
+      "contentSha256": "ab4aa51dbc0e081a0fc313a23f51754952b9ff62e64f8a84145c20ceeb6c2643"
+    },
+    {
+      "path": "Contents/Frameworks/libfreetype.6.dylib",
+      "component": "freetype",
+      "contentSha256": "088204ae4c1e94376d76a4d79c5f1e87bd966abef9aa193c4329893e4885c752"
+    },
+    {
+      "path": "Contents/Frameworks/libgthread-2.0.0.dylib",
+      "component": "glib",
+      "contentSha256": "d2e4196221b6cb067131674593fa2e8004b01b8de4bd7ef024e3ed34f92eda67"
+    },
+    {
+      "path": "Contents/Frameworks/libicui18n.78.3.dylib",
+      "component": "icu4c@78",
+      "contentSha256": "b12324940961558348521d046c83173e76048a116de60a15be7a6bc89b3c400d"
+    },
+    {
+      "path": "Contents/Frameworks/libicuuc.78.3.dylib",
+      "component": "icu4c@78",
+      "contentSha256": "6f4a20a1597958ae4cba4c489ef5c96e37a68f4ee785c67daa0c2f49cbf475db"
+    },
+    {
+      "path": "Contents/Frameworks/libicudata.78.3.dylib",
+      "component": "icu4c@78",
+      "contentSha256": "a0b5a8f6d1ed32eb878bc4b48781647d7d18e3ac333243e9920471e9caeb7d45"
+    },
+    {
+      "path": "Contents/Frameworks/libdouble-conversion.3.4.0.dylib",
+      "component": "double-conversion",
+      "contentSha256": "f2f8759db80f078750d5c660bcf830c46852c2fb792c60fd158567b5acd4e8d2"
+    },
+    {
+      "path": "Contents/Frameworks/libb2.1.dylib",
+      "component": "libb2",
+      "contentSha256": "6a6e7d59d53308b12feca2bf35de5de478005532fc1225679158b7ae59f275cb"
+    },
+    {
+      "path": "Contents/Frameworks/libpcre2-16.0.dylib",
+      "component": "pcre2",
+      "contentSha256": "7248a7557b25504693adc605d6b21ac81ca93bacecffdc3d4f8edfe3a2bb4431"
+    },
+    {
+      "path": "Contents/Frameworks/liblzma.5.dylib",
+      "component": "xz",
+      "contentSha256": "a4e7cac3e24124aa8e457cd20c77019719f60ad20bd362a7670adfce541657e1"
+    },
+    {
+      "path": "Contents/Frameworks/libX11.6.dylib",
+      "component": "libx11",
+      "contentSha256": "63acceb7dd386720be14659406c140a6b7906acb4dce7fc8fbea98c328d413ef"
+    },
+    {
+      "path": "Contents/Frameworks/libX11-xcb.1.dylib",
+      "component": "libx11",
+      "contentSha256": "9d1a0937d5d80272368a6be55e14d72e8a1fa06c49dd72bb7bb27c9323d6f015"
+    },
+    {
+      "path": "Contents/Frameworks/libxcb.1.1.0.dylib",
+      "component": "libxcb",
+      "contentSha256": "e31b1cf6420d122e1281c7c5d0015341d19d9e9ce2e213ecc0445efd35ceeb05"
+    },
+    {
+      "path": "Contents/Frameworks/libbrotlicommon.1.2.0.dylib",
+      "component": "brotli",
+      "contentSha256": "6ce6e11b3f10bcd253225b62190db6ac7848feb6799321341d40ba1ab5089e8e"
+    },
+    {
+      "path": "Contents/Frameworks/libdbus-1.3.dylib",
+      "component": "dbus",
+      "contentSha256": "d56a60b9a94f033e31d5afd709fdaf64c61929828e1c1ee7a5cdd64008f1615a"
+    },
+    {
+      "path": "Contents/Frameworks/libgraphite2.3.2.1.dylib",
+      "component": "graphite2",
+      "contentSha256": "02598cbb4b734580ca2fff50a65601703fda37b34bea67f214eb69025205e441"
+    },
+    {
+      "path": "Contents/Frameworks/libXau.6.dylib",
+      "component": "libxau",
+      "contentSha256": "e3215fb385940e1c985eccd9f8ec22fb719c62aad33b3dfa50ad1a9728113085"
+    },
+    {
+      "path": "Contents/Frameworks/libXdmcp.6.dylib",
+      "component": "libxdmcp",
+      "contentSha256": "bfd2c11caead6a3f9af225ff3b8a827d5f0beeea275ec1ef372a3eea2f969f2f"
+    }
+  ],
+  "noticeFiles": {
+    "notices/brotli/816c96e8e8f1/LICENSE": "3d180008e36922a4e8daec11c34c7af264fed5962d07924aea928c38e8663c94",
+    "notices/dav1d/e099f53253f6/COPYING": "dd92c3c2247c5651606fc23a5e2d6a1ebc5ace9a3e49cbde0e12f05ad1cb1ee5",
+    "notices/dav1d/e099f53253f6/doc/PATENTS": "335eca574598bf4ca181b12f708d6669e5a5e78c8e1513e5b35fa1f03901484b",
+    "notices/dbus/0ba2a1a4b16a/AUTHORS": "a56f6628c407e46ec72eb5512591b4c6204e7c0854c15ed0af4daad807edb84f",
+    "notices/dbus/0ba2a1a4b16a/COPYING": "150e5d08e1cb5e62b65967d7931acad2c42d98ec1bbb584bebb01921cbc853c2",
+    "notices/dbus/0ba2a1a4b16a/LICENSES/AFL-2.0.txt": "7ecc7db84298adb05d2cf10339c63a5315a1c5c270a68d97d7d40a53b508ccde",
+    "notices/dbus/0ba2a1a4b16a/LICENSES/AFL-2.1.txt": "93bb4f7417aa775bab9026cc3d0af28aeb64451fc5a8ec651876785edd8eaf9b",
+    "notices/dbus/0ba2a1a4b16a/LICENSES/Apache-2.0.txt": "074e6e32c86a4c0ef8b3ed25b721ca23aca83df277cd88106ef7177c354615ff",
+    "notices/dbus/0ba2a1a4b16a/LICENSES/BSD-3-Clause.txt": "5a93d5831e1297ab10fe643e1a631e83be392896da14ee2951285a79012df69d",
+    "notices/dbus/0ba2a1a4b16a/LICENSES/GPL-2.0-or-later.txt": "aaf135472f81c5b4a0dca9367e5bb5e9750032b5bebe5442b36e4c0a47430df3",
+    "notices/dbus/0ba2a1a4b16a/LICENSES/LGPL-2.1-or-later.txt": "fa6f36630bb1e0c571d34b2bbdf188d08495c9dbf58f28cac112f303fc1f58fb",
+    "notices/dbus/0ba2a1a4b16a/LICENSES/LicenseRef-CMakeScripts.txt": "a4c1387064fda4c22bfca364b606eb4e0421efa37cad27c040a3d7ca7186d522",
+    "notices/dbus/0ba2a1a4b16a/LICENSES/LicenseRef-GAP.txt": "cf4bc4c56dd0837f3d53b8c1467e0d7dbb95223de8bcfe83a4981c318a738ae3",
+    "notices/dbus/0ba2a1a4b16a/LICENSES/LicenseRef-pycrypto-orig.txt": "2cb8f4f410f0ffc5dcfbadd188e20c859fdbb161e616cf2f3d34dfbf8c740547",
+    "notices/dbus/0ba2a1a4b16a/LICENSES/MIT.txt": "b85dcd3e453d05982552c52b5fc9e0bdd6d23c6f8e844b984a88af32570b0cc0",
+    "notices/dbus/0ba2a1a4b16a/LICENSES/TCL.txt": "36fc2d8a56a2a014ded51e298a7e63635eb4ec62e8bedb99c82b892542ac5e7d",
+    "notices/double-conversion/42fd4d980ea8/AUTHORS": "02f8e5babc63a87d460219a74b97e15046d198ed3bab061e3d46b4f44ea77a9d",
+    "notices/double-conversion/42fd4d980ea8/COPYING": "4af93c12062c58058378de2397dc1c92bbff9ddfb1d583a01c84127557ce97ca",
+    "notices/double-conversion/42fd4d980ea8/LICENSE": "4af93c12062c58058378de2397dc1c92bbff9ddfb1d583a01c84127557ce97ca",
+    "notices/ffmpeg/b072aed68719/COPYING.LGPLv2.1": "246041b6ecf9bc32d718a62c57877c78b5eb397b6467e74ed7ae2626ab189c30",
+    "notices/ffmpeg/b072aed68719/COPYING.GPLv2": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+    "notices/ffmpeg/b072aed68719/COPYING.LGPLv3": "da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768",
+    "notices/ffmpeg/b072aed68719/COPYING.GPLv3": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+    "notices/ffmpeg/b072aed68719/doc/authors.texi": "fb5fac6dd8f7474033e933814491a8297d8723c52be4dcbcc82eef9c4f008dd2",
+    "notices/ffmpeg/b072aed68719/LICENSE.md": "2e1d16c72fd74e12063776371da757322f8b77589386532f4fd8634bde7de1af",
+    "notices/ffmpeg/COMPILED-PERMISSIVE-HEADERS.txt": "1ba52352c566f6be8886857342106ceee4490ea540013d9eab3136b00786ce3f",
+    "notices/flac/f2c1c76592a8/AUTHORS": "89d44b9c876a8a5cbfc886348a151abd74eeb49e4b690b0cfe96d44a9afe8118",
+    "notices/flac/f2c1c76592a8/COPYING.GPL": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+    "notices/flac/f2c1c76592a8/COPYING.FDL": "c5d2b95c2538d2e41d8eedd9ecc750cd5fee085c7bb2bc3e2f95f4e59cc0b10d",
+    "notices/flac/f2c1c76592a8/COPYING.Xiph": "7866ee98760fc1f0156b4fe6bf530257e02be487ab3fd94e2b63799dd32d6b2c",
+    "notices/flac/f2c1c76592a8/COPYING.LGPL": "5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a",
+    "notices/freetype/36bc4f1cc413/docs/GPLv2.TXT": "c4120c6752c910c299e3bd9cb3a46ff262c268303ca2069b61f92f10a5656c18",
+    "notices/freetype/36bc4f1cc413/docs/FTL.TXT": "5a5ee54c5001bbad1cdc1a57cc3dd4c42199b2da09d39c7ee41fab002d02967f",
+    "notices/freetype/36bc4f1cc413/LICENSE.TXT": "bd36c8b474855fa294c2ec5c184544478ef3720aad37d65a6296a4f264fd2d3b",
+    "notices/gettext/85d99b79c981/AUTHORS": "167b04ed012e59c2d2cfc87d420d8c8a8f5c528ef1fd068598b36d57f39db203",
+    "notices/gettext/85d99b79c981/gettext-runtime/AUTHORS": "136ea88816ec1990c2fc060970013b9e94c875ba8b387f9bb3d62e77c90bc9b4",
+    "notices/gettext/85d99b79c981/gettext-runtime/intl/AUTHORS": "4bd9e2cd15ab6d68b30965512b63a1d4aae95f4c1dd040657a4d1300252a695f",
+    "notices/gettext/85d99b79c981/gettext-runtime/libasprintf/AUTHORS": "590f1c4aa72c2c14dd52b0e230bf652e2109d00099fc7bb272e4594b800913d0",
+    "notices/gettext/85d99b79c981/gettext-tools/AUTHORS": "4027705b723299dd8e6153939ab73395e22685503994cc8de92fa2ebaa432a49",
+    "notices/gettext/85d99b79c981/libtextstyle/AUTHORS": "71c0580cb05d28848b341e5a4da2761d4a8eb482592358d646dab104648a8303",
+    "notices/gettext/85d99b79c981/COPYING": "e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b",
+    "notices/gettext/85d99b79c981/gettext-runtime/COPYING": "7ef2cdfe58e0c0460657b6598b49af29d4e03c1e41cbaf0e1da1eb8ad74b95d0",
+    "notices/gettext/85d99b79c981/gettext-runtime/libasprintf/COPYING": "03133addae5b99a6148c538300e6d97074453089be1423b741bd081f18e2b298",
+    "notices/gettext/85d99b79c981/gettext-tools/COPYING": "5d4cff30d5038f82a0edc79798456049b61e1752fdb7e9ab1f4bfb9fae3a7303",
+    "notices/gettext/85d99b79c981/gettext-tools/gnulib-lib/libxml/COPYING": "c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd",
+    "notices/gettext/85d99b79c981/gnulib-local/lib/libxml/COPYING": "c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd",
+    "notices/gettext/85d99b79c981/libtextstyle/COPYING": "e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b",
+    "notices/gettext/85d99b79c981/libtextstyle/lib/libxml/COPYING": "c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd",
+    "notices/gettext/85d99b79c981/gettext-runtime/intl/COPYING.LIB": "20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95",
+    "notices/gettext/85d99b79c981/gettext-runtime/libasprintf/COPYING.LIB": "20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95",
+    "notices/gettext/85d99b79c981/gettext-tools/tree-sitter-0.23.2/LICENSE": "5f9cf9fb6acb1972b35ae29119ce563bb60ec097656bc4b69b9bac2d04c7a147",
+    "notices/gettext/85d99b79c981/gettext-tools/tree-sitter-0.23.2/lib/src/unicode/LICENSE": "6a18c5fac70d7860b57f5b72b4e2c9a1ba6b3d2741eef7ff9767c5379364f10d",
+    "notices/gettext/85d99b79c981/gettext-tools/tree-sitter-d-0.8.2/LICENSE": "ecf206b1a27e8e4ea07f1e1529cb111b4be5ce8420bd27b8269981d9c0c389f8",
+    "notices/gettext/85d99b79c981/gettext-tools/tree-sitter-go-0.23.4/LICENSE": "2e0110e07abef7c2548b26ec9d6969775617ca539a0dc8dbeeb14d6452c711d1",
+    "notices/gettext/85d99b79c981/gettext-tools/tree-sitter-ocaml-0.23.2/LICENSE": "f977a20805dd6e275f14bc090a5f8e638401dad4df366841c1060f12c75b74ae",
+    "notices/gettext/85d99b79c981/gettext-tools/tree-sitter-rust-0.23.2/LICENSE": "31d5b6f4243d5c7c6e1c4ebbbb9f6407bd1457a08bcc4f706521710341acba36",
+    "notices/gettext/85d99b79c981/gettext-tools/tree-sitter-typescript-0.23.2/LICENSE": "49bf33cf78ef5897e4e161ce1517df7de1ae5042a65b6bcfd44401e0fc606559",
+    "notices/glib/3546251ccbb3/LICENSES/AFL-2.0.txt": "7ecc7db84298adb05d2cf10339c63a5315a1c5c270a68d97d7d40a53b508ccde",
+    "notices/glib/3546251ccbb3/LICENSES/Apache-2.0.txt": "074e6e32c86a4c0ef8b3ed25b721ca23aca83df277cd88106ef7177c354615ff",
+    "notices/glib/3546251ccbb3/LICENSES/CC-BY-SA-3.0.txt": "3f941b3b89cf7b8370ceb83cc76d2120d471b58735d8ca60238a751a48d7f72f",
+    "notices/glib/3546251ccbb3/LICENSES/CC0-1.0.txt": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+    "notices/glib/3546251ccbb3/LICENSES/GPL-2.0-or-later.txt": "aaf135472f81c5b4a0dca9367e5bb5e9750032b5bebe5442b36e4c0a47430df3",
+    "notices/glib/3546251ccbb3/LICENSES/LGPL-2.1-only.txt": "fa6f36630bb1e0c571d34b2bbdf188d08495c9dbf58f28cac112f303fc1f58fb",
+    "notices/glib/3546251ccbb3/LICENSES/LGPL-2.1-or-later.txt": "fa6f36630bb1e0c571d34b2bbdf188d08495c9dbf58f28cac112f303fc1f58fb",
+    "notices/glib/3546251ccbb3/LICENSES/LLVM-exception.txt": "e34c58338bd89d43e709e226610d8f32b3e3c47f4ad9a99a8dc1d4ac7842488e",
+    "notices/glib/3546251ccbb3/LICENSES/LicenseRef-old-glib-tests.txt": "fb261b2d5dbe76c4850f90da763210bc385e52428df6bbfd7b06295ac8a32914",
+    "notices/glib/3546251ccbb3/LICENSES/MIT.txt": "b85dcd3e453d05982552c52b5fc9e0bdd6d23c6f8e844b984a88af32570b0cc0",
+    "notices/glib/3546251ccbb3/LICENSES/MPL-1.1.txt": "6214f8b1300bb9f37b16ebc146f8f61af0187e0025042ff95c8b3030744a8795",
+    "notices/glib/3546251ccbb3/docs/reference/AUTHORS": "b4f60a02b2b1f82764f8295b2eafbfcd4c33f596d70abcf5cb3c3623b1cfbc6d",
+    "notices/glib/3546251ccbb3/docs/reference/COPYING": "b1ec1d0e5947f81e815d8771f7d4d90671a94bb10a42dc687fb566de461a57aa",
+    "notices/glib/3546251ccbb3/gmodule/AUTHORS": "28073c8c65c072387b778ba00b6c24a2ff1b573ca4415e151aa91fab5a6454be",
+    "notices/glib/3546251ccbb3/subprojects/gvdb/COPYING": "bdbcdaa7858872393e9d6b216bbdc8a23e99d98dd6cdb7cda19458025b9e19fc",
+    "notices/glib/3546251ccbb3/subprojects/gvdb/LICENSES/LGPL-2.1-or-later.txt": "5749785c8bdefafcb5d798270ed0a967036fe2ca63dcedade1627565dfef81d2",
+    "notices/glib/920d1a3fcede/COPYING": "1b3275b028bcaa77e4580a302ae80473abb97139b84a0e48618be34cd65f8aaa",
+    "notices/glib/920d1a3fcede/COPYING.GPL": "4c1cedcbb4a12ea964f1160dbbf36099e5a59b96129a99a1a1a61f2cb09271fb",
+    "notices/glib/920d1a3fcede/COPYING.LGPL": "faa2e414bd5f91d2d2c39e85c7cc3f2ccde05c3306f96b404f8ed8cf0266c279",
+    "notices/glib/920d1a3fcede/gobject-introspection-tests/LICENSES/CC0-1.0.txt": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+    "notices/glib/920d1a3fcede/gobject-introspection-tests/LICENSES/GPL-2.0-or-later.txt": "aaf135472f81c5b4a0dca9367e5bb5e9750032b5bebe5442b36e4c0a47430df3",
+    "notices/glib/920d1a3fcede/gobject-introspection-tests/LICENSES/LGPL-2.0-or-later.txt": "86dc99d7e5060915ab1dfc1378b7dd351c62088bfa74067e8aa1868c6fdba7d8",
+    "notices/glib/920d1a3fcede/gobject-introspection-tests/LICENSES/LGPL-2.1-or-later.txt": "5749785c8bdefafcb5d798270ed0a967036fe2ca63dcedade1627565dfef81d2",
+    "notices/glib/920d1a3fcede/gobject-introspection-tests/LICENSES/MIT.txt": "b85dcd3e453d05982552c52b5fc9e0bdd6d23c6f8e844b984a88af32570b0cc0",
+    "notices/graphite2/f99d1c13aa5f/COPYING": "2c272829ff23f182c8bf7ea12fedea69b0ae148663123ed5240c117cb129c9c1",
+    "notices/graphite2/f99d1c13aa5f/LICENSE": "a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861",
+    "notices/graphite2/f99d1c13aa5f/debian-src/copyright": "88f17179e66c9efcdd88316a0294499bd5e221e8ccb14523c389fccc491bfb3a",
+    "notices/gst-libav/bfa91aaca38d/COPYING": "ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db",
+    "notices/gst-plugins-rs/5488965db0fb/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/5488965db0fb/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/5488965db0fb/LICENSE-MPL-2.0": "fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85",
+    "notices/gst-plugins-rs/rust/allocator-api2/LICENSE-APACHE": "20fe7b00e904ed690e3b9fd6073784d3fc428141dbd10b81c01fd143d0797f58",
+    "notices/gst-plugins-rs/rust/allocator-api2/LICENSE-MIT": "36516aefdc84c5d5a1e7485425913a22dbda69eb1930c5e84d6ae4972b5194b9",
+    "notices/gst-plugins-rs/rust/android_system_properties/LICENSE-APACHE": "216486f29671a4262efe32af6d84a75bef398127f8c5f369b5c8305983887a06",
+    "notices/gst-plugins-rs/rust/android_system_properties/LICENSE-MIT": "80f275e90d799911ed3830a7f242a2ef5a4ade2092fe0aa07bfb2d2cf2f2b95e",
+    "notices/gst-plugins-rs/rust/anyhow/LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+    "notices/gst-plugins-rs/rust/anyhow/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/atomic_refcell/LICENSE.MIT": "d8e997e6cdf64acfdd3a9315b5dea0dd933f1f5386a55a2c16916dc8514071f2",
+    "notices/gst-plugins-rs/rust/atomic_refcell/LICENSE.APACHE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "notices/gst-plugins-rs/rust/autocfg/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/autocfg/LICENSE-MIT": "27995d58ad5c1145c1a8cd86244ce844886958a35eb2b78c6b772748669999ac",
+    "notices/gst-plugins-rs/rust/av-data/LICENSE": "0ffd79084929c4913ea1223796dccfb1d86abfb359e86ef7c0137d9805bfaacd",
+    "notices/gst-plugins-rs/rust/bitflags/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/bitflags/LICENSE-MIT": "6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb",
+    "notices/gst-plugins-rs/rust/bumpalo/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/bumpalo/LICENSE-MIT": "65f94e99ddaf4f5d1782a6dae23f35d4293a9a01444a13135a6887017d353cee",
+    "notices/gst-plugins-rs/rust/byte-slice-cast/LICENSE": "c524732311819f888ce57b1b56148feaa6e9b1705fcb158e7e5d71554ccf39ed",
+    "notices/gst-plugins-rs/rust/bytes/LICENSE": "45f522cacecb1023856e46df79ca625dfc550c94910078bd8aec6e02880b3d42",
+    "notices/gst-plugins-rs/rust/cc/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/cc/LICENSE-MIT": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397",
+    "notices/gst-plugins-rs/rust/cfg-expr/LICENSE-APACHE": "8173d5c29b4f956d532781d2b86e4e30f83e6b7878dce18c919451d6ba707c90",
+    "notices/gst-plugins-rs/rust/cfg-expr/LICENSE-MIT": "090a294a492ab2f41388252312a65cf2f0e423330b721a68c6665ac64766753b",
+    "notices/gst-plugins-rs/rust/cfg-if/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/cfg-if/LICENSE-MIT": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397",
+    "notices/gst-plugins-rs/rust/chrono/LICENSE.txt": "946c9835d8034d24404f8cfec5f4654cee5dad17e944afc3d06d742cf2882831",
+    "notices/gst-plugins-rs/rust/core-foundation-sys/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/core-foundation-sys/LICENSE-MIT": "62065228e42caebca7e7d7db1204cbb867033de5982ca4009928915e4095f3a3",
+    "notices/gst-plugins-rs/rust/dav1d/LICENSE": "8eb4fb5a6505da473ee195f326007c8c7e28357e3e6a11e293ce2a480384030c",
+    "notices/gst-plugins-rs/rust/dav1d-sys/LICENSE": "8eb4fb5a6505da473ee195f326007c8c7e28357e3e6a11e293ce2a480384030c",
+    "notices/gst-plugins-rs/rust/either/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/either/LICENSE-MIT": "7576269ea71f767b99297934c0b2367532690f8c4badc695edf8e04ab6a1e545",
+    "notices/gst-plugins-rs/rust/equivalent/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/equivalent/LICENSE-MIT": "7365cc8878a1d7ce155a58c4ca09c3d7a6be413efa5334a80ea842912b669349",
+    "notices/gst-plugins-rs/rust/find-msvc-tools/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/find-msvc-tools/LICENSE-MIT": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397",
+    "notices/gst-plugins-rs/rust/foldhash/LICENSE": "b1181a40b2a7b25cf66fd01481713bc1005df082c53ef73e851e55071b102744",
+    "notices/gst-plugins-rs/rust/futures-channel/LICENSE-APACHE": "275c491d6d1160553c32fd6127061d7f9606c3ea25abfad6ca3f6ed088785427",
+    "notices/gst-plugins-rs/rust/futures-channel/LICENSE-MIT": "6652c868f35dfe5e8ef636810a4e576b9d663f3a17fb0f5613ad73583e1b88fd",
+    "notices/gst-plugins-rs/rust/futures-core/LICENSE-APACHE": "275c491d6d1160553c32fd6127061d7f9606c3ea25abfad6ca3f6ed088785427",
+    "notices/gst-plugins-rs/rust/futures-core/LICENSE-MIT": "6652c868f35dfe5e8ef636810a4e576b9d663f3a17fb0f5613ad73583e1b88fd",
+    "notices/gst-plugins-rs/rust/futures-executor/LICENSE-APACHE": "275c491d6d1160553c32fd6127061d7f9606c3ea25abfad6ca3f6ed088785427",
+    "notices/gst-plugins-rs/rust/futures-executor/LICENSE-MIT": "6652c868f35dfe5e8ef636810a4e576b9d663f3a17fb0f5613ad73583e1b88fd",
+    "notices/gst-plugins-rs/rust/futures-io/LICENSE-APACHE": "275c491d6d1160553c32fd6127061d7f9606c3ea25abfad6ca3f6ed088785427",
+    "notices/gst-plugins-rs/rust/futures-io/LICENSE-MIT": "6652c868f35dfe5e8ef636810a4e576b9d663f3a17fb0f5613ad73583e1b88fd",
+    "notices/gst-plugins-rs/rust/futures-macro/LICENSE-APACHE": "275c491d6d1160553c32fd6127061d7f9606c3ea25abfad6ca3f6ed088785427",
+    "notices/gst-plugins-rs/rust/futures-macro/LICENSE-MIT": "6652c868f35dfe5e8ef636810a4e576b9d663f3a17fb0f5613ad73583e1b88fd",
+    "notices/gst-plugins-rs/rust/futures-sink/LICENSE-APACHE": "275c491d6d1160553c32fd6127061d7f9606c3ea25abfad6ca3f6ed088785427",
+    "notices/gst-plugins-rs/rust/futures-sink/LICENSE-MIT": "6652c868f35dfe5e8ef636810a4e576b9d663f3a17fb0f5613ad73583e1b88fd",
+    "notices/gst-plugins-rs/rust/futures-task/LICENSE-APACHE": "275c491d6d1160553c32fd6127061d7f9606c3ea25abfad6ca3f6ed088785427",
+    "notices/gst-plugins-rs/rust/futures-task/LICENSE-MIT": "6652c868f35dfe5e8ef636810a4e576b9d663f3a17fb0f5613ad73583e1b88fd",
+    "notices/gst-plugins-rs/rust/futures-util/LICENSE-APACHE": "275c491d6d1160553c32fd6127061d7f9606c3ea25abfad6ca3f6ed088785427",
+    "notices/gst-plugins-rs/rust/futures-util/LICENSE-MIT": "6652c868f35dfe5e8ef636810a4e576b9d663f3a17fb0f5613ad73583e1b88fd",
+    "notices/gst-plugins-rs/rust/getrandom/LICENSE-APACHE": "aaff376532ea30a0cd5330b9502ad4a4c8bf769c539c87ffe78819d188a18ebf",
+    "notices/gst-plugins-rs/rust/getrandom/LICENSE-MIT": "29e9fe5074bd27e0e5d5d110394fbbcd841baee2651a3c4b4560a632702cede4",
+    "notices/gst-plugins-rs/rust/gio-sys/LICENSE": "8cf56d10131ce201cf69ab74b111d3ebac1acca3833d7efb39ae357224b70edb",
+    "notices/gst-plugins-rs/rust/glib/LICENSE": "8cf56d10131ce201cf69ab74b111d3ebac1acca3833d7efb39ae357224b70edb",
+    "notices/gst-plugins-rs/rust/glib/COPYRIGHT": "dae402989de65164815b7e2b6bc2b9576285434c3785934c8b6ece0fa055960d",
+    "notices/gst-plugins-rs/rust/glib/gobject-sys/LICENSE": "8cf56d10131ce201cf69ab74b111d3ebac1acca3833d7efb39ae357224b70edb",
+    "notices/gst-plugins-rs/rust/glib/sys/LICENSE": "8cf56d10131ce201cf69ab74b111d3ebac1acca3833d7efb39ae357224b70edb",
+    "notices/gst-plugins-rs/rust/glib-macros/LICENSE": "8cf56d10131ce201cf69ab74b111d3ebac1acca3833d7efb39ae357224b70edb",
+    "notices/gst-plugins-rs/rust/glib-macros/COPYRIGHT": "dae402989de65164815b7e2b6bc2b9576285434c3785934c8b6ece0fa055960d",
+    "notices/gst-plugins-rs/rust/glib-sys/LICENSE": "8cf56d10131ce201cf69ab74b111d3ebac1acca3833d7efb39ae357224b70edb",
+    "notices/gst-plugins-rs/rust/gobject-sys/LICENSE": "8cf56d10131ce201cf69ab74b111d3ebac1acca3833d7efb39ae357224b70edb",
+    "notices/gst-plugins-rs/rust/gst-plugin-dav1d/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/gst-plugin-dav1d/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/gst-plugin-version-helper/LICENSE": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/gstreamer/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/gstreamer/COPYRIGHT": "09230790719b8034522109d0ec97ce72305c7a76cab07ef445e0732d456921f8",
+    "notices/gst-plugins-rs/rust/gstreamer/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/gstreamer/sys/LICENSE": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/gstreamer/sys/COPYRIGHT": "09230790719b8034522109d0ec97ce72305c7a76cab07ef445e0732d456921f8",
+    "notices/gst-plugins-rs/rust/gstreamer-base/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/gstreamer-base/COPYRIGHT": "09230790719b8034522109d0ec97ce72305c7a76cab07ef445e0732d456921f8",
+    "notices/gst-plugins-rs/rust/gstreamer-base/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/gstreamer-base/sys/LICENSE": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/gstreamer-base/sys/COPYRIGHT": "09230790719b8034522109d0ec97ce72305c7a76cab07ef445e0732d456921f8",
+    "notices/gst-plugins-rs/rust/gstreamer-base-sys/LICENSE": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/gstreamer-base-sys/COPYRIGHT": "09230790719b8034522109d0ec97ce72305c7a76cab07ef445e0732d456921f8",
+    "notices/gst-plugins-rs/rust/gstreamer-sys/LICENSE": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/gstreamer-sys/COPYRIGHT": "09230790719b8034522109d0ec97ce72305c7a76cab07ef445e0732d456921f8",
+    "notices/gst-plugins-rs/rust/gstreamer-video/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/gstreamer-video/COPYRIGHT": "09230790719b8034522109d0ec97ce72305c7a76cab07ef445e0732d456921f8",
+    "notices/gst-plugins-rs/rust/gstreamer-video/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/gstreamer-video/sys/LICENSE": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/gstreamer-video/sys/COPYRIGHT": "09230790719b8034522109d0ec97ce72305c7a76cab07ef445e0732d456921f8",
+    "notices/gst-plugins-rs/rust/gstreamer-video-sys/LICENSE": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/gstreamer-video-sys/COPYRIGHT": "09230790719b8034522109d0ec97ce72305c7a76cab07ef445e0732d456921f8",
+    "notices/gst-plugins-rs/rust/hashbrown/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/hashbrown/LICENSE-MIT": "ff8f68cb076caf8cefe7a6430d4ac086ce6af2ca8ce2c4e5a2004d4552ef52a2",
+    "notices/gst-plugins-rs/rust/heck/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/heck/LICENSE-MIT": "7b63ecd5f1902af1b63729947373683c32745c16a10e8e6292e2e2dcd7e90ae0",
+    "notices/gst-plugins-rs/rust/hermit-abi/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/hermit-abi/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/iana-time-zone/LICENSE-APACHE": "696759d65dfe558ff7d9f031c76db19ec5c0767470fb67c4e8d990820d1e99c9",
+    "notices/gst-plugins-rs/rust/iana-time-zone/LICENSE-MIT": "da28ccc6b158fc2d8cccc74e99794b1cff1d29bd7bbeb019442fcf0c04c6cad9",
+    "notices/gst-plugins-rs/rust/iana-time-zone-haiku/LICENSE-APACHE": "696759d65dfe558ff7d9f031c76db19ec5c0767470fb67c4e8d990820d1e99c9",
+    "notices/gst-plugins-rs/rust/iana-time-zone-haiku/LICENSE-MIT": "da28ccc6b158fc2d8cccc74e99794b1cff1d29bd7bbeb019442fcf0c04c6cad9",
+    "notices/gst-plugins-rs/rust/id-arena/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/id-arena/LICENSE-MIT": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397",
+    "notices/gst-plugins-rs/rust/indexmap/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/indexmap/LICENSE-MIT": "ecc269ef87fd38a1d98e30bfac9ba964a9dbd9315c3770fed98d4d7cb5882055",
+    "notices/gst-plugins-rs/rust/itertools/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/itertools/LICENSE-MIT": "7576269ea71f767b99297934c0b2367532690f8c4badc695edf8e04ab6a1e545",
+    "notices/gst-plugins-rs/rust/itoa/LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+    "notices/gst-plugins-rs/rust/itoa/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/jobserver/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/jobserver/LICENSE-MIT": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397",
+    "notices/gst-plugins-rs/rust/js-sys/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/js-sys/LICENSE-MIT": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397",
+    "notices/gst-plugins-rs/rust/kstring/LICENSE-APACHE": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08",
+    "notices/gst-plugins-rs/rust/kstring/LICENSE-MIT": "6efb0476a1cc085077ed49357026d8c173bf33017278ef440f222fb9cbcb66e6",
+    "notices/gst-plugins-rs/rust/leb128fmt/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/leb128fmt/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/libc/LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+    "notices/gst-plugins-rs/rust/libc/LICENSE-MIT": "123a331b5dbf04c30097fa43b8f858bc85df671fe776de498d01f3d6b7c1f69e",
+    "notices/gst-plugins-rs/rust/libm/LICENSE.txt": "3823dda7cf046602f4b4e77ec8e227863dc4736037cc85bb33d9f19febe16bb7",
+    "notices/gst-plugins-rs/rust/log/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/log/LICENSE-MIT": "6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb",
+    "notices/gst-plugins-rs/rust/memchr/COPYING": "01c266bced4a434da0051174d6bee16a4c82cf634e2679b6155d40d75012390f",
+    "notices/gst-plugins-rs/rust/memchr/LICENSE-MIT": "0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f",
+    "notices/gst-plugins-rs/rust/muldiv/LICENSE": "c524732311819f888ce57b1b56148feaa6e9b1705fcb158e7e5d71554ccf39ed",
+    "notices/gst-plugins-rs/rust/num-bigint/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/num-bigint/LICENSE-MIT": "6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb",
+    "notices/gst-plugins-rs/rust/num-derive/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/num-derive/LICENSE-MIT": "6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb",
+    "notices/gst-plugins-rs/rust/num-integer/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/num-integer/LICENSE-MIT": "6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb",
+    "notices/gst-plugins-rs/rust/num-rational/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/num-rational/LICENSE-MIT": "6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb",
+    "notices/gst-plugins-rs/rust/num-traits/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/num-traits/LICENSE-MIT": "6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb",
+    "notices/gst-plugins-rs/rust/num_cpus/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/num_cpus/LICENSE-MIT": "391a5396cec6230bfabd4ef4eb2350eb895bc5efce377a2218f5702ed020d3e3",
+    "notices/gst-plugins-rs/rust/once_cell/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/once_cell/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/option-operations/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/option-operations/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/pastey/LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+    "notices/gst-plugins-rs/rust/pastey/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/pin-project-lite/LICENSE-APACHE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+    "notices/gst-plugins-rs/rust/pin-project-lite/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/pkg-config/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/pkg-config/LICENSE-MIT": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397",
+    "notices/gst-plugins-rs/rust/portable-atomic/LICENSE-APACHE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+    "notices/gst-plugins-rs/rust/portable-atomic/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/prettyplease/LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+    "notices/gst-plugins-rs/rust/prettyplease/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/proc-macro2/LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+    "notices/gst-plugins-rs/rust/proc-macro2/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/quote/LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+    "notices/gst-plugins-rs/rust/quote/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/r-efi/AUTHORS": "ff92bed461f50338dd703a9ba9aee496a425957873df1d91192776e4bdf5dda7",
+    "notices/gst-plugins-rs/rust/rustversion/LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+    "notices/gst-plugins-rs/rust/rustversion/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/semver/LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+    "notices/gst-plugins-rs/rust/semver/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/serde/LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+    "notices/gst-plugins-rs/rust/serde/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/serde_bytes/LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+    "notices/gst-plugins-rs/rust/serde_bytes/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/serde_core/LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+    "notices/gst-plugins-rs/rust/serde_core/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/serde_derive/LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+    "notices/gst-plugins-rs/rust/serde_derive/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/serde_json/LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+    "notices/gst-plugins-rs/rust/serde_json/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/serde_spanned/LICENSE-APACHE": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08",
+    "notices/gst-plugins-rs/rust/serde_spanned/LICENSE-MIT": "6efb0476a1cc085077ed49357026d8c173bf33017278ef440f222fb9cbcb66e6",
+    "notices/gst-plugins-rs/rust/shlex/LICENSE-APACHE": "553fffcd9b1cb158bc3e9edc35da85ca5c3b3d7d2e61c883ebcfa8a65814b583",
+    "notices/gst-plugins-rs/rust/shlex/LICENSE-MIT": "4455bf75a91154108304cb283e0fea9948c14f13e20d60887cf2552449dea3b1",
+    "notices/gst-plugins-rs/rust/slab/LICENSE": "8ce0830173fdac609dfb4ea603fdc002c2f4af0dc9b1a005653f5da9cf534b18",
+    "notices/gst-plugins-rs/rust/smallvec/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/smallvec/LICENSE-MIT": "0b28172679e0009b655da42797c03fd163a3379d5cfa67ba1f1655e974a2a1a9",
+    "notices/gst-plugins-rs/rust/static_assertions/LICENSE-APACHE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "notices/gst-plugins-rs/rust/static_assertions/LICENSE-MIT": "ea084a2373ebc1f0902c09266e7bf25a05ab3814c1805bb017ffa7308f90c061",
+    "notices/gst-plugins-rs/rust/syn/LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+    "notices/gst-plugins-rs/rust/syn/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/system-deps/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/system-deps/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/target-lexicon/LICENSE": "268872b9816f90fd8e85db5a28d33f8150ebb8dd016653fb39ef1f94f2686bc5",
+    "notices/gst-plugins-rs/rust/thiserror/LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+    "notices/gst-plugins-rs/rust/thiserror/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/thiserror-impl/LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+    "notices/gst-plugins-rs/rust/thiserror-impl/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/toml/LICENSE-APACHE": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08",
+    "notices/gst-plugins-rs/rust/toml/LICENSE-MIT": "6efb0476a1cc085077ed49357026d8c173bf33017278ef440f222fb9cbcb66e6",
+    "notices/gst-plugins-rs/rust/toml_datetime/LICENSE-APACHE": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08",
+    "notices/gst-plugins-rs/rust/toml_datetime/LICENSE-MIT": "6efb0476a1cc085077ed49357026d8c173bf33017278ef440f222fb9cbcb66e6",
+    "notices/gst-plugins-rs/rust/toml_edit/LICENSE-APACHE": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08",
+    "notices/gst-plugins-rs/rust/toml_edit/LICENSE-MIT": "6efb0476a1cc085077ed49357026d8c173bf33017278ef440f222fb9cbcb66e6",
+    "notices/gst-plugins-rs/rust/toml_parser/LICENSE-APACHE": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08",
+    "notices/gst-plugins-rs/rust/toml_parser/LICENSE-MIT": "6efb0476a1cc085077ed49357026d8c173bf33017278ef440f222fb9cbcb66e6",
+    "notices/gst-plugins-rs/rust/toml_writer/LICENSE-APACHE": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08",
+    "notices/gst-plugins-rs/rust/toml_writer/LICENSE-MIT": "6efb0476a1cc085077ed49357026d8c173bf33017278ef440f222fb9cbcb66e6",
+    "notices/gst-plugins-rs/rust/unicode-ident/LICENSE-UNICODE": "f7db81051789b729fea528a63ec4c938fdcb93d9d61d97dc8cc2e9df6d47f2a1",
+    "notices/gst-plugins-rs/rust/unicode-ident/LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+    "notices/gst-plugins-rs/rust/unicode-ident/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/unicode-xid/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/unicode-xid/COPYRIGHT": "23860c2a7b5d96b21569afedf033469bab9fe14a1b24a35068b8641c578ce24d",
+    "notices/gst-plugins-rs/rust/unicode-xid/LICENSE-MIT": "7b63ecd5f1902af1b63729947373683c32745c16a10e8e6292e2e2dcd7e90ae0",
+    "notices/gst-plugins-rs/rust/version-compare/LICENSE": "cedfcc7ace1639adb054bd4a19b6f8585ccb2429a60b4bf51bfeb0601058c22c",
+    "notices/gst-plugins-rs/rust/wasip2/upstream/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/wasip2/upstream/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/wasm-bindgen/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/wasm-bindgen/LICENSE-MIT": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397",
+    "notices/gst-plugins-rs/rust/wasm-bindgen-macro/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/wasm-bindgen-macro/LICENSE-MIT": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397",
+    "notices/gst-plugins-rs/rust/wasm-bindgen-macro-support/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/wasm-bindgen-macro-support/LICENSE-MIT": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397",
+    "notices/gst-plugins-rs/rust/wasm-bindgen-shared/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/wasm-bindgen-shared/LICENSE-MIT": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397",
+    "notices/gst-plugins-rs/rust/wasm-encoder/upstream/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/wasm-encoder/upstream/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/wasm-metadata/src/oci_annotations/licenses.rs": "2c8aca896e6e398329499ccb47c43947ab89e6cd4bd6a2739fad80118df45881",
+    "notices/gst-plugins-rs/rust/wasm-metadata/src/oci_annotations/authors.rs": "241d116ecc7ec20e3c67cb8e9edb00ef98feab4af4a87f4f00b1f21bc3e8d1f2",
+    "notices/gst-plugins-rs/rust/wasmparser/upstream/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/wasmparser/upstream/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/windows-core/license-apache-2.0": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b",
+    "notices/gst-plugins-rs/rust/windows-core/license-mit": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+    "notices/gst-plugins-rs/rust/windows-implement/license-apache-2.0": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b",
+    "notices/gst-plugins-rs/rust/windows-implement/license-mit": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+    "notices/gst-plugins-rs/rust/windows-interface/license-apache-2.0": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b",
+    "notices/gst-plugins-rs/rust/windows-interface/license-mit": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+    "notices/gst-plugins-rs/rust/windows-link/license-apache-2.0": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b",
+    "notices/gst-plugins-rs/rust/windows-link/license-mit": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+    "notices/gst-plugins-rs/rust/windows-result/license-apache-2.0": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b",
+    "notices/gst-plugins-rs/rust/windows-result/license-mit": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+    "notices/gst-plugins-rs/rust/windows-strings/license-apache-2.0": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b",
+    "notices/gst-plugins-rs/rust/windows-strings/license-mit": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+    "notices/gst-plugins-rs/rust/windows-sys/license-apache-2.0": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b",
+    "notices/gst-plugins-rs/rust/windows-sys/license-mit": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+    "notices/gst-plugins-rs/rust/winnow/LICENSE-MIT": "cb5aedb296c5246d1f22e9099f925a65146f9f0d6b4eebba97fd27a6cdbbab2d",
+    "notices/gst-plugins-rs/rust/wit-bindgen/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/wit-bindgen/LICENSE-Apache-2.0_WITH_LLVM-exception": "268872b9816f90fd8e85db5a28d33f8150ebb8dd016653fb39ef1f94f2686bc5",
+    "notices/gst-plugins-rs/rust/wit-bindgen/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/wit-bindgen-core/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/wit-bindgen-core/LICENSE-Apache-2.0_WITH_LLVM-exception": "268872b9816f90fd8e85db5a28d33f8150ebb8dd016653fb39ef1f94f2686bc5",
+    "notices/gst-plugins-rs/rust/wit-bindgen-core/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/wit-bindgen-rust/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/wit-bindgen-rust/LICENSE-Apache-2.0_WITH_LLVM-exception": "268872b9816f90fd8e85db5a28d33f8150ebb8dd016653fb39ef1f94f2686bc5",
+    "notices/gst-plugins-rs/rust/wit-bindgen-rust/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/wit-bindgen-rust-macro/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/wit-bindgen-rust-macro/LICENSE-Apache-2.0_WITH_LLVM-exception": "268872b9816f90fd8e85db5a28d33f8150ebb8dd016653fb39ef1f94f2686bc5",
+    "notices/gst-plugins-rs/rust/wit-bindgen-rust-macro/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/wit-component/upstream/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/wit-component/upstream/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/wit-parser/upstream/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gst-plugins-rs/rust/wit-parser/upstream/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gst-plugins-rs/rust/zmij/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "supplemental/gst-plugins-rs/rust-stdlib-1.94.1/COPYRIGHT-library.html": "af70aaabed1b73e872f14f9130db37e09f3f4d73a5f7c598b9173697a5d2729f",
+    "notices/gstreamer/86ec01791046/LICENSE": "ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db",
+    "notices/gstreamer/86ec01791046/subprojects/gst-plugins-bad/COPYING": "dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551",
+    "notices/gstreamer/86ec01791046/subprojects/gst-plugins-base/COPYING": "ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db",
+    "notices/gstreamer/86ec01791046/subprojects/gst-plugins-good/COPYING": "6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3",
+    "notices/gstreamer/86ec01791046/subprojects/gstreamer/COPYING": "ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db",
+    "notices/gstreamer/5488965db0fb/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "notices/gstreamer/5488965db0fb/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "notices/gstreamer/5488965db0fb/LICENSE-MPL-2.0": "fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85",
+    "supplemental/gstreamer/kissfft/COPYING": "a2840585f8411be8e6826a31ef15ae65c950bd74a2437a73b013398a934ad0c6",
+    "supplemental/gstreamer/kissfft/BSD-3-Clause": "4d6bcab46f27d6d0c878e8305d4bdcfe040d52bf6656b9771f04c9fb9902c0ed",
+    "supplemental/gstreamer/kissfft/GSTREAMER-COPYRIGHTS.txt": "023c4fbd00719ced1cf9a8d522b4a414c8de4b9f3412995823fa5a33d4461d1a",
+    "notices/harfbuzz/d4aa31272813/AUTHORS": "19bfe8f5ed100636cd24ab0c90a3f71c21d8b02d9ba00719447a0faab364d49f",
+    "notices/harfbuzz/d4aa31272813/COPYING": "ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64",
+    "notices/harfbuzz/d4aa31272813/src/ms-use/COPYING": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+    "notices/harfbuzz/d4aa31272813/test/COPYING": "9b35b8485f69cd298fccbb3c40a827dc06cf1185553bef827903497d2944a8d7",
+    "notices/harfbuzz/d4aa31272813/test/shape/data/aots/COPYING": "f55f74bf740db07bb032a90aa74af4307adea3d489c1ccba12453cf0c0a764cb",
+    "notices/harfbuzz/d4aa31272813/test/shape/data/text-rendering-tests/COPYING": "d24039e4d22c9bc72096f6174374539d92a3d6e1163938546ec59179fe095e6f",
+    "notices/icu4c@78/3a2e7a47604b/license.html": "c62d7697c03979f5056d28b338fafc7a1152820f7b379adf4a9d88cd37160f96",
+    "notices/icu4c@78/3a2e7a47604b/LICENSE": "e55522d81edc687a341a4411e0776e54ca654e90147f354a90458aaced4116af",
+    "notices/jpeg-turbo/ecae8008e2cc/LICENSE.md": "e10114e6e40f3d0311c401ca25245ac5ef459a43c20f976fd63f03e816f5741f",
+    "notices/jpeg-turbo/ecae8008e2cc/README.ijg": "75815e3bf6484201a3c3d17a1bbf10f2e8e3237f84df10a2357ea896db2a81d6",
+    "notices/jpeg-turbo/ecae8008e2cc/java/doc/legal/LICENSE": "4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726",
+    "notices/jpeg-turbo/ecae8008e2cc/release/License.rtf": "d26120ab237f87dea10aa4fa7fd4243cadffd26e54eb2f3903d5fb0f8ed336b2",
+    "notices/libb2/53626fddce75/COPYING": "6a1ee543e5282cd9061881edf462e6fdab181f328da71fc2c9a6950a80e94d01",
+    "notices/libogg/83e670473068/COPYING": "d2ab5758336489da61c12cc5bb757da5339c4ae9001f9bb0562b4370249af814",
+    "notices/libogg/83e670473068/AUTHORS": "6fcb33d0cdd60b5054e7df820916388b590427514288c2bab01c626bb8ae9506",
+    "notices/libpng/f7d8bf1601b7/AUTHORS": "0de66f4a30324ff320b82bc0a19364c90063ed8849c8ab7aac06095870591893",
+    "notices/libpng/f7d8bf1601b7/LICENSE": "bdb0a645ea18c60507d0368379b1ac5474b92255fcc2d115e07486a7672ba526",
+    "notices/libpng/f7d8bf1601b7/ci/LICENSE_MIT.txt": "508a77d2e7b51d98adeed32648ad124b7b30241a8e70b2e72c99f92d8e5874d1",
+    "notices/libpng/f7d8bf1601b7/contrib/gregbook/COPYING": "d6cb0e9e560f51085556949a84af12b79a00f10ab8b66c752537faf7cd665572",
+    "notices/libpng/f7d8bf1601b7/contrib/gregbook/LICENSE": "b6a03c1803eb58ffb1f1278d5c7d4096c4c116e66dce8a7553e8c77d163c3438",
+    "notices/libpng/f7d8bf1601b7/contrib/pngexif/LICENSE_MIT.txt": "508a77d2e7b51d98adeed32648ad124b7b30241a8e70b2e72c99f92d8e5874d1",
+    "notices/libpng/f7d8bf1601b7/contrib/pngminus/LICENSE.txt": "1806f1f10d393e9e377b3a8d1b968452b54f1a90378f14eeef45426946ace330",
+    "notices/libpng/f7d8bf1601b7/scripts/cmake/AUTHORS.md": "50633b976f0133862c921aa67d56de2c0b42eb344c8ca3853686efb092a447db",
+    "notices/libtiff/f698d94f3103/doc/html-prebuilt/_sources/project/license.rst.txt": "02e86af3b805e0f2075ebb5ac512831f6ab2a97ddeb186de076c418956418ba1",
+    "notices/libtiff/f698d94f3103/doc/html-prebuilt/project/license.html": "c5bc827b485b77932fd610bbedf8ec7fe9fbbc6fa6e9cf944e9c5a7446e885a6",
+    "notices/libtiff/f698d94f3103/doc/project/license.rst": "02e86af3b805e0f2075ebb5ac512831f6ab2a97ddeb186de076c418956418ba1",
+    "notices/libtiff/f698d94f3103/LICENSE.md": "0e27c2382d7b8147972bbb746e04059a1152c8d0fda9d03ef1399d1a433c4ade",
+    "notices/libvorbis/b33cc4934322/COPYING": "ec1815db59fcd302846df949d7424876cb2e2dc5ed1606c5fb0b36787b1cf43a",
+    "notices/libvorbis/b33cc4934322/AUTHORS": "f5cab9f16035f770f50299f85cf2938c06dc3a9a30425961067788102ec896d3",
+    "notices/libvpx/7a479a3c66b9/AUTHORS": "fd2d1ac03d9d3c864bd98c2042de2d8f7fbd78b298c8d9c506076b6c6a9de889",
+    "notices/libvpx/7a479a3c66b9/LICENSE": "8267348d5af1262c11d1a08de2f5afc77457755f1ac658627dd9acf71011d615",
+    "notices/libvpx/7a479a3c66b9/PATENTS": "cc3273e0694ea5896145e0677699b53471b03ea43021ddc50e7923fbb9f5023c",
+    "notices/libvpx/7a479a3c66b9/third_party/googletest/src/LICENSE": "9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138",
+    "notices/libvpx/7a479a3c66b9/third_party/libwebm/AUTHORS.TXT": "3edb5f5496bfff3d6d4a62fa75fe996b814920d0d6e348c2e65c589e7ac5d177",
+    "notices/libvpx/7a479a3c66b9/third_party/libwebm/LICENSE.TXT": "5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf",
+    "notices/libvpx/7a479a3c66b9/third_party/libwebm/PATENTS.TXT": "cc3273e0694ea5896145e0677699b53471b03ea43021ddc50e7923fbb9f5023c",
+    "notices/libvpx/7a479a3c66b9/third_party/libyuv/LICENSE": "2b2cc1180c7e6988328ad2033b04b80117419db9c4c584918bbb3cfec7e9364f",
+    "notices/libvpx/7a479a3c66b9/third_party/nalloc/LICENSE": "d7dd0396ec46975e1bf9093680068ef301bc0ed204603e623a6f7073ab922ab1",
+    "notices/libvpx/7a479a3c66b9/third_party/x86inc/LICENSE": "719d8fa235f2068e0ae6d6a7dceb0a7720d7840f0f0ebed29957989e6ded3cd8",
+    "notices/libx11/acf0e7cd7541/COPYING": "eda0c2ed1cae0280c7fe79762eaad8ad31c044afc64e71e92ef2c6f3cd7bc395",
+    "notices/libx11/acf0e7cd7541/AUTHORS": "cb356a611127b9e2267be82c79db15b6ad87a6038f91f55cf5ae2b585fb879f2",
+    "notices/libx11/acf0e7cd7541/src/xlibi18n/lcUniConv/COPYRIGHT": "b7492b0e0cb9117d13dc928130ca8303185008f7231bc91a9a2071b381f5f490",
+    "supplemental/libx11/xtrans-1.5.2-COPYING": "22616bf00b6db85ee3164775a95206894af987b85ff1a7703de55644bc722a39",
+    "supplemental/libx11/xtrans-1.6.0-COPYING": "3fe68a84ab89e82947e560316ab70cf2d02a8b978ae5cf4fbdfd53fc5b917308",
+    "notices/libxau/74d0e4dfa3d3/AUTHORS": "151282e906d23afcd2e40762782124616083d81de5205be74f668714b9bf168b",
+    "notices/libxau/74d0e4dfa3d3/COPYING": "56abe29bb1d9806a9e04fa9f80fed2c0f18027594df3f098148d814aef6bddfa",
+    "notices/libxcb/599ebf999671/COPYING": "c5ffbfeaa501071ceeb97b7de2c0d703fdaa35de01c0fb6cbac1c28453a3e9fd",
+    "notices/libxdmcp/d8a5222828c3/COPYING": "8a3c3f35b0dbcb60a4e242b9e4394a352a65bb27deb2938ea1e2e62a626e16e9",
+    "notices/libxdmcp/d8a5222828c3/AUTHORS": "81b60a90982e139aaa3e71beaefdf00a5b7d6dbd3efe3d9724eac5d0992cc68f",
+    "notices/md4c/55d0111d48fb/LICENSE.md": "d30937367d5413e7eaa218b1640b8946ff76fd34d97152f6979fd96169d5d0fc",
+    "notices/md4c/55d0111d48fb/test/LICENSE.md": "19be7deb1b55da28dee73023f6c77bfafa2d78b3da628fee85f08515ca3c51d6",
+    "notices/mpg123/3ae8c9ff80a9/AUTHORS": "fb18c9abae864a20f691e949e4c7871c79f5f0861b3a3dcaf5881c3c02cf5cc2",
+    "notices/mpg123/3ae8c9ff80a9/COPYING": "c22482728a634a8dfdb4ff72a96d4c1ed64cd8f3e79335c401751ac591609366",
+    "notices/mpg123/3ae8c9ff80a9/doc/PATENTS": "a16db5483cc2ab07a81b152fe9147f0ef196d38d26477c7b8c803aff6522e8bc",
+    "notices/mpg123/3ae8c9ff80a9/doc/LICENSE": "cca79ea6fc0a7715e52450df2d86311f990e85067dd13f4d7f5a88d4fd23a07c",
+    "notices/openssl@3/b1bfedcd5b28/AUTHORS.md": "b9f638dfc06b59c2d3b808186c3b30f713805a5db390f5b77b1703ac58acb83e",
+    "notices/openssl@3/b1bfedcd5b28/LICENSE.txt": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a",
+    "notices/openssl@3/b1bfedcd5b28/external/perl/Text-Template-1.56/LICENSE": "9837f05336ef3cbacb6a96e1672a0426d81ad01191f214b8d48e22ca62338181",
+    "notices/openssl@3/b1bfedcd5b28/util/perl/OpenSSL/copyright.pm": "04213b69dbebc8ba0dd8a6216af1d9422f9b63619c1cf2f1d8aa107b83bbb608",
+    "notices/openssl@3/420600911230/LICENSE": "af4ea0f044413b0bf5fd126284d5a6d29088d77ddbe5a1a1d4a4d781dd7908cc",
+    "notices/opus/6ffcb593207b/AUTHORS": "f9fd849e652219ce98e008303370b352d37663d0ffb27b8dc514ad93c9c7438b",
+    "notices/opus/6ffcb593207b/COPYING": "01e1167d54a096d123cf6dfbbeb19587278845c6481d2d66d545669846079551",
+    "notices/orc/7ec912ab59af/COPYING": "4f5dabb1b44bb6fc5cd53820b1f103147ad61b395a57903991325bd1b85d97bf",
+    "notices/pcre2/47fe8c994612/LICENCE.md": "197d8a73ffee0d6b09adba2f9c677b5f5aede24edf89258a68e48248d010d811",
+    "notices/pcre2/47fe8c994612/deps/sljit/LICENSE": "5f216505c0f6ea3273caec89e766eef93cdeb7bbb0c429f9360116d7c938feeb",
+    "notices/pcre2/47fe8c994612/cmake/COPYING-CMAKE-SCRIPTS": "c666ec2313dba24523ccad88f4c04ea4b24fad6545263a35b1d4ab2b08efe50a",
+    "notices/pcre2/47fe8c994612/AUTHORS.md": "66d9adef4d4bcb7c2dd99a499a89a52033375785edaa8a35ada0f2db7d05a1a4",
+    "notices/pcre2/47fe8c994612/COPYING": "99272c55f3dcfa07a8a7e15a5c1a33096e4727de74241d65fa049fccfdd59507",
+    "notices/qtbase/231ad8597986/LICENSES/BSD-3-Clause.txt": "9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce",
+    "notices/qtbase/231ad8597986/LICENSES/GPL-2.0-only.txt": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+    "notices/qtbase/231ad8597986/LICENSES/GPL-3.0-only.txt": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+    "notices/qtbase/231ad8597986/LICENSES/LGPL-3.0-only.txt": "da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768",
+    "notices/qtbase/231ad8597986/src/3rdparty/VulkanMemoryAllocator/qt_attribution.json": "833626a9e955bdae274f076786ca2cc7c8b50f9e382dff566db89ec69f8178cf",
+    "notices/qtbase/231ad8597986/src/3rdparty/blake2/qt_attribution.json": "bab552307bdd03ed9a4cf7f8f1397c3d18d4dbee19ee576033284104785245be",
+    "notices/qtbase/231ad8597986/src/3rdparty/easing/qt_attribution.json": "77d67a1db5882bb0b9a1278b014885bee45a4c059d1da9f835b6da5bc4b9c93d",
+    "notices/qtbase/231ad8597986/src/3rdparty/emoji-segmenter/qt_attribution.json": "9a980fc0f9e478d2a7e9a571d4cd234c259aaf8e2ea3fb60a0a7cf02cc3c3700",
+    "notices/qtbase/231ad8597986/src/3rdparty/forkfd/qt_attribution.json": "525fd890017a3966f542da42a9ff0ca2a0d71bc45f80a4871de3e0bd0f612612",
+    "notices/qtbase/231ad8597986/src/3rdparty/icc/qt_attribution.json": "509da9bd2b3f769c730aa4627b1080d65f39b0ecd4130111c9e1122e13cd35b5",
+    "notices/qtbase/231ad8597986/src/3rdparty/libpsl/qt_attribution.json": "249db4fc311357b0080ccbc123f49e8cd0004dfe86a44f2855f7ea5837ae40f1",
+    "notices/qtbase/231ad8597986/src/3rdparty/md4/qt_attribution.json": "34bda63a2fcc23c83f2e5364ccd394553b4baa505b1f79ded9cc2161c56a9b4c",
+    "notices/qtbase/231ad8597986/src/3rdparty/md5/qt_attribution.json": "20b0f1b17ccd1bd5e8d763b1cdca4b095b8f0c037644b5ee18154536b7d8425e",
+    "notices/qtbase/231ad8597986/src/3rdparty/rfc6234/qt_attribution.json": "fa24413bdc5015fc7fc84297fa17d4c8a598f8f7c76b9495a6e6b26a77b4a324",
+    "notices/qtbase/231ad8597986/src/3rdparty/sha1/qt_attribution.json": "53cab2c771f7f7ffbf6a58ff759e5846b746e91d98dfe467d5145edf8cd7d306",
+    "notices/qtbase/231ad8597986/src/3rdparty/sha3/qt_attribution.json": "d904a6c21c150d9cac693c0806a469480306cb4e5879cc13c994fbadba71a56e",
+    "notices/qtbase/231ad8597986/src/3rdparty/siphash/qt_attribution.json": "8614947dfc0ca1d21aad2f88b4400598262ab8c08aa87c4f7acc0c2de6e5619e",
+    "notices/qtbase/231ad8597986/src/3rdparty/tinycbor/qt_attribution.json": "788408509fb7967042640f24ba78b263712e816d886303ba1733f49753d33863",
+    "notices/qtbase/231ad8597986/src/corelib/global/qt_attribution.json": "64698063a65a1502b986bd61163b5eb9c6bde87f93feb28e4eab43ff07a4f10a",
+    "notices/qtbase/231ad8597986/src/corelib/kernel/qt_attribution.json": "27bb1f28d336f1f8f6d44689f28cb650f0844cc82672e36ae168d0716783fad5",
+    "notices/qtbase/231ad8597986/src/corelib/mimetypes/3rdparty/qt_attribution.json": "c4489b84900db9b66a20ab237f162f406ef3f670d008d9f7e0038e651302649e",
+    "notices/qtbase/231ad8597986/src/corelib/text/qt_attribution.json": "b6a2f9a2a33c4c0a951ffd15ceafd5c21dba5a4e5e2e246d5db3493440362302",
+    "notices/qtbase/231ad8597986/src/dbus/qt_attribution.json": "346532e1fb3bf653bc949408834c305646fc93f96650a2af9b2171d141c107ee",
+    "notices/qtbase/231ad8597986/src/gui/opengl/qt_attribution.json": "d05626e02386f22186b385b3ce2cd5a6431b84e2fc552c68f7133e38da552fc1",
+    "notices/qtbase/231ad8597986/src/gui/painting/qt_attribution.json": "8cddd6c73a885f697261c4d6d60e5cd814a2544fcd407504b52a5eb9b7cc3600",
+    "notices/qtbase/231ad8597986/src/gui/text/qt_attribution.json": "73066a55ff52c6546753e1dc0802d8890d58e93e7efa394565cd8bdd0df0995b",
+    "notices/qtbase/231ad8597986/src/gui/vulkan/qt_attribution.json": "b4beb6ac27b066a6a71408da116fea60131c06ac9799c9763fe9cef28a76e7b9",
+    "notices/qtbase/231ad8597986/src/plugins/platforms/cocoa/qt_attribution.json": "27a435bfea96ca950f4a5ad6a82be7fe2a62bb4db0d8851e7a84fc5dce0c3ff3",
+    "notices/qtbase/231ad8597986/util/gradientgen/qt_attribution.json": "6e87ac5d79ab92110e6e517b2c74e4f4fd15878540e93eea0300e529d3318572",
+    "notices/qtbase/231ad8597986/src/3rdparty/VulkanMemoryAllocator/LICENSE.txt": "846d97c8b74ccaa92b9ad031140a04363b3b3985f318094552f297b8bda1c68e",
+    "notices/qtbase/231ad8597986/src/3rdparty/blake2/COPYING": "4103f471877ed0bae500752c5fcd7ecca409d4a4a8dc2ad40437daba60f1a2bc",
+    "notices/qtbase/231ad8597986/src/3rdparty/easing/LICENSE": "92fac99458f1754b73edf50f9c9983e0efaa06ad96e2afd5e538c79f45b4b191",
+    "notices/qtbase/231ad8597986/src/3rdparty/forkfd/LICENSE": "d0d683ae18e78fbef90eb41168fb781920da2d12bf80704490f0882915c18ae0",
+    "notices/qtbase/231ad8597986/src/3rdparty/icc/LICENSE.txt": "9e34ff47b3a44814e183342e7e198d127a6740e29d20e8381fba7688dafc79dd",
+    "notices/qtbase/231ad8597986/src/3rdparty/libpsl/PSL-LICENSE.txt": "3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04",
+    "notices/qtbase/231ad8597986/src/3rdparty/libpsl/src/LICENSE.chromium": "1d7f52747a9169751cdf2641a8299c0098e9ecdf9429296ffd55bdb14c9ed5b3",
+    "notices/qtbase/231ad8597986/src/3rdparty/rfc6234/LICENSE": "7ccebd514aaabc86192f957d773cebf06577c12fe9f25ecd419c6cac5da7a14c",
+    "notices/qtbase/231ad8597986/src/3rdparty/sha3/BRG_ENDIAN_LICENSE": "2fed6f252ca4a7e813811de3cd3cd08183edd4138bdee909410ef6eee394e82c",
+    "notices/qtbase/231ad8597986/src/3rdparty/sha3/CC0_LICENSE": "1f2786e2c5befeb4dcba6638db6528bf96ef5d2cf24bc85ab5a81ef00abef59d",
+    "notices/qtbase/231ad8597986/src/3rdparty/tinycbor/LICENSE": "3c6ba0b5bfa7830505301ffb336a17b0748e0d61c4d34216e9dc98f10e40395e",
+    "notices/qtbase/231ad8597986/src/corelib/kernel/LICENSE.QEVENTDISPATCHER_CF.txt": "e9e5b9f66d21c0e88a4179525ab39cd8d7eac9af78a8404f322c32b0874783d5",
+    "notices/qtbase/231ad8597986/src/dbus/LICENSE.LIBDBUS-1.txt": "ad90aa08bb1a9b7056aa51e2e215b36630855457cde5dffd36aa0faa7b169f24",
+    "notices/qtbase/231ad8597986/src/gui/opengl/LICENSE.KHRONOS.txt": "2e484f3c26ff5008c704a3ca9dd809d43f24a004a1abb6c202660fbff0d19715",
+    "notices/qtbase/231ad8597986/src/3rdparty/freetype/LICENSE.txt": "bf543cdda11864477b8d2ca2aa9afc2aaa8f9133461b4d962ed6ec73646256a1",
+    "notices/qtbase/231ad8597986/src/gui/painting/LICENSE.QIMAGETRANSFORM.txt": "46b3cbfa2f2946b93291506351e9be1dd0a28d2a53260f5aa488abd36fbeca9d",
+    "notices/qtbase/231ad8597986/src/gui/painting/LICENSE.XCONSORTIUM.txt": "a216b01291eb38fc1af93cfccf1fc67b48d9923612e517c2a695e95b3f03c22c",
+    "notices/qtbase/231ad8597986/src/gui/text/LICENSE.AGLFN.txt": "40818155548ff41c67d3a40edf355e9658992b292c227f4c1147425cedc746c6",
+    "notices/qtbase/231ad8597986/src/gui/vulkan/LICENSE.txt": "5f618873b0cdd1e84c611c5529212c2524bfc887bdfd7d1f3b568bad3c649612",
+    "notices/qtbase/231ad8597986/src/plugins/platforms/cocoa/LICENSE.COCOA.txt": "e9e5b9f66d21c0e88a4179525ab39cd8d7eac9af78a8404f322c32b0874783d5",
+    "notices/qtbase/231ad8597986/util/gradientgen/LICENSE.WEBGRADIENTS.txt": "9be732e45b638c74f9c0e5248541dd54dc7e8e9a5545df96b5c4b7c9ac0c68ba",
+    "notices/qtimageformats/d3adb02ac5e2/LICENSES/BSD-3-Clause.txt": "9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce",
+    "notices/qtimageformats/d3adb02ac5e2/LICENSES/GPL-2.0-only.txt": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+    "notices/qtimageformats/d3adb02ac5e2/LICENSES/GPL-3.0-only.txt": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+    "notices/qtimageformats/d3adb02ac5e2/LICENSES/LGPL-3.0-only.txt": "da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768",
+    "notices/qtsvg/dfa8d653be07/LICENSES/BSD-3-Clause.txt": "9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce",
+    "notices/qtsvg/dfa8d653be07/LICENSES/GPL-2.0-only.txt": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+    "notices/qtsvg/dfa8d653be07/LICENSES/GPL-3.0-only.txt": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+    "notices/qtsvg/dfa8d653be07/LICENSES/LGPL-3.0-only.txt": "da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768",
+    "notices/qtsvg/dfa8d653be07/src/svg/qt_attribution.json": "c1b0472511c791561b89ee0d11c11d78a85fbdf5df5ad94c1a4653e192367759",
+    "notices/qtsvg/dfa8d653be07/src/svg/LICENSE.XSVG.txt": "3a946598a9f674d44df764279ca0b85b5d6faba08f3bc75d8e0fcf6cd729a9bd",
+    "notices/qtwebengine/63b921c8b2dd/LICENSES/BSD-3-Clause.txt": "9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce",
+    "notices/qtwebengine/63b921c8b2dd/LICENSES/GPL-2.0-only.txt": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+    "notices/qtwebengine/63b921c8b2dd/LICENSES/GPL-3.0-only.txt": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+    "notices/qtwebengine/63b921c8b2dd/LICENSES/LGPL-3.0-only.txt": "da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768",
+    "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/LICENSE": "368cca1106be99d39ecd32a38d8305585d802a475effb66380b91ffc9bcf709b",
+    "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/base/third_party/icu/LICENSE": "5d85142a5609ad177a2d7a2e7cae060b886b8b42f25c5b9803cf0cb5ee04ad2f",
+    "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/abseil-cpp/AUTHORS": "1fd39030c119b4c97014f59e0ad0ed65f23475bbdf55a52740f31eb82b34b4ee",
+    "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/abseil-cpp/LICENSE": "c79a7fea0e3cac04cd43f20e7b648e5a0ff8fa5344e644b0ee09ca1162b62747",
+    "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/fast_float/src/AUTHORS": "ed249424bce4e318fa190dd6d8becf60cfc37287132ad3f89e16e0f28d878dcf",
+    "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/fast_float/src/LICENSE-APACHE": "097a889aa954d04e088b790b10a4014d6189561d0a6013935a73ce3d4ddaaf06",
+    "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/fast_float/src/LICENSE-BOOST": "8d8291caf1cee26d23acf3eb67c9f9a2d58f1c681b16a4fbe8cbfb9e3c0b5a9b",
+    "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/fast_float/src/LICENSE-MIT": "e562f3f974ced7e69dd1db77b820b36bcf8f30377f1aa105723fba449c53c4e6",
+    "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/freetype/src/LICENSE.TXT": "bd36c8b474855fa294c2ec5c184544478ef3720aad37d65a6296a4f264fd2d3b",
+    "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/freetype/src/docs/FTL.TXT": "5a5ee54c5001bbad1cdc1a57cc3dd4c42199b2da09d39c7ee41fab002d02967f",
+    "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/icu/LICENSE": "17510cf7a58b4879b887ec05a45d72cf1b73544dd9ec7e72f20110ed104229ee",
+    "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/icu/license.html": "c62d7697c03979f5056d28b338fafc7a1152820f7b379adf4a9d88cd37160f96",
+    "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/icu/scripts/LICENSE": "845022e0c1db1abb41a6ba4cd3c4b674ec290f3359d9d3c78ae558d4c0ed9308",
+    "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/libjpeg_turbo/LICENSE.md": "96f5b328adbb78eeaaec6980d73fd558cb1e4d62560ed615646bc3cf5e532430",
+    "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/libjpeg_turbo/README.ijg": "75815e3bf6484201a3c3d17a1bbf10f2e8e3237f84df10a2357ea896db2a81d6",
+    "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/pdfium/AUTHORS": "57b11cf4d954df8d6aa13507db27072c1d74525e11cc6911b4729561775be792",
+    "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/pdfium/LICENSE": "1fe9dea718fbd75cf149adaf4d8a22a4335604d964ddb76d1b45383dec8668c9",
+    "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/pdfium/third_party/agg23/copying": "0e16f9c2285583269242e94c6f502de0c9910dfcbbc7b386e236cdf29ecd4333",
+    "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/pdfium/third_party/lcms/LICENSE": "6dbd60437f8ef91d8de1f08ad75882547fd4931bfcc3566a0735f28db1484d31",
+    "notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/pdfium/third_party/libopenjpeg/LICENSE": "a6af136f3e15038a666b61f376612a07d9a4e48cb7c01adbf3e33b3f14ab49b6",
+    "notices/qtwebengine/PRODUCTION-SOURCE-COPYRIGHTS.txt": "c7bf089e45c01d9672e63c12e61bbd8c40813359fe55afafd239a1d203ee473e",
+    "notices/vtr-pon/MPL-2.0.txt": "3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04",
+    "notices/vtr-pon/CC0-1.0.txt": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+    "notices/vtr-pon/MIT.txt": "e9c8765a58240fd31bfee5ca5fb3523b66efe334ae6c8690e6250d2fe71f17dc",
+    "notices/webp/e4ab7009bf06/PATENTS": "cc3273e0694ea5896145e0677699b53471b03ea43021ddc50e7923fbb9f5023c",
+    "notices/webp/e4ab7009bf06/COPYING": "5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf",
+    "notices/webp/e4ab7009bf06/AUTHORS": "f251be89fd442bd9d701360730aea163cc8e2076ff03528f59267dc2c4f8b60a",
+    "notices/xz/3d3a1b973af2/AUTHORS": "01e6df90d71d591f4307db3f397a5a4fac93b18533f5a3862156f1a0a7dc8610",
+    "notices/xz/3d3a1b973af2/COPYING": "616a3ad264ce29b8f1cb97e53037b139d406899ca8d1f799651e17bfa09830b8",
+    "notices/xz/3d3a1b973af2/COPYING.0BSD": "0b01625d853911cd0e2e088dcfb743261034a091bb379246cb25a14cc4c74bf1",
+    "notices/xz/3d3a1b973af2/COPYING.GPLv2": "edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6",
+    "notices/xz/3d3a1b973af2/COPYING.GPLv3": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+    "notices/xz/3d3a1b973af2/COPYING.LGPLv2.1": "20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95",
+    "notices/xz/3d3a1b973af2/build-aux/license-check.sh": "2b3fa1d23cb2ab084f3d919908159473cc0e1eed059d106e2a2857c0ec8af98a",
+    "notices/zlib/bb329a0a2cd0/LICENSE": "e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2",
+    "notices/zlib/bb329a0a2cd0/contrib/dotzlib/LICENSE_1_0.txt": "36266a8fd073568394cb81cdb2b124f7fdae2c64c1a7ed09db34b4d22efa2951",
+    "notices/zlib/bb329a0a2cd0/contrib/minizip/LICENSE.Info-Zip": "fc686023047ce5ce3a18a9b8a777156f0e475929d3de06bac279f3c025d2b2ca",
+    "notices/zstd/37d7284556b2/COPYING": "f9c375a1be4a41f7b70301dd83c91cb89e41567478859b77eef375a52d782505",
+    "notices/zstd/37d7284556b2/LICENSE": "7055266497633c9025b777c78eb7235af13922117480ed5c674677adc381c9d8",
+    "notices/zstd/37d7284556b2/build/LICENSE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "supplemental/zstd/BORROWED-COPYRIGHTS.txt": "5366a830cec0aad44b1f6e836183b09e1bfe3884bddecef8d2bf061056601881"
+  },
+  "noticeScope": "Payload file map is exact. Embedded-code notices use conservative module/Cargo-closure coverage.",
+  "staticEmbeddedCodeReviewComplete": false,
+  "qtEmbeddedCodeReviewComplete": true,
+  "publicSourceDeliveryVerified": false,
+  "reviewMetadataFiles": {
+    "embedded-code-review.json": "6e2184c84a377a2eb6fac13b4f42ef22fdc2405dea9fb1ff553a28bd58449416",
+    "qt-attributions.json": "91a12e9bffc364869919abd3823107525b92fc5932462af37123a1fa42bb2550",
+    "supplemental-notices.json": "5be53c13bb10f46279cd93821921697737891e3dfeff6c1c5082ba8f68faa998"
+  }
+}

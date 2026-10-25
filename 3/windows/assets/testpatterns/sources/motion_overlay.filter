@@ -1,0 +1,2 @@
+color=c=black@0:s=4096x1080:r=30:d=180,format=rgba,geq=r=255:g=255:b=255:a='if(lt(mod(X+Y,2048),6),255,0)',trim=end_frame=1,loop=loop=-1:size=1:start=0,setpts=N/(30*TB)[diagonal];
+[0:v][diagonal]overlay=x='-mod(t*240,2048)':y=0:shortest=1,drawtext=fontfile='C\:/Windows/Fonts/consolab.ttf':text='%{eif\:floor(t/3600)\:d\:2}\:%{eif\:mod(floor(t/60),60)\:d\:2}\:%{eif\:mod(floor(t),60)\:d\:2}.%{eif\:mod(floor(t*100+0.001),100)\:d\:2}':fontsize=64:fontcolor=white:box=1:boxcolor=black@0.85:boxborderw=14:x='(w-tw)/2':y='h-th-35'[video]

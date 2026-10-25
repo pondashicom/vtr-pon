@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "scope": "Targeted missing copyright/license notices; no additional runtime code.",
+  "notices": [
+    {
+      "component": "gstreamer",
+      "path": "supplemental/gstreamer/kissfft/COPYING",
+      "sha256": "a2840585f8411be8e6826a31ef15ae65c950bd74a2437a73b013398a934ad0c6",
+      "sourceUrl": "https://raw.githubusercontent.com/mborgerding/kissfft/5399a98411c57b3da734d0050744e14103f898ab/COPYING",
+      "scope": "Upstream KISS FFT copyright and full BSD-3-Clause text; GStreamer adapted FFT source has the same Mark Borgerding attribution."
+    },
+    {
+      "component": "gstreamer",
+      "path": "supplemental/gstreamer/kissfft/BSD-3-Clause",
+      "sha256": "4d6bcab46f27d6d0c878e8305d4bdcfe040d52bf6656b9771f04c9fb9902c0ed",
+      "sourceUrl": "https://raw.githubusercontent.com/mborgerding/kissfft/5399a98411c57b3da734d0050744e14103f898ab/LICENSES/BSD-3-Clause",
+      "scope": "Upstream KISS FFT copyright and full BSD-3-Clause text; GStreamer adapted FFT source has the same Mark Borgerding attribution."
+    },
+    {
+      "component": "gst-plugins-rs",
+      "path": "supplemental/gst-plugins-rs/rust-stdlib-1.94.1/COPYRIGHT-library.html",
+      "sha256": "af70aaabed1b73e872f14f9130db37e09f3f4d73a5f7c598b9173697a5d2729f",
+      "sourceUrl": "https://static.rust-lang.org/dist/rustc-1.94.1-aarch64-apple-darwin.tar.xz",
+      "sourceArchiveSha256": "3ae26df6f8c83a13e4190469d124de49970432b6f4517a0762d9bfffdff5b89b",
+      "archiveMember": "rustc-1.94.1-aarch64-apple-darwin/rustc/share/doc/rust/COPYRIGHT-library.html",
+      "scope": "Original Rust standard-library notices including transitive dependencies and LLVM exception. Permissive notice superset, not a claim that every listed dependency is linked."
+    },
+    {
+      "component": "libx11",
+      "path": "supplemental/libx11/xtrans-1.5.2-COPYING",
+      "sha256": "22616bf00b6db85ee3164775a95206894af987b85ff1a7703de55644bc722a39",
+      "sourceUrl": "https://xorg.freedesktop.org/archive/individual/lib/xtrans-1.5.2.tar.xz",
+      "sourceArchiveSha256": "5c5cbfe34764a9131d048f03c31c19e57fb4c682d67713eab6a65541b4dff86c",
+      "scope": "Conservative notices for adjacent Xtrans source versions; original build-only header version is not recorded in the libX11 bottle receipt. No exact-version claim."
+    },
+    {
+      "component": "libx11",
+      "path": "supplemental/libx11/xtrans-1.6.0-COPYING",
+      "sha256": "3fe68a84ab89e82947e560316ab70cf2d02a8b978ae5cf4fbdfd53fc5b917308",
+      "sourceUrl": "https://xorg.freedesktop.org/archive/individual/lib/xtrans-1.6.0.tar.xz",
+      "sourceArchiveSha256": "faafea166bf2451a173d9d593352940ec6404145c5d1da5c213423ce4d359e92",
+      "scope": "Conservative notices for adjacent Xtrans source versions; original build-only header version is not recorded in the libX11 bottle receipt. No exact-version claim."
+    },
+    {
+      "component": "zstd",
+      "path": "supplemental/zstd/BORROWED-COPYRIGHTS.txt",
+      "sha256": "5366a830cec0aad44b1f6e836183b09e1bfe3884bddecef8d2bf061056601881",
+      "sourceUrl": "https://github.com/facebook/zstd/archive/refs/tags/v1.5.7.tar.gz",
+      "sourceArchiveSha256": "37d7284556b20954e56e1ca85b80226768902e2edabd3b649e9e72c0c9012ee3",
+      "sourceFiles": [
+        "lib/common/xxhash.h",
+        "lib/dictBuilder/divsufsort.c"
+      ]
+    },
+    {
+      "component": "gstreamer",
+      "path": "supplemental/gstreamer/kissfft/GSTREAMER-COPYRIGHTS.txt",
+      "sha256": "023c4fbd00719ced1cf9a8d522b4a414c8de4b9f3412995823fa5a33d4461d1a",
+      "sourceUrl": "https://gitlab.freedesktop.org/gstreamer/gstreamer/-/archive/1.28.1/gstreamer-1.28.1.tar.bz2",
+      "sourceArchiveSha256": "86ec0179104664a1ca6de57d7c886d3a8aa0491d1a243d02514b306885272b91",
+      "sourceFiles": [
+        "subprojects/gst-plugins-base/gst-libs/gst/fft/kiss_fft_f32.c",
+        "subprojects/gst-plugins-base/gst-libs/gst/fft/kiss_fftr_f32.h"
+      ]
+    }
+  ]
+}

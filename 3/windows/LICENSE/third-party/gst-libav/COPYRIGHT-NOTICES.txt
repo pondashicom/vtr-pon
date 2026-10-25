@@ -1,0 +1,73 @@
+Copyright statements in the corresponding upstream source areas.
+Some files have platform or feature guards; this is an attribution index, not a list of linked object files.
+
+ext/libav/gstav.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+ext/libav/gstav.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+ext/libav/gstavauddec.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) <2012> Collabora Ltd.
+
+ext/libav/gstavauddec.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+ext/libav/gstavaudenc.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) <2012> Collabora Ltd.
+
+ext/libav/gstavaudenc.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+ext/libav/gstavcfg.c
+Copyright (C) <2006> Mark Nauwelaerts <manauw@skynet.be>
+
+ext/libav/gstavcfg.h
+Copyright (C) <2006> Mark Nauwelaerts <manauw@skynet.be>
+
+ext/libav/gstavcodecmap.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (c) 2002-2004 Ronald Bultje <rbultje@ronald.bitfreak.net>
+
+ext/libav/gstavcodecmap.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+ext/libav/gstavdeinterlace.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+Copyright (C) 2005 Luca Ognibene <luogni@tin.it>
+Copyright (C) 2006 Martin Zlomek <martin.zlomek@itonis.tv>
+
+ext/libav/gstavdemux.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>,
+
+ext/libav/gstavmux.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+ext/libav/gstavprotocol.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+ext/libav/gstavprotocol.h
+Copyright (C) <2006> Mark Nauwelaerts <manauw@skynet.be>
+
+ext/libav/gstavutils.c
+Copyright (c) 2009 Edward Hervey <bilboed@bilboed.com>
+
+ext/libav/gstavutils.h
+Copyright (C) <2009> Edward Hervey <bilboed@bilboed.com>
+
+ext/libav/gstavvidcmp.c
+Copyright (C) 2022 Intel Corporation
+
+ext/libav/gstavviddec.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+ext/libav/gstavviddec.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+ext/libav/gstavvidenc.c
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>
+
+ext/libav/gstavvidenc.h
+Copyright (C) <1999> Erik Walthinsen <omega@cse.ogi.edu>

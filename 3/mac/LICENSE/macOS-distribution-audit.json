@@ -1,0 +1,885 @@
+{
+  "schemaVersion": 1,
+  "auditedOn": "2026-10-25",
+  "baseCommit": "f75d2a134853d19520a98deffff00487722815af",
+  "purpose": "development audit snapshot, not a distributable payload manifest",
+  "releaseReady": false,
+  "summary": {
+    "app_macho_roots": 8,
+    "qt_plugin_candidates": 20,
+    "gst_plugin_candidates": 280,
+    "scanner_candidates": 1,
+    "optional_addon_roots": 3,
+    "unique_macho_files": 480,
+    "homebrew_packages": 99,
+    "app_link_closure": 46,
+    "apple_system_install_names": 61,
+    "unresolved_edges": 0,
+    "inspection_errors": 0,
+    "missing_candidate_roots": 1,
+    "bundled_notice_files": 173
+  },
+  "coreHomebrewPackages": [
+    {
+      "name": "brotli",
+      "version": "1.2.0",
+      "core_linked_binaries": 2,
+      "formula_license_expression": "license \"MIT\"",
+      "license_selection_proposal": "formula declaration; per-file original notice review pending",
+      "formula_sha256": "2d0050036dfa720d8357fa8d7ddcbb2abb88cdc79f34b438a1f10dd4e1c72366",
+      "receipt_sha256": "3699ff172eca1a366fc99096d8e99852a80d113df5bc85319f029607b96a7013",
+      "recipe_primary_download": {
+        "url": "https://github.com/google/brotli/archive/refs/tags/v1.2.0.tar.gz",
+        "declared_sha256": "816c96e8e8f193b40151dad7e8ff37b1221d019dbcb9c35cd3fadbfe6477dfec",
+        "download_verified": false
+      },
+      "mac_notice_and_corresponding_source_verified": false
+    },
+    {
+      "name": "dbus",
+      "version": "1.16.2_1",
+      "core_linked_binaries": 1,
+      "formula_license_expression": "license any_of: [\"AFL-2.1\", \"GPL-2.0-or-later\"]",
+      "license_selection_proposal": "AFL-2.1 alternative; selection and notice review pending",
+      "formula_sha256": "0ccf3ea6dd594140eaeaecc7dbd5810af6a6ca94885311501cd4bdabd5f843df",
+      "receipt_sha256": "ffad327c0cc9b1008ccda133ac72f394958c1c60a75603a45c872b1432193939",
+      "recipe_primary_download": {
+        "url": "https://dbus.freedesktop.org/releases/dbus/dbus-1.16.2.tar.xz",
+        "declared_sha256": "0ba2a1a4b16afe7bceb2c07e9ce99a8c2c3508e5dec290dbb643384bd6beb7e2",
+        "download_verified": false
+      },
+      "mac_notice_and_corresponding_source_verified": false
+    },
+    {
+      "name": "double-conversion",
+      "version": "3.4.0",
+      "core_linked_binaries": 1,
+      "formula_license_expression": "license \"BSD-3-Clause\"",
+      "license_selection_proposal": "formula declaration; per-file original notice review pending",
+      "formula_sha256": "e5fa484ea27ae32a1dd2ecab92a2dcde38f00ffa47b073310ff1768ceba501c5",
+      "receipt_sha256": "dedce4ba34fdef4ce34011ea278d2ba670f1671fc92606b756e43988a5ddef27",
+      "recipe_primary_download": {
+        "url": "https://github.com/google/double-conversion/archive/refs/tags/v3.4.0.tar.gz",
+        "declared_sha256": "42fd4d980ea86426e457b24bdfa835a6f5ad9517ddb01cdb42b99ab9c8dd5dc9",
+        "download_verified": false
+      },
+      "mac_notice_and_corresponding_source_verified": false
+    },
+    {
+      "name": "freetype",
+      "version": "2.14.3",
+      "core_linked_binaries": 1,
+      "formula_license_expression": "license \"FTL\"",
+      "license_selection_proposal": "formula declaration; per-file original notice review pending",
+      "formula_sha256": "cc500226718264185ecf4b0560e0d9daee933c3e40622dd936b955536d025613",
+      "receipt_sha256": "7c232c20e3f531a673812538bca5b4c9b73136e4a7abef03318bcbf48d29f566",
+      "recipe_primary_download": {
+        "url": "https://downloads.sourceforge.net/project/freetype/freetype2/2.14.3/freetype-2.14.3.tar.xz",
+        "declared_sha256": "36bc4f1cc413335368ee656c42afca65c5a3987e8768cc28cf11ba775e785a5f",
+        "download_verified": false
+      },
+      "mac_notice_and_corresponding_source_verified": false
+    },
+    {
+      "name": "gettext",
+      "version": "1.0",
+      "core_linked_binaries": 1,
+      "formula_license_expression": "license all_of: [ \"GPL-3.0-or-later\", \"LGPL-2.1-or-later\", # libintl, libasprintf ]",
+      "license_selection_proposal": "LGPL-2.1-or-later for libintl; tools not selected",
+      "formula_sha256": "170f5a29d2eb95b9dd1f1f754c0f9b90692c3d5dcf6db02c199c93e2c445177d",
+      "receipt_sha256": "404e685b74157f3f7ebd7f85ce84bf92c78bf9c58e43da9ae21ac1b904c7f9f1",
+      "recipe_primary_download": {
+        "url": "https://ftpmirror.gnu.org/gnu/gettext/gettext-1.0.tar.gz",
+        "declared_sha256": "85d99b79c981a404874c02e0342176cf75c7698e2b51fe41031cf6526d974f1a",
+        "download_verified": false
+      },
+      "mac_notice_and_corresponding_source_verified": false
+    },
+    {
+      "name": "glib",
+      "version": "2.88.0",
+      "core_linked_binaries": 4,
+      "formula_license_expression": "license \"LGPL-2.1-or-later\"",
+      "license_selection_proposal": "LGPL-2.1-or-later",
+      "formula_sha256": "c04fc99c94def73fe485baf64698c865a51afcc3aaefa1c6565a500c1b2dae38",
+      "receipt_sha256": "b48ddffc1c8ac792fd4e215afaeccec275d4b315273de60c0c1a8fcd541bb7ad",
+      "recipe_primary_download": {
+        "url": "https://download.gnome.org/sources/glib/2.88/glib-2.88.0.tar.xz",
+        "declared_sha256": "3546251ccbb3744d4bc4eb48354540e1f6200846572bab68e3a2b7b2b64dfd07",
+        "download_verified": false
+      },
+      "mac_notice_and_corresponding_source_verified": false
+    },
+    {
+      "name": "graphite2",
+      "version": "1.3.14",
+      "core_linked_binaries": 1,
+      "formula_license_expression": "license any_of: [\"GPL-2.0-or-later\", \"LGPL-2.1-or-later\", \"MPL-1.1+\"]",
+      "license_selection_proposal": "LGPL-2.1-or-later alternative; selection review pending",
+      "formula_sha256": "45474d74486c748f27de500cae165754198e9643ce266e0098241fb2aed3fcdf",
+      "receipt_sha256": "cd28698f5a737fabce4852b56b5a51c9c369780f1bbc3f809f969801387eac17",
+      "recipe_primary_download": {
+        "url": "https://github.com/silnrsi/graphite/releases/download/1.3.14/graphite2-1.3.14.tgz",
+        "declared_sha256": "f99d1c13aa5fa296898a181dff9b82fb25f6cc0933dbaa7a475d8109bd54209d",
+        "download_verified": false
+      },
+      "mac_notice_and_corresponding_source_verified": false
+    },
+    {
+      "name": "gstreamer",
+      "version": "1.28.1",
+      "core_linked_binaries": 7,
+      "formula_license_expression": "license all_of: [\"LGPL-2.0-or-later\", \"LGPL-2.1-or-later\", \"MIT\"]",
+      "license_selection_proposal": "LGPL-2.0-or-later / LGPL-2.1-or-later per selected library/plugin",
+      "formula_sha256": "32d20c3b961782f487c399bff667f9efe8f873551a200767de94ce5d25b3a894",
+      "receipt_sha256": "e36d68db2c58525273806b1d5d1f862c883157477517889f00685f52569fa8af",
+      "recipe_primary_download": {
+        "url": "https://gitlab.freedesktop.org/gstreamer/gstreamer/-/archive/1.28.1/gstreamer-1.28.1.tar.bz2",
+        "declared_sha256": "86ec0179104664a1ca6de57d7c886d3a8aa0491d1a243d02514b306885272b91",
+        "download_verified": false
+      },
+      "mac_notice_and_corresponding_source_verified": false
+    },
+    {
+      "name": "harfbuzz",
+      "version": "14.0.0",
+      "core_linked_binaries": 1,
+      "formula_license_expression": "license \"MIT\"",
+      "license_selection_proposal": "formula declaration; per-file original notice review pending",
+      "formula_sha256": "79d5b97e34f25991d444e7b749da2817f89afe8bdd7ea28c09a5c71fd1e1f24b",
+      "receipt_sha256": "b8548d390b177dcff829cfd63813113e1cd0dd86c44241c7a3480b2989c0a7d0",
+      "recipe_primary_download": {
+        "url": "https://github.com/harfbuzz/harfbuzz/releases/download/14.0.0/harfbuzz-14.0.0.tar.xz",
+        "declared_sha256": "d4aa312728136e3dc7c3cda47b871614ce0d12bbb19f9dcac2ea70de836dc307",
+        "download_verified": false
+      },
+      "mac_notice_and_corresponding_source_verified": false
+    },
+    {
+      "name": "icu4c@78",
+      "version": "78.3",
+      "core_linked_binaries": 3,
+      "formula_license_expression": "license \"ICU\"",
+      "license_selection_proposal": "formula declaration; per-file original notice review pending",
+      "formula_sha256": "db6d475bc93d9138f6ec7272dcc2718614e3df68dc0edeb2ab63054493eec04b",
+      "receipt_sha256": "78596bd3c3a46c318391eaf15b1864113a4d213ff8da5c1dac1de75ac9dff868",
+      "recipe_primary_download": {
+        "url": "https://github.com/unicode-org/icu/releases/download/release-78.3/icu4c-78.3-sources.tgz",
+        "declared_sha256": "3a2e7a47604ba702f345878308e6fefeca612ee895cf4a5f222e7955fabfe0c0",
+        "download_verified": false
+      },
+      "mac_notice_and_corresponding_source_verified": false
+    },
+    {
+      "name": "libb2",
+      "version": "0.98.1",
+      "core_linked_binaries": 1,
+      "formula_license_expression": "license \"CC0-1.0\"",
+      "license_selection_proposal": "formula declaration; per-file original notice review pending",
+      "formula_sha256": "e0c353e17c03fa5cb4aea32d8ed9cd299d2ee77d950c6a32ccd61082f0f9355c",
+      "receipt_sha256": "205cba75c0d4c17fe3057f281228b744d92cb54d5a87289bb0d808f19437f633",
+      "recipe_primary_download": {
+        "url": "https://github.com/BLAKE2/libb2/releases/download/v0.98.1/libb2-0.98.1.tar.gz",
+        "declared_sha256": "53626fddce753c454a3fea581cbbc7fe9bbcf0bc70416d48fdbbf5d87ef6c72e",
+        "download_verified": false
+      },
+      "mac_notice_and_corresponding_source_verified": false
+    },
+    {
+      "name": "libpng",
+      "version": "1.6.56",
+      "core_linked_binaries": 1,
+      "formula_license_expression": "license \"libpng-2.0\"",
+      "license_selection_proposal": "formula declaration; per-file original notice review pending",
+      "formula_sha256": "b02ef80f1c5a2b5c4fcc7edf1f8c899bafdaeb4db5763a08931b68f9fe09632b",
+      "receipt_sha256": "3837075c4c4b345a45834e82411d8653c68a14096cfca77edbf2a9d381f7dc36",
+      "recipe_primary_download": {
+        "url": "https://downloads.sourceforge.net/project/libpng/libpng16/1.6.56/libpng-1.6.56.tar.xz",
+        "declared_sha256": "f7d8bf1601b7804f583a254ab343a6549ca6cf27d255c302c47af2d9d36a6f18",
+        "download_verified": false
+      },
+      "mac_notice_and_corresponding_source_verified": false
+    },
+    {
+      "name": "md4c",
+      "version": "0.5.2",
+      "core_linked_binaries": 1,
+      "formula_license_expression": "license \"MIT\"",
+      "license_selection_proposal": "formula declaration; per-file original notice review pending",
+      "formula_sha256": "27968da260adbd4186ebe158bd3de3e85cddd14f586d66c98717abc8d49221f1",
+      "receipt_sha256": "09f77463b7dfa73445dc96507b571acafd217d85771b9c1b2a89649b4ac9e471",
+      "recipe_primary_download": {
+        "url": "https://github.com/mity/md4c/archive/refs/tags/release-0.5.2.tar.gz",
+        "declared_sha256": "55d0111d48fb11883aaee91465e642b8b640775a4d6993c2d0e7a8092758ef21",
+        "download_verified": false
+      },
+      "mac_notice_and_corresponding_source_verified": false
+    },
+    {
+      "name": "openssl@3",
+      "version": "3.6.1",
+      "core_linked_binaries": 2,
+      "formula_license_expression": "license \"Apache-2.0\"",
+      "license_selection_proposal": "formula declaration; per-file original notice review pending",
+      "formula_sha256": "0d17d2cf7930b61e921d4a2ff63fbdbeb70c608e9e169ee52601e7d08d72254f",
+      "receipt_sha256": "cd7d8e226e092c63569bc7a7b8a3456b12722d7147656a0706d05dc9da8d07e3",
+      "recipe_primary_download": {
+        "url": "https://github.com/openssl/openssl/releases/download/openssl-3.6.1/openssl-3.6.1.tar.gz",
+        "declared_sha256": "b1bfedcd5b289ff22aee87c9d600f515767ebf45f77168cb6d64f231f518a82e",
+        "download_verified": false
+      },
+      "mac_notice_and_corresponding_source_verified": false
+    },
+    {
+      "name": "orc",
+      "version": "0.4.42",
+      "core_linked_binaries": 1,
+      "formula_license_expression": "license all_of: [\"BSD-2-Clause\", \"BSD-3-Clause\"]",
+      "license_selection_proposal": "formula declaration; per-file original notice review pending",
+      "formula_sha256": "fd35e46a1a609fc6d23be34e532006f8db55cf17124d48875cb503132ebb568e",
+      "receipt_sha256": "241131ca3f05dc9830900aadba04598c7aedb45a7d187314354b2bab01d61b2f",
+      "recipe_primary_download": {
+        "url": "https://gstreamer.freedesktop.org/src/orc/orc-0.4.42.tar.xz",
+        "declared_sha256": "7ec912ab59af3cc97874c456a56a8ae1eec520c385ec447e8a102b2bd122c90c",
+        "download_verified": false
+      },
+      "mac_notice_and_corresponding_source_verified": false
+    },
+    {
+      "name": "pcre2",
+      "version": "10.47_1",
+      "core_linked_binaries": 2,
+      "formula_license_expression": "license \"BSD-3-Clause\"",
+      "license_selection_proposal": "formula declaration; per-file original notice review pending",
+      "formula_sha256": "40d07c0619cc42e570dfe34e22f02841254777c8a7eab72da2a4af5d60a5310e",
+      "receipt_sha256": "bdc69800e550bbe837decbc8d17bfb95543278e0664e6c76e89f5581db27311b",
+      "recipe_primary_download": {
+        "url": "https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.47/pcre2-10.47.tar.bz2",
+        "declared_sha256": "47fe8c99461250d42f89e6e8fdaeba9da057855d06eb7fc08d9ca03fd08d7bc7",
+        "download_verified": false
+      },
+      "mac_notice_and_corresponding_source_verified": false
+    },
+    {
+      "name": "qtbase",
+      "version": "6.11.0",
+      "core_linked_binaries": 5,
+      "formula_license_expression": "license all_of: [ { any_of: [\"LGPL-3.0-only\", \"GPL-2.0-only\", \"GPL-3.0-only\"] }, { \"GPL-3.0-only\" => { with: \"Qt-GPL-exception-1.0\" } }, # qmake \"BSD-3-Clause\", # *.cmake \"GFDL-1.3-no-invariants-only\", # *.qdoc ]",
+      "license_selection_proposal": "LGPL-3.0-only (runtime modules; per-file confirmation pending)",
+      "formula_sha256": "6612c02f2644d15c0daff9c1515d3372f95dc8292ac375d622079685cfcf6946",
+      "receipt_sha256": "5fa70d889226d6a1b2a12bdbfc5852acb25b9aac5576ba710b85dd84d344be11",
+      "recipe_primary_download": {
+        "url": "https://download.qt.io/official_releases/qt/6.11/6.11.0/submodules/qtbase-everywhere-src-6.11.0.tar.xz",
+        "declared_sha256": "231ad85979864d914dc9568a1b71c91d6cf20d7b2021d059103bf0eb51cb755e",
+        "download_verified": false
+      },
+      "mac_notice_and_corresponding_source_verified": false
+    },
+    {
+      "name": "qtwebengine",
+      "version": "6.11.0",
+      "core_linked_binaries": 1,
+      "formula_license_expression": "license all_of: [ { any_of: [\"LGPL-3.0-only\", \"GPL-2.0-only\", \"GPL-3.0-only\"] }, { \"GPL-3.0-only\" => { with: \"Qt-GPL-exception-1.0\" } }, # qwebengine_convert_dict; QtWebEngineProcess \"BSD-3-Clause\", # *.cmake; main Chromium license  # The following extra licenses are for Chromium's bundled libraries # https://doc.qt.io/qt-6/qtwebengine-licensing.html#third-party-licenses \"Apache-2.0\",        # Abseil; boringssl; Crashpad; FlatBuffers; libgav1; ... \"blessing\",          # sqlite \"BSD-2-Clause\",      # aom; cpuinfo; dav1d; libavif \"LGPL-2.1-or-later\", # ffmpeg; speech-dispatcher (Linux) \"libpng-2.0\",        # libpng (macOS) \"MIT\",               # Brotli; CityHash; FP16; fast_float; ... \"MPL-1.1\",           # hunspell \"NCL\",               # PFFFT \"SGI-B-2.0\",         # mesa_headers \"SunPro\",            # fdlibm \"Zlib\",              # zlib (macOS) :public_domain,      # sigslot; SPL-SQRT-FLOOR ]",
+      "license_selection_proposal": "LGPL-3.0-only for QtPdf; PDFium third-party conditions separate",
+      "formula_sha256": "e269bd982f85a96b943fc22dcd3b2972ad7d51e17805c2f3e5bf535c85d25506",
+      "receipt_sha256": "780fb3649123a0ac5bf550fc73259bbc5f8f2a5d4d7a175909d01a1b479b0c26",
+      "recipe_primary_download": {
+        "url": "https://download.qt.io/official_releases/qt/6.11/6.11.0/submodules/qtwebengine-everywhere-src-6.11.0.tar.xz",
+        "declared_sha256": "63b921c8b2dd59152ced9a796676010166df044588ee00ef9429dc2fd2146736",
+        "download_verified": false
+      },
+      "mac_notice_and_corresponding_source_verified": false
+    },
+    {
+      "name": "zlib",
+      "version": "1.3.2",
+      "core_linked_binaries": 1,
+      "formula_license_expression": "license \"Zlib\"",
+      "license_selection_proposal": "formula declaration; per-file original notice review pending",
+      "formula_sha256": "42bf8d820736047ff22a2099c247b58861c431f0ad28b565a52f14e719f8e4d7",
+      "receipt_sha256": "8918c51009e691e4f1c2de03dd1f74188de452f44eea4a8a2b3590ac9010b45d",
+      "recipe_primary_download": {
+        "url": "https://zlib.net/zlib-1.3.2.tar.gz",
+        "declared_sha256": "bb329a0a2cd0274d05519d61c667c062e06990d72e125ee2dfa8de64f0119d16",
+        "download_verified": false
+      },
+      "mac_notice_and_corresponding_source_verified": false
+    },
+    {
+      "name": "zstd",
+      "version": "1.5.7_1",
+      "core_linked_binaries": 1,
+      "formula_license_expression": "license all_of: [ { any_of: [\"BSD-3-Clause\", \"GPL-2.0-only\"] }, \"BSD-2-Clause\", # programs/zstdgrep, lib/libzstd.pc.in \"MIT\", # lib/dictBuilder/divsufsort.c ]",
+      "license_selection_proposal": "permissive alternative and embedded MIT/BSD notices; per-file review pending",
+      "formula_sha256": "9a9b0183896886e82b915af4db576f27d34d1cee7757d6c5beb0e1eb74c68e0d",
+      "receipt_sha256": "e2363732b0a1da51a18037ee3e7a6d07d1c895377283ed1c68a0a972933d99f3",
+      "recipe_primary_download": {
+        "url": "https://github.com/facebook/zstd/archive/refs/tags/v1.5.7.tar.gz",
+        "declared_sha256": "37d7284556b20954e56e1ca85b80226768902e2edabd3b649e9e72c0c9012ee3",
+        "download_verified": false
+      },
+      "mac_notice_and_corresponding_source_verified": false
+    }
+  ],
+  "appLinkClosureFiles": [
+    {
+      "path": "app/Contents/Helpers/vtr-pon-camera-output.app/Contents/MacOS/vtr-pon-camera-output",
+      "sha256": "d51fe0de1eba64948b00924548737cba925bafa74e710ef466894f460c5d2095",
+      "bytes": 116080,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": null
+    },
+    {
+      "path": "app/Contents/Helpers/vtr-pon-operator-monitor.app/Contents/MacOS/vtr-pon-operator-monitor",
+      "sha256": "175456bdfb4e8682b68ceea26ef42eef9d218642c8af32836d55bc9fa44d1cd8",
+      "bytes": 231248,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": null
+    },
+    {
+      "path": "app/Contents/Library/SystemExtensions/com.pondashi.vtrpon3.development.CameraExtension.systemextension/Contents/MacOS/com.pondashi.vtrpon3.development.CameraExtension",
+      "sha256": "d7657e95a005a9ceef5285903f7b83586f2745cbf0848f0f6bc5564c169201f4",
+      "bytes": 193616,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "13.0",
+      "homebrew_package": null
+    },
+    {
+      "path": "app/Contents/MacOS/vtr-pon",
+      "sha256": "03e3fdf57505bdc097921d6ec73d67a64ddeaae7b321d30087663176b6789b16",
+      "bytes": 23316160,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": null
+    },
+    {
+      "path": "app/Contents/MacOS/vtr-pon-addon-manager",
+      "sha256": "48886d94867c90f4702b8486414992eee1ff326046a09d92148c252cc46c0f03",
+      "bytes": 804040,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": null
+    },
+    {
+      "path": "app/Contents/MacOS/vtr-pon-addon-runtime-probe",
+      "sha256": "708a49d6339418f649f3f93c917f5b7e7c9c9a99f766d41593df71d5b5cb45b3",
+      "bytes": 797992,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": null
+    },
+    {
+      "path": "app/Contents/MacOS/vtr-pon-audio-devices",
+      "sha256": "1df1f35f922cbdd1a89c10658677cf4226c86a02d235f3dcbf8cdeb09489200d",
+      "bytes": 184376,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": null
+    },
+    {
+      "path": "app/Contents/MacOS/vtr-pon-pfl-output",
+      "sha256": "ab0cbf549f32f4fd7d37e0455517a6f6851a0dbd0368836306751029be8b8149",
+      "bytes": 130896,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": null
+    },
+    {
+      "path": "homebrew/brotli/1.2.0/lib/libbrotlicommon.1.2.0.dylib",
+      "sha256": "41ea919f6b53d772067477235cbe8fdf97aaad403c30a90512c6c4b17cd529ef",
+      "bytes": 168128,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "brotli"
+    },
+    {
+      "path": "homebrew/brotli/1.2.0/lib/libbrotlidec.1.2.0.dylib",
+      "sha256": "23f7347022952e956a8fd9a045e32069c0d9adda23100af9d061502008976330",
+      "bytes": 88112,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "brotli"
+    },
+    {
+      "path": "homebrew/dbus/1.16.2_1/lib/libdbus-1.3.dylib",
+      "sha256": "7bd24ba3776816f769db9819412ebca9b51cc7d3669633107360f02c97e6ddf2",
+      "bytes": 320528,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "dbus"
+    },
+    {
+      "path": "homebrew/double-conversion/3.4.0/lib/libdouble-conversion.3.4.0.dylib",
+      "sha256": "7a0eab4b5ffa5e92209e81660aa860d3fb681cb0b79f7dd29e3db654f74330c5",
+      "bytes": 94720,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "double-conversion"
+    },
+    {
+      "path": "homebrew/freetype/2.14.3/lib/libfreetype.6.dylib",
+      "sha256": "b34df0bb8bff625ba07d7b646a2b65d0faebbbdd72051fc372569ddf5359175d",
+      "bytes": 641888,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "freetype"
+    },
+    {
+      "path": "homebrew/gettext/1.0/lib/libintl.8.dylib",
+      "sha256": "c4ccc12dacd99bae7cf3e04f6a1a16909b9f6e096f203712a8241462f539785b",
+      "bytes": 230048,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "gettext"
+    },
+    {
+      "path": "homebrew/glib/2.88.0/lib/libglib-2.0.0.dylib",
+      "sha256": "220b3984c4d7d508bedb010a645b1ea2cee778397be15a18757aab2fbb596ef7",
+      "bytes": 1381552,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "glib"
+    },
+    {
+      "path": "homebrew/glib/2.88.0/lib/libgmodule-2.0.0.dylib",
+      "sha256": "63fb6d91b3293f34e833ab02b965596d5ed51dc18ea93ed928def8fc8b64e1fa",
+      "bytes": 71600,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "glib"
+    },
+    {
+      "path": "homebrew/glib/2.88.0/lib/libgobject-2.0.0.dylib",
+      "sha256": "7ba1849213d13a1ba7812461d2dfebb90c3e706b265db51db8383c33281ddc80",
+      "bytes": 428352,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "glib"
+    },
+    {
+      "path": "homebrew/glib/2.88.0/lib/libgthread-2.0.0.dylib",
+      "sha256": "7c048a7a03008eda75b6b0950a4a84f07797978b696ee502fc9056c9e8e5f434",
+      "bytes": 51760,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "glib"
+    },
+    {
+      "path": "homebrew/graphite2/1.3.14/lib/libgraphite2.3.2.1.dylib",
+      "sha256": "ea978263c5cb2396cf2e8965c45ba3e3d5fe7af9c804e3537c7749216f23790b",
+      "bytes": 139232,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "graphite2"
+    },
+    {
+      "path": "homebrew/gstreamer/1.28.1/lib/libgstapp-1.0.0.dylib",
+      "sha256": "aecc61ba6c8d72ec9b0660d6077ae9431c3e903ec974a7d90bc95daa8fdd0c53",
+      "bytes": 148320,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "gstreamer"
+    },
+    {
+      "path": "homebrew/gstreamer/1.28.1/lib/libgstaudio-1.0.0.dylib",
+      "sha256": "8bd2e7cbd7634da40ac0fa0b40b7358cb361ed2f483efcb5ba33b19aa17b996f",
+      "bytes": 585248,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "gstreamer"
+    },
+    {
+      "path": "homebrew/gstreamer/1.28.1/lib/libgstbase-1.0.0.dylib",
+      "sha256": "6021ab5b06abb82432f8a72a237640aa677b32aec0f771aa67e97c3c89263e8a",
+      "bytes": 599680,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "gstreamer"
+    },
+    {
+      "path": "homebrew/gstreamer/1.28.1/lib/libgstpbutils-1.0.0.dylib",
+      "sha256": "dfa286d6065828a1b87aa79776afb09bb0c92eb8244f97b55aa00bd929a4a52e",
+      "bytes": 326448,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "gstreamer"
+    },
+    {
+      "path": "homebrew/gstreamer/1.28.1/lib/libgstreamer-1.0.0.dylib",
+      "sha256": "183591f16c52dcbda94c3a6f00073124ba9f5896251199e86db5db77f121a3d8",
+      "bytes": 1584272,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "gstreamer"
+    },
+    {
+      "path": "homebrew/gstreamer/1.28.1/lib/libgsttag-1.0.0.dylib",
+      "sha256": "0baaf740a2b8f55e00ffd31411e3a28f6ef83a1a1974bdaf2a4175e6a723eedf",
+      "bytes": 319376,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "gstreamer"
+    },
+    {
+      "path": "homebrew/gstreamer/1.28.1/lib/libgstvideo-1.0.0.dylib",
+      "sha256": "1cc6abab4597e9e72f14087865a8b9440518db18e147440c29ba7a8e3153cf47",
+      "bytes": 894672,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "gstreamer"
+    },
+    {
+      "path": "homebrew/harfbuzz/14.0.0/lib/libharfbuzz.0.dylib",
+      "sha256": "ec4e9e27efbe1ef7f14164cf6adae8800cdec46a695c6d1db2e9fed9c734a786",
+      "bytes": 1307200,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "harfbuzz"
+    },
+    {
+      "path": "homebrew/icu4c@78/78.3/lib/libicudata.78.3.dylib",
+      "sha256": "f1f9f63e9447ca2d0411de6333a2637eb1c19dd9b53fdb500045424e92734e32",
+      "bytes": 33389136,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "icu4c@78"
+    },
+    {
+      "path": "homebrew/icu4c@78/78.3/lib/libicui18n.78.3.dylib",
+      "sha256": "0c2ddcfefd99a218759937a7c25463294707919f0a16f9722ec7a4472ea77ccb",
+      "bytes": 3186704,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "icu4c@78"
+    },
+    {
+      "path": "homebrew/icu4c@78/78.3/lib/libicuuc.78.3.dylib",
+      "sha256": "53c65de799427ed14b2a85991a91df2cd4c36bf855e51876368a2e8a8464e0be",
+      "bytes": 1877408,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "icu4c@78"
+    },
+    {
+      "path": "homebrew/libb2/0.98.1/lib/libb2.1.dylib",
+      "sha256": "6dd3ad884f40a9137030cbf00666129d551cb6bebb17aa3c13ba7ff992615285",
+      "bytes": 85968,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "libb2"
+    },
+    {
+      "path": "homebrew/libpng/1.6.56/lib/libpng16.16.dylib",
+      "sha256": "f42838319f57574d8b5b3e68c1f574bdbc8baa391948541d9002e7fd23317723",
+      "bytes": 209392,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "libpng"
+    },
+    {
+      "path": "homebrew/md4c/0.5.2/lib/libmd4c.0.5.2.dylib",
+      "sha256": "711ec0f2f62f90051f84a56bb4009f21a62078d84c1407462f5e5fad16fedc5b",
+      "bytes": 88144,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "md4c"
+    },
+    {
+      "path": "homebrew/openssl@3/3.6.1/lib/libcrypto.3.dylib",
+      "sha256": "060e2f86a8422bc1be3e02e1e371083d57322d0b8eab7785004a3917607b327b",
+      "bytes": 4871984,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "openssl@3"
+    },
+    {
+      "path": "homebrew/openssl@3/3.6.1/lib/libssl.3.dylib",
+      "sha256": "c29ef4e39d28e77af02449f76b30a8695b3ab1ea558d14a2ef064000c417704b",
+      "bytes": 905456,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "openssl@3"
+    },
+    {
+      "path": "homebrew/orc/0.4.42/lib/liborc-0.4.0.dylib",
+      "sha256": "e4593892318a9ba4c4816bd13fd37cadec2c126db34609c4b337e5dbceb5d840",
+      "bytes": 1119264,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "orc"
+    },
+    {
+      "path": "homebrew/pcre2/10.47_1/lib/libpcre2-16.0.dylib",
+      "sha256": "49bbf064e736476b252588366ca3515e628bc5197c65f9c067713b3d2c61926e",
+      "bytes": 556288,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "pcre2"
+    },
+    {
+      "path": "homebrew/pcre2/10.47_1/lib/libpcre2-8.0.dylib",
+      "sha256": "e6c70e3f055712f21500c088b9b4e39c5140a5feb88f81d2508cf6ebd186f119",
+      "bytes": 591552,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "pcre2"
+    },
+    {
+      "path": "homebrew/qtbase/6.11.0/lib/QtCore.framework/Versions/A/QtCore",
+      "sha256": "fc40ecd8b932b4e9398dbee4ffb923373b30d621a316a7c37992d32095a7497b",
+      "bytes": 7169520,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "14.0",
+      "homebrew_package": "qtbase"
+    },
+    {
+      "path": "homebrew/qtbase/6.11.0/lib/QtDBus.framework/Versions/A/QtDBus",
+      "sha256": "7179e6025f8bc894eb3096be84c9ca781049422b59ad1a8e7df8e3e609fca2d2",
+      "bytes": 1035456,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "14.0",
+      "homebrew_package": "qtbase"
+    },
+    {
+      "path": "homebrew/qtbase/6.11.0/lib/QtGui.framework/Versions/A/QtGui",
+      "sha256": "21aca5f09c6e919ca5216a12424ba5674241a1bde75588c97141b76e04b3234b",
+      "bytes": 8732192,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "14.0",
+      "homebrew_package": "qtbase"
+    },
+    {
+      "path": "homebrew/qtbase/6.11.0/lib/QtNetwork.framework/Versions/A/QtNetwork",
+      "sha256": "05b19705ded1e7448aabd90d8684d497fd2c44039aa1eb1fe51f0e9c6d49248f",
+      "bytes": 2165888,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "14.0",
+      "homebrew_package": "qtbase"
+    },
+    {
+      "path": "homebrew/qtbase/6.11.0/lib/QtWidgets.framework/Versions/A/QtWidgets",
+      "sha256": "ca8b937654adb70d92c042e368912d2669423496fcb29a5126e63c369a04b8aa",
+      "bytes": 7242016,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "14.0",
+      "homebrew_package": "qtbase"
+    },
+    {
+      "path": "homebrew/qtwebengine/6.11.0/lib/QtPdf.framework/Versions/A/QtPdf",
+      "sha256": "358861ede2111da705ffeab86329794569d7740903d60cf72a61336f1e810344",
+      "bytes": 4800160,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "14.0",
+      "homebrew_package": "qtwebengine"
+    },
+    {
+      "path": "homebrew/zlib/1.3.2/lib/libz.1.3.2.dylib",
+      "sha256": "8b9b8d60352353404b401a9b1f73f1e11964b07204884ae815c7257ee02dac55",
+      "bytes": 108528,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "zlib"
+    },
+    {
+      "path": "homebrew/zstd/1.5.7_1/lib/libzstd.1.5.7.dylib",
+      "sha256": "69d8dee81bccdee425d167300d11431f3c5ecc34a3011400e536aa89f7756189",
+      "bytes": 653328,
+      "architectures": [
+        "arm64"
+      ],
+      "minimum_macos": "15.0",
+      "homebrew_package": "zstd"
+    }
+  ],
+  "runtimeCandidates": {
+    "qtPluginFiles": 20,
+    "gstreamerPluginFilesIncludingNestedAndDangling": 280,
+    "gstreamerRegistryRows": 280,
+    "registryLicenseCounts": {
+      "LGPL": 211,
+      "unknown": 4,
+      "MPL": 37,
+      "MIT/X11": 14,
+      "BSD": 2,
+      "GPL": 3,
+      "MPL-2.0": 7,
+      "BLACKLIST": 2
+    },
+    "explicitGplPlugins": [
+      "faad",
+      "x264",
+      "x265"
+    ],
+    "unknownLicensePlugins": [
+      "amrnb",
+      "amrwbdec",
+      "mpegpsdemux",
+      "rtponvif"
+    ],
+    "blacklistedPlugins": [
+      "libgstpython.dylib",
+      "libgstvalidatessim.dylib"
+    ],
+    "ffmpeg": {
+      "version": "8.1",
+      "runtimeLicense": "GPL version 3 or later",
+      "configuration": "--prefix=<ffmpeg-prefix> --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags= --enable-ffplay --enable-gpl --enable-libsvtav1 --enable-libopus --enable-libx264 --enable-libmp3lame --enable-libdav1d --enable-libvpx --enable-libx265 --enable-openssl --enable-videotoolbox --enable-audiotoolbox --enable-neon",
+      "gstLibavPluginDeclaredLicense": "LGPL",
+      "selectedForRelease": false
+    },
+    "missingCandidates": [
+      {
+        "group": "gst-installed-candidate",
+        "path": "homebrew/opt/libnice-gstreamer/libexec/gstreamer-1.0/libgstnice.dylib"
+      }
+    ],
+    "selectedReleasePluginListFinalized": false
+  },
+  "optionalAddons": [
+    {
+      "kind": "ATEM",
+      "source_commit": "e459d0492b7e4439ea79e5eccf0259252bef979d",
+      "binary_name": "vtr-pon-atem-addon.dylib",
+      "sha256": "eb0b930f6afa6af0b9dfb74a32e2831242811c381c337a03a6143137ad097bbe",
+      "minimum_macos": "15.0",
+      "apple_only_direct_links": true,
+      "mac_distribution_notices_finalized": false
+    },
+    {
+      "kind": "NDI",
+      "source_commit": "8b4a7d619fd4c27e69ff950b211056e7b3e847ac",
+      "binary_name": "vtr-pon-network-video-addon.dylib",
+      "sha256": "9af4175bbd31509e0406b91fa9a6bc9cb17bd5cf76ed359dab7c665a90bdbc53",
+      "minimum_macos": "15.0",
+      "apple_only_direct_links": true,
+      "mac_distribution_notices_finalized": false
+    },
+    {
+      "kind": "VST3",
+      "source_commit": "bb5c9ccab4c3c58a4c7d5df091e53ae29046e68a",
+      "binary_name": "vtr-pon-vst3-addon",
+      "sha256": "00ccbbcc7f083794872cf78b9c7b97d87355fce47b3344a695eb95b61333bdd8",
+      "minimum_macos": "15.0",
+      "apple_only_direct_links": false,
+      "mac_distribution_notices_finalized": false
+    }
+  ],
+  "vstSdkLicenseNotice": {
+    "version": "3.8.1_build_84",
+    "sha256": "e86d79e19e4a33ebc442d2e0d083887dfc75a2a8de9fe17eeddedb84810ad74e",
+    "matchesBuiltHelper": true
+  },
+  "currentNoticeScope": {
+    "bundledFiles": 173,
+    "existingManifestTarget": "Windows x64 3.0.0-beta.1",
+    "existingManifestBinaryCount": 113,
+    "existingQtVersion": "6.8.3",
+    "existingGStreamerVersion": "1.28.5",
+    "macNoticeCoverageFinalized": false
+  },
+  "systemDependencies": {
+    "uniqueInstallNames": 61,
+    "copyForDistribution": false
+  },
+  "limitations": [
+    "dlopen and static embedded code are not enumerated by Mach-O links alone",
+    "installed plugins and transitive packages are candidates, not release selections",
+    "system dependencies use the macOS dyld cache; they are not copied or recursively inspected",
+    "formula declarations and SBOMs do not replace per-file license/source review",
+    "No source archive download/rebuild or redistribution approval was performed.",
+    "Minimum deployment values are observations of these binaries, not a product minimum OS decision.",
+    "Source URLs and checksums are formula declarations; matching corresponding source delivery is unfinished."
+  ]
+}
