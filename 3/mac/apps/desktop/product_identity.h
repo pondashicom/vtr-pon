@@ -10,7 +10,12 @@ namespace vtrpon {
 inline constexpr auto kDistributionMarker = "vtr-pon-distribution.txt";
 
 inline bool isDistributionDirectory(const QString &directory) {
-  QFile marker(QDir(directory).filePath(QString::fromLatin1(kDistributionMarker)));
+  QString markerPath = QDir(directory).filePath(QString::fromLatin1(kDistributionMarker));
+#ifdef Q_OS_MACOS
+  if (directory.endsWith(QLatin1String("/Contents/MacOS")))
+    markerPath = QDir(directory).filePath(QStringLiteral("../Resources/") + QString::fromLatin1(kDistributionMarker));
+#endif
+  QFile marker(markerPath);
   return marker.open(QIODevice::ReadOnly) &&
          marker.readAll().trimmed() == QByteArrayLiteral("VTR-PON3");
 }

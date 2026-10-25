@@ -15,20 +15,19 @@ This is a source update, not a Mac binary release.
 - Includes dependency selection, LGPL runtime build/packaging scripts, original
   third-party notices, source/rebuild/replacement instructions, and validation.
 
-## Before a binary release
+## Distribution preparation
 
-1. Fix the Mac version, package format, minimum macOS and adopted feature scope.
-2. Build from the public source and regenerate the dependency notices and complete
-   corresponding-source bundle for that exact app. Complete the remaining
-   embedded-dependency review and verify recipient access to those sources.
-3. Complete distribution signing/notarization and verify library replacement
-   under the final signing conditions.
-4. Verify installation, update, removal and recovery on another Mac, together
-   with the required visible output, physical audio and device conditions.
-5. Publish the tested packages and SHA-256, then the Mac download guide. Update
-   `platforms.macos-arm64` in the shared update feed last. Keep Windows update
-   information intact and publish Mac add-ons through their separate catalog.
+The binary target is Apple Silicon arm64, macOS 15.0 or later. Release packaging
+includes the production Camera Extension identifiers/profiles, Developer ID and
+Hardened Runtime signing, selected LGPL media libraries, and separate ATEM/NDI/VST3
+packages with a format-v2 Mac catalog. The finalizer checks Apple's notarization
+acceptance and staples tickets to the actual app/DMG and VST3 helper bundle.
 
-The recorded Mac build and targeted test results belong to development work.
-Source export on Windows does not constitute a new Mac build, signing check,
-or physical-device acceptance. `releaseReady` remains false.
+Generated DMG, add-on packages, corresponding-source ZIP and SHA-256 stay local
+for later official website distribution. No Mac binaries are uploaded to GitHub.
+Source publication does not publish website announcements or update the download
+catalog/feed. `releaseReady` remains false while website delivery is pending.
+
+The recorded checks cover build/signatures, packaged dependencies, Homebrew-denied
+startup and package parsing/extracted signatures. Acceptance on a separate Mac
+and physical device operation are not established by those checks.

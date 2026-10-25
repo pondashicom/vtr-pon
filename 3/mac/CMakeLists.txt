@@ -1768,6 +1768,12 @@ if(APPLE)
 endif()
 
 if(APPLE)
+  set(VTRPON_MAC_MINIMUM_SYSTEM_VERSION "${CMAKE_OSX_DEPLOYMENT_TARGET}")
+  if(NOT VTRPON_MAC_MINIMUM_SYSTEM_VERSION)
+    set(VTRPON_MAC_MINIMUM_SYSTEM_VERSION "13.0")
+  endif()
+  set(VTRPON_MAC_BUNDLE_ID "com.pondashi.vtrpon3.development" CACHE STRING "Mac application bundle identifier")
+  add_compile_definitions(VTRPON_MAC_CAMERA_EXTENSION_ID="${VTRPON_MAC_BUNDLE_ID}.CameraExtension")
   # Development bundle. Runtime dependencies remain in the local toolchain;
   # a self-contained, signed distribution is a separate packaging step.
   add_executable(vtr-pon-audio-devices apps/desktop/mac_audio_devices_main.cpp)
@@ -1781,10 +1787,10 @@ if(APPLE)
   set_target_properties(vtr-pon PROPERTIES
     MACOSX_BUNDLE TRUE
     MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/apps/desktop/macos-Info.plist.in"
-    MACOSX_BUNDLE_GUI_IDENTIFIER "com.pondashi.vtrpon3.development"
+    MACOSX_BUNDLE_GUI_IDENTIFIER "${VTRPON_MAC_BUNDLE_ID}"
     MACOSX_BUNDLE_BUNDLE_NAME "VTR-PON3"
-    MACOSX_BUNDLE_BUNDLE_VERSION "${VTRPON_APP_VERSION}"
-    MACOSX_BUNDLE_SHORT_VERSION_STRING "${VTRPON_APP_VERSION}"
+    MACOSX_BUNDLE_BUNDLE_VERSION "${_vtrpon_major}.${_vtrpon_minor}.${_vtrpon_windows_revision}"
+    MACOSX_BUNDLE_SHORT_VERSION_STRING "${_vtrpon_major}.${_vtrpon_minor}.${_vtrpon_patch}"
     MACOSX_BUNDLE_ICON_FILE "VTR-PON3.icns")
   add_custom_target(vtrpon-mac-audio-helper
     COMMAND "${CMAKE_COMMAND}" -E make_directory "$<TARGET_FILE_DIR:vtr-pon>"
@@ -2045,8 +2051,8 @@ if(APPLE)
   set_target_properties(vtr-pon-operator-monitor PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER "com.pondashi.vtrpon3.development.return-monitor"
     MACOSX_BUNDLE_BUNDLE_NAME "VTR-PON Return Monitor"
-    MACOSX_BUNDLE_BUNDLE_VERSION "${VTRPON_APP_VERSION}"
-    MACOSX_BUNDLE_SHORT_VERSION_STRING "${VTRPON_APP_VERSION}")
+    MACOSX_BUNDLE_BUNDLE_VERSION "${_vtrpon_major}.${_vtrpon_minor}.${_vtrpon_windows_revision}"
+    MACOSX_BUNDLE_SHORT_VERSION_STRING "${_vtrpon_major}.${_vtrpon_minor}.${_vtrpon_patch}")
   target_link_libraries(vtr-pon-operator-monitor PRIVATE Qt6::Widgets)
   add_custom_target(vtrpon-mac-operator-monitor-helper
     COMMAND "${CMAKE_COMMAND}" -E make_directory "$<TARGET_BUNDLE_CONTENT_DIR:vtr-pon>/Helpers"
@@ -2133,6 +2139,8 @@ if(APPLE AND BUILD_TESTING)
   # Test-only ad-hoc signing. Production add-ons arrive signed by the publisher.
   add_custom_command(TARGET mac-addon-fixture POST_BUILD
     COMMAND /usr/bin/codesign --force --sign - --timestamp=none "$<TARGET_FILE:mac-addon-fixture>" VERBATIM)
+  qt_add_executable(mac-distribution-package-test tests/mac_distribution_package_test.cpp)
+  target_link_libraries(mac-distribution-package-test PRIVATE vtrpon-addon-package)
   qt_add_executable(mac-addon-test tests/mac_addon_test.cpp)
   target_include_directories(mac-addon-test PRIVATE ${VTRPON_ZLIB_INCLUDE_DIR})
   target_link_libraries(mac-addon-test PRIVATE vtrpon-addon-package ${VTRPON_ZLIB_LIBRARY})

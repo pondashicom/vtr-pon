@@ -21,6 +21,7 @@ def sha(path):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output',type=Path,default=WORK/'VTR-PON-macOS-corresponding-source.zip')
+    parser.add_argument('--application-source',type=Path,help='Use an audited public source subtree instead of this private worktree')
     args=parser.parse_args();output=args.output.resolve()
     if not output.is_relative_to(ROOT/'build'):parser.error('output must be under this checkout/build')
     lock=json.loads((WORK/'inputs.json').read_text());rust=json.loads((WORK/'rust-inputs.json').read_text())
@@ -44,10 +45,14 @@ def main():
     add(WORK/'inputs.json','records/inputs.json');add(WORK/'rust-inputs.json','records/rust-inputs.json')
     add(ROOT/'build/mac-runtime-selection-check/ffmpeg-lgpl/build-record.json','records/ffmpeg-build-record.json')
     add(ROOT/'build/mac-runtime-selection-check/gst-libav-lgpl/build-record.json','records/gst-libav-build-record.json')
-    application=set(p for p in subprocess.check_output(['git','ls-files','-z'],cwd=ROOT).decode().split('\0') if p)
-    application.update(p for p in subprocess.check_output(['git','ls-files','--others','--exclude-standard','-z'],cwd=ROOT).decode().split('\0') if p)
+    source_root=args.application_source.resolve() if args.application_source else ROOT
+    if args.application_source:
+        application={p.relative_to(source_root).as_posix() for p in source_root.rglob('*') if p.is_file() and not any(part in ['.git','build','.agents','.codex','__pycache__'] for part in p.relative_to(source_root).parts)}
+    else:
+        application=set(p for p in subprocess.check_output(['git','ls-files','-z'],cwd=ROOT).decode().split('\0') if p)
+        application.update(p for p in subprocess.check_output(['git','ls-files','--others','--exclude-standard','-z'],cwd=ROOT).decode().split('\0') if p)
     for name in sorted(application):
-        path=ROOT/name
+        path=source_root/name
         if not path.is_file() or name=='LICENSE/macOS/source-provision.json' or name.startswith(('archive/','docs/archive/')):continue
         if any(part in ['.git','build','.agents','.codex'] for part in Path(name).parts):raise RuntimeError('Private/build path entered source snapshot: '+name)
         if Path(name).name in ['AGENTS.md','MAC_HANDOVER.md','WORKING_PREFERENCES.md']:raise RuntimeError('Local-only file entered source snapshot')

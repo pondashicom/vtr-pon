@@ -8,7 +8,7 @@ This software is based in part on the work of the Independent JPEG Group.
 
 Portions of this software are copyright © 2026 The FreeType Project (www.freetype.org). All rights reserved.
 
-ファイル対応は実際の129 Mach-Oに基づきます。Qt内包物は同梱バイナリ・SBOM・構築条件と照合済みで、条件付きヘッダーの原文も保全します。Rust依存の通知は条件付きコード・構築用依存を含む上限範囲を保持します。詳細は [Qt内包コードの照合記録](embedded-code-review.json) を参照してください。
+ファイル対応は実際の126 Mach-Oに基づきます。Qt内包物は同梱バイナリ・SBOM・構築条件と照合済みで、条件付きヘッダーの原文も保全します。Rust依存の通知は条件付きコード・構築用依存を含む上限範囲を保持します。詳細は [Qt内包コードの照合記録](embedded-code-review.json) を参照してください。
 
 ソースの提供案内は [THIRD-PARTY-SOURCES.md](THIRD-PARTY-SOURCES.md)、構築は [REBUILD.md](REBUILD.md)、交換・再署名は [REPLACE.md](REPLACE.md) を参照してください。
 
@@ -909,7 +909,7 @@ Only QtPdf; PDFium and its embedded third-party code also apply. QtWebEngine bro
 - [notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/pdfium/third_party/libopenjpeg/LICENSE](notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/pdfium/third_party/libopenjpeg/LICENSE)
 - [notices/qtwebengine/PRODUCTION-SOURCE-COPYRIGHTS.txt](notices/qtwebengine/PRODUCTION-SOURCE-COPYRIGHTS.txt)
 
-## vtr-pon d7a21084ab6a7d3f2accd0fb93bca93c37d83b15
+## vtr-pon 3.0.0-beta.1
 
 MPL-2.0; self-authored test patterns CC0-1.0
 
@@ -917,7 +917,7 @@ See the original notices and corresponding source files.
 
 Main application, helpers, test executables and build scripts; bundled self-authored test-pattern media separately CC0.
 
-同梱ファイル: 11件。原文通知:
+同梱ファイル: 8件。原文通知:
 
 - [notices/vtr-pon/CC0-1.0.txt](notices/vtr-pon/CC0-1.0.txt)
 - [notices/vtr-pon/MIT.txt](notices/vtr-pon/MIT.txt)

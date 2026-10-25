@@ -7,7 +7,10 @@ namespace vtrpon::vcam {
 constexpr uint32_t macMagic=0x5654434d, macVersion=1;
 constexpr uint32_t width=1920, height=1080, stride=width*4, bytes=stride*height;
 constexpr const char *deviceUid="BAC4B305-4C38-44BE-A1D3-DA855F14415D";
-constexpr const char *extensionId="com.pondashi.vtrpon3.development.CameraExtension";
+#ifndef VTRPON_MAC_CAMERA_EXTENSION_ID
+#define VTRPON_MAC_CAMERA_EXTENSION_ID "com.pondashi.vtrpon3.development.CameraExtension"
+#endif
+constexpr const char *extensionId=VTRPON_MAC_CAMERA_EXTENSION_ID;
 constexpr const char *senderId="com.pondashi.vtrpon3.camera-output";
 static_assert(std::atomic<uint64_t>::is_always_lock_free && std::atomic<uint32_t>::is_always_lock_free);
 inline uint64_t nowNs() {

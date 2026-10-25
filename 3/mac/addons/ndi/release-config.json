@@ -1,0 +1,14 @@
+{
+  "id": "vtr-pon-network-video-addon",
+  "version": "0.3.0",
+  "folder": "network-video-addons",
+  "contract": "network-video-abi-v2",
+  "runtimeStatus": true,
+  "payload": [
+    "vtr-pon-network-video-addon.dll"
+  ],
+  "agreements": [
+    "MIT.txt",
+    "NDI-TERMS.md"
+  ]
+}

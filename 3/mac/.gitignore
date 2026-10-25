@@ -1,3 +1,14 @@
 # An upstream notice has a literal build/ path; it is source, not build output.
 !LICENSE/macOS/notices/zstd/37d7284556b2/build/
 !LICENSE/macOS/notices/zstd/37d7284556b2/build/LICENSE
+
+# Local Apple signing and notarization material
+*.p12
+*.pfx
+*.provisionprofile
+*.mobileprovision
+*.keychain
+*.keychain-db
+AuthKey_*.p8
+.env
+.env.*

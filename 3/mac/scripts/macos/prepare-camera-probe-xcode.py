@@ -46,8 +46,8 @@ def main():
               "CFBundleIdentifier": "$(PRODUCT_BUNDLE_IDENTIFIER)", "CFBundleName": "$(PRODUCT_NAME)",
               "CFBundleVersion": "$(CURRENT_PROJECT_VERSION)", "CFBundleShortVersionString": "0.1.0",
               "LSMinimumSystemVersion": "$(MACOSX_DEPLOYMENT_TARGET)"}
-    write("Host-Info.plist", {**common, "CFBundlePackageType": "APPL", "NSSystemExtensionUsageDescription": "テスト映像を他アプリへカメラとして提供します。"})
-    write("Extension-Info.plist", {**common, "CFBundlePackageType": "SYSX", "NSSystemExtensionUsageDescription": "VTR-PONの試作用テスト映像を提供します。",
+    write("Host-Info.plist", {**common, "CFBundlePackageType": "APPL", "NSSystemExtensionUsageDescription": "VTR-PONのオンエア映像を他アプリへカメラとして提供します。"})
+    write("Extension-Info.plist", {**common, "CFBundlePackageType": "SYSX", "NSSystemExtensionUsageDescription": "VTR-PONのオンエア映像をカメラとして提供します。",
           "CMIOExtension": {"CMIOExtensionMachServiceName": group}, "VTRPONTeamIdentifier": "$(DEVELOPMENT_TEAM)", "CFBundleDisplayName": product})
     write("Host.entitlements", {"com.apple.developer.system-extension.install": True, "com.apple.security.application-groups": [group]})
     write("Extension.entitlements", {"com.apple.security.app-sandbox": True, "com.apple.security.application-groups": [group]})

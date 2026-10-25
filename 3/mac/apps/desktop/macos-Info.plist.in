@@ -30,6 +30,8 @@
 	<true/>
 	<key>NSHumanReadableCopyright</key>
 	<string>${MACOSX_BUNDLE_COPYRIGHT}</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>${VTRPON_MAC_MINIMUM_SYSTEM_VERSION}</string>
     <key>NSSystemExtensionUsageDescription</key>
     <string>VTR-PON provides ON AIR video to other applications through its virtual camera extension.</string>
     <key>NSCameraUsageDescription</key>

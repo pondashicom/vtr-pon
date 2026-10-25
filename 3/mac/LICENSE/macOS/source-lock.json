@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "applicationSourceCommit": "d7a21084ab6a7d3f2accd0fb93bca93c37d83b15",
+  "applicationSourceCommit": "58ebb9b561c9f2c55bc990b73b4f1a399a2a0474",
   "publicSourceBaseUrl": null,
   "distributionMode": "Deliver the complete source sidecar with the binary; public hosting not configured",
   "components": [
@@ -3753,5 +3753,7 @@
       }
     }
   },
-  "publicSourceDeliveryVerified": false
+  "publicSourceDeliveryVerified": false,
+  "publicApplicationSourceUrl": "https://github.com/pondashicom/vtr-pon/tree/main/3/mac",
+  "applicationWorktreeSnapshot": true
 }

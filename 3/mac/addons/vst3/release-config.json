@@ -1,0 +1,39 @@
+{
+  "id": "vtr-pon-vst3-addon",
+  "version": "0.3.0",
+  "folder": "audio-addons",
+  "contract": "vst-protocol-v2",
+  "runtimeStatus": false,
+  "payload": [
+    "vtr-pon-vst3-addon.exe",
+    "VST3-SDK-LICENSE.txt",
+    "Qt6Core.dll",
+    "Qt6Gui.dll",
+    "Qt6Widgets.dll",
+    "Qt6Svg.dll",
+    "opengl32sw.dll",
+    "D3Dcompiler_47.dll",
+    "dxcompiler.dll",
+    "dxil.dll",
+    "iconengines/qsvgicon.dll",
+    "imageformats/qgif.dll",
+    "imageformats/qico.dll",
+    "imageformats/qjpeg.dll",
+    "imageformats/qsvg.dll",
+    "platforms/qwindows.dll",
+    "styles/qmodernwindowsstyle.dll",
+    "concrt140.dll",
+    "msvcp140.dll",
+    "msvcp140_1.dll",
+    "msvcp140_2.dll",
+    "msvcp140_atomic_wait.dll",
+    "msvcp140_codecvt_ids.dll",
+    "vccorlib140.dll",
+    "vcruntime140.dll",
+    "vcruntime140_1.dll",
+    "vcruntime140_threads.dll"
+  ],
+  "agreements": [
+    "MIT.txt"
+  ]
+}

@@ -39,7 +39,11 @@
 #include <QVBoxLayout>
 
 namespace {
+#ifdef Q_OS_MACOS
+const QUrl kCatalog(QStringLiteral("https://pondashi.com/vtr-pon/addon/download/catalog-macos.json"));
+#else
 const QUrl kCatalog(QStringLiteral("https://pondashi.com/vtr-pon/addon/download/catalog.json"));
+#endif
 const QUrl kBase(QStringLiteral("https://pondashi.com/vtr-pon/addon/download/"));
 
 bool validDownloadUrl(const QUrl &url, const QString &id, const QString &version) {

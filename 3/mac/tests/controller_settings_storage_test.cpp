@@ -109,6 +109,21 @@ int main(int argc, char **argv) {
               QDir(executable).absoluteFilePath("config/VTR-PON3/user.ini"),
           "Distribution portable settings path is incorrect");
   }
+#ifdef Q_OS_MACOS
+  {
+    const QString macExecutable = directory.filePath("Package.app/Contents/MacOS");
+    const QString resources = directory.filePath("Package.app/Contents/Resources");
+    QDir().mkpath(macExecutable); QDir().mkpath(resources);
+    check(vtrpon::productStorageName(macExecutable) == QStringLiteral("VTR-PON3-Dev"),
+          "Unmarked Mac app must retain development settings");
+    QFile marker(QDir(resources).filePath(QString::fromLatin1(vtrpon::kDistributionMarker)));
+    check(marker.open(QIODevice::WriteOnly) && marker.write("VTR-PON3\n") == 9,
+          "Could not create Mac Resources marker");
+    marker.close();
+    check(vtrpon::productStorageName(macExecutable) == QStringLiteral("VTR-PON3"),
+          "Mac distribution settings are not selected by the Resources marker");
+  }
+#endif
 #ifdef Q_OS_WIN
   {
     auto settings = vtrpon::makeControllerSettings();

@@ -50,7 +50,12 @@ def main():
     parser.add_argument('--output', type=Path, default=ROOT/'build/mac-bundle-check/VTR-PON.app')
     parser.add_argument('--test-build', type=Path, help='Include the 3 verification executables in this test copy only')
     parser.add_argument('--inventory-only',action='store_true',help='Write provenance for notice generation; this intermediate copy is not runnable')
+    parser.add_argument('--identity', help='Override the cached development signing identity')
+    parser.add_argument('--entitlements', type=Path, help='Host entitlements for the selected signing identity')
+    parser.add_argument('--distribution', action='store_true', help='Developer ID, Hardened Runtime and secure timestamp')
     options = parser.parse_args()
+    if options.distribution and (not options.identity or not options.entitlements):
+        parser.error('--distribution requires --identity and --entitlements')
     source, selection, app = options.source_app.resolve(), options.selection.resolve(), options.output.resolve()
     if not app.is_relative_to(ROOT/'build') or app.suffix!='.app' or app==source or app.is_relative_to(source):
         parser.error('output must be a separate .app under this checkout/build')
@@ -140,25 +145,37 @@ def main():
 
     changes = {}
     for original,name,target in edges: changes.setdefault(original,[]).append((name,target))
-    signing = json.loads((ROOT/'build/macos-camera-extension/signing.json').read_text())
-    identity = signing['identity']
+    identity = options.identity or json.loads((ROOT/'build/macos-camera-extension/signing.json').read_text())['identity']
+    sign_args = ['--options', 'runtime' if options.distribution else '0',
+                 '--timestamp' if options.distribution else '--timestamp=none']
+    plugin_entitlements = app.parent/'runtime-probe.entitlements'
+    if options.distribution:
+        import plistlib
+        plugin_entitlements.write_bytes(plistlib.dumps({'com.apple.security.cs.disable-library-validation': True}))
     for original,destination in destinations.items():
         info = metadata[original]
         edits = changes.get(original,[])
         # Pure OS executables (notably the Camera Extension) keep their exact
         # signed bytes and entitlements when their rpaths are already relative.
-        if not edits and not info['install_id'] and all(
-            r.startswith(('@loader_path','@executable_path')+AUDIT.SYSTEM_PREFIXES) for r in info['rpaths']): continue
-        args = ['/usr/bin/install_name_tool']
-        for old,target in edits:
-            relative = os.path.relpath(destinations[target],destination.parent)
-            args += ['-change',old,'@loader_path/'+relative]
-        for rpath in dict.fromkeys(info['rpaths']): args += ['-delete_rpath',rpath]
-        if info['install_id']:
-            args += ['-id','@rpath/'+(str(destination.relative_to(frameworks)) if destination.is_relative_to(frameworks) else destination.name)]
-        args += [str(destination)]
-        run(*args)
-        run('/usr/bin/codesign','--force','--sign',identity,'--options','0','--timestamp=none',destination)
+        pure_os = not edits and not info['install_id'] and all(
+            r.startswith(('@loader_path','@executable_path')+AUDIT.SYSTEM_PREFIXES) for r in info['rpaths'])
+        if pure_os:
+            if not options.distribution or any(p.suffix=='.systemextension' for p in destination.parents):
+                continue
+        else:
+            args = ['/usr/bin/install_name_tool']
+            for old,target in edits:
+                relative = os.path.relpath(destinations[target],destination.parent)
+                args += ['-change',old,'@loader_path/'+relative]
+            for rpath in dict.fromkeys(info['rpaths']): args += ['-delete_rpath',rpath]
+            if info['install_id']:
+                args += ['-id','@rpath/'+(str(destination.relative_to(frameworks)) if destination.is_relative_to(frameworks) else destination.name)]
+            args += [str(destination)]
+            run(*args)
+        # The host is signed after all nested code and resources are complete.
+        if destination == contents/'MacOS/vtr-pon': continue
+        extra = ['--entitlements', plugin_entitlements] if options.distribution and destination.name=='vtr-pon-addon-runtime-probe' else []
+        run('/usr/bin/codesign','--force','--sign',identity,*sign_args,*extra,destination)
 
     def qt_conf(bundle_contents):
         relative = os.path.relpath(contents,bundle_contents)
@@ -208,14 +225,14 @@ def main():
     marker = {'schemaVersion':1,'packager':'scripts/macos/package-app.py','selfContained':True,
         'qtVersion':policy['qtVersion'],'gstreamerVersion':policy['gstreamerVersion'],
         'ffmpegRuntimeLicense':manifest['ffmpegRuntimeLicense'],'verificationExecutables':tests,
-        'releaseReady':False,'limitations':['Development signing; no notarization','Public source delivery and final embedded-code review pending']}
+        'releaseReady':False,'limitations':['Apple notarization and final package acceptance pending'] if options.distribution else ['Development signing; no notarization']}
     (contents/'Resources/vtrpon-runtime.json').write_text(json.dumps(marker,indent=2)+'\n')
     for framework in sorted(frameworks.glob('*.framework')):
-        run('/usr/bin/codesign','--force','--sign',identity,'--options','0','--timestamp=none',framework)
-    for helper in sorted(qt_helpers):
-        run('/usr/bin/codesign','--force','--sign',identity,'--options','0','--timestamp=none',helper)
-    entitlements = ROOT/'build/macos-camera-extension/main.entitlements'
-    run('/usr/bin/codesign','--force','--sign',identity,'--options','0','--timestamp=none','--entitlements',entitlements,'--generate-entitlement-der',app)
+        run('/usr/bin/codesign','--force','--sign',identity,*sign_args,framework)
+    for helper in sorted((contents/'Helpers').glob('*.app')):
+        run('/usr/bin/codesign','--force','--sign',identity,*sign_args,helper)
+    entitlements = options.entitlements or ROOT/'build/macos-camera-extension/main.entitlements'
+    run('/usr/bin/codesign','--force','--sign',identity,*sign_args,'--entitlements',entitlements,'--generate-entitlement-der',app)
     run('/usr/bin/codesign','--verify','--deep','--strict',app)
     run('python3',ROOT/'scripts/macos/verify-license-bundle.py','--app',app)
 
@@ -236,10 +253,10 @@ def main():
         'selfContained':True,'releaseReady':False,'qtPlugins':manifest['qtPlugins'],
         'gstreamerPlugins':manifest['gstreamerPlugins'],'ffmpegBuild':manifest['ffmpegBuild'],'gstLibavBuild':manifest['gstLibavBuild'],
         'files':checked,'edges':linked,'originalFiles':[{'source':str(o),'sha256':h,'bundledPath':str(destinations[o].relative_to(app))} for o,h in original_hashes.items()],
-        'developmentSignatureVerified':True}
+        'signatureVerified':True,'developerID':options.distribution}
     (app.parent/'bundle-manifest.json').write_text(json.dumps(record,ensure_ascii=False,indent=2)+'\n')
     print('Packaged',len(checked),'Mach-O files with',len(linked),'internal dependency links:',app)
-    print('Development signature deep/strict: PASS; releaseReady: false')
+    print('Signature deep/strict: PASS; releaseReady: false')
 
 
 if __name__=='__main__': main()

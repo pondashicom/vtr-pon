@@ -6,7 +6,7 @@
 
 バイナリと一緒に **VTR-PON-macOS-corresponding-source.zip** を渡す方式を用意しています。ソース束内のsource-provision.jsonは再生成用テンプレートです。実際のアーカイブのハッシュは配布.app側の同名記録で示し、自己参照を避けます。ソースは.appの内部へ埋め込まず、同じ配布場所の別ダウンロードとして提供します。アーカイブのSHA-256と提供状態は [source-provision.json](source-provision.json) に記録します。
 
-この開発段階ではローカルにソース束を生成しますが、**一般の受取人が使える公開配布URLは未設定**です。私有GitHubへのリンクだけを、ソース提供の代用にはしません。公開時は実バイナリと同じ場所から、アカウントや非開示契約を求めず対応ソースへ到達できることを確認してください。未設定・未検証の状態はリリース検査で失敗させます。
+この開発段階ではローカルにソース束を生成しますが、**一般の受取人が使える公開配布URLは未設定**です。本体とATEM・NDI・VST3アドオンの自作ソースは [公開リポジトリの3/mac](https://github.com/pondashicom/vtr-pon/tree/main/3/mac) にあります。上流ライブラリーを含む対応ソース束は別ファイルです。公開時は実バイナリと同じ場所から、アカウントや非開示契約を求めず対応ソースへ到達できることを確認してください。未設定・未検証の状態はリリース検査で失敗させます。
 
 ## ソース束の内容
 
@@ -25,6 +25,6 @@ Qtの通知は実同梱15バイナリのSBOM・構築条件・シンボルと照
 
 第三者の元ソースをVTR-PONのために直接書き換えて採用したものではありません。Homebrew由来の修正は同梱するformula／patchに、独自LGPL FFmpegとgst-libavの有効化条件はbuild-recordとスクリプトに記録します。.app化ではinstall name／rpathと署名を変更しており、元バイナリとの一致ではなく、対応するソース・構築条件と配置処理を提供します。
 
-再構築は [REBUILD.md](REBUILD.md)、共有ライブラリーの交換は [REPLACE.md](REPLACE.md)。公開前にはQt以外の残る内包コードの通知レビュー、ソース束の配布先と到達性、実配布物との照合を確定してください。ここにないアドオンやmacOS／XcodeのSDK・システムライブラリーはこのソース束の対象ではありません。
+再構築は [REBUILD.md](REBUILD.md)、共有ライブラリーの交換は [REPLACE.md](REPLACE.md)。公開前にはQt以外の残る内包コードの通知レビュー、ソース束の配布先と到達性、実配布物との照合を確定してください。application/addonsにはATEM・NDI・VST3の自作ソースと通知を含めます。各ベンダーのSDK・Runtime、利用者のVST3プラグイン、macOS／XcodeのSDK・システムライブラリーは含めません。
 
 根拠原文: [Qt LGPLの案内](https://www.qt.io/development/open-source-lgpl-obligations)、[FFmpegの案内](https://ffmpeg.org/legal.html)、[MPL 2.0](https://www.mozilla.org/en-US/MPL/2.0/)。具体的な条件は同梱する各ライセンス原文を参照してください。
