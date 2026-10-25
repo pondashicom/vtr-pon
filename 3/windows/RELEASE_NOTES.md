@@ -1,6 +1,6 @@
 # Windows release notes
 
-## Unreleased source changes — 2026-10-25
+## VTR-PON 3.0.0-beta.2 — release candidate, 2026-10-25
 
 - Move Windows sources to `3/windows`, alongside the Mac source in `3/mac`.
 - Add Roland switcher trial profiles, including VR-50HD MK II and VR-120HD LAN
@@ -15,9 +15,10 @@
 - Fix the MIDI test's source-path dependency and include its Roland profile
   sources so it builds after the directory move.
 
-These changes are published as source. The existing 3.0.0-beta.1 installer,
-ZIP, release tag and update feed are unchanged. `releaseReady: false` prevents
-this source snapshot from being treated as a new accepted binary release.
+The source version is fixed for the Windows beta.2 installer and ZIP candidate.
+The existing public 3.0.0-beta.1 downloads and update feed remain in place until
+beta.2 distribution is authorized. Package generation and automated checks do
+not establish clean-PC installation, physical audio or hardware acceptance.
 
 ## VTR-PON 3.0.0-beta.1
 

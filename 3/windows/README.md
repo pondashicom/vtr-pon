@@ -1,7 +1,7 @@
 # VTR-PON3 for Windows
 
-This source tree is now at `3/windows`. It includes unreleased Roland, VST3 and
-PDF changes; see [release notes](RELEASE_NOTES.md). The published beta.1 binaries
+This source tree is now at `3/windows`. It prepares the beta.2 release with Roland,
+VST3 and PDF changes; see [release notes](RELEASE_NOTES.md). The published beta.1 binaries
 remain unchanged. Mac sources and their release status are in [3/mac](../mac/README.md).
 
 VTR-PON3 is a Windows 11 x64 application for preparing and playing media in live productions. The application is named **VTR-PON** on screen.
