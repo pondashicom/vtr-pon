@@ -18,3 +18,8 @@ Windows **3.0.0-beta.2** is available from the
 [official Windows download page](https://pondashi.com/vtr-pon/download/windows/).
 Its [distribution record](windows/release/distribution-3.0.0-beta.2.json) pins
 the corresponding source commit and the SHA-256 of each download.
+
+Mac **3.0.0-beta.2** is available from the
+[official Mac download page](https://pondashi.com/vtr-pon/download/mac/index.html).
+Its [distribution record](mac/release/distribution-3.0.0-beta.2.json) pins the
+corresponding source, notarization results and SHA-256 of the three Mac files.

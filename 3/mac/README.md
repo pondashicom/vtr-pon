@@ -5,9 +5,9 @@ the **Apple Silicon arm64** Mac source. Intel and Universal builds are outside
 the current release scope.
 
 The source is public. Mac beta.2 and four separate add-ons are available on the official Mac page. Windows and Mac use the same 3.0.0-beta.2 application version. The existing 0.3.0 add-on packages are reused with their original published hashes. Apple notarization is checked on the final artifacts, not inferred from source publication.
-The development value `3.0.0-beta.2` with `releaseReady: false` is not a published
-Mac version. See [build instructions](BUILDING.md), [installation status](INSTALL.ja.md),
-and [release preparation](RELEASE_NOTES.md).
+The source version is `3.0.0-beta.2`. `releaseReady: false` retains the outstanding
+separate-Mac and physical-device acceptance work. See [build instructions](BUILDING.md), [installation status](INSTALL.ja.md),
+and [release notes](RELEASE_NOTES.md).
 
 Implemented features include ON AIR and EDIT, playlists, media and PDF playback,
 UVC input, audio controls, PFL, BGM, fullscreen output, and a built-in video-only

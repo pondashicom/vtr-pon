@@ -1,19 +1,16 @@
-# VTR-PON3 Mac版の導入・公開準備
+# VTR-PON3 Mac版の導入
 
-2026-10-25時点では、Apple Silicon arm64向けのソースを公開しています。
-一般利用者向けMac配布物の公開は準備中です。ソース内の `3.0.0-beta.1` と
-`releaseReady: false` は開発用の値で、Mac版を配布済みという意味ではありません。
+VTR-PON 3.0.0-beta.2は、macOS 15.0以降・Apple Silicon arm64向けです。Intel Macは対象外です。
 
-ソースからの構築は [BUILDING.md](BUILDING.md) を参照してください。
-正式な配布形式、初版番号、最低macOS、署名・公証、別Macでの導入・更新・削除の
-確認後に、実配布物・SHA-256・対応ソースと導入手順を案内します。
+1. [公式Mac配布ページ](https://pondashi.com/vtr-pon/download/mac/index.html)からDMGを取得します。
+2. DMGを開き、VTR-PON.appをApplicationsへドラッグします。
+3. アプリを起動し、使う機能に応じてカメラ・マイク・Camera Extensionの許可を行います。
+4. 素材を登録し、エディットで確認してからオンエア・出力を試します。
 
-基本操作は、素材を登録し、エディットで確認・調整してからオンエアします。
-PDF・動画・音声・静止画、UVCなどに対応します。PPTXの直接読み込み、PowerPoint
-連携・変換、Keynote直接連携、DeckLinkは現在のMac版の対象外です。
+PPTX・PowerPointファイルはWindows版のみの機能です。Macでは動画・音声・静止画・PDF、UVC/UAC等を利用できます。仮想カメラは映像のみを出力し、OSでの有効化と本体での出力開始は別の操作です。
 
-仮想カメラは本体同梱のCamera Extensionを使用し、映像のみを出力します。
-OSでの有効化と本体での出力開始は別の操作です。開発用署名での確認を一般配布の
-導入確認には読み替えません。Windows用インストーラーやアドオンはMacへ導入できません。
+ATEM・NDI・VST3・DeckLinkは別配布のMac用アドオン0.3.0を使います。[機能ごとのWindows／Mac案内](https://pondashi.com/vtr-pon/addon/index.html)でmacos-arm64パッケージを選び、「設定 → アドオン」から導入してください。各社Runtime・VST3エフェクトは別途必要です。
 
-残る公開工程は [RELEASE_NOTES.md](RELEASE_NOTES.md) を参照してください。
+Mac版DeckLinkとRoland追加機種は試験対応です。[開発・報告ページ](https://pondashi.com/vtr-pon/development.html#hardware-verification)で実機確認への協力を募集しています。レポートを保存してメールを作成し、内容と添付を確認してご自身で送信してください。
+
+更新は本体の案内からMac配布ページを開いて行います。自動でアプリを書き換えません。ソースからの構築は[BUILDING.md](BUILDING.md)、変更内容は[RELEASE_NOTES.md](RELEASE_NOTES.md)、配布物と対応ソースの固定値は[配布記録](release/distribution-3.0.0-beta.2.json)を参照してください。
