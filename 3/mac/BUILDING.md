@@ -68,7 +68,7 @@ python3 scripts/macos/finalize-release.py --identity "$VTRPON_SIGN_IDENTITY" --n
 
 `VTRPON_SIGN_IDENTITY` is a Developer ID Application identity name or certificate fingerprint. Never put private keys or authentication values in source. For App Store Connect API authentication, set `ASC_KEY_FILE`, `ASC_KEY_ID`, and `ASC_ISSUER_ID` outside the repository and use `--notarize` instead of `--notary-profile`. The key file is passed directly to Apple’s tool. Omit both options to generate a signed, unnotarized candidate. Outputs stay in `build/mac-release/distribution`; nothing is uploaded to GitHub or the website. With a profile, the finalizer submits only the prepared artifacts to Apple's notary service and staples accepted tickets.
 
-The local Mac catalog is `catalog-macos.json` (format v2, `macos-arm64`), for later placement at the existing official add-on download path. Package hashes are computed from the final archives. ATEM Switchers Software and NDI Runtime must be installed separately. VST3 packages include their own selected Qt libraries. No vendor SDK or user plug-in is packaged.
+The Mac catalog is `catalog-macos.json` (format v2, `macos-arm64`), published at the existing official add-on download path. When only the host version changes, reuse the exact existing add-on bytes and catalog with `finalize-release.py --work-dir build/mac-release-beta2 --reuse-addons-from build/mac-release/distribution`; do not replace a published 0.3.0 package with a new build. Package hashes are computed from the final archives. ATEM Switchers Software and NDI Runtime must be installed separately. VST3 packages include their own selected Qt libraries. No vendor SDK or user plug-in is packaged.
 
 
 ## Mac DeckLink: hardware operation unverified, volunteers wanted

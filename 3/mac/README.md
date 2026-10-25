@@ -4,8 +4,8 @@ VTR-PON prepares and plays media for live productions. This directory contains
 the **Apple Silicon arm64** Mac source. Intel and Universal builds are outside
 the current release scope.
 
-The source is public. Signed Mac distribution candidates and add-on packages are prepared locally; Mac beta downloads are announced on the official Mac page. Apple notarization is checked on the final artifacts, not inferred from source publication.
-The development value `3.0.0-beta.1` with `releaseReady: false` is not a published
+The source is public. Mac beta.1 and four separate add-ons are available on the official Mac page. The beta.2 source and distribution candidate are prepared for the next release; public downloads remain beta.1 until final upload verification. Apple notarization is checked on the final artifacts, not inferred from source publication.
+The development value `3.0.0-beta.2` with `releaseReady: false` is not a published
 Mac version. See [build instructions](BUILDING.md), [installation status](INSTALL.ja.md),
 and [release preparation](RELEASE_NOTES.md).
 

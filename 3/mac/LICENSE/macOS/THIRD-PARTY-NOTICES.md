@@ -909,7 +909,7 @@ Only QtPdf; PDFium and its embedded third-party code also apply. QtWebEngine bro
 - [notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/pdfium/third_party/libopenjpeg/LICENSE](notices/qtwebengine/63b921c8b2dd/src/3rdparty/chromium/third_party/pdfium/third_party/libopenjpeg/LICENSE)
 - [notices/qtwebengine/PRODUCTION-SOURCE-COPYRIGHTS.txt](notices/qtwebengine/PRODUCTION-SOURCE-COPYRIGHTS.txt)
 
-## vtr-pon 3.0.0-beta.1
+## vtr-pon 3.0.0-beta.2
 
 MPL-2.0; self-authored test patterns CC0-1.0
 
@@ -983,3 +983,4 @@ Select the BSD alternative for shared libzstd.
 - [notices/zstd/37d7284556b2/LICENSE](notices/zstd/37d7284556b2/LICENSE)
 - [notices/zstd/37d7284556b2/build/LICENSE](notices/zstd/37d7284556b2/build/LICENSE)
 - [supplemental/zstd/BORROWED-COPYRIGHTS.txt](supplemental/zstd/BORROWED-COPYRIGHTS.txt)
+

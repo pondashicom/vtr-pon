@@ -43,11 +43,25 @@ def notarize(path,profile):
  return record
 
 def main():
+ global WORK
  parser=argparse.ArgumentParser(description=__doc__)
  parser.add_argument('--identity',required=True)
+ parser.add_argument('--work-dir',type=Path,default=WORK,help='Separate release work directory under build; preserve earlier releases')
+ parser.add_argument('--reuse-addons-from',type=Path,help='Reuse immutable signed/notarized add-ons and catalog without rebuilding or changing their bytes')
  parser.add_argument('--notarize',action='store_true',help='Use ASC_KEY_FILE, ASC_KEY_ID and ASC_ISSUER_ID environment variables')
  parser.add_argument('--notary-profile',help='Existing notarytool Keychain profile name; credentials are never arguments')
  args=parser.parse_args();do_notarize=bool(args.notarize or args.notary_profile)
+ WORK=args.work_dir.resolve()
+ if not WORK.is_relative_to(ROOT/'build'):parser.error('--work-dir must be under this checkout/build')
+ reused=[]
+ if args.reuse_addons_from:
+  source=args.reuse_addons_from.resolve();catalog=json.loads((source/'catalog-macos.json').read_text())
+  if catalog.get('formatVersion')!=2 or len(catalog.get('packages',[]))!=4:raise RuntimeError('Expected four immutable Mac add-ons')
+  for package in catalog['packages']:
+   name=package['url'].rsplit('/',1)[-1];path=source/name
+   if package.get('platform')!='macos-arm64' or Path(name).name!=name or not name.endswith('-macos-arm64.vtrponaddon') or digest(path)!=package['sha256']:raise RuntimeError('Immutable Mac add-on differs: '+name)
+   reused.append(path)
+  reused.append(source/'catalog-macos.json')
  if do_notarize:notary_auth(args.notary_profile)
  app=WORK/'VTR-PON.app';out=WORK/'distribution';out.mkdir(exist_ok=True)
  version=json.loads((ROOT/'release/version.json').read_text())['version']
@@ -64,14 +78,16 @@ def main():
   submission=WORK/'apple-submission'
   if submission.exists():shutil.rmtree(submission)
   submission.mkdir();shutil.copytree(app,submission/app.name,symlinks=True)
-  for folder in ['atem','ndi','vst3','decklink']:
-   shutil.copytree(WORK/'addon-stage'/folder/'payload',submission/folder,symlinks=True)
+  if not reused:
+   for folder in ['atem','ndi','vst3','decklink']:
+    shutil.copytree(WORK/'addon-stage'/folder/'payload',submission/folder,symlinks=True)
   archive=WORK/'apple-submission.zip';archive.unlink(missing_ok=True)
   run('ditto','-c','-k','--sequesterRsrc',submission,archive)
   notary_records.append(notarize(archive,args.notary_profile))
-  for bundle in [app,WORK/'addon-stage/vst3/payload/audio-addons/vtr-pon-vst3-addon.app']:
+  for bundle in ([app] if reused else [app,WORK/'addon-stage/vst3/payload/audio-addons/vtr-pon-vst3-addon.app']):
    staple('staple',bundle);staple('validate',bundle)
-  run('python3',ROOT/'scripts/macos/package-release-addons.py','--identity',args.identity,'--archives-only')
+  if not reused:run('python3',ROOT/'scripts/macos/package-release-addons.py','--identity',args.identity,'--archives-only')
+ for path in reused:shutil.copy2(path,out/path.name)
  stage=WORK/'disk-image'
  if stage.exists():shutil.rmtree(stage)
  stage.mkdir();shutil.copytree(app,stage/app.name,symlinks=True)

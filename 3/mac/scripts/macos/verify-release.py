@@ -12,8 +12,8 @@ spec=importlib.util.spec_from_file_location('package',ROOT/'scripts/macos/packag
 package=importlib.util.module_from_spec(spec);spec.loader.exec_module(package)
 def run(*args,**kwargs):return subprocess.run(list(map(str,args)),capture_output=True,text=True,check=True,**kwargs)
 def main():
- parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--team',required=True);parser.add_argument('--ndi-runtime-dir',type=Path,help='Optional separately installed official Runtime for the ready-state check');args=parser.parse_args()
- work=ROOT/'build/mac-release'; app=work/'VTR-PON.app'; files=[]
+ parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--team',required=True);parser.add_argument('--work-dir',type=Path,default=ROOT/'build/mac-release');parser.add_argument('--ndi-runtime-dir',type=Path,help='Optional separately installed official Runtime for the ready-state check');args=parser.parse_args()
+ work=args.work_dir.resolve(); app=work/'VTR-PON.app'; files=[]
  candidates=list(package.machos(app))
  candidates.extend(package.machos(work/'addon-stage'))
  for path in candidates:
