@@ -6,9 +6,9 @@ organized by operating system under [`3/`](3/README.md).
 | Platform | Source and build instructions | Distribution |
 | --- | --- | --- |
 | Windows 11 x64 | [3/windows](3/windows/README.md) · [Build](3/windows/BUILDING.md) | Installer and ZIP |
-| macOS / Apple Silicon arm64 | [3/mac](3/mac/README.md) · [Build](3/mac/BUILDING.md) | Source published; binary release preparation continues |
+| macOS / Apple Silicon arm64 | [3/mac](3/mac/README.md) · [Build](3/mac/BUILDING.md) | [Mac release status](3/mac/RELEASE_NOTES.md) |
 
-The current source includes changes after the Windows **3.0.0-beta.1** release.
+Windows **3.0.0-beta.2** was released on 2026-10-25 as installer and ZIP editions.
 See the [Windows changes](3/windows/RELEASE_NOTES.md) and
 [Mac release status](3/mac/RELEASE_NOTES.md). Existing release tags retain the
 source layout and contents used for those releases.

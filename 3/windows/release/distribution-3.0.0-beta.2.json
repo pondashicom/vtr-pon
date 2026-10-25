@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "version": "3.0.0-beta.2",
+  "platform": "windows-x64",
+  "publishedOn": "2026-10-25",
+  "signed": false,
+  "sourceCommit": "569f1130921076f4e60c5658e3e558cfbb04fd8c",
+  "sourceDirectory": "3/windows",
+  "downloadPage": "https://pondashi.com/vtr-pon/download/windows/",
+  "updateCatalogUrl": "https://pondashi.com/vtr-pon/updates.json",
+  "files": [
+    {
+      "name": "VTR-PON-3.0.0-beta.2-windows-x64-setup.exe",
+      "bytes": 57342712,
+      "sha256": "62c1fac73a3d073a866c33dfc4b051e9dce7ff6bae08488c224767251d5cfe65",
+      "url": "https://pondashi.com/vtr-pon/download/files/VTR-PON-3.0.0-beta.2-windows-x64-setup.exe"
+    },
+    {
+      "name": "VTR-PON-3.0.0-beta.2-windows-x64.zip",
+      "bytes": 74983579,
+      "sha256": "1682ebc78c39a61fdc9a7b3c48ca3af6d2009727c68927d40b3a7d556d5d7512",
+      "url": "https://pondashi.com/vtr-pon/download/files/VTR-PON-3.0.0-beta.2-windows-x64.zip"
+    },
+    {
+      "name": "VTR-PON-3.0.0-beta.2-SHA256SUMS.txt",
+      "bytes": 212,
+      "sha256": "b5311320b35ccb7c288122c3b477e3282a3131a0fa9e44c3a3286d2fde74c839",
+      "url": "https://pondashi.com/vtr-pon/download/files/VTR-PON-3.0.0-beta.2-SHA256SUMS.txt"
+    }
+  ]
+}
