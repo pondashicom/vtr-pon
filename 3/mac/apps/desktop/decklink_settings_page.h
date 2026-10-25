@@ -1,5 +1,7 @@
 #pragma once
 #include "decklink.h"
+#include "decklink_check_window.h"
+#include <QPushButton>
 #include "language_text.h"
 #include "settings_style.h"
 #include "addon_runtime_status_widget.h"
@@ -21,6 +23,9 @@ public:
         auto *outer = new QVBoxLayout(this); outer->setContentsMargins(0, 0, 0, 0);
         title_ = new QLabel(this); vtrpon::setSettingsRole(title_, "pageTitle"); outer->addWidget(title_);
         description_ = new QLabel(this); description_->setWordWrap(true); vtrpon::setSettingsRole(description_, "description"); outer->addWidget(description_);
+        trial_=new QLabel(this);trial_->setObjectName("deckLinkTrialNotice");trial_->setWordWrap(true);outer->addWidget(trial_);
+        check_=new QPushButton(this);check_->setObjectName("deckLinkCheckButton");outer->addWidget(check_);
+        connect(check_,&QPushButton::clicked,this,[this]{vtrpon::showDeckLinkCheckWindow(this);});
         auto *scroll = new QScrollArea(this); scroll->setWidgetResizable(true); scroll->setFrameShape(QFrame::NoFrame);
         auto *content = new QWidget(scroll); auto *layout = new QVBoxLayout(content); layout->setContentsMargins(0, 0, 0, 0);
         scroll->setWidget(content); content->setAutoFillBackground(false); scroll->viewport()->setAutoFillBackground(false); outer->addWidget(scroll, 1);
@@ -70,6 +75,7 @@ public:
         channelSnapshot_.clear(); channels_[0]->clear(); refresh(); updateControls();
     }
     void retranslate() {
+        trial_->setText(vtrpon::uiText("decklink.trial.notice"));check_->setText(vtrpon::uiText("decklink.check.title"));
         runtime_->retranslate(); title_->setText(vtrpon::uiText("decklink.title")); description_->setText(vtrpon::uiText("decklink.description"));
         input_->setText(vtrpon::uiText("decklink.enable_input")); output_->setText(vtrpon::uiText("decklink.enable_output"));
         const std::array<const char *, 3> labels{"network_video.composite", "network_video.fill", "network_video.key"};
@@ -148,6 +154,8 @@ private:
     vtrpon::DeckLinkSettings settings_;
     QStringList channelSnapshot_;
     QLabel *title_, *description_, *fillLabel_, *help_, *inputModeLabel_, *inputHelp_, *status_, *deviceStatus_;
+    QLabel *trial_;
+    QPushButton *check_;
     QCheckBox *input_, *output_;
     QComboBox *inputMode_, *fillFormat_;
     std::array<QCheckBox *, 3> kinds_{};

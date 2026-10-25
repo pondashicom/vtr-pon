@@ -94,7 +94,13 @@ public:
     }
     void retranslate() {
         const auto software = kind_ == AddonRuntimeKind::Atem
-            ? QStringLiteral("ATEM Switchers Software") : kind_ == AddonRuntimeKind::DeckLink ? QStringLiteral("Blackmagic Desktop Video (x64)") : kind_ == AddonRuntimeKind::Vst3 ? QStringLiteral("VST3") :
+            ? QStringLiteral("ATEM Switchers Software") : kind_ == AddonRuntimeKind::DeckLink ?
+#ifdef Q_OS_MACOS
+              QStringLiteral("Blackmagic Desktop Video for macOS")
+#else
+              QStringLiteral("Blackmagic Desktop Video (x64)")
+#endif
+               : kind_ == AddonRuntimeKind::Vst3 ? QStringLiteral("VST3") :
 #ifdef Q_OS_MACOS
               QStringLiteral("NDI Runtime for macOS");
 #else

@@ -57,13 +57,13 @@ QByteArray archive(const QList<QPair<QByteArray, QByteArray>> &entries) {
 
 QByteArray read(const QString &path) { QFile file(path); return file.open(QIODevice::ReadOnly) ? file.readAll() : QByteArray(); }
 QString digest(const QByteArray &bytes) { return QString::fromLatin1(QCryptographicHash::hash(bytes, QCryptographicHash::Sha256).toHex()); }
-QByteArray package(const QByteArray &binary, const QString &v = "1.0.0", const QString &platform = platformId(), const QString &path = {}) {
+QByteArray package(const QByteArray &binary, const QString &v = "1.0.0", const QString &platform = platformId(), const QString &path = {}, const QString &id = "vtr-pon-atem-addon") {
   const QByteArray agreement("Fixture agreement.\n");
-  const QJsonObject manifest{{"formatVersion", 2}, {"platform", platform}, {"id", "vtr-pon-atem-addon"},
-    {"version", v}, {"contract", contract("vtr-pon-atem-addon")}, {"runtimeStatus", 1},
+  const QJsonObject manifest{{"formatVersion", 2}, {"platform", platform}, {"id", id},
+    {"version", v}, {"contract", contract(id)}, {"runtimeStatus", 1},
     {"agreements", QJsonArray{QJsonObject{{"path", "licenses/AGREEMENT.txt"}, {"sha256", digest(agreement)}}}}};
   return archive({{"manifest.json", QJsonDocument(manifest).toJson()}, {"README.md", "Fixture only"},
-    {"licenses/AGREEMENT.txt", agreement}, {(path.isEmpty() ? "payload/" + entryPath("vtr-pon-atem-addon") : path).toUtf8(), binary}});
+    {"licenses/AGREEMENT.txt", agreement}, {(path.isEmpty() ? "payload/" + entryPath(id) : path).toUtf8(), binary}});
 }
 bool stage(const QString &root, const QString &path, const QString &operation, QString *error, const QString &id = "vtr-pon-atem-addon") {
   QDir().mkpath(stateDirectory(root));
@@ -88,6 +88,22 @@ int main(int argc, char **argv) {
   QCoreApplication app(argc, argv); vtrpon::initializeProductIdentity();
   const auto args = app.arguments();
   QString error;
+  if (args.value(1) == "--verify-package") {
+    CHECK(args.size() == 3);
+    QStandardPaths::setTestModeEnabled(true);
+    Package parsed; CHECK(readPackage(args.at(2), &parsed, &error));
+    const QString id = parsed.manifest.value("id").toString();
+    QTemporaryDir temporary("/private/tmp/vtrpon-real-package-XXXXXX"); CHECK(temporary.isValid());
+    const QString root = temporary.path();
+    const auto cleanup = qScopeGuard([&]{ QDir(stateDirectory(root)).removeRecursively(); QDir(installationDirectory(root)).removeRecursively(); });
+    CHECK(QFile::copy(app.applicationFilePath(), applicationExecutable(root)));
+    CHECK(stage(root, args.at(2), "install", &error, id) && apply(root, &error, id) == 0);
+    CHECK(verifyInstalledBinary(addonFilePath(root, id), &error));
+    CHECK(stage(root, args.at(2), "uninstall", &error, id) && apply(root, &error, id) == 0);
+    CHECK(!QFileInfo::exists(addonFilePath(root, id)));
+    std::printf("Real package native payload/signature/install/remove PASS: %s %s\n", qPrintable(id), qPrintable(parsed.sha256));
+    return 0;
+  }
   if (args.value(1) == "--restart") return 2; // Old helper fixture: no ready acknowledgement.
   if (args.value(1) == "--restart-marker") {
     CHECK(write(args.at(2), QJsonDocument(QJsonObject{{"arguments", QJsonArray::fromStringList(args.mid(1))}, {"cwd", QDir::currentPath()},
@@ -146,7 +162,17 @@ int main(int argc, char **argv) {
     CHECK(!requestRestart(root, {}, root, &error));
     std::puts("Mac add-on process wait/restart/handshake: PASS"); return 0;
   }
-  CHECK(ids().size() == 3 && !ids().contains("vtr-pon-decklink-addon"));
+  CHECK(ids().size() == 4 && ids().contains("vtr-pon-decklink-addon"));
+  const QString decklinkId = "vtr-pon-decklink-addon";
+  CHECK(entryPath(decklinkId) == "decklink-addons/vtr-pon-decklink-addon.dylib");
+  CHECK(contract(decklinkId) == "decklink-media-abi-v1");
+  Package decklinkPackage;
+  CHECK(write(pkg, package(binary, "0.3.0", platformId(), {}, decklinkId)) && readPackage(pkg, &decklinkPackage, &error));
+  CHECK(stage(root, pkg, "install", &error, decklinkId) && apply(root, &error, decklinkId) == 0);
+  CHECK(read(addonFilePath(root, decklinkId)) == binary);
+  CHECK(stage(root, pkg, "uninstall", &error, decklinkId) && apply(root, &error, decklinkId) == 0);
+  CHECK(!QFileInfo::exists(addonFilePath(root, decklinkId)));
+
   CHECK(!installationDirectory(root).startsWith(root + '/') && !entryPath(id).endsWith(".dll"));
   Package parsed;
   CHECK(write(pkg, package(binary)) && readPackage(pkg, &parsed, &error));
@@ -163,6 +189,10 @@ int main(int argc, char **argv) {
   const auto catalog = [&](const QJsonArray &entries) { return QJsonDocument(QJsonObject{{"formatVersion", 2}, {"packages", entries}}).toJson(); };
   CHECK(readCatalog(catalog({entry("windows-x64"), entry(platformId())}), &selected, &error) && selected.size() == 1);
   CHECK(!readCatalog(catalog({entry(platformId()), entry(platformId())}), &selected, &error) && selected.isEmpty());
+  auto decklinkCatalog = entry(platformId()); decklinkCatalog.insert("id", decklinkId);
+  decklinkCatalog.insert("url", "https://pondashi.com/vtr-pon/addon/download/" + decklinkId + "-1.0.0-" + platformId() + ".vtrponaddon");
+  CHECK(readCatalog(catalog({decklinkCatalog}), &selected, &error) && selected.size() == 1 && selected.front().id == decklinkId);
+
   auto foreign = entry(platformId()); foreign.insert("url", "https://example.com/foreign");
   CHECK(!readCatalog(catalog({foreign}), &selected, &error));
   auto legacy = entry("windows-x64"); legacy.remove("platform");

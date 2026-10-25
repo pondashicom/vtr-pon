@@ -243,7 +243,7 @@ void AddonManagementPage::retranslate() {
   rows_[0].description->setText(vtrpon::uiText("settings.addons.atem"));
   rows_[1].description->setText(vtrpon::uiText("settings.addons.ndi"));
   rows_[2].description->setText(vtrpon::uiText("settings.addons.vst3"));
-  if (rows_.size() > 3) rows_[3].description->setText(vtrpon::uiText("decklink.description"));
+  if (rows_.size() > 3) rows_[3].description->setText(vtrpon::uiText("decklink.description") + QStringLiteral("\n") + vtrpon::uiText("decklink.trial.notice"));
   for (auto &row : rows_)
     row.uninstall->setText(vtrpon::uiText("settings.addons.uninstall"));
   reload();

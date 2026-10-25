@@ -1,0 +1,13 @@
+{
+  "id": "vtr-pon-decklink-addon",
+  "version": "0.3.0",
+  "folder": "decklink-addons",
+  "contract": "decklink-media-abi-v1",
+  "runtimeStatus": true,
+  "payload": [
+    "vtr-pon-decklink-addon.dylib"
+  ],
+  "agreements": [
+    "MIT.txt"
+  ]
+}

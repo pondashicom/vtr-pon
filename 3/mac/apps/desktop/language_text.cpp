@@ -7,6 +7,45 @@
 namespace {
 
 constexpr auto kUiTextIds = std::to_array<const char *>({
+    //% "Hardware operation unverified — volunteers wanted. Mac DeckLink input, output, audio and Fill/Key require testing with real devices. Please share your results using Operation Report."
+    QT_TRID_NOOP("decklink.trial.notice"),
+    //% "DeckLink Operation Report"
+    QT_TRID_NOOP("decklink.check.title"),
+    //% "Use the normal DeckLink settings and controller to test your hardware. Record only what you observed; the current software status is shown separately and does not prove physical operation. Refresh status after testing. Review the JSON, then save it or create an email to info@pondashi.com. Attach the saved JSON and press Send yourself. Raw logs, media paths and device IDs are not included automatically. Review any details you enter before sharing."
+    QT_TRID_NOOP("decklink.check.instructions"),
+    //% "Device model / firmware"
+    QT_TRID_NOOP("decklink.check.device"),
+    //% "Desktop Video version"
+    QT_TRID_NOOP("decklink.check.runtime"),
+    //% "Connection / connector"
+    QT_TRID_NOOP("decklink.check.connection"),
+    //% "Video format / test duration"
+    QT_TRID_NOOP("decklink.check.format"),
+    //% "Input video / shared input"
+    QT_TRID_NOOP("decklink.check.input_video"),
+    //% "Input audio (listening)"
+    QT_TRID_NOOP("decklink.check.input_audio"),
+    //% "Composite video / audio output"
+    QT_TRID_NOOP("decklink.check.composite"),
+    //% "Fill/Key composition"
+    QT_TRID_NOOP("decklink.check.fill_key"),
+    //% "A/V synchronization"
+    QT_TRID_NOOP("decklink.check.av_sync"),
+    //% "Signal loss / reconnection"
+    QT_TRID_NOOP("decklink.check.reconnect"),
+    //% "Long-run stability"
+    QT_TRID_NOOP("decklink.check.long_run"),
+    //% "Report contents (software status and operator results)"
+    QT_TRID_NOOP("decklink.check.preview"),
+    //% "Refresh current status"
+    QT_TRID_NOOP("decklink.check.refresh"),
+    //% "Save the JSON report and open an email to info@pondashi.com. Attach the saved JSON, review the message, and press Send yourself."
+    QT_TRID_NOOP("decklink.check.email_help"),
+    //% "VTR-PON Mac DeckLink operation report"
+    QT_TRID_NOOP("decklink.check.mail_subject"),
+    //% "Mac DeckLink hardware verification results (reported by the operator):"
+    QT_TRID_NOOP("decklink.check.mail_intro"),
+
     //% "This switcher model is unavailable in this Mac version."
     QT_TRID_NOOP("settings.switcher.mac.unavailable"),
     //% " — unavailable on Mac"

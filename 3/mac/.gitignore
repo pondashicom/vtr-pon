@@ -12,3 +12,7 @@
 AuthKey_*.p8
 .env
 .env.*
+
+# Preserve upstream build-system license originals.
+!LICENSE/macOS/notices/**/build/
+!LICENSE/macOS/notices/**/build/**

@@ -20,7 +20,12 @@
 #endif
 #else
 #define VTRPON_DECKLINK_CALL
+#ifdef VTRPON_DECKLINK_ADDON_BUILD
+#define VTRPON_DECKLINK_EXPORT __attribute__((visibility("default")))
+#else
 #define VTRPON_DECKLINK_EXPORT
+#endif
+
 #endif
 #ifdef __cplusplus
 extern "C" {

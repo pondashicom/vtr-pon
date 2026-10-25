@@ -4,7 +4,7 @@ VTR-PON prepares and plays media for live productions. This directory contains
 the **Apple Silicon arm64** Mac source. Intel and Universal builds are outside
 the current release scope.
 
-The source is public. Signed Mac distribution candidates and add-on packages are prepared locally; official website publication is pending. Apple notarization is checked on the final artifacts, not inferred from source publication.
+The source is public. Signed Mac distribution candidates and add-on packages are prepared locally; Mac beta downloads are announced on the official Mac page. Apple notarization is checked on the final artifacts, not inferred from source publication.
 The development value `3.0.0-beta.1` with `releaseReady: false` is not a published
 Mac version. See [build instructions](BUILDING.md), [installation status](INSTALL.ja.md),
 and [release preparation](RELEASE_NOTES.md).
@@ -33,3 +33,25 @@ The notice metadata records the Release payload; regenerate and verify it agains
 Use [GitHub Issues](https://github.com/pondashicom/vtr-pon/issues) for reports.
 Include the source commit or app version, macOS version, CPU, reproduction steps,
 and relevant devices or add-ons. Do not attach private media or personal data.
+
+
+## Mac DeckLink: hardware operation unverified, volunteers wanted
+
+Mac DeckLink 0.3.0 is trial support. Input/output, audio, Fill/Key, physical
+synchronization, signal loss/reconnection and long-run operation need testing
+with real hardware. Automated software tests and Apple notarization are not
+hardware acceptance. Requires macOS 15+, Apple Silicon and the official
+Blackmagic Desktop Video for macOS API 16.0+ installed separately.
+
+Settings > DeckLink > DeckLink Operation Report records operator observations
+separately from the current software state. Send report saves reviewed JSON and
+opens an email draft to info@pondashi.com; attach the JSON and send it yourself.
+Raw errors, media paths and persistent device IDs are omitted automatically.
+
+```sh
+bash scripts/macos/test-decklink.sh
+bash scripts/macos/build-decklink.sh '/path/to/Blackmagic DeckLink SDK 16.0'
+```
+
+SDK headers and dispatch source remain outside the repository. Full instructions:
+[Mac DeckLink](docs/macOS/DeckLink入出力.md).

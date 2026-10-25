@@ -3,6 +3,26 @@
 <TS version="2.1" language="en_US">
 <context>
     <name></name>
+    <message id="decklink.trial.notice"><source>Hardware operation unverified — volunteers wanted. Mac DeckLink input, output, audio and Fill/Key require testing with real devices. Please share your results using Operation Report.</source><translation>Hardware operation unverified — volunteers wanted. Mac DeckLink input, output, audio and Fill/Key require testing with real devices. Please share your results using Operation Report.</translation></message>
+    <message id="decklink.check.title"><source>DeckLink Operation Report</source><translation>DeckLink Operation Report</translation></message>
+    <message id="decklink.check.instructions"><source>Use the normal DeckLink settings and controller to test your hardware. Record only what you observed; the current software status is shown separately and does not prove physical operation. Refresh status after testing. Review the JSON, then save it or create an email to info@pondashi.com. Attach the saved JSON and press Send yourself. Raw logs, media paths and device IDs are not included automatically. Review any details you enter before sharing.</source><translation>Use the normal DeckLink settings and controller to test your hardware. Record only what you observed; the current software status is shown separately and does not prove physical operation. Refresh status after testing. Review the JSON, then save it or create an email to info@pondashi.com. Attach the saved JSON and press Send yourself. Raw logs, media paths and device IDs are not included automatically. Review any details you enter before sharing.</translation></message>
+    <message id="decklink.check.device"><source>Device model / firmware</source><translation>Device model / firmware</translation></message>
+    <message id="decklink.check.runtime"><source>Desktop Video version</source><translation>Desktop Video version</translation></message>
+    <message id="decklink.check.connection"><source>Connection / connector</source><translation>Connection / connector</translation></message>
+    <message id="decklink.check.format"><source>Video format / test duration</source><translation>Video format / test duration</translation></message>
+    <message id="decklink.check.input_video"><source>Input video / shared input</source><translation>Input video / shared input</translation></message>
+    <message id="decklink.check.input_audio"><source>Input audio (listening)</source><translation>Input audio (listening)</translation></message>
+    <message id="decklink.check.composite"><source>Composite video / audio output</source><translation>Composite video / audio output</translation></message>
+    <message id="decklink.check.fill_key"><source>Fill/Key composition</source><translation>Fill/Key composition</translation></message>
+    <message id="decklink.check.av_sync"><source>A/V synchronization</source><translation>A/V synchronization</translation></message>
+    <message id="decklink.check.reconnect"><source>Signal loss / reconnection</source><translation>Signal loss / reconnection</translation></message>
+    <message id="decklink.check.long_run"><source>Long-run stability</source><translation>Long-run stability</translation></message>
+    <message id="decklink.check.preview"><source>Report contents (software status and operator results)</source><translation>Report contents (software status and operator results)</translation></message>
+    <message id="decklink.check.refresh"><source>Refresh current status</source><translation>Refresh current status</translation></message>
+    <message id="decklink.check.email_help"><source>Save the JSON report and open an email to info@pondashi.com. Attach the saved JSON, review the message, and press Send yourself.</source><translation>Save the JSON report and open an email to info@pondashi.com. Attach the saved JSON, review the message, and press Send yourself.</translation></message>
+    <message id="decklink.check.mail_subject"><source>VTR-PON Mac DeckLink operation report</source><translation>VTR-PON Mac DeckLink operation report</translation></message>
+    <message id="decklink.check.mail_intro"><source>Mac DeckLink hardware verification results (reported by the operator):</source><translation>Mac DeckLink hardware verification results (reported by the operator):</translation></message>
+
     <message id="settings.switcher.mac.suffix"><source> — unavailable on Mac</source><translation> — unavailable on Mac</translation></message>
     <message id="settings.switcher.mac.unavailable"><source>This switcher model is unavailable in this Mac version.</source><translation>This switcher model is unavailable in this Mac version.</translation></message>
     <message id="switcher.trial.no_fade"><source>FTB following is unavailable in this trial: the reference does not establish a command that sets the active fade state. Panel-lock settings are not used as fade commands.</source><translation>FTB following is unavailable in this trial: the reference does not establish a command that sets the active fade state. Panel-lock settings are not used as fade commands.</translation></message>

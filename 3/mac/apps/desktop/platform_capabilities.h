@@ -16,13 +16,13 @@ inline constexpr bool platformFeatureImplemented(PlatformFeature feature) {
   case PlatformFeature::Vst3:
   case PlatformFeature::Switcher:
   case PlatformFeature::Atem:
+  case PlatformFeature::ExternalAddons:
 #if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
     return true;
 #else
     return false;
 #endif
   case PlatformFeature::PowerPoint:
-  case PlatformFeature::ExternalAddons:
 #ifdef Q_OS_WIN
     return true;
 #else

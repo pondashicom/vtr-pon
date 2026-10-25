@@ -7,10 +7,21 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
+import time
 ROOT=Path(__file__).resolve().parents[2]
 WORK=ROOT/'build/mac-release'
 
 def run(*args): subprocess.run(list(map(str,args)),check=True)
+def staple(action, path):
+ for attempt in range(4):
+  result=subprocess.run(['xcrun','stapler',action,str(path)],text=True,capture_output=True)
+  print(result.stdout,end='',flush=True)
+  if result.returncode==0:return
+  print(result.stderr,end='',flush=True)
+  transient=any(text in result.stdout+result.stderr for text in ['NSURLErrorDomain','network connection was lost','Code=-1005','Code=-1001'])
+  if not transient or attempt==3:result.check_returncode()
+  time.sleep(2**(attempt+1))
+
 def digest(path):
  h=hashlib.sha256()
  with path.open('rb') as stream:
@@ -47,19 +58,19 @@ def main():
  run('codesign','--force','--sign',args.identity,'--options','runtime','--timestamp',
      '--entitlements',WORK/'main.entitlements','--generate-entitlement-der',app)
  run('codesign','--verify','--deep','--strict',app)
- run('python3',ROOT/'scripts/macos/verify-license-bundle.py','--app',app,'--source-archive',out/'VTR-PON-macOS-corresponding-source.zip')
+ run('python3',ROOT/'scripts/macos/verify-license-bundle.py','--app',app,'--source-archive',out/json.loads(provision.read_text())['sourceArchive'])
  notary_records=[]
  if do_notarize:
   submission=WORK/'apple-submission'
   if submission.exists():shutil.rmtree(submission)
   submission.mkdir();shutil.copytree(app,submission/app.name,symlinks=True)
-  for folder in ['atem','ndi','vst3']:
+  for folder in ['atem','ndi','vst3','decklink']:
    shutil.copytree(WORK/'addon-stage'/folder/'payload',submission/folder,symlinks=True)
   archive=WORK/'apple-submission.zip';archive.unlink(missing_ok=True)
   run('ditto','-c','-k','--sequesterRsrc',submission,archive)
   notary_records.append(notarize(archive,args.notary_profile))
   for bundle in [app,WORK/'addon-stage/vst3/payload/audio-addons/vtr-pon-vst3-addon.app']:
-   run('xcrun','stapler','staple',bundle);run('xcrun','stapler','validate',bundle)
+   staple('staple',bundle);staple('validate',bundle)
   run('python3',ROOT/'scripts/macos/package-release-addons.py','--identity',args.identity,'--archives-only')
  stage=WORK/'disk-image'
  if stage.exists():shutil.rmtree(stage)
@@ -71,7 +82,7 @@ def main():
  run('codesign','--verify','--strict',image)
  if do_notarize:
   notary_records.append(notarize(image,args.notary_profile))
-  run('xcrun','stapler','staple',image);run('xcrun','stapler','validate',image)
+  staple('staple',image);staple('validate',image)
  artifacts=sorted(p for p in out.iterdir() if p.suffix in {'.dmg','.vtrponaddon','.zip','.json'} and p.name!='release-files.json')
  files=[{'file':p.name,'sha256':digest(p),'bytes':p.stat().st_size} for p in artifacts]
  (out/'SHA256SUMS').write_text(''.join(f['sha256']+'  '+f['file']+'\n' for f in files))

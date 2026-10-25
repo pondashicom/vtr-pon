@@ -325,6 +325,7 @@ qt_add_executable(vtr-pon WIN32
   apps/desktop/roland_switcher_profiles.h
   apps/desktop/switcher_check_session.cpp
   apps/desktop/switcher_check_session.h
+  apps/desktop/decklink_check_window.cpp
   apps/desktop/switcher_check_window.cpp
   apps/desktop/switcher_check_window.h
   apps/desktop/switcher_addon_api.h
@@ -1206,7 +1207,8 @@ if(BUILD_TESTING)
     apps/desktop/roland_switcher_profiles.h
     apps/desktop/switcher_check_session.cpp
     apps/desktop/switcher_check_session.h
-    apps/desktop/switcher_check_window.cpp
+    apps/desktop/decklink_check_window.cpp
+  apps/desktop/switcher_check_window.cpp
     apps/desktop/switcher_check_window.h
     apps/desktop/switcher_addon_api.h
     apps/desktop/language_text.cpp
@@ -1669,12 +1671,12 @@ if(VTRPON_BUILD_VST3_ADDON)
   add_subdirectory(addons/vst3)
 endif()
 
-# Separately distributed DeckLink media DLL: no vendor SDK in the host build.
+# Separately distributed DeckLink media add-on: no vendor SDK in the host build.
 qt_add_library(vtrpon-decklink STATIC apps/desktop/decklink.cpp apps/desktop/decklink.h
   apps/desktop/decklink_output.cpp apps/desktop/decklink_addon_api.h apps/desktop/decklink_media_api.h
   apps/desktop/decklink_output_api.h)
 target_include_directories(vtrpon-decklink PUBLIC apps/desktop)
-target_link_libraries(vtrpon-decklink PRIVATE Qt6::Core Qt6::Gui PkgConfig::GSTREAMER PkgConfig::GSTREAMER_APP)
+target_link_libraries(vtrpon-decklink PRIVATE vtrpon-addon-package Qt6::Core Qt6::Gui PkgConfig::GSTREAMER PkgConfig::GSTREAMER_APP)
 target_compile_definitions(vtrpon-decklink PRIVATE NOMINMAX WIN32_LEAN_AND_MEAN)
 if(WIN32)
   target_link_libraries(vtrpon-decklink PRIVATE d3d11)
@@ -1980,7 +1982,7 @@ if(APPLE)
     add_executable(vtrpon-mac-compositor-test tests/mac_compositor_test.cpp apps/desktop/program_gpu_compositor_mac.mm apps/desktop/dsk_playback.cpp)
     target_compile_definitions(vtrpon-mac-compositor-test PRIVATE VTRPON_TEST_MEDIA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/assets/testpatterns/media")
     target_include_directories(vtrpon-mac-compositor-test PRIVATE apps/desktop)
-    target_link_libraries(vtrpon-mac-compositor-test PRIVATE vtrpon-network-video Qt6::Widgets PkgConfig::GSTREAMER PkgConfig::GSTREAMER_APP "-framework Metal" "-framework QuartzCore" "-framework Cocoa")
+    target_link_libraries(vtrpon-mac-compositor-test PRIVATE vtrpon-decklink vtrpon-network-video Qt6::Widgets PkgConfig::GSTREAMER PkgConfig::GSTREAMER_APP "-framework Metal" "-framework QuartzCore" "-framework Cocoa")
   endif()
 endif()
 
@@ -2244,4 +2246,38 @@ if(APPLE)
       vtrpon-gpu-configuration vtrpon-mac-system-load Qt6::Widgets PkgConfig::GSTREAMER PkgConfig::GSTREAMER_APP
       "-framework Metal" "-framework QuartzCore" "-framework Cocoa")
   endif()
+endif()
+
+if(APPLE AND BUILD_TESTING)
+  add_library(mac-decklink-fixture SHARED tests/decklink/mock_addon.cpp)
+  target_include_directories(mac-decklink-fixture PRIVATE apps/desktop)
+  target_compile_definitions(mac-decklink-fixture PRIVATE VTRPON_DECKLINK_ADDON_BUILD=1)
+  set_target_properties(mac-decklink-fixture PROPERTIES PREFIX "" CXX_VISIBILITY_PRESET hidden)
+  add_custom_command(TARGET mac-decklink-fixture POST_BUILD
+    COMMAND /usr/bin/codesign --force --sign - "$<TARGET_FILE:mac-decklink-fixture>" VERBATIM)
+  qt_add_executable(mac-decklink-host-test tests/mac_decklink_host_test.cpp
+    apps/desktop/uvc_source_session_manager.cpp)
+  target_link_libraries(mac-decklink-host-test PRIVATE vtrpon-decklink vtrpon-network-video
+    vtrpon-mac-capture Qt6::Core Qt6::Gui PkgConfig::GSTREAMER PkgConfig::GSTREAMER_APP)
+  add_dependencies(mac-decklink-host-test mac-decklink-fixture)
+  add_test(NAME mac-decklink-host COMMAND mac-decklink-host-test "$<TARGET_FILE:mac-decklink-fixture>")
+  set_tests_properties(mac-decklink-host PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen" TIMEOUT 60 RUN_SERIAL TRUE)
+  qt_add_executable(mac-decklink-metal-test tests/mac_decklink_metal_test.cpp
+    apps/desktop/program_gpu_compositor_mac.mm)
+  target_link_libraries(mac-decklink-metal-test PRIVATE Qt6::Widgets vtrpon-decklink vtrpon-network-video
+    vtrpon-gpu-configuration vtrpon-mac-system-load vtrpon-operator-monitor-output vtrpon-mac-virtual-camera
+    PkgConfig::GSTREAMER PkgConfig::GSTREAMER_APP "-framework Metal" "-framework QuartzCore" "-framework Cocoa")
+  add_dependencies(mac-decklink-metal-test mac-decklink-fixture)
+  add_test(NAME mac-decklink-metal COMMAND mac-decklink-metal-test "$<TARGET_FILE:mac-decklink-fixture>")
+  set_tests_properties(mac-decklink-metal PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=cocoa" TIMEOUT 60 RUN_SERIAL TRUE)
+endif()
+
+if(APPLE AND BUILD_TESTING)
+  qt_add_executable(decklink-report-test tests/decklink_report_test.cpp apps/desktop/decklink_check_window.cpp apps/desktop/language_text.cpp)
+  target_include_directories(decklink-report-test PRIVATE apps/desktop)
+  target_link_libraries(decklink-report-test PRIVATE Qt6::Widgets vtrpon-decklink)
+  add_dependencies(decklink-report-test release_translations vtr-pon-addon-runtime-probe)
+  add_test(NAME decklink-report COMMAND decklink-report-test)
+  add_test(NAME decklink-report-ja COMMAND decklink-report-test --japanese)
+  set_tests_properties(decklink-report decklink-report-ja PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen" TIMEOUT 20 RUN_SERIAL TRUE)
 endif()

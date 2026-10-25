@@ -158,7 +158,7 @@ bool readCatalog(const QByteArray &data, QVector<CatalogEntry> *entries, QString
         url.port(-1) != -1 || !url.userInfo().isEmpty() || !url.query().isEmpty() || !url.fragment().isEmpty() ||
         url.path(QUrl::FullyEncoded) != QStringLiteral("/vtr-pon/addon/download/") + id + QLatin1Char('-') + v +
           QLatin1Char('-') + platform + QStringLiteral(".vtrponaddon") ||
-        (id == QLatin1String("vtr-pon-decklink-addon") && platform != QLatin1String("windows-x64")))
+        (id == QLatin1String("vtr-pon-decklink-addon") && platform != QLatin1String("windows-x64") && platform != QLatin1String("macos-arm64")))
       return fail(error, QStringLiteral("Invalid add-on catalog entry."));
     seen.insert(key);
     if (platform == platformId() && ids().contains(id)) selected.append({id, v, digest, url.toString()});

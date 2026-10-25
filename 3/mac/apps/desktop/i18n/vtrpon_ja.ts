@@ -3,6 +3,26 @@
 <TS version="2.1" language="ja_JP">
 <context>
     <name></name>
+    <message id="decklink.trial.notice"><source>Hardware operation unverified — volunteers wanted. Mac DeckLink input, output, audio and Fill/Key require testing with real devices. Please share your results using Operation Report.</source><translation>動作未確認・協力者募集中の機能です。MacのDeckLink入力・出力・音声・フィル／キーは実機での確認が必要です。「動作確認レポート」から結果をお寄せください。</translation></message>
+    <message id="decklink.check.title"><source>DeckLink Operation Report</source><translation>DeckLink 動作確認レポート</translation></message>
+    <message id="decklink.check.instructions"><source>Use the normal DeckLink settings and controller to test your hardware. Record only what you observed; the current software status is shown separately and does not prove physical operation. Refresh status after testing. Review the JSON, then save it or create an email to info@pondashi.com. Attach the saved JSON and press Send yourself. Raw logs, media paths and device IDs are not included automatically. Review any details you enter before sharing.</source><translation>通常のDeckLink設定とControllerで実機を試し、実際に確認した結果を選んでください。現在のソフトウェア状態は別に記録し、機器の動作成功とは扱いません。確認後に「現在の状態を取得」で更新してください。JSONを確認して保存するか、info@pondashi.com宛てのメールを作成できます。保存したJSONを添付し、送信はご自身で行ってください。生ログ・素材パス・機器IDは自動収集しません。手入力した内容も共有前に確認してください。</translation></message>
+    <message id="decklink.check.device"><source>Device model / firmware</source><translation>機器名・ファームウェア</translation></message>
+    <message id="decklink.check.runtime"><source>Desktop Video version</source><translation>Desktop Videoの版</translation></message>
+    <message id="decklink.check.connection"><source>Connection / connector</source><translation>接続方法・端子</translation></message>
+    <message id="decklink.check.format"><source>Video format / test duration</source><translation>映像形式・確認時間</translation></message>
+    <message id="decklink.check.input_video"><source>Input video / shared input</source><translation>入力映像・入力共有</translation></message>
+    <message id="decklink.check.input_audio"><source>Input audio (listening)</source><translation>入力音声（聴感）</translation></message>
+    <message id="decklink.check.composite"><source>Composite video / audio output</source><translation>通常映像・音声出力</translation></message>
+    <message id="decklink.check.fill_key"><source>Fill/Key composition</source><translation>フィル／キー合成</translation></message>
+    <message id="decklink.check.av_sync"><source>A/V synchronization</source><translation>映像・音声の同期</translation></message>
+    <message id="decklink.check.reconnect"><source>Signal loss / reconnection</source><translation>信号断・再接続</translation></message>
+    <message id="decklink.check.long_run"><source>Long-run stability</source><translation>長時間の安定性</translation></message>
+    <message id="decklink.check.preview"><source>Report contents (software status and operator results)</source><translation>レポート内容（ソフトウェア状態と利用者の確認結果）</translation></message>
+    <message id="decklink.check.refresh"><source>Refresh current status</source><translation>現在の状態を取得</translation></message>
+    <message id="decklink.check.email_help"><source>Save the JSON report and open an email to info@pondashi.com. Attach the saved JSON, review the message, and press Send yourself.</source><translation>JSONレポートを保存し、info@pondashi.com宛てのメールを開きます。保存したJSONを添付し、内容を確認してご自身で送信してください。</translation></message>
+    <message id="decklink.check.mail_subject"><source>VTR-PON Mac DeckLink operation report</source><translation>VTR-PON Mac DeckLink 動作確認レポート</translation></message>
+    <message id="decklink.check.mail_intro"><source>Mac DeckLink hardware verification results (reported by the operator):</source><translation>Mac DeckLinkの実機確認結果（利用者による報告）：</translation></message>
+
     <message id="settings.switcher.mac.suffix"><source> — unavailable on Mac</source><translation> — Macでは利用できません</translation></message>
     <message id="settings.switcher.mac.unavailable"><source>This switcher model is unavailable in this Mac version.</source><translation>このMac版ではこの機種を利用できません。</translation></message>
     <message id="switcher.trial.no_fade"><source>FTB following is unavailable in this trial: the reference does not establish a command that sets the active fade state. Panel-lock settings are not used as fade commands.</source><translation>参照資料からフェード状態を指定するコマンドを確定できないため、今回の試験対応ではFTB連動を無効にしています。</translation></message>

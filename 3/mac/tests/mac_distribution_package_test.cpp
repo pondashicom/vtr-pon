@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
   QVector<vtrpon::addons::CatalogEntry> entries;
   QString error;
   if (!catalog.open(QIODevice::ReadOnly) ||
-      !vtrpon::addons::readCatalog(catalog.readAll(), &entries, &error) || entries.size()!=3) {
+      !vtrpon::addons::readCatalog(catalog.readAll(), &entries, &error) || entries.size()!=4) {
     std::fprintf(stderr, "Catalog: %s\n", qPrintable(error)); return 1;
   }
   for (const auto &entry: entries) {

@@ -30,8 +30,8 @@
 #define CHECK(x) do { if (!(x)) { std::fprintf(stderr,"line %d: %s\n",__LINE__,#x); return false; } } while(false)
 bool runPlatformCapabilitiesRegression() {
   using namespace vtrpon;
-  for (const auto feature : {PlatformFeature::PowerPoint,
-      PlatformFeature::ExternalAddons}) CHECK(!platformFeatureImplemented(feature));
+  CHECK(!platformFeatureImplemented(PlatformFeature::PowerPoint));
+  CHECK(platformFeatureImplemented(PlatformFeature::ExternalAddons));
   CHECK(platformFeatureImplemented(PlatformFeature::Switcher));
   CHECK(platformFeatureImplemented(PlatformFeature::Atem));
   CHECK(platformFeatureImplemented(PlatformFeature::VirtualCamera));
@@ -66,7 +66,8 @@ bool runPlatformCapabilitiesRegression() {
   saveNetworkVideoSettings({}); CHECK(savedNetworkVideoSettings() == NetworkVideoSettings{});
   saveNetworkVideoSettings(ndi); CHECK(savedNetworkVideoSettings() == ndi);
   const auto decklink = savedDeckLinkSettings();
-  saveDeckLinkSettings({}); CHECK(savedDeckLinkSettings() == decklink);
+  saveDeckLinkSettings({}); CHECK(savedDeckLinkSettings() == DeckLinkSettings{});
+  saveDeckLinkSettings(decklink); CHECK(savedDeckLinkSettings() == decklink);
   CHECK(saveGpuPreferences(settings, {"other", false}));
   CHECK((readGpuPreferences(settings) == GpuPreferences{"other", false}));
   CHECK(save4kProgramOutput(settings, false) && !load4kProgramOutput(settings));
@@ -126,7 +127,8 @@ bool runPlatformCapabilitiesRegression() {
   AddonManagementPage addons;
   CHECK(addons.findChild<QPushButton *>("addonCatalogRefresh")->isEnabled());
   CHECK(addons.findChild<QPushButton *>("addonInstallLocal")->isEnabled());
-  CHECK(!addons.findChild<QPushButton *>("addonInstall3"));
+  CHECK(addons.findChild<QPushButton *>("addonInstall3"));
+  CHECK(!addons.findChild<QPushButton *>("addonInstall3")->isEnabled());
   CHECK(!addons.findChild<QPushButton *>("addonInstall0")->isEnabled());
   QTemporaryDir root; CHECK(root.isValid());
   QString error;

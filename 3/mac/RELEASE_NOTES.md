@@ -31,3 +31,25 @@ catalog/feed. `releaseReady` remains false while website delivery is pending.
 The recorded checks cover build/signatures, packaged dependencies, Homebrew-denied
 startup and package parsing/extracted signatures. Acceptance on a separate Mac
 and physical device operation are not established by those checks.
+
+
+## Mac DeckLink: hardware operation unverified, volunteers wanted
+
+Mac DeckLink 0.3.0 is trial support. Input/output, audio, Fill/Key, physical
+synchronization, signal loss/reconnection and long-run operation need testing
+with real hardware. Automated software tests and Apple notarization are not
+hardware acceptance. Requires macOS 15+, Apple Silicon and the official
+Blackmagic Desktop Video for macOS API 16.0+ installed separately.
+
+Settings > DeckLink > DeckLink Operation Report records operator observations
+separately from the current software state. Send report saves reviewed JSON and
+opens an email draft to info@pondashi.com; attach the JSON and send it yourself.
+Raw errors, media paths and persistent device IDs are omitted automatically.
+
+```sh
+bash scripts/macos/test-decklink.sh
+bash scripts/macos/build-decklink.sh '/path/to/Blackmagic DeckLink SDK 16.0'
+```
+
+SDK headers and dispatch source remain outside the repository. Full instructions:
+[Mac DeckLink](docs/macOS/DeckLink入出力.md).

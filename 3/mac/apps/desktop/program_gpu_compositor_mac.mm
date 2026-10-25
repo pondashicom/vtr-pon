@@ -1,6 +1,7 @@
 #include "program_gpu_compositor.h"
 #include "operator_monitor_output.h"
 #include "network_video.h"
+#include "decklink.h"
 #include "virtual_camera/output.h"
 #include "mac_gpu_device.h"
 #include "mac_gpu_activity.h"
@@ -46,7 +47,7 @@ struct OutputSurface { id<MTLTexture> texture, alpha; };
 struct Output {
     id<MTLTexture> texture;
     uint64_t sequence = 0;
-    quint64 generation = 0;
+    quint64 generation = 0, decklinkGeneration = 0;
     qint64 timecode = 0;
     std::shared_ptr<OutputSurface> owner; // Pins a pool slot through presentation/capture.
 };
@@ -222,7 +223,9 @@ public:
             catch (const std::exception &error) { qWarning() << "Mac return monitor worker unavailable:" << error.what(); }
             try { cameraWorker = std::thread([this] { cameraLoop(); }); }
             catch (const std::exception &error) { qWarning() << "Mac virtual camera reader unavailable:" << error.what(); }
-            try { networkWorker = std::thread([this] { networkLoop(); }); }
+            try { decklinkWorker = std::thread([this] { externalOutputLoop(true); }); }
+            catch (const std::exception &error) { vtrpon::reportDeckLinkOutputError(QString::fromLocal8Bit(error.what())); }
+            try { networkWorker = std::thread([this] { externalOutputLoop(false); }); }
             catch (const std::exception &error) { vtrpon::reportNetworkVideoOutputError(QString::fromLocal8Bit(error.what())); }
             qInfo() << "Mac Metal compositor started:" << geometry.width << "x" << geometry.height
                     << "shared output, independent presenters, NV12/BGRA shared buffers, 6 output slots";
@@ -280,6 +283,7 @@ public:
         if (renderWorker.joinable()) renderWorker.join();
         if (operatorMonitorWorker.joinable()) operatorMonitorWorker.join();
         if (networkWorker.joinable()) networkWorker.join();
+        if (decklinkWorker.joinable()) decklinkWorker.join();
         if (cameraWorker.joinable()) cameraWorker.join();
         for (auto &p : presenters) if (p.worker.joinable()) p.worker.join();
         return true;
@@ -406,12 +410,17 @@ public:
                     for (const auto &candidate : outputPool) if (candidate.use_count() == 1) { surface = candidate; break; }
                     if (!surface) { ++outputDrops; std::this_thread::sleep_until(deadline); continue; }
                     const auto generation = vtrpon::networkVideoOutputGeneration();
-                    const bool wantsAlpha = generation && (vtrpon::networkVideoOutputMask() & 14u);
+                    const auto decklinkGeneration = vtrpon::deckLinkOutputGeneration();
+                    const bool wantsAlpha = (generation && (vtrpon::networkVideoOutputMask() & 14u)) ||
+                        (decklinkGeneration && (vtrpon::deckLinkOutputMask() & 6u));
                     if (wantsAlpha && !surface->alpha)
                         surface->alpha = makeTexture(geometry.width, geometry.height, MTLTextureUsageRenderTarget | MTLTextureUsageShaderRead);
                     if (!wantsAlpha) surface->alpha = nil;
                     const bool alpha = wantsAlpha && surface->alpha;
-                    if (wantsAlpha && !alpha) vtrpon::reportNetworkVideoOutputError(QStringLiteral("NDI output: Metal alpha allocation failed."));
+                    if (wantsAlpha && !alpha) {
+                        if (generation) vtrpon::reportNetworkVideoOutputError(QStringLiteral("NDI output: Metal alpha allocation failed."));
+                        if (decklinkGeneration) vtrpon::reportDeckLinkOutputError(QStringLiteral("DeckLink output: Metal alpha allocation failed."));
+                    }
                     const auto timecode = vtrpon::networkVideoTimecode();
                     auto target = surface->texture;
                     Parameters p{};
@@ -453,22 +462,22 @@ public:
                     [command waitUntilCompleted];
                     if (command.status == MTLCommandBufferStatusError) { fail(command.error.localizedDescription.UTF8String); break; }
                     vtrpon::recordMetalActivity(command.GPUStartTime, command.GPUEndTime);
-                    { std::lock_guard lock(outputMutex); output = {target, ++rendered, generation, timecode, surface}; }
+                    { std::lock_guard lock(outputMutex); output = {target, ++rendered, generation, decklinkGeneration, timecode, surface}; }
                 }
                 std::this_thread::sleep_until(deadline);
             }
         }
     }
-    void networkLoop() {
+    void externalOutputLoop(bool decklink) {
         uint64_t last = 0;
         while (running) {
             const auto deadline = std::chrono::steady_clock::now() + std::chrono::milliseconds(4);
-            const auto generation = vtrpon::networkVideoOutputGeneration();
+            const auto generation = decklink ? vtrpon::deckLinkOutputGeneration() : vtrpon::networkVideoOutputGeneration();
             if (generation) @autoreleasepool {
                 Output frame;
                 { std::unique_lock lock(outputMutex, std::try_to_lock); if (lock) frame = output; }
-                if (frame.texture && frame.sequence != last && frame.generation == generation) {
-                    const auto mask = vtrpon::networkVideoOutputMask();
+                if (frame.texture && frame.sequence != last && (decklink ? frame.decklinkGeneration : frame.generation) == generation) {
+                    const auto mask = decklink ? vtrpon::deckLinkOutputMask() : vtrpon::networkVideoOutputMask();
                     std::array<QByteArray, 2> pixels;
                     id<MTLTexture> sources[2] = {frame.texture, frame.owner->alpha};
                     for (unsigned i = 0; i < 2; ++i) if (mask & (i ? 14u : 1u)) {
@@ -479,7 +488,9 @@ public:
                     }
                     // Sender workers own encoding/network waits. This reader pins
                     // one immutable pool slot; rendering drops instead of waiting.
-                    vtrpon::publishNetworkVideo(std::move(pixels[0]), std::move(pixels[1]),
+                    if (decklink) vtrpon::publishDeckLinkVideo(std::move(pixels[0]), std::move(pixels[1]),
+                        int(geometry.width), int(geometry.height), generation, frame.timecode);
+                    else vtrpon::publishNetworkVideo(std::move(pixels[0]), std::move(pixels[1]),
                         int(geometry.width), int(geometry.height), generation, frame.timecode);
                     last = frame.sequence;
                 }
@@ -641,7 +652,7 @@ public:
     std::atomic_bool running{false}, failed{false};
     std::atomic_uint64_t rendered{0};
     std::string errorText;
-    std::thread renderWorker, operatorMonitorWorker, networkWorker, cameraWorker;
+    std::thread renderWorker, operatorMonitorWorker, networkWorker, decklinkWorker, cameraWorker;
     QTimer surfaceTimer;
 };
 

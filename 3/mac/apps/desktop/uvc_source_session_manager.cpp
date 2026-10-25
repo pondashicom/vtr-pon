@@ -643,7 +643,7 @@ private:
         const bool deckLink = vtrpon::isDeckLinkSource(session->devicePath);
         const bool network = deckLink || vtrpon::isNetworkVideoSource(session->devicePath);
 #ifdef __APPLE__
-        if (deckLink || (!network && !vtrpon::registerMacCaptureSources())) {
+        if (!network && !vtrpon::registerMacCaptureSources()) {
             *errorDetail = QStringLiteral("The selected input backend is unavailable on Mac.");
             return false;
         }

@@ -101,15 +101,15 @@ const VtrPonDeckLinkMediaApi *VTRPON_DECKLINK_CALL vtrpon_decklink_get_media_api
     return version == 1 ? &mediaApi : nullptr;
 }
 const VtrPonDeckLinkOutputApi *VTRPON_DECKLINK_CALL vtrpon_decklink_get_output_api(uint32_t version) { return version == 1 ? &outputApi : nullptr; }
-extern "C" __declspec(dllexport) void __cdecl vtrpon_decklink_test_expect(unsigned route, uint32_t color) { if (route < 3) outputs[route].expected = color; }
-extern "C" __declspec(dllexport) void __cdecl vtrpon_decklink_test_outputs(uint64_t *out) {
+extern "C" VTRPON_DECKLINK_EXPORT void VTRPON_DECKLINK_CALL vtrpon_decklink_test_expect(unsigned route, uint32_t color) { if (route < 3) outputs[route].expected = color; }
+extern "C" VTRPON_DECKLINK_EXPORT void VTRPON_DECKLINK_CALL vtrpon_decklink_test_outputs(uint64_t *out) {
     for (unsigned i = 0; i < 3; ++i) {
         out[i*6] = outputs[i].video; out[i*6+1] = outputs[i].audio; out[i*6+2] = outputs[i].time;
         out[i*6+3] = outputs[i].color; out[i*6+4] = outputs[i].active; out[i*6+5] = outputs[i].group;
         out[18+i] = outputs[i].opens;
     }
 }
-extern "C" __declspec(dllexport) void __cdecl vtrpon_decklink_test_stats(uint32_t *out) {
+extern "C" VTRPON_DECKLINK_EXPORT void VTRPON_DECKLINK_CALL vtrpon_decklink_test_stats(uint32_t *out) {
     out[0] = inputOpens; out[1] = inputs; out[2] = videoSends; out[3] = audioSends; out[4] = outputPumps;
 }
 const VtrPonDeckLinkApi *VTRPON_DECKLINK_CALL vtrpon_decklink_get_api(uint32_t version) {

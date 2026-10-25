@@ -30,6 +30,11 @@ int main(int argc, char **argv) {
   CHECK(button && !button->accessibleDescription().contains("x64"));
   vtrpon::AddonRuntimeStatusWidget vst3(vtrpon::AddonRuntimeKind::Vst3, library, nullptr, probe);
   CHECK(vst3.downloadUrl().isEmpty());
+  vtrpon::AddonRuntimeStatusWidget decklink(vtrpon::AddonRuntimeKind::DeckLink, library, nullptr, probe);
+  CHECK(decklink.downloadUrl().host() == "www.blackmagicdesign.com");
+  const auto *decklinkButton = decklink.findChild<QPushButton *>("addonRuntimeDownload");
+  CHECK(decklinkButton && decklinkButton->accessibleDescription().contains("macOS") && !decklinkButton->accessibleDescription().contains("x64"));
+
   qputenv("VTRPON_FIXTURE_RUNTIME", "hang");
   QElapsedTimer close; close.start();
   { vtrpon::AddonRuntimeStatusWidget widget(vtrpon::AddonRuntimeKind::Atem, library, nullptr, probe);

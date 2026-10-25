@@ -392,7 +392,7 @@ bool waitForRunningCopies(const QString &root, QString *error,
 QStringList ids() {
 #ifdef Q_OS_MACOS
   return {QStringLiteral("vtr-pon-atem-addon"), QStringLiteral("vtr-pon-network-video-addon"),
-          QStringLiteral("vtr-pon-vst3-addon")};
+          QStringLiteral("vtr-pon-vst3-addon"), QStringLiteral("vtr-pon-decklink-addon")};
 #else
   return {QStringLiteral("vtr-pon-atem-addon"),
           QStringLiteral("vtr-pon-network-video-addon"),
@@ -401,6 +401,7 @@ QStringList ids() {
 }
 QString entryPath(const QString &id) {
 #ifdef Q_OS_MACOS
+  if (id == QLatin1String("vtr-pon-decklink-addon")) return QStringLiteral("decklink-addons/vtr-pon-decklink-addon.dylib");
   if (id == QLatin1String("vtr-pon-atem-addon")) return QStringLiteral("switcher-addons/vtr-pon-atem-addon.dylib");
   if (id == QLatin1String("vtr-pon-network-video-addon")) return QStringLiteral("network-video-addons/vtr-pon-network-video-addon.dylib");
   if (id == QLatin1String("vtr-pon-vst3-addon")) return QStringLiteral("audio-addons/vtr-pon-vst3-addon.app/Contents/MacOS/vtr-pon-vst3-addon");

@@ -1,4 +1,5 @@
 #include "platform_capabilities.h"
+#include "addon_platform.h"
 #include "decklink.h"
 #include "decklink_output_api.h"
 #include "media_timecode.h"
@@ -50,6 +51,9 @@ public:
         if (!platformFeatureImplemented(PlatformFeature::ExternalAddons)) {
             error = QStringLiteral("DeckLink is not implemented on this platform."); return;
         }
+#ifdef Q_OS_MACOS
+        if (!addons::verifyInstalledBinary(deckLinkAddonPath(), &error)) return;
+#endif
         const auto get = reinterpret_cast<VtrPonGetDeckLinkApi>(library.resolve("vtrpon_decklink_get_api"));
         const auto getMedia = reinterpret_cast<VtrPonGetDeckLinkMediaApi>(library.resolve("vtrpon_decklink_get_media_api"));
         api = get ? get(1) : nullptr; media = getMedia ? getMedia(1) : nullptr;
@@ -91,7 +95,7 @@ public:
         error.clear(); return result;
     }
 };
-// Every logical output owns a context on this one MTA worker. Destruction closes
+// Every logical output owns a context on this one owner worker (MTA on Windows). Destruction closes
 // hardware before unloading the library, including exceptional worker exits.
 struct OutputBundle {
     Addon &addon;
@@ -381,9 +385,15 @@ bool deckLinkSourceOptions(const QString &path, VtrPonDeckLinkStreamOptions *out
 }
 QString deckLinkAddonPath() {
     const auto override = qEnvironmentVariable("VTRPON_DECKLINK_ADDON_FILE");
-    return !override.isEmpty() && QDir::isAbsolutePath(override) ? override : QDir(QCoreApplication::applicationDirPath()).filePath(QStringLiteral("decklink-addons/vtr-pon-decklink-addon.dll"));
+    return !override.isEmpty() && QDir::isAbsolutePath(override) ? override :
+        addons::addonFilePath(QCoreApplication::applicationDirPath(), QStringLiteral("vtr-pon-decklink-addon"));
 }
-bool deckLinkAddonInstalled() { return platformFeatureImplemented(PlatformFeature::ExternalAddons) && QFileInfo(deckLinkAddonPath()).isFile(); }
+bool deckLinkAddonInstalled() {
+#ifdef Q_OS_MACOS
+    if (!deckLinkAddonPath().endsWith(QLatin1StringView(".dylib"))) return false;
+#endif
+    return platformFeatureImplemented(PlatformFeature::ExternalAddons) && QFileInfo(deckLinkAddonPath()).isFile();
+}
 DeckLinkSettings savedDeckLinkSettings() {
     auto s = makeControllerSettings(); return {s.value("deckLink/inputEnabled", true).toBool(), s.value("deckLink/outputEnabled", false).toBool(),
         s.value("deckLink/outputChannel").toString(), s.value("deckLink/outputMode", "0").toString().toUInt(), s.value("deckLink/inputMode", "0").toString().toUInt(),

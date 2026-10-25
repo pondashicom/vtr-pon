@@ -13,6 +13,8 @@ typedef int32_t (*VtrPonCheckAddonRuntime)(char *detailUtf8, uint32_t capacity);
 
 #if defined(_WIN32) && (defined(VTRPON_SWITCHER_ADDON_BUILD) || defined(VTRPON_NETWORK_VIDEO_ADDON_BUILD))
 #define VTRPON_ADDON_RUNTIME_EXPORT __declspec(dllexport)
+#elif defined(__APPLE__)
+#define VTRPON_ADDON_RUNTIME_EXPORT __attribute__((visibility("default")))
 #else
 #define VTRPON_ADDON_RUNTIME_EXPORT
 #endif

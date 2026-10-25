@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "platform": "macOS-arm64",
-  "baseCommit": "58ebb9b561c9f2c55bc990b73b4f1a399a2a0474",
+  "baseCommit": "1316311d6eda1fb3f6672fc0f72ff42df33a8f13",
   "releaseReady": false,
   "components": [
     {
@@ -127,11 +127,11 @@
       "scope": "8.1 shared decoder build, GPL/nonfree/version3/autodetection disabled; embedded permissive-code notices retained.",
       "copyrightNotice": "See the original notices and corresponding source files.",
       "files": [
-        "Contents/Frameworks/ffmpeg/libavcodec.62.28.100.dylib",
         "Contents/Frameworks/ffmpeg/libavfilter.11.14.100.dylib",
-        "Contents/Frameworks/ffmpeg/libavformat.62.12.100.dylib",
-        "Contents/Frameworks/ffmpeg/libavutil.60.26.100.dylib",
         "Contents/Frameworks/ffmpeg/libswresample.6.3.100.dylib",
+        "Contents/Frameworks/ffmpeg/libavutil.60.26.100.dylib",
+        "Contents/Frameworks/ffmpeg/libavcodec.62.28.100.dylib",
+        "Contents/Frameworks/ffmpeg/libavformat.62.12.100.dylib",
         "Contents/Frameworks/ffmpeg/libswscale.9.5.100.dylib"
       ],
       "notices": [
@@ -266,11 +266,11 @@
       "scope": "GLib/GObject/GIO/GModule/GThread; retain bundled-code notices.",
       "copyrightNotice": "See the original notices and corresponding source files.",
       "files": [
-        "Contents/Frameworks/libgio-2.0.0.dylib",
         "Contents/Frameworks/libglib-2.0.0.dylib",
-        "Contents/Frameworks/libgmodule-2.0.0.dylib",
         "Contents/Frameworks/libgobject-2.0.0.dylib",
-        "Contents/Frameworks/libgthread-2.0.0.dylib"
+        "Contents/Frameworks/libgmodule-2.0.0.dylib",
+        "Contents/Frameworks/libgthread-2.0.0.dylib",
+        "Contents/Frameworks/libgio-2.0.0.dylib"
       ],
       "notices": [
         "notices/glib/3546251ccbb3/LICENSES/AFL-2.0.txt",
@@ -674,55 +674,55 @@
       "scope": "Selected libraries/plugins and scanner only. The build recipe also builds GPL plugins, but they are excluded from this .app.",
       "copyrightNotice": "See the original notices and corresponding source files.",
       "files": [
-        "Contents/Frameworks/libgstapp-1.0.0.dylib",
         "Contents/Frameworks/libgstaudio-1.0.0.dylib",
-        "Contents/Frameworks/libgstbase-1.0.0.dylib",
-        "Contents/Frameworks/libgstcodecparsers-1.0.0.dylib",
-        "Contents/Frameworks/libgstfft-1.0.0.dylib",
-        "Contents/Frameworks/libgstgl-1.0.0.dylib",
-        "Contents/Frameworks/libgstpbutils-1.0.0.dylib",
         "Contents/Frameworks/libgstreamer-1.0.0.dylib",
-        "Contents/Frameworks/libgstriff-1.0.0.dylib",
-        "Contents/Frameworks/libgstrtp-1.0.0.dylib",
+        "Contents/Frameworks/libgstfft-1.0.0.dylib",
         "Contents/Frameworks/libgsttag-1.0.0.dylib",
         "Contents/Frameworks/libgstvideo-1.0.0.dylib",
+        "Contents/Frameworks/libgstrtp-1.0.0.dylib",
+        "Contents/Frameworks/libgstapp-1.0.0.dylib",
+        "Contents/Frameworks/libgstbase-1.0.0.dylib",
+        "Contents/Frameworks/libgstcodecparsers-1.0.0.dylib",
+        "Contents/Frameworks/libgstriff-1.0.0.dylib",
+        "Contents/Frameworks/libgstgl-1.0.0.dylib",
+        "Contents/Frameworks/libgstpbutils-1.0.0.dylib",
         "Contents/Helpers/gst-plugin-scanner",
-        "Contents/PlugIns/gstreamer/libgstaiff.dylib",
+        "Contents/PlugIns/gstreamer/libgstvpx.dylib",
+        "Contents/PlugIns/gstreamer/libgstplayback.dylib",
+        "Contents/PlugIns/gstreamer/libgstwavparse.dylib",
+        "Contents/PlugIns/gstreamer/libgstmpg123.dylib",
         "Contents/PlugIns/gstreamer/libgstapetag.dylib",
-        "Contents/PlugIns/gstreamer/libgstapp.dylib",
-        "Contents/PlugIns/gstreamer/libgstapplemedia.dylib",
-        "Contents/PlugIns/gstreamer/libgstaudioconvert.dylib",
         "Contents/PlugIns/gstreamer/libgstaudiofx.dylib",
-        "Contents/PlugIns/gstreamer/libgstaudiomixer.dylib",
         "Contents/PlugIns/gstreamer/libgstaudioparsers.dylib",
+        "Contents/PlugIns/gstreamer/libgstlevel.dylib",
+        "Contents/PlugIns/gstreamer/libgstisomp4.dylib",
+        "Contents/PlugIns/gstreamer/libgstvolume.dylib",
+        "Contents/PlugIns/gstreamer/libgstimagefreeze.dylib",
+        "Contents/PlugIns/gstreamer/libgstdeinterlace.dylib",
+        "Contents/PlugIns/gstreamer/libgstosxaudio.dylib",
+        "Contents/PlugIns/gstreamer/libgstogg.dylib",
+        "Contents/PlugIns/gstreamer/libgstflac.dylib",
+        "Contents/PlugIns/gstreamer/libgstmxf.dylib",
         "Contents/PlugIns/gstreamer/libgstaudioresample.dylib",
+        "Contents/PlugIns/gstreamer/libgstapplemedia.dylib",
+        "Contents/PlugIns/gstreamer/libgstapp.dylib",
+        "Contents/PlugIns/gstreamer/libgstid3demux.dylib",
+        "Contents/PlugIns/gstreamer/libgstjpeg.dylib",
+        "Contents/PlugIns/gstreamer/libgstopus.dylib",
+        "Contents/PlugIns/gstreamer/libgstwavenc.dylib",
+        "Contents/PlugIns/gstreamer/libgstaiff.dylib",
+        "Contents/PlugIns/gstreamer/libgstvideorate.dylib",
+        "Contents/PlugIns/gstreamer/libgstaudiomixer.dylib",
+        "Contents/PlugIns/gstreamer/libgstvideoparsersbad.dylib",
+        "Contents/PlugIns/gstreamer/libgstvorbis.dylib",
+        "Contents/PlugIns/gstreamer/libgstpng.dylib",
+        "Contents/PlugIns/gstreamer/libgstmatroska.dylib",
+        "Contents/PlugIns/gstreamer/libgstcoreelements.dylib",
+        "Contents/PlugIns/gstreamer/libgsttypefindfunctions.dylib",
+        "Contents/PlugIns/gstreamer/libgstaudioconvert.dylib",
         "Contents/PlugIns/gstreamer/libgstautodetect.dylib",
         "Contents/PlugIns/gstreamer/libgstavi.dylib",
-        "Contents/PlugIns/gstreamer/libgstcoreelements.dylib",
-        "Contents/PlugIns/gstreamer/libgstdeinterlace.dylib",
-        "Contents/PlugIns/gstreamer/libgstflac.dylib",
-        "Contents/PlugIns/gstreamer/libgstid3demux.dylib",
-        "Contents/PlugIns/gstreamer/libgstimagefreeze.dylib",
-        "Contents/PlugIns/gstreamer/libgstisomp4.dylib",
-        "Contents/PlugIns/gstreamer/libgstjpeg.dylib",
-        "Contents/PlugIns/gstreamer/libgstlevel.dylib",
-        "Contents/PlugIns/gstreamer/libgstmatroska.dylib",
-        "Contents/PlugIns/gstreamer/libgstmpg123.dylib",
-        "Contents/PlugIns/gstreamer/libgstmxf.dylib",
-        "Contents/PlugIns/gstreamer/libgstogg.dylib",
-        "Contents/PlugIns/gstreamer/libgstopus.dylib",
-        "Contents/PlugIns/gstreamer/libgstosxaudio.dylib",
-        "Contents/PlugIns/gstreamer/libgstplayback.dylib",
-        "Contents/PlugIns/gstreamer/libgstpng.dylib",
-        "Contents/PlugIns/gstreamer/libgsttypefindfunctions.dylib",
-        "Contents/PlugIns/gstreamer/libgstvideoconvertscale.dylib",
-        "Contents/PlugIns/gstreamer/libgstvideoparsersbad.dylib",
-        "Contents/PlugIns/gstreamer/libgstvideorate.dylib",
-        "Contents/PlugIns/gstreamer/libgstvolume.dylib",
-        "Contents/PlugIns/gstreamer/libgstvorbis.dylib",
-        "Contents/PlugIns/gstreamer/libgstvpx.dylib",
-        "Contents/PlugIns/gstreamer/libgstwavenc.dylib",
-        "Contents/PlugIns/gstreamer/libgstwavparse.dylib"
+        "Contents/PlugIns/gstreamer/libgstvideoconvertscale.dylib"
       ],
       "notices": [
         "notices/gstreamer/5488965db0fb/LICENSE-APACHE",
@@ -801,8 +801,8 @@
       "scope": "ICU 78.3 original license and data notices.",
       "copyrightNotice": "See the original notices and corresponding source files.",
       "files": [
-        "Contents/Frameworks/libicudata.78.3.dylib",
         "Contents/Frameworks/libicui18n.78.3.dylib",
+        "Contents/Frameworks/libicudata.78.3.dylib",
         "Contents/Frameworks/libicuuc.78.3.dylib"
       ],
       "notices": [
@@ -982,8 +982,8 @@
       "scope": "",
       "copyrightNotice": "See the original notices and corresponding source files.",
       "files": [
-        "Contents/Frameworks/libvorbis.0.dylib",
-        "Contents/Frameworks/libvorbisenc.2.dylib"
+        "Contents/Frameworks/libvorbisenc.2.dylib",
+        "Contents/Frameworks/libvorbis.0.dylib"
       ],
       "notices": [
         "notices/libvorbis/b33cc4934322/AUTHORS",
@@ -1050,8 +1050,8 @@
       "scope": "X11-style notices differ by source file; original COPYING retained.",
       "copyrightNotice": "See the original notices and corresponding source files.",
       "files": [
-        "Contents/Frameworks/libX11-xcb.1.dylib",
-        "Contents/Frameworks/libX11.6.dylib"
+        "Contents/Frameworks/libX11.6.dylib",
+        "Contents/Frameworks/libX11-xcb.1.dylib"
       ],
       "notices": [
         "notices/libx11/acf0e7cd7541/AUTHORS",
@@ -1211,8 +1211,8 @@
       "scope": "Include NOTICE and Apache 2.0 original text.",
       "copyrightNotice": "See the original notices and corresponding source files.",
       "files": [
-        "Contents/Frameworks/libcrypto.3.dylib",
-        "Contents/Frameworks/libssl.3.dylib"
+        "Contents/Frameworks/libssl.3.dylib",
+        "Contents/Frameworks/libcrypto.3.dylib"
       ],
       "notices": [
         "notices/openssl@3/420600911230/LICENSE",
@@ -1343,15 +1343,15 @@
       "scope": "Core, Gui, Widgets, Network, DBus and selected Cocoa/image/TLS plugins; embedded notices follow the reviewed SBOM/source/feature conditions.",
       "copyrightNotice": "Copyright (C) The Qt Company Ltd. and other contributors.",
       "files": [
+        "Contents/Frameworks/QtNetwork.framework/Versions/A/QtNetwork",
+        "Contents/Frameworks/QtWidgets.framework/Versions/A/QtWidgets",
         "Contents/Frameworks/QtCore.framework/Versions/A/QtCore",
         "Contents/Frameworks/QtDBus.framework/Versions/A/QtDBus",
         "Contents/Frameworks/QtGui.framework/Versions/A/QtGui",
-        "Contents/Frameworks/QtNetwork.framework/Versions/A/QtNetwork",
-        "Contents/Frameworks/QtWidgets.framework/Versions/A/QtWidgets",
-        "Contents/PlugIns/qt/imageformats/libqgif.dylib",
-        "Contents/PlugIns/qt/imageformats/libqjpeg.dylib",
         "Contents/PlugIns/qt/platforms/libqcocoa.dylib",
-        "Contents/PlugIns/qt/tls/libqsecuretransportbackend.dylib"
+        "Contents/PlugIns/qt/tls/libqsecuretransportbackend.dylib",
+        "Contents/PlugIns/qt/imageformats/libqgif.dylib",
+        "Contents/PlugIns/qt/imageformats/libqjpeg.dylib"
       ],
       "notices": [
         "notices/qtbase/231ad8597986/LICENSES/BSD-3-Clause.txt",
@@ -1425,8 +1425,8 @@
       "scope": "Only TIFF and WebP plugins; their separately linked libraries are separate components.",
       "copyrightNotice": "Copyright (C) The Qt Company Ltd. and other contributors.",
       "files": [
-        "Contents/PlugIns/qt/imageformats/libqtiff.dylib",
-        "Contents/PlugIns/qt/imageformats/libqwebp.dylib"
+        "Contents/PlugIns/qt/imageformats/libqwebp.dylib",
+        "Contents/PlugIns/qt/imageformats/libqtiff.dylib"
       ],
       "notices": [
         "notices/qtimageformats/d3adb02ac5e2/LICENSES/BSD-3-Clause.txt",
@@ -1570,14 +1570,14 @@
       "scope": "Main application, helpers, test executables and build scripts; bundled self-authored test-pattern media separately CC0.",
       "copyrightNotice": "See the original notices and corresponding source files.",
       "files": [
-        "Contents/Helpers/vtr-pon-camera-output.app/Contents/MacOS/vtr-pon-camera-output",
-        "Contents/Helpers/vtr-pon-operator-monitor.app/Contents/MacOS/vtr-pon-operator-monitor",
-        "Contents/Library/SystemExtensions/com.pondashi.vtrpon3.CameraExtension.systemextension/Contents/MacOS/com.pondashi.vtrpon3.CameraExtension",
         "Contents/MacOS/vtr-pon",
-        "Contents/MacOS/vtr-pon-addon-manager",
-        "Contents/MacOS/vtr-pon-addon-runtime-probe",
         "Contents/MacOS/vtr-pon-audio-devices",
-        "Contents/MacOS/vtr-pon-pfl-output"
+        "Contents/MacOS/vtr-pon-pfl-output",
+        "Contents/MacOS/vtr-pon-addon-runtime-probe",
+        "Contents/MacOS/vtr-pon-addon-manager",
+        "Contents/Helpers/vtr-pon-operator-monitor.app/Contents/MacOS/vtr-pon-operator-monitor",
+        "Contents/Helpers/vtr-pon-camera-output.app/Contents/MacOS/vtr-pon-camera-output",
+        "Contents/Library/SystemExtensions/com.pondashi.vtrpon3.CameraExtension.systemextension/Contents/MacOS/com.pondashi.vtrpon3.CameraExtension"
       ],
       "notices": [
         "notices/vtr-pon/CC0-1.0.txt",
@@ -1588,7 +1588,7 @@
       "recipe": null,
       "recipeSha256": null,
       "receiptSha256": null,
-      "sourceCommit": "58ebb9b561c9f2c55bc990b73b4f1a399a2a0474"
+      "sourceCommit": "1316311d6eda1fb3f6672fc0f72ff42df33a8f13"
     },
     {
       "id": "webp",
@@ -1597,10 +1597,10 @@
       "scope": "Include PATENTS and AUTHORS.",
       "copyrightNotice": "See the original notices and corresponding source files.",
       "files": [
-        "Contents/Frameworks/libsharpyuv.0.1.2.dylib",
         "Contents/Frameworks/libwebp.7.2.0.dylib",
         "Contents/Frameworks/libwebpdemux.2.0.17.dylib",
-        "Contents/Frameworks/libwebpmux.3.1.2.dylib"
+        "Contents/Frameworks/libwebpmux.3.1.2.dylib",
+        "Contents/Frameworks/libsharpyuv.0.1.2.dylib"
       ],
       "notices": [
         "notices/webp/e4ab7009bf06/AUTHORS",
@@ -1709,6 +1709,381 @@
   ],
   "files": [
     {
+      "path": "Contents/MacOS/vtr-pon",
+      "component": "vtr-pon",
+      "contentSha256": "0aad3114fdd861a56ec3c47ccf2f06e5c4584dd12bc64788c193b3f7d06ab277"
+    },
+    {
+      "path": "Contents/MacOS/vtr-pon-audio-devices",
+      "component": "vtr-pon",
+      "contentSha256": "c895820dc641f5d8c450d0dfdaf1458dbf699ab75c9d2b63c1c1178f1bf8fdb0"
+    },
+    {
+      "path": "Contents/MacOS/vtr-pon-pfl-output",
+      "component": "vtr-pon",
+      "contentSha256": "ce602a21841949bc23814772b579b8f7c1716f14e740881872488f6229eba855"
+    },
+    {
+      "path": "Contents/MacOS/vtr-pon-addon-runtime-probe",
+      "component": "vtr-pon",
+      "contentSha256": "eddd9410aaa02c3467c1ef8de301a70d7c8d71e73c425db23c21f16702bcc54c"
+    },
+    {
+      "path": "Contents/MacOS/vtr-pon-addon-manager",
+      "component": "vtr-pon",
+      "contentSha256": "78f23808998903d51d2eb0ef6d3f4e1c9def4705cb3325505fbeb810c8d6bf8a"
+    },
+    {
+      "path": "Contents/Frameworks/libpcre2-16.0.dylib",
+      "component": "pcre2",
+      "contentSha256": "7248a7557b25504693adc605d6b21ac81ca93bacecffdc3d4f8edfe3a2bb4431"
+    },
+    {
+      "path": "Contents/Frameworks/libgstaudio-1.0.0.dylib",
+      "component": "gstreamer",
+      "contentSha256": "0d4b64a1b7584b6f1634fa805013c1a1a3f8551f1b3be5bdce58eeb145cfaac1"
+    },
+    {
+      "path": "Contents/Frameworks/libwebp.7.2.0.dylib",
+      "component": "webp",
+      "contentSha256": "1f61dca188c9c2dc46fecd490c4c28ac38ffd3b2c748fa92fd0138f120416a4f"
+    },
+    {
+      "path": "Contents/Frameworks/libmpg123.0.dylib",
+      "component": "mpg123",
+      "contentSha256": "5d938a49344ee72025dec07855d516f0b2461564c09ed49ffe88f4c6d0d28bab"
+    },
+    {
+      "path": "Contents/Frameworks/libvorbisenc.2.dylib",
+      "component": "libvorbis",
+      "contentSha256": "5f074bd699a6751bae1516489470d81ff7a7d265a83ba890cf930cbe374acc6d"
+    },
+    {
+      "path": "Contents/Frameworks/libogg.0.8.6.dylib",
+      "component": "libogg",
+      "contentSha256": "6c4158ba02ed0a96532e23e738ed3f023fcc88360c440da32bd916ff80511300"
+    },
+    {
+      "path": "Contents/Frameworks/libbrotlicommon.1.2.0.dylib",
+      "component": "brotli",
+      "contentSha256": "6ce6e11b3f10bcd253225b62190db6ac7848feb6799321341d40ba1ab5089e8e"
+    },
+    {
+      "path": "Contents/Frameworks/libgstreamer-1.0.0.dylib",
+      "component": "gstreamer",
+      "contentSha256": "0914a20e4bc237030cc5f23041dfc9c48ee8aab63e1e37b74bfd305a5a60ac66"
+    },
+    {
+      "path": "Contents/Frameworks/libgraphite2.3.2.1.dylib",
+      "component": "graphite2",
+      "contentSha256": "02598cbb4b734580ca2fff50a65601703fda37b34bea67f214eb69025205e441"
+    },
+    {
+      "path": "Contents/Frameworks/libpcre2-8.0.dylib",
+      "component": "pcre2",
+      "contentSha256": "2021908ae6d6a31b890e8e9bf2c56f737ee1353399aeb88e04f3a501ee0e69f9"
+    },
+    {
+      "path": "Contents/Frameworks/libFLAC.14.dylib",
+      "component": "flac",
+      "contentSha256": "ce0872e724b90716504879c1b6cae55040287adc00d99dfcf401a5f87a373c00"
+    },
+    {
+      "path": "Contents/Frameworks/libbrotlidec.1.2.0.dylib",
+      "component": "brotli",
+      "contentSha256": "adcc79d87b957f3ee06bcb8c817cb73648059c634da53b9386e40ebcb38ad0de"
+    },
+    {
+      "path": "Contents/Frameworks/libdav1d.7.dylib",
+      "component": "dav1d",
+      "contentSha256": "61b5d4275f8e8095347c88952cdf3b7886294de52224048781f5885ef82e3c2c"
+    },
+    {
+      "path": "Contents/Frameworks/libglib-2.0.0.dylib",
+      "component": "glib",
+      "contentSha256": "2304d94949f04c5c45a6ecf368d2f492f91e9ec4bb9ca046de6b6330ce761e29"
+    },
+    {
+      "path": "Contents/Frameworks/libX11.6.dylib",
+      "component": "libx11",
+      "contentSha256": "63acceb7dd386720be14659406c140a6b7906acb4dce7fc8fbea98c328d413ef"
+    },
+    {
+      "path": "Contents/Frameworks/libicui18n.78.3.dylib",
+      "component": "icu4c@78",
+      "contentSha256": "b12324940961558348521d046c83173e76048a116de60a15be7a6bc89b3c400d"
+    },
+    {
+      "path": "Contents/Frameworks/libpng16.16.dylib",
+      "component": "libpng",
+      "contentSha256": "00001e462eb1ab5c2d90d09e6d134c73111a9a248ac1f3a28ab377c5fe4908b7"
+    },
+    {
+      "path": "Contents/Frameworks/libssl.3.dylib",
+      "component": "openssl@3",
+      "contentSha256": "3370880085309c910c555bf35b509ff7e0a1f0d870602da27fb0999241ab6797"
+    },
+    {
+      "path": "Contents/Frameworks/libgstfft-1.0.0.dylib",
+      "component": "gstreamer",
+      "contentSha256": "a7a1987589150c1ba4d82590e265527dd8afd8dc16a2ed1c9aee8813a114f023"
+    },
+    {
+      "path": "Contents/Frameworks/libxcb.1.1.0.dylib",
+      "component": "libxcb",
+      "contentSha256": "e31b1cf6420d122e1281c7c5d0015341d19d9e9ce2e213ecc0445efd35ceeb05"
+    },
+    {
+      "path": "Contents/Frameworks/libgobject-2.0.0.dylib",
+      "component": "glib",
+      "contentSha256": "456a5a678f48c7258907f619ee14bf4fc5d8e7d90baa4b08f86782cfde7e5a3e"
+    },
+    {
+      "path": "Contents/Frameworks/libgsttag-1.0.0.dylib",
+      "component": "gstreamer",
+      "contentSha256": "b57d966e25ca34b8659278afd257a6ba69874d90b4e502c3d8777565dd2f98e9"
+    },
+    {
+      "path": "Contents/Frameworks/libgstvideo-1.0.0.dylib",
+      "component": "gstreamer",
+      "contentSha256": "28fb70dbb5250b2d4870b3ddd12518adfe536ffbdc0463965b7660b0e1c38c7d"
+    },
+    {
+      "path": "Contents/Frameworks/libfreetype.6.dylib",
+      "component": "freetype",
+      "contentSha256": "088204ae4c1e94376d76a4d79c5f1e87bd966abef9aa193c4329893e4885c752"
+    },
+    {
+      "path": "Contents/Frameworks/libcrypto.3.dylib",
+      "component": "openssl@3",
+      "contentSha256": "588117508b7f0d6d053e91bc6d0df77aaf48a4bbf5c79ba0dee9e9a0d64d70c2"
+    },
+    {
+      "path": "Contents/Frameworks/libgstrtp-1.0.0.dylib",
+      "component": "gstreamer",
+      "contentSha256": "08e8f484d7afb1aa01049b277b282c6f81c40c4a6adb191914e40fd1a75111fe"
+    },
+    {
+      "path": "Contents/Frameworks/libgstapp-1.0.0.dylib",
+      "component": "gstreamer",
+      "contentSha256": "18d595bf7d9e1fa2b263707e53ef9b396d0982ca12c2d7aa11302dca776cc171"
+    },
+    {
+      "path": "Contents/Frameworks/libharfbuzz.0.dylib",
+      "component": "harfbuzz",
+      "contentSha256": "1d30aa6240f11b4db1aaa0d24e96febce4294bd29f078f83f8b15ff65e8874a7"
+    },
+    {
+      "path": "Contents/Frameworks/libgmodule-2.0.0.dylib",
+      "component": "glib",
+      "contentSha256": "275bc4eddf09effdc3c104d3d943190c268b60484a5cd8d85c815a9bd6a55aa4"
+    },
+    {
+      "path": "Contents/Frameworks/libintl.8.dylib",
+      "component": "gettext",
+      "contentSha256": "e07b5762330798768499fe51342e3a971de4564567d5dbcc105ea24fe3e83148"
+    },
+    {
+      "path": "Contents/Frameworks/libwebpdemux.2.0.17.dylib",
+      "component": "webp",
+      "contentSha256": "6e90190b2663502f7430b2eb9ca0df14bd6202a9621b822f10d865e09ae081d7"
+    },
+    {
+      "path": "Contents/Frameworks/libX11-xcb.1.dylib",
+      "component": "libx11",
+      "contentSha256": "9d1a0937d5d80272368a6be55e14d72e8a1fa06c49dd72bb7bb27c9323d6f015"
+    },
+    {
+      "path": "Contents/Frameworks/libgstbase-1.0.0.dylib",
+      "component": "gstreamer",
+      "contentSha256": "024092fba04db3a5af478ddc6f511001f5f7f1e8c811287e66c708b8632817e3"
+    },
+    {
+      "path": "Contents/Frameworks/libXdmcp.6.dylib",
+      "component": "libxdmcp",
+      "contentSha256": "bfd2c11caead6a3f9af225ff3b8a827d5f0beeea275ec1ef372a3eea2f969f2f"
+    },
+    {
+      "path": "Contents/Frameworks/libmd4c.0.5.2.dylib",
+      "component": "md4c",
+      "contentSha256": "ab4aa51dbc0e081a0fc313a23f51754952b9ff62e64f8a84145c20ceeb6c2643"
+    },
+    {
+      "path": "Contents/Frameworks/libXau.6.dylib",
+      "component": "libxau",
+      "contentSha256": "e3215fb385940e1c985eccd9f8ec22fb719c62aad33b3dfa50ad1a9728113085"
+    },
+    {
+      "path": "Contents/Frameworks/libgstcodecparsers-1.0.0.dylib",
+      "component": "gstreamer",
+      "contentSha256": "6309ffde22b25278697da76d17c7d0283a2f5c150bb06b4ecc188c90e0a6fe7a"
+    },
+    {
+      "path": "Contents/Frameworks/libvorbis.0.dylib",
+      "component": "libvorbis",
+      "contentSha256": "24f61e1d87a936166776c37196011a6ac8b8386b781bb06be554b06bdc4f94c2"
+    },
+    {
+      "path": "Contents/Frameworks/libdbus-1.3.dylib",
+      "component": "dbus",
+      "contentSha256": "d56a60b9a94f033e31d5afd709fdaf64c61929828e1c1ee7a5cdd64008f1615a"
+    },
+    {
+      "path": "Contents/Frameworks/libgthread-2.0.0.dylib",
+      "component": "glib",
+      "contentSha256": "d2e4196221b6cb067131674593fa2e8004b01b8de4bd7ef024e3ed34f92eda67"
+    },
+    {
+      "path": "Contents/Frameworks/libgstriff-1.0.0.dylib",
+      "component": "gstreamer",
+      "contentSha256": "36d883030a0ed7e63cf20b4ce5f22422f23b92960c72f8e9096d33994ff49346"
+    },
+    {
+      "path": "Contents/Frameworks/liblzma.5.dylib",
+      "component": "xz",
+      "contentSha256": "a4e7cac3e24124aa8e457cd20c77019719f60ad20bd362a7670adfce541657e1"
+    },
+    {
+      "path": "Contents/Frameworks/libdouble-conversion.3.4.0.dylib",
+      "component": "double-conversion",
+      "contentSha256": "f2f8759db80f078750d5c660bcf830c46852c2fb792c60fd158567b5acd4e8d2"
+    },
+    {
+      "path": "Contents/Frameworks/libjpeg.8.3.2.dylib",
+      "component": "jpeg-turbo",
+      "contentSha256": "63515a1b50a85f0891794f2a39add42a187ce17d2e617939bbe75d153315d8da"
+    },
+    {
+      "path": "Contents/Frameworks/libz.1.3.2.dylib",
+      "component": "zlib",
+      "contentSha256": "c4bd5f0d5ac9c87f034f8f46e4e311ad4a10b0f6399b784ec67af654bb1e8ca3"
+    },
+    {
+      "path": "Contents/Frameworks/libicudata.78.3.dylib",
+      "component": "icu4c@78",
+      "contentSha256": "a0b5a8f6d1ed32eb878bc4b48781647d7d18e3ac333243e9920471e9caeb7d45"
+    },
+    {
+      "path": "Contents/Frameworks/liborc-0.4.0.dylib",
+      "component": "orc",
+      "contentSha256": "17ac16f0cef5023022d78cc9d392915a8af3ac9de8f0e9ea3087c49823452df0"
+    },
+    {
+      "path": "Contents/Frameworks/libwebpmux.3.1.2.dylib",
+      "component": "webp",
+      "contentSha256": "7fb90e6157908c02525671117b711329b0570b7fe5eced0b308e10db59946d2e"
+    },
+    {
+      "path": "Contents/Frameworks/libb2.1.dylib",
+      "component": "libb2",
+      "contentSha256": "6a6e7d59d53308b12feca2bf35de5de478005532fc1225679158b7ae59f275cb"
+    },
+    {
+      "path": "Contents/Frameworks/libgstgl-1.0.0.dylib",
+      "component": "gstreamer",
+      "contentSha256": "87ec27b423491dd6efcb7700f412933900cb92b154f39bd9838e7236261148c8"
+    },
+    {
+      "path": "Contents/Frameworks/libtiff.6.dylib",
+      "component": "libtiff",
+      "contentSha256": "ce8eeb177c5c32f9ac14a710e9c6d021af4751982bd173185aac2a1dc010acd1"
+    },
+    {
+      "path": "Contents/Frameworks/libgstpbutils-1.0.0.dylib",
+      "component": "gstreamer",
+      "contentSha256": "15e77a3d636704e35d7186b4f6e356abd58bc7fd5403800e967fa9962dabdb9e"
+    },
+    {
+      "path": "Contents/Frameworks/libzstd.1.5.7.dylib",
+      "component": "zstd",
+      "contentSha256": "d7244a36f41ce32f0eaf3007b239036937b2cff61b0b14f5159d5e5fe6e3592d"
+    },
+    {
+      "path": "Contents/Frameworks/libvpx.12.dylib",
+      "component": "libvpx",
+      "contentSha256": "bb935852092cec92014ccb8c218d46e56d2edc4fc7703c742353055732f56d9b"
+    },
+    {
+      "path": "Contents/Frameworks/libicuuc.78.3.dylib",
+      "component": "icu4c@78",
+      "contentSha256": "6f4a20a1597958ae4cba4c489ef5c96e37a68f4ee785c67daa0c2f49cbf475db"
+    },
+    {
+      "path": "Contents/Frameworks/libgio-2.0.0.dylib",
+      "component": "glib",
+      "contentSha256": "72372a04c1e92a39f8d9893e925c8385cedb37dae022ff0ad13f793aeea95d09"
+    },
+    {
+      "path": "Contents/Frameworks/libopus.0.dylib",
+      "component": "opus",
+      "contentSha256": "96326f08a2ef2dcfb61037671da928d0ef23554e3fad4f971da54c04295b8d63"
+    },
+    {
+      "path": "Contents/Frameworks/libsharpyuv.0.1.2.dylib",
+      "component": "webp",
+      "contentSha256": "b76733194ada59ffa72edce970c816eeeab9b0640084eb062c4c7978843ef0d2"
+    },
+    {
+      "path": "Contents/Helpers/gst-plugin-scanner",
+      "component": "gstreamer",
+      "contentSha256": "fbd34d8eac57bdf86f1959ab514d75ab8460eb4fa47eaab324db0afd90c3e5a4"
+    },
+    {
+      "path": "Contents/Helpers/vtr-pon-operator-monitor.app/Contents/MacOS/vtr-pon-operator-monitor",
+      "component": "vtr-pon",
+      "contentSha256": "ae585f58f5b8eba2839511026ffe5109034ebb404b8e75933da4d6a67175b3d2"
+    },
+    {
+      "path": "Contents/Helpers/vtr-pon-camera-output.app/Contents/MacOS/vtr-pon-camera-output",
+      "component": "vtr-pon",
+      "contentSha256": "edb5a677d448cf1fd271cb0a32cdbd4fcc9052797ce4cb7e64cbb1cf63903a98"
+    },
+    {
+      "path": "Contents/Frameworks/ffmpeg/libavfilter.11.14.100.dylib",
+      "component": "ffmpeg",
+      "contentSha256": "80e815fdbcff2719e84ca29355b7355bca486191c74b82d0d21fff837a074794"
+    },
+    {
+      "path": "Contents/Frameworks/ffmpeg/libswresample.6.3.100.dylib",
+      "component": "ffmpeg",
+      "contentSha256": "1cbcc45b07a6b4d7cd263bc0d0554c702f74820b7b270880d38d608b377cef28"
+    },
+    {
+      "path": "Contents/Frameworks/ffmpeg/libavutil.60.26.100.dylib",
+      "component": "ffmpeg",
+      "contentSha256": "4e114ad7d7c8e6526075854cfe6942ee85170db502348ce7ba2cdc393505006e"
+    },
+    {
+      "path": "Contents/Frameworks/ffmpeg/libavcodec.62.28.100.dylib",
+      "component": "ffmpeg",
+      "contentSha256": "479c44686b6bb6706e243aea2ad5a800d0be0ad5584f9c92bf3613411980185f"
+    },
+    {
+      "path": "Contents/Frameworks/ffmpeg/libavformat.62.12.100.dylib",
+      "component": "ffmpeg",
+      "contentSha256": "a88716df2dcf37258e9bf09364bfb08c83e1377f01f35aace4e504728e435d26"
+    },
+    {
+      "path": "Contents/Frameworks/ffmpeg/libswscale.9.5.100.dylib",
+      "component": "ffmpeg",
+      "contentSha256": "68aa7ae2046b49280612814ea42c4b4b8afba943111e693bb0537acb66fd72d5"
+    },
+    {
+      "path": "Contents/Frameworks/QtSvg.framework/Versions/A/QtSvg",
+      "component": "qtsvg",
+      "contentSha256": "d4090e28237da0afb3c179944b9941e17bb0443e147a404568076bd7b180bd30"
+    },
+    {
+      "path": "Contents/Frameworks/QtNetwork.framework/Versions/A/QtNetwork",
+      "component": "qtbase",
+      "contentSha256": "cc5ced5e3f94257adf16d4c0d92a4dc534b454c571a74098b6d51300511757eb"
+    },
+    {
+      "path": "Contents/Frameworks/QtWidgets.framework/Versions/A/QtWidgets",
+      "component": "qtbase",
+      "contentSha256": "d722bafbecf3b85a8c73657c5a85c6f24054bdbe663a59778ce4bb27df8e6372"
+    },
+    {
       "path": "Contents/Frameworks/QtCore.framework/Versions/A/QtCore",
       "component": "qtbase",
       "contentSha256": "aae18364558d32d6f6d3a00ca401b90b822aebf443c99204a971c09f82965a9f"
@@ -1724,359 +2099,9 @@
       "contentSha256": "ad4dc992174dc7a3f9192044deee10620262c31d917816dc95b480c5835329c4"
     },
     {
-      "path": "Contents/Frameworks/QtNetwork.framework/Versions/A/QtNetwork",
-      "component": "qtbase",
-      "contentSha256": "cc5ced5e3f94257adf16d4c0d92a4dc534b454c571a74098b6d51300511757eb"
-    },
-    {
       "path": "Contents/Frameworks/QtPdf.framework/Versions/A/QtPdf",
       "component": "qtwebengine",
       "contentSha256": "3b7c241cb8348756a41e812c447d33efb49bbe863312278d4b0b7e32cff1c36a"
-    },
-    {
-      "path": "Contents/Frameworks/QtSvg.framework/Versions/A/QtSvg",
-      "component": "qtsvg",
-      "contentSha256": "d4090e28237da0afb3c179944b9941e17bb0443e147a404568076bd7b180bd30"
-    },
-    {
-      "path": "Contents/Frameworks/QtWidgets.framework/Versions/A/QtWidgets",
-      "component": "qtbase",
-      "contentSha256": "d722bafbecf3b85a8c73657c5a85c6f24054bdbe663a59778ce4bb27df8e6372"
-    },
-    {
-      "path": "Contents/Frameworks/ffmpeg/libavcodec.62.28.100.dylib",
-      "component": "ffmpeg",
-      "contentSha256": "479c44686b6bb6706e243aea2ad5a800d0be0ad5584f9c92bf3613411980185f"
-    },
-    {
-      "path": "Contents/Frameworks/ffmpeg/libavfilter.11.14.100.dylib",
-      "component": "ffmpeg",
-      "contentSha256": "80e815fdbcff2719e84ca29355b7355bca486191c74b82d0d21fff837a074794"
-    },
-    {
-      "path": "Contents/Frameworks/ffmpeg/libavformat.62.12.100.dylib",
-      "component": "ffmpeg",
-      "contentSha256": "a88716df2dcf37258e9bf09364bfb08c83e1377f01f35aace4e504728e435d26"
-    },
-    {
-      "path": "Contents/Frameworks/ffmpeg/libavutil.60.26.100.dylib",
-      "component": "ffmpeg",
-      "contentSha256": "4e114ad7d7c8e6526075854cfe6942ee85170db502348ce7ba2cdc393505006e"
-    },
-    {
-      "path": "Contents/Frameworks/ffmpeg/libswresample.6.3.100.dylib",
-      "component": "ffmpeg",
-      "contentSha256": "1cbcc45b07a6b4d7cd263bc0d0554c702f74820b7b270880d38d608b377cef28"
-    },
-    {
-      "path": "Contents/Frameworks/ffmpeg/libswscale.9.5.100.dylib",
-      "component": "ffmpeg",
-      "contentSha256": "68aa7ae2046b49280612814ea42c4b4b8afba943111e693bb0537acb66fd72d5"
-    },
-    {
-      "path": "Contents/Frameworks/libFLAC.14.dylib",
-      "component": "flac",
-      "contentSha256": "ce0872e724b90716504879c1b6cae55040287adc00d99dfcf401a5f87a373c00"
-    },
-    {
-      "path": "Contents/Frameworks/libX11-xcb.1.dylib",
-      "component": "libx11",
-      "contentSha256": "9d1a0937d5d80272368a6be55e14d72e8a1fa06c49dd72bb7bb27c9323d6f015"
-    },
-    {
-      "path": "Contents/Frameworks/libX11.6.dylib",
-      "component": "libx11",
-      "contentSha256": "63acceb7dd386720be14659406c140a6b7906acb4dce7fc8fbea98c328d413ef"
-    },
-    {
-      "path": "Contents/Frameworks/libXau.6.dylib",
-      "component": "libxau",
-      "contentSha256": "e3215fb385940e1c985eccd9f8ec22fb719c62aad33b3dfa50ad1a9728113085"
-    },
-    {
-      "path": "Contents/Frameworks/libXdmcp.6.dylib",
-      "component": "libxdmcp",
-      "contentSha256": "bfd2c11caead6a3f9af225ff3b8a827d5f0beeea275ec1ef372a3eea2f969f2f"
-    },
-    {
-      "path": "Contents/Frameworks/libb2.1.dylib",
-      "component": "libb2",
-      "contentSha256": "6a6e7d59d53308b12feca2bf35de5de478005532fc1225679158b7ae59f275cb"
-    },
-    {
-      "path": "Contents/Frameworks/libbrotlicommon.1.2.0.dylib",
-      "component": "brotli",
-      "contentSha256": "6ce6e11b3f10bcd253225b62190db6ac7848feb6799321341d40ba1ab5089e8e"
-    },
-    {
-      "path": "Contents/Frameworks/libbrotlidec.1.2.0.dylib",
-      "component": "brotli",
-      "contentSha256": "adcc79d87b957f3ee06bcb8c817cb73648059c634da53b9386e40ebcb38ad0de"
-    },
-    {
-      "path": "Contents/Frameworks/libcrypto.3.dylib",
-      "component": "openssl@3",
-      "contentSha256": "588117508b7f0d6d053e91bc6d0df77aaf48a4bbf5c79ba0dee9e9a0d64d70c2"
-    },
-    {
-      "path": "Contents/Frameworks/libdav1d.7.dylib",
-      "component": "dav1d",
-      "contentSha256": "61b5d4275f8e8095347c88952cdf3b7886294de52224048781f5885ef82e3c2c"
-    },
-    {
-      "path": "Contents/Frameworks/libdbus-1.3.dylib",
-      "component": "dbus",
-      "contentSha256": "d56a60b9a94f033e31d5afd709fdaf64c61929828e1c1ee7a5cdd64008f1615a"
-    },
-    {
-      "path": "Contents/Frameworks/libdouble-conversion.3.4.0.dylib",
-      "component": "double-conversion",
-      "contentSha256": "f2f8759db80f078750d5c660bcf830c46852c2fb792c60fd158567b5acd4e8d2"
-    },
-    {
-      "path": "Contents/Frameworks/libfreetype.6.dylib",
-      "component": "freetype",
-      "contentSha256": "088204ae4c1e94376d76a4d79c5f1e87bd966abef9aa193c4329893e4885c752"
-    },
-    {
-      "path": "Contents/Frameworks/libgio-2.0.0.dylib",
-      "component": "glib",
-      "contentSha256": "72372a04c1e92a39f8d9893e925c8385cedb37dae022ff0ad13f793aeea95d09"
-    },
-    {
-      "path": "Contents/Frameworks/libglib-2.0.0.dylib",
-      "component": "glib",
-      "contentSha256": "2304d94949f04c5c45a6ecf368d2f492f91e9ec4bb9ca046de6b6330ce761e29"
-    },
-    {
-      "path": "Contents/Frameworks/libgmodule-2.0.0.dylib",
-      "component": "glib",
-      "contentSha256": "275bc4eddf09effdc3c104d3d943190c268b60484a5cd8d85c815a9bd6a55aa4"
-    },
-    {
-      "path": "Contents/Frameworks/libgobject-2.0.0.dylib",
-      "component": "glib",
-      "contentSha256": "456a5a678f48c7258907f619ee14bf4fc5d8e7d90baa4b08f86782cfde7e5a3e"
-    },
-    {
-      "path": "Contents/Frameworks/libgraphite2.3.2.1.dylib",
-      "component": "graphite2",
-      "contentSha256": "02598cbb4b734580ca2fff50a65601703fda37b34bea67f214eb69025205e441"
-    },
-    {
-      "path": "Contents/Frameworks/libgstapp-1.0.0.dylib",
-      "component": "gstreamer",
-      "contentSha256": "18d595bf7d9e1fa2b263707e53ef9b396d0982ca12c2d7aa11302dca776cc171"
-    },
-    {
-      "path": "Contents/Frameworks/libgstaudio-1.0.0.dylib",
-      "component": "gstreamer",
-      "contentSha256": "0d4b64a1b7584b6f1634fa805013c1a1a3f8551f1b3be5bdce58eeb145cfaac1"
-    },
-    {
-      "path": "Contents/Frameworks/libgstbase-1.0.0.dylib",
-      "component": "gstreamer",
-      "contentSha256": "024092fba04db3a5af478ddc6f511001f5f7f1e8c811287e66c708b8632817e3"
-    },
-    {
-      "path": "Contents/Frameworks/libgstcodecparsers-1.0.0.dylib",
-      "component": "gstreamer",
-      "contentSha256": "6309ffde22b25278697da76d17c7d0283a2f5c150bb06b4ecc188c90e0a6fe7a"
-    },
-    {
-      "path": "Contents/Frameworks/libgstfft-1.0.0.dylib",
-      "component": "gstreamer",
-      "contentSha256": "a7a1987589150c1ba4d82590e265527dd8afd8dc16a2ed1c9aee8813a114f023"
-    },
-    {
-      "path": "Contents/Frameworks/libgstgl-1.0.0.dylib",
-      "component": "gstreamer",
-      "contentSha256": "87ec27b423491dd6efcb7700f412933900cb92b154f39bd9838e7236261148c8"
-    },
-    {
-      "path": "Contents/Frameworks/libgstpbutils-1.0.0.dylib",
-      "component": "gstreamer",
-      "contentSha256": "15e77a3d636704e35d7186b4f6e356abd58bc7fd5403800e967fa9962dabdb9e"
-    },
-    {
-      "path": "Contents/Frameworks/libgstreamer-1.0.0.dylib",
-      "component": "gstreamer",
-      "contentSha256": "0914a20e4bc237030cc5f23041dfc9c48ee8aab63e1e37b74bfd305a5a60ac66"
-    },
-    {
-      "path": "Contents/Frameworks/libgstriff-1.0.0.dylib",
-      "component": "gstreamer",
-      "contentSha256": "36d883030a0ed7e63cf20b4ce5f22422f23b92960c72f8e9096d33994ff49346"
-    },
-    {
-      "path": "Contents/Frameworks/libgstrtp-1.0.0.dylib",
-      "component": "gstreamer",
-      "contentSha256": "08e8f484d7afb1aa01049b277b282c6f81c40c4a6adb191914e40fd1a75111fe"
-    },
-    {
-      "path": "Contents/Frameworks/libgsttag-1.0.0.dylib",
-      "component": "gstreamer",
-      "contentSha256": "b57d966e25ca34b8659278afd257a6ba69874d90b4e502c3d8777565dd2f98e9"
-    },
-    {
-      "path": "Contents/Frameworks/libgstvideo-1.0.0.dylib",
-      "component": "gstreamer",
-      "contentSha256": "28fb70dbb5250b2d4870b3ddd12518adfe536ffbdc0463965b7660b0e1c38c7d"
-    },
-    {
-      "path": "Contents/Frameworks/libgthread-2.0.0.dylib",
-      "component": "glib",
-      "contentSha256": "d2e4196221b6cb067131674593fa2e8004b01b8de4bd7ef024e3ed34f92eda67"
-    },
-    {
-      "path": "Contents/Frameworks/libharfbuzz.0.dylib",
-      "component": "harfbuzz",
-      "contentSha256": "1d30aa6240f11b4db1aaa0d24e96febce4294bd29f078f83f8b15ff65e8874a7"
-    },
-    {
-      "path": "Contents/Frameworks/libicudata.78.3.dylib",
-      "component": "icu4c@78",
-      "contentSha256": "a0b5a8f6d1ed32eb878bc4b48781647d7d18e3ac333243e9920471e9caeb7d45"
-    },
-    {
-      "path": "Contents/Frameworks/libicui18n.78.3.dylib",
-      "component": "icu4c@78",
-      "contentSha256": "b12324940961558348521d046c83173e76048a116de60a15be7a6bc89b3c400d"
-    },
-    {
-      "path": "Contents/Frameworks/libicuuc.78.3.dylib",
-      "component": "icu4c@78",
-      "contentSha256": "6f4a20a1597958ae4cba4c489ef5c96e37a68f4ee785c67daa0c2f49cbf475db"
-    },
-    {
-      "path": "Contents/Frameworks/libintl.8.dylib",
-      "component": "gettext",
-      "contentSha256": "e07b5762330798768499fe51342e3a971de4564567d5dbcc105ea24fe3e83148"
-    },
-    {
-      "path": "Contents/Frameworks/libjpeg.8.3.2.dylib",
-      "component": "jpeg-turbo",
-      "contentSha256": "63515a1b50a85f0891794f2a39add42a187ce17d2e617939bbe75d153315d8da"
-    },
-    {
-      "path": "Contents/Frameworks/liblzma.5.dylib",
-      "component": "xz",
-      "contentSha256": "a4e7cac3e24124aa8e457cd20c77019719f60ad20bd362a7670adfce541657e1"
-    },
-    {
-      "path": "Contents/Frameworks/libmd4c.0.5.2.dylib",
-      "component": "md4c",
-      "contentSha256": "ab4aa51dbc0e081a0fc313a23f51754952b9ff62e64f8a84145c20ceeb6c2643"
-    },
-    {
-      "path": "Contents/Frameworks/libmpg123.0.dylib",
-      "component": "mpg123",
-      "contentSha256": "5d938a49344ee72025dec07855d516f0b2461564c09ed49ffe88f4c6d0d28bab"
-    },
-    {
-      "path": "Contents/Frameworks/libogg.0.8.6.dylib",
-      "component": "libogg",
-      "contentSha256": "6c4158ba02ed0a96532e23e738ed3f023fcc88360c440da32bd916ff80511300"
-    },
-    {
-      "path": "Contents/Frameworks/libopus.0.dylib",
-      "component": "opus",
-      "contentSha256": "96326f08a2ef2dcfb61037671da928d0ef23554e3fad4f971da54c04295b8d63"
-    },
-    {
-      "path": "Contents/Frameworks/liborc-0.4.0.dylib",
-      "component": "orc",
-      "contentSha256": "17ac16f0cef5023022d78cc9d392915a8af3ac9de8f0e9ea3087c49823452df0"
-    },
-    {
-      "path": "Contents/Frameworks/libpcre2-16.0.dylib",
-      "component": "pcre2",
-      "contentSha256": "7248a7557b25504693adc605d6b21ac81ca93bacecffdc3d4f8edfe3a2bb4431"
-    },
-    {
-      "path": "Contents/Frameworks/libpcre2-8.0.dylib",
-      "component": "pcre2",
-      "contentSha256": "2021908ae6d6a31b890e8e9bf2c56f737ee1353399aeb88e04f3a501ee0e69f9"
-    },
-    {
-      "path": "Contents/Frameworks/libpng16.16.dylib",
-      "component": "libpng",
-      "contentSha256": "00001e462eb1ab5c2d90d09e6d134c73111a9a248ac1f3a28ab377c5fe4908b7"
-    },
-    {
-      "path": "Contents/Frameworks/libsharpyuv.0.1.2.dylib",
-      "component": "webp",
-      "contentSha256": "b76733194ada59ffa72edce970c816eeeab9b0640084eb062c4c7978843ef0d2"
-    },
-    {
-      "path": "Contents/Frameworks/libssl.3.dylib",
-      "component": "openssl@3",
-      "contentSha256": "3370880085309c910c555bf35b509ff7e0a1f0d870602da27fb0999241ab6797"
-    },
-    {
-      "path": "Contents/Frameworks/libtiff.6.dylib",
-      "component": "libtiff",
-      "contentSha256": "ce8eeb177c5c32f9ac14a710e9c6d021af4751982bd173185aac2a1dc010acd1"
-    },
-    {
-      "path": "Contents/Frameworks/libvorbis.0.dylib",
-      "component": "libvorbis",
-      "contentSha256": "24f61e1d87a936166776c37196011a6ac8b8386b781bb06be554b06bdc4f94c2"
-    },
-    {
-      "path": "Contents/Frameworks/libvorbisenc.2.dylib",
-      "component": "libvorbis",
-      "contentSha256": "5f074bd699a6751bae1516489470d81ff7a7d265a83ba890cf930cbe374acc6d"
-    },
-    {
-      "path": "Contents/Frameworks/libvpx.12.dylib",
-      "component": "libvpx",
-      "contentSha256": "bb935852092cec92014ccb8c218d46e56d2edc4fc7703c742353055732f56d9b"
-    },
-    {
-      "path": "Contents/Frameworks/libwebp.7.2.0.dylib",
-      "component": "webp",
-      "contentSha256": "1f61dca188c9c2dc46fecd490c4c28ac38ffd3b2c748fa92fd0138f120416a4f"
-    },
-    {
-      "path": "Contents/Frameworks/libwebpdemux.2.0.17.dylib",
-      "component": "webp",
-      "contentSha256": "6e90190b2663502f7430b2eb9ca0df14bd6202a9621b822f10d865e09ae081d7"
-    },
-    {
-      "path": "Contents/Frameworks/libwebpmux.3.1.2.dylib",
-      "component": "webp",
-      "contentSha256": "7fb90e6157908c02525671117b711329b0570b7fe5eced0b308e10db59946d2e"
-    },
-    {
-      "path": "Contents/Frameworks/libxcb.1.1.0.dylib",
-      "component": "libxcb",
-      "contentSha256": "e31b1cf6420d122e1281c7c5d0015341d19d9e9ce2e213ecc0445efd35ceeb05"
-    },
-    {
-      "path": "Contents/Frameworks/libz.1.3.2.dylib",
-      "component": "zlib",
-      "contentSha256": "c4bd5f0d5ac9c87f034f8f46e4e311ad4a10b0f6399b784ec67af654bb1e8ca3"
-    },
-    {
-      "path": "Contents/Frameworks/libzstd.1.5.7.dylib",
-      "component": "zstd",
-      "contentSha256": "d7244a36f41ce32f0eaf3007b239036937b2cff61b0b14f5159d5e5fe6e3592d"
-    },
-    {
-      "path": "Contents/Helpers/gst-plugin-scanner",
-      "component": "gstreamer",
-      "contentSha256": "fbd34d8eac57bdf86f1959ab514d75ab8460eb4fa47eaab324db0afd90c3e5a4"
-    },
-    {
-      "path": "Contents/Helpers/vtr-pon-camera-output.app/Contents/MacOS/vtr-pon-camera-output",
-      "component": "vtr-pon",
-      "contentSha256": "edb5a677d448cf1fd271cb0a32cdbd4fcc9052797ce4cb7e64cbb1cf63903a98"
-    },
-    {
-      "path": "Contents/Helpers/vtr-pon-operator-monitor.app/Contents/MacOS/vtr-pon-operator-monitor",
-      "component": "vtr-pon",
-      "contentSha256": "ae585f58f5b8eba2839511026ffe5109034ebb404b8e75933da4d6a67175b3d2"
     },
     {
       "path": "Contents/Library/SystemExtensions/com.pondashi.vtrpon3.CameraExtension.systemextension/Contents/MacOS/com.pondashi.vtrpon3.CameraExtension",
@@ -2084,34 +2109,24 @@
       "contentSha256": "99e939d1e50840f3e1b4122fb15ab650736a6c3097e56c85cf88a776900c3587"
     },
     {
-      "path": "Contents/MacOS/vtr-pon",
-      "component": "vtr-pon",
-      "contentSha256": "89243cd515bb96661cafdf21d003aca1aaca153e74db09181068d5e30e697f47"
-    },
-    {
-      "path": "Contents/MacOS/vtr-pon-addon-manager",
-      "component": "vtr-pon",
-      "contentSha256": "e3d45adfc31daff8ae0ff333c0d86778508359096a53d366c1b6f6b776e01838"
-    },
-    {
-      "path": "Contents/MacOS/vtr-pon-addon-runtime-probe",
-      "component": "vtr-pon",
-      "contentSha256": "68ade1cc8859b69eb188474c743d06b4b1a0a5077f7501e747495628ac16780a"
-    },
-    {
-      "path": "Contents/MacOS/vtr-pon-audio-devices",
-      "component": "vtr-pon",
-      "contentSha256": "c895820dc641f5d8c450d0dfdaf1458dbf699ab75c9d2b63c1c1178f1bf8fdb0"
-    },
-    {
-      "path": "Contents/MacOS/vtr-pon-pfl-output",
-      "component": "vtr-pon",
-      "contentSha256": "ce602a21841949bc23814772b579b8f7c1716f14e740881872488f6229eba855"
-    },
-    {
-      "path": "Contents/PlugIns/gstreamer/libgstaiff.dylib",
+      "path": "Contents/PlugIns/gstreamer/libgstvpx.dylib",
       "component": "gstreamer",
-      "contentSha256": "2b733b52ff640d12c0d46293cba6bc77cd7d990d851bf734a070ae6cb6eeb08f"
+      "contentSha256": "6bc87654fcb9587212cb0f807daa08b87f9b47da8f99768ffe09b0e32cde2c11"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstplayback.dylib",
+      "component": "gstreamer",
+      "contentSha256": "1c7b532cac4d29c4e956e116b819851d16326b4d844dad64737f0320df945ddf"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstwavparse.dylib",
+      "component": "gstreamer",
+      "contentSha256": "f2b30ceb0afadb3afe6836501227c93f5ea04e18f839028be05ff0e92e573d59"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstmpg123.dylib",
+      "component": "gstreamer",
+      "contentSha256": "13e9e489798f2c969a6fdd393750db60231c9c4ae57aec838813b272e7d11411"
     },
     {
       "path": "Contents/PlugIns/gstreamer/libgstapetag.dylib",
@@ -2119,29 +2134,9 @@
       "contentSha256": "2ced7f165cfd85317a154604e27caca6d8d84624d5ab5f69b23242c89c3fa559"
     },
     {
-      "path": "Contents/PlugIns/gstreamer/libgstapp.dylib",
-      "component": "gstreamer",
-      "contentSha256": "4589b6019d0ff7879c7a1378c575ee72faf2ffb93d6020d13e1ccc0c0f3183a7"
-    },
-    {
-      "path": "Contents/PlugIns/gstreamer/libgstapplemedia.dylib",
-      "component": "gstreamer",
-      "contentSha256": "9dc492d701fcbdda6abe975a7559838850207dffc98a492a1b3cc29772ae1cf6"
-    },
-    {
-      "path": "Contents/PlugIns/gstreamer/libgstaudioconvert.dylib",
-      "component": "gstreamer",
-      "contentSha256": "f7445db5e0acff9a5c91452b068eadc27f96cfa34db768d8e9c6f36fc303fcb0"
-    },
-    {
       "path": "Contents/PlugIns/gstreamer/libgstaudiofx.dylib",
       "component": "gstreamer",
       "contentSha256": "1510f6991b5094a59ec578ddd17450d2843e1a8fd05fc9d7bd750cf39ec48d92"
-    },
-    {
-      "path": "Contents/PlugIns/gstreamer/libgstaudiomixer.dylib",
-      "component": "gstreamer",
-      "contentSha256": "f1120d118d16757e902e7528355ca993e357b2a781cb867a1d32f85290b561e2"
     },
     {
       "path": "Contents/PlugIns/gstreamer/libgstaudioparsers.dylib",
@@ -2149,9 +2144,144 @@
       "contentSha256": "8480d9dd9193d01a81f8a2a340b3aa409948a4f10674bd4cceb06b4a9ba7d51e"
     },
     {
+      "path": "Contents/PlugIns/gstreamer/libgstlevel.dylib",
+      "component": "gstreamer",
+      "contentSha256": "3785342235e1312bb757b403797c69a89cd7a25d8f2c1f83586ca37ddf7e8777"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstisomp4.dylib",
+      "component": "gstreamer",
+      "contentSha256": "40ed16e666385329c3a027333c9818a664015bca02c42722d45e254d3441f664"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstlibav.dylib",
+      "component": "gst-libav",
+      "contentSha256": "9c6105b4bb1be45a0adad817939251e1e934cb98f586945ed1a684d0a35df5c9"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstvolume.dylib",
+      "component": "gstreamer",
+      "contentSha256": "f3b91c392ea28dd1c9a9931e27a07a89c6ab3206feabf83239a48851848df32b"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstimagefreeze.dylib",
+      "component": "gstreamer",
+      "contentSha256": "261488e8aff6ded2180876be7db8669158111a6b31eb31be79185ea0d2c259ab"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstdeinterlace.dylib",
+      "component": "gstreamer",
+      "contentSha256": "06f84638c624a83b9cf0b91f52a1097ced42ea641debb91881bb11380ebe24cd"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstosxaudio.dylib",
+      "component": "gstreamer",
+      "contentSha256": "d224b2f019710f7c33c83bde866d2e52a9c97e605dbdc7b3f51a833386de643f"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstogg.dylib",
+      "component": "gstreamer",
+      "contentSha256": "6865a76e7f718a578c8bb36945989ea046e309461df2bd57052b676c16d89fdf"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstflac.dylib",
+      "component": "gstreamer",
+      "contentSha256": "e2c0dc29528921fdbe6fd0bad8f4f0f78ce123b79fd8254591aaf2e98d0f7e1b"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstmxf.dylib",
+      "component": "gstreamer",
+      "contentSha256": "2d2459192f86226d08c18e116f64d8e7f4337bcb859550a7f27e02a0d44abea3"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstdav1d.dylib",
+      "component": "gst-plugins-rs",
+      "contentSha256": "c722e2bdb5bbee9751d7dee24b03d594fe02de12bf2fda259625649356337d91"
+    },
+    {
       "path": "Contents/PlugIns/gstreamer/libgstaudioresample.dylib",
       "component": "gstreamer",
       "contentSha256": "37dadbbe48668a2071e3e89a7a44d51bc29295d848f247577d88aaad7ccbe269"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstapplemedia.dylib",
+      "component": "gstreamer",
+      "contentSha256": "9dc492d701fcbdda6abe975a7559838850207dffc98a492a1b3cc29772ae1cf6"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstapp.dylib",
+      "component": "gstreamer",
+      "contentSha256": "4589b6019d0ff7879c7a1378c575ee72faf2ffb93d6020d13e1ccc0c0f3183a7"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstid3demux.dylib",
+      "component": "gstreamer",
+      "contentSha256": "b5a37136e9eea823f9717921c1e6f4ae82808312dbf0a46c98f68238eedc3d7a"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstjpeg.dylib",
+      "component": "gstreamer",
+      "contentSha256": "73d177a2267147dedd0c7a19c87dbbfaad3a6071b201e8a53b3d9321ead365d5"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstopus.dylib",
+      "component": "gstreamer",
+      "contentSha256": "1a138a6df8d08bbb72f8cd224e205ae0b793f49db4f93f88bc70fc6379436d7d"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstwavenc.dylib",
+      "component": "gstreamer",
+      "contentSha256": "1e304c269df40849496f5e9b90b83076ea87368f865a05246507980a99145692"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstaiff.dylib",
+      "component": "gstreamer",
+      "contentSha256": "2b733b52ff640d12c0d46293cba6bc77cd7d990d851bf734a070ae6cb6eeb08f"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstvideorate.dylib",
+      "component": "gstreamer",
+      "contentSha256": "2555debdac9ce15343aa6a0cb9c63ed6821071859cc2c44a207fa8ff302c2598"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstaudiomixer.dylib",
+      "component": "gstreamer",
+      "contentSha256": "f1120d118d16757e902e7528355ca993e357b2a781cb867a1d32f85290b561e2"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstvideoparsersbad.dylib",
+      "component": "gstreamer",
+      "contentSha256": "738546617b3a23427e0cef6ed02b87ba3de72c12b1c624aba34b723f627829cf"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstvorbis.dylib",
+      "component": "gstreamer",
+      "contentSha256": "6b692ec7f56228aa27df67e3477c324f0ed875cc05cf9a0e0df4958d32827e67"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstpng.dylib",
+      "component": "gstreamer",
+      "contentSha256": "262cb9195e25a922f6df45aa290adb1c6a3ece2ea11113beb4cbaeb4512ed99d"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstmatroska.dylib",
+      "component": "gstreamer",
+      "contentSha256": "36860a6c3184fa45c22a1c6fe91a90795545fd0e3a1d4d68a2b4af67244d6af7"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstcoreelements.dylib",
+      "component": "gstreamer",
+      "contentSha256": "a20bb6d672fa8ae029ce9db9be0791e7351ccdc4d95e9552ceb87a6b929d34f4"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgsttypefindfunctions.dylib",
+      "component": "gstreamer",
+      "contentSha256": "41dfc9f0a80c5c8da505611a3df4eaf3a4fe64c5535d1d80eea03a50905fd9f6"
+    },
+    {
+      "path": "Contents/PlugIns/gstreamer/libgstaudioconvert.dylib",
+      "component": "gstreamer",
+      "contentSha256": "f7445db5e0acff9a5c91452b068eadc27f96cfa34db768d8e9c6f36fc303fcb0"
     },
     {
       "path": "Contents/PlugIns/gstreamer/libgstautodetect.dylib",
@@ -2164,139 +2294,19 @@
       "contentSha256": "cfff6648dae2c963058cee566f539094df3329ea7e77c8463934bc5eb87c7d6e"
     },
     {
-      "path": "Contents/PlugIns/gstreamer/libgstcoreelements.dylib",
-      "component": "gstreamer",
-      "contentSha256": "a20bb6d672fa8ae029ce9db9be0791e7351ccdc4d95e9552ceb87a6b929d34f4"
-    },
-    {
-      "path": "Contents/PlugIns/gstreamer/libgstdav1d.dylib",
-      "component": "gst-plugins-rs",
-      "contentSha256": "c722e2bdb5bbee9751d7dee24b03d594fe02de12bf2fda259625649356337d91"
-    },
-    {
-      "path": "Contents/PlugIns/gstreamer/libgstdeinterlace.dylib",
-      "component": "gstreamer",
-      "contentSha256": "06f84638c624a83b9cf0b91f52a1097ced42ea641debb91881bb11380ebe24cd"
-    },
-    {
-      "path": "Contents/PlugIns/gstreamer/libgstflac.dylib",
-      "component": "gstreamer",
-      "contentSha256": "e2c0dc29528921fdbe6fd0bad8f4f0f78ce123b79fd8254591aaf2e98d0f7e1b"
-    },
-    {
-      "path": "Contents/PlugIns/gstreamer/libgstid3demux.dylib",
-      "component": "gstreamer",
-      "contentSha256": "b5a37136e9eea823f9717921c1e6f4ae82808312dbf0a46c98f68238eedc3d7a"
-    },
-    {
-      "path": "Contents/PlugIns/gstreamer/libgstimagefreeze.dylib",
-      "component": "gstreamer",
-      "contentSha256": "261488e8aff6ded2180876be7db8669158111a6b31eb31be79185ea0d2c259ab"
-    },
-    {
-      "path": "Contents/PlugIns/gstreamer/libgstisomp4.dylib",
-      "component": "gstreamer",
-      "contentSha256": "40ed16e666385329c3a027333c9818a664015bca02c42722d45e254d3441f664"
-    },
-    {
-      "path": "Contents/PlugIns/gstreamer/libgstjpeg.dylib",
-      "component": "gstreamer",
-      "contentSha256": "73d177a2267147dedd0c7a19c87dbbfaad3a6071b201e8a53b3d9321ead365d5"
-    },
-    {
-      "path": "Contents/PlugIns/gstreamer/libgstlevel.dylib",
-      "component": "gstreamer",
-      "contentSha256": "3785342235e1312bb757b403797c69a89cd7a25d8f2c1f83586ca37ddf7e8777"
-    },
-    {
-      "path": "Contents/PlugIns/gstreamer/libgstlibav.dylib",
-      "component": "gst-libav",
-      "contentSha256": "9c6105b4bb1be45a0adad817939251e1e934cb98f586945ed1a684d0a35df5c9"
-    },
-    {
-      "path": "Contents/PlugIns/gstreamer/libgstmatroska.dylib",
-      "component": "gstreamer",
-      "contentSha256": "36860a6c3184fa45c22a1c6fe91a90795545fd0e3a1d4d68a2b4af67244d6af7"
-    },
-    {
-      "path": "Contents/PlugIns/gstreamer/libgstmpg123.dylib",
-      "component": "gstreamer",
-      "contentSha256": "13e9e489798f2c969a6fdd393750db60231c9c4ae57aec838813b272e7d11411"
-    },
-    {
-      "path": "Contents/PlugIns/gstreamer/libgstmxf.dylib",
-      "component": "gstreamer",
-      "contentSha256": "2d2459192f86226d08c18e116f64d8e7f4337bcb859550a7f27e02a0d44abea3"
-    },
-    {
-      "path": "Contents/PlugIns/gstreamer/libgstogg.dylib",
-      "component": "gstreamer",
-      "contentSha256": "6865a76e7f718a578c8bb36945989ea046e309461df2bd57052b676c16d89fdf"
-    },
-    {
-      "path": "Contents/PlugIns/gstreamer/libgstopus.dylib",
-      "component": "gstreamer",
-      "contentSha256": "1a138a6df8d08bbb72f8cd224e205ae0b793f49db4f93f88bc70fc6379436d7d"
-    },
-    {
-      "path": "Contents/PlugIns/gstreamer/libgstosxaudio.dylib",
-      "component": "gstreamer",
-      "contentSha256": "d224b2f019710f7c33c83bde866d2e52a9c97e605dbdc7b3f51a833386de643f"
-    },
-    {
-      "path": "Contents/PlugIns/gstreamer/libgstplayback.dylib",
-      "component": "gstreamer",
-      "contentSha256": "1c7b532cac4d29c4e956e116b819851d16326b4d844dad64737f0320df945ddf"
-    },
-    {
-      "path": "Contents/PlugIns/gstreamer/libgstpng.dylib",
-      "component": "gstreamer",
-      "contentSha256": "262cb9195e25a922f6df45aa290adb1c6a3ece2ea11113beb4cbaeb4512ed99d"
-    },
-    {
-      "path": "Contents/PlugIns/gstreamer/libgsttypefindfunctions.dylib",
-      "component": "gstreamer",
-      "contentSha256": "41dfc9f0a80c5c8da505611a3df4eaf3a4fe64c5535d1d80eea03a50905fd9f6"
-    },
-    {
       "path": "Contents/PlugIns/gstreamer/libgstvideoconvertscale.dylib",
       "component": "gstreamer",
       "contentSha256": "9163ad9497e5784fe0e909b049d1de7234f965637a2f3d0733eca01b3d112da1"
     },
     {
-      "path": "Contents/PlugIns/gstreamer/libgstvideoparsersbad.dylib",
-      "component": "gstreamer",
-      "contentSha256": "738546617b3a23427e0cef6ed02b87ba3de72c12b1c624aba34b723f627829cf"
+      "path": "Contents/PlugIns/qt/platforms/libqcocoa.dylib",
+      "component": "qtbase",
+      "contentSha256": "d783ef2495b8af8d74c6f5eaa618276a39a0fce4e339a5c841b8fd9516307658"
     },
     {
-      "path": "Contents/PlugIns/gstreamer/libgstvideorate.dylib",
-      "component": "gstreamer",
-      "contentSha256": "2555debdac9ce15343aa6a0cb9c63ed6821071859cc2c44a207fa8ff302c2598"
-    },
-    {
-      "path": "Contents/PlugIns/gstreamer/libgstvolume.dylib",
-      "component": "gstreamer",
-      "contentSha256": "f3b91c392ea28dd1c9a9931e27a07a89c6ab3206feabf83239a48851848df32b"
-    },
-    {
-      "path": "Contents/PlugIns/gstreamer/libgstvorbis.dylib",
-      "component": "gstreamer",
-      "contentSha256": "6b692ec7f56228aa27df67e3477c324f0ed875cc05cf9a0e0df4958d32827e67"
-    },
-    {
-      "path": "Contents/PlugIns/gstreamer/libgstvpx.dylib",
-      "component": "gstreamer",
-      "contentSha256": "6bc87654fcb9587212cb0f807daa08b87f9b47da8f99768ffe09b0e32cde2c11"
-    },
-    {
-      "path": "Contents/PlugIns/gstreamer/libgstwavenc.dylib",
-      "component": "gstreamer",
-      "contentSha256": "1e304c269df40849496f5e9b90b83076ea87368f865a05246507980a99145692"
-    },
-    {
-      "path": "Contents/PlugIns/gstreamer/libgstwavparse.dylib",
-      "component": "gstreamer",
-      "contentSha256": "f2b30ceb0afadb3afe6836501227c93f5ea04e18f839028be05ff0e92e573d59"
+      "path": "Contents/PlugIns/qt/tls/libqsecuretransportbackend.dylib",
+      "component": "qtbase",
+      "contentSha256": "5a71de502d11b7ac587c18b8585c57101bc8d3ca28045089db581b2d221c68bc"
     },
     {
       "path": "Contents/PlugIns/qt/iconengines/libqsvgicon.dylib",
@@ -2309,14 +2319,14 @@
       "contentSha256": "9f323fedcef4f6b64bcd66deb52298163677a869e922d12e09cdeb90a9b277b1"
     },
     {
+      "path": "Contents/PlugIns/qt/imageformats/libqwebp.dylib",
+      "component": "qtimageformats",
+      "contentSha256": "3d1c4dd5d27cf06ac3addca40e2807b67ce276dd454cd84e569af50113975bcd"
+    },
+    {
       "path": "Contents/PlugIns/qt/imageformats/libqjpeg.dylib",
       "component": "qtbase",
       "contentSha256": "0bfdc65e1da8dcee3ab0a32680417efab1971646ba906e1a53195c7267962cf5"
-    },
-    {
-      "path": "Contents/PlugIns/qt/imageformats/libqsvg.dylib",
-      "component": "qtsvg",
-      "contentSha256": "0942b6f3e5c16f69872079d1b80ea13b99b848b518a2953f345c2de86a8acaec"
     },
     {
       "path": "Contents/PlugIns/qt/imageformats/libqtiff.dylib",
@@ -2324,19 +2334,9 @@
       "contentSha256": "25a0395f94c9cd5d5518fabf3e70c11c8974973b7e09017bd5d56132eb6f5fae"
     },
     {
-      "path": "Contents/PlugIns/qt/imageformats/libqwebp.dylib",
-      "component": "qtimageformats",
-      "contentSha256": "3d1c4dd5d27cf06ac3addca40e2807b67ce276dd454cd84e569af50113975bcd"
-    },
-    {
-      "path": "Contents/PlugIns/qt/platforms/libqcocoa.dylib",
-      "component": "qtbase",
-      "contentSha256": "d783ef2495b8af8d74c6f5eaa618276a39a0fce4e339a5c841b8fd9516307658"
-    },
-    {
-      "path": "Contents/PlugIns/qt/tls/libqsecuretransportbackend.dylib",
-      "component": "qtbase",
-      "contentSha256": "5a71de502d11b7ac587c18b8585c57101bc8d3ca28045089db581b2d221c68bc"
+      "path": "Contents/PlugIns/qt/imageformats/libqsvg.dylib",
+      "component": "qtsvg",
+      "contentSha256": "0942b6f3e5c16f69872079d1b80ea13b99b848b518a2953f345c2de86a8acaec"
     }
   ],
   "noticeFiles": {

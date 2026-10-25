@@ -36,9 +36,6 @@ int main(int argc, char **argv) {
     const bool decklink = args[2] == QLatin1StringView("decklink");
     const bool vst3 = args[2] == QLatin1StringView("vst3");
     if (!decklink && !atem && !vst3 && args[2] != QLatin1StringView("network-video")) return 1;
-#ifdef Q_OS_MACOS
-    if (decklink) return report("incompatible", QStringLiteral("DeckLink is Windows-only."));
-#endif
     if (!QFileInfo(args[4]).isFile()) return report("addon_missing");
 #ifdef Q_OS_MACOS
     QString error;

@@ -81,7 +81,7 @@ def stage(cfg, identity, work):
     # are replaced with the notices for the actual Mac shared libraries below.
     for path in (source/'LICENSE').rglob('*'):
         rel=path.relative_to(source/'LICENSE')
-        if path.is_file() and (len(rel.parts)==1 and path.suffix.lower() in {'.txt','.md'} or rel.as_posix() in {'third-party/ATEM-SDK-NOTICE.txt','third-party/VST3-SDK-LICENSE.txt','third-party/NDI-HEADER-NOTICE.txt'}):
+        if path.is_file() and (len(rel.parts)==1 and path.suffix.lower() in {'.txt','.md'} or rel.as_posix() in {'third-party/ATEM-SDK-NOTICE.txt','third-party/VST3-SDK-LICENSE.txt','third-party/NDI-HEADER-NOTICE.txt','third-party/DeckLink-SDK-NOTICE.txt'}):
             if rel.name in {'THIRD-PARTY-SOURCES.md','DISTRIBUTION.md'}: continue
             dest=notices/rel;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(path,dest)
     dependencies=json.loads((ROOT/'LICENSE/macOS/third-party-components.json').read_text())
@@ -114,7 +114,7 @@ def stage(cfg, identity, work):
             # Installer notice readers require .txt/.md UTF-8 files.
             dest=dest.with_name(dest.name+'.txt');dest.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(src,dest)
     (notices/'MACOS-SOURCES.md').write_text('# Mac add-on source and libraries\n\nSource: https://github.com/pondashicom/vtr-pon/tree/main/3/mac/addons/'+cfg['key']+'\n\nOriginal add-on commit: '+cfg['commit']+'\n\nShared libraries are dynamically linked; their sources, build recipes and replacement instructions are provided with the main Mac corresponding-source archive. VST3 libraries can be replaced in the helper app, followed by local re-signing.\n\n'+ '\n'.join(c['id']+' '+c['version']+': '+', '.join(s['url'] for s in c.get('sourceDownloads',[])) for c in sections)+'\n')
-    required={'atem':'Blackmagic ATEM Switchers Software for Mac (install separately).','ndi':'Official NDI Runtime for Apple (install separately; not bundled).','vst3':'Your arm64 VST3 plug-ins (install separately).'}[cfg['key']]
+    required={'atem':'Blackmagic ATEM Switchers Software for Mac (install separately).','ndi':'Official NDI Runtime for Apple (install separately; not bundled).','vst3':'Your arm64 VST3 plug-ins (install separately).','decklink':'Blackmagic Desktop Video for macOS API 16.0 or later (install separately). Hardware operation is unverified; volunteers are wanted. Use Settings > DeckLink > Operation Report to share results.'}[cfg['key']]
     (root/'README.md').write_text('# '+cfg['id']+' '+cfg['version']+' for Mac\n\nVTR-PON 3.0.0-beta.1; Apple Silicon arm64; macOS 15 or later.\n\nRequired: '+required+'\n\nIn VTR-PON, open Settings > Add-ons > Install from package, review the terms and restart as prompted. This package does not install vendor runtimes or third-party plug-ins.\n')
     manifest={'formatVersion':2,'platform':'macos-arm64','id':cfg['id'],'version':cfg['version'],'contract':cfg['contract'],
         'agreements':[{'path':'licenses/'+name,'sha256':sha((notices/name).read_bytes())} for name in cfg['agreements']]}

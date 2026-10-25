@@ -3,7 +3,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-/* Media ABI 1. All calls use the context's MTA owner thread. Borrowed packet
+/* Media ABI 1. All calls use the context's owner worker thread (MTA on Windows). Borrowed packet
  * bytes remain valid until the next read/close on that context. No SDK types
  * cross this boundary. Each context owns at most one input and one output.
  * A channel is a logical SDK subdevice plus a physical connection bit.

@@ -72,7 +72,7 @@ private:
     std::unique_ptr<Impl> impl_;
 };
 // Multiple video/audio consumers of one channel share one hardware capture.
-// Destruction only detaches a subscriber; SDK shutdown runs on its MTA worker.
+// Destruction only detaches a subscriber; SDK shutdown runs on its owner worker (MTA on Windows).
 class DeckLinkReceiver final {
 public:
     DeckLinkReceiver(const QString &, GstElement *appsrc, bool audioOnly);

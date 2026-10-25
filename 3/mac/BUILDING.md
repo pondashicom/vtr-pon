@@ -69,3 +69,25 @@ python3 scripts/macos/finalize-release.py --identity "$VTRPON_SIGN_IDENTITY" --n
 `VTRPON_SIGN_IDENTITY` is a Developer ID Application identity name or certificate fingerprint. Never put private keys or authentication values in source. For App Store Connect API authentication, set `ASC_KEY_FILE`, `ASC_KEY_ID`, and `ASC_ISSUER_ID` outside the repository and use `--notarize` instead of `--notary-profile`. The key file is passed directly to Apple’s tool. Omit both options to generate a signed, unnotarized candidate. Outputs stay in `build/mac-release/distribution`; nothing is uploaded to GitHub or the website. With a profile, the finalizer submits only the prepared artifacts to Apple's notary service and staples accepted tickets.
 
 The local Mac catalog is `catalog-macos.json` (format v2, `macos-arm64`), for later placement at the existing official add-on download path. Package hashes are computed from the final archives. ATEM Switchers Software and NDI Runtime must be installed separately. VST3 packages include their own selected Qt libraries. No vendor SDK or user plug-in is packaged.
+
+
+## Mac DeckLink: hardware operation unverified, volunteers wanted
+
+Mac DeckLink 0.3.0 is trial support. Input/output, audio, Fill/Key, physical
+synchronization, signal loss/reconnection and long-run operation need testing
+with real hardware. Automated software tests and Apple notarization are not
+hardware acceptance. Requires macOS 15+, Apple Silicon and the official
+Blackmagic Desktop Video for macOS API 16.0+ installed separately.
+
+Settings > DeckLink > DeckLink Operation Report records operator observations
+separately from the current software state. Send report saves reviewed JSON and
+opens an email draft to info@pondashi.com; attach the JSON and send it yourself.
+Raw errors, media paths and persistent device IDs are omitted automatically.
+
+```sh
+bash scripts/macos/test-decklink.sh
+bash scripts/macos/build-decklink.sh '/path/to/Blackmagic DeckLink SDK 16.0'
+```
+
+SDK headers and dispatch source remain outside the repository. Full instructions:
+[Mac DeckLink](docs/macOS/DeckLink入出力.md).
