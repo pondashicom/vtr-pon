@@ -1849,6 +1849,8 @@
         <translation>RolandとATEMは排他です。一方を有効にすると、もう一方は自動的に無効になります。</translation>
     </message>
     <message id="settings.switcher.roland.model"><source>Model</source><translation>機種</translation></message>
+    <message id="settings.switcher.roland.transport"><source>Connection</source><translation>接続方式</translation></message>
+    <message id="switcher.trial.vr120_usb_help"><source>For input-to-ON AIR, disable AUX, PinP&amp;Key and DSK in Tally Settings. FTB linking is available via LAN only; the saved LAN FTB preference is retained.</source><translation>入力選択からオンエアする場合はTally SettingsのAUX・PinP&amp;Key・DSKをDisableにします。FTB連動はLAN接続で利用できます。保存済みのLAN用FTB設定は保持します。</translation></message>
     <message id="settings.switcher.roland.host"><source>Switcher IPv4 address</source><translation>スイッチャーのIPv4アドレス</translation></message>
     <message id="settings.switcher.roland.port"><source>TCP port</source><translation>TCPポート</translation></message>
     <message id="settings.switcher.roland.midi_help"><source>Connect the selected model by USB MIDI. Its MIDI ports are detected by model name. New models require a valid status reply before Ready.</source><translation>選択した機種をUSB MIDIで接続します。MIDIポートは機種名で自動検出します。追加機種では状態の応答を受信してからReadyになります。</translation></message>

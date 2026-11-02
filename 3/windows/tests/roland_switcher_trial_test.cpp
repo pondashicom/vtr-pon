@@ -27,7 +27,80 @@ QByteArray frame(const QByteArray &s) { return QByteArray(1, char(2)) + s + ';';
 namespace vtrpon {
 class RolandMidiTrialTest {
 public:
+  static void runLanUsbModels() {
+    struct Fixture { RolandSwitcherModel model; int inputs; const char *program; };
+    const Fixture fixtures[]{
+      {RolandSwitcherModel::V160Hd, 16, "f041100000000002120021000f50f7"},
+      {RolandSwitcherModel::V80Hd, 8, "f04110010514120015000764f7"},
+      {RolandSwitcherModel::V1_4K, 5, "f0411001061012001200046af7"},
+      {RolandSwitcherModel::Vr6Hd, 6, "f04110000000002c12000f00056cf7"},
+      {RolandSwitcherModel::Vr120Hd, 12, "f04110000000002512001b000b5af7"}
+    };
+    for (const auto &f : fixtures) {
+      RolandModelSettings settings; settings.useUsbMidi = true; settings.sourceNumber = f.inputs;
+      check(rolandTransport(f.model, {}) == RolandTransport::Lan &&
+            rolandTransport(f.model, settings) == RolandTransport::Midi, "LAN remains default; USB is opt-in");
+      RolandV8HdMidiSwitcher device(f.model, settings, true);
+      QByteArray sent;
+      device.writeForTest_ = [&](const QByteArray &message) { sent = message; return true; };
+      int ready = 0, changes = 0;
+      QObject::connect(&device, &SwitcherDevice::connectionOpened, &device, [&](bool value, const QString &) { if (value) ++ready; });
+      QObject::connect(&device, &SwitcherDevice::programInputChanged, &device, [&](int value) { if (value == f.inputs) ++changes; });
+      const auto response = [&](int selected) {
+        QByteArray tallies(f.inputs, char(0)); if (selected) tallies[selected - 1] = 1;
+        return rolandSysEx(f.model, 16, 0x12, QByteArray::fromHex("0c0000") + tallies);
+      };
+      device.requestTally();
+      QByteArray address, size;
+      auto reply = sent; // Decode the RQ1 with the same checksum after changing its command to DT1.
+      reply[reply.size() - 9] = 0x12;
+      check(decodeRolandSysEx(f.model, 16, reply, &address, &size) && address == QByteArray::fromHex("0c0000") &&
+            size == QByteArray::fromHex("0000") + QByteArray(1, char(f.inputs)), "physical-input tally request has model-specific size");
+      auto corrupt = response(1); corrupt[corrupt.size() - 2] ^= 1;
+      device.receiveMidiBytes(corrupt);
+      check(device.queryPending_ && ready == 0, "invalid checksum cannot establish USB readiness");
+      device.receiveMidiBytes(rolandSysEx(f.model, 1, 0x12, QByteArray::fromHex("0c0000") + QByteArray(f.inputs, char(0))));
+      device.receiveMidiBytes(rolandSysEx(RolandSwitcherModel::V8Hd, 16, 0x12, QByteArray::fromHex("0c0000") + QByteArray(f.inputs, char(0))));
+      device.receiveMidiBytes(rolandSysEx(f.model, 16, 0x12, QByteArray::fromHex("0c0000") + QByteArray(f.inputs, char(3))));
+      device.receiveMidiBytes(rolandSysEx(f.model, 16, 0x12, QByteArray::fromHex("0c0000") + QByteArray(f.inputs - 1, char(0))));
+      check(device.queryPending_ && ready == 0, "wrong model, device, tally range and size rejected");
+      const auto initial = response(1);
+      device.receiveMidiBytes(initial.left(5)); device.receiveMidiBytes(QByteArray(1, char(0xf8)) + initial.mid(5));
+      check(ready == 1 && changes == 0, "valid split tally establishes baseline without ON AIR");
+      device.requestTally(); device.receiveMidiBytes(response(f.inputs));
+      check(changes == 1, "last physical input including SDI is detected over USB");
+      device.requestTally(); device.receiveMidiBytes(response(f.inputs));
+      check(changes == 1, "duplicate tally cannot retrigger ON AIR");
+      check(device.setProgramInput(f.inputs) && sent == QByteArray::fromHex(f.program), "documented USB PGM command, model ID and checksum");
+      device.requestTally(); device.receiveMidiBytes(response(1));
+      check(device.localTarget_ == f.inputs && changes == 1, "stale tally after local command cannot retrigger");
+      device.requestTally(); device.receiveMidiBytes(response(f.inputs));
+      check(device.localTarget_ == 0 && changes == 1, "local command reflection is suppressed");
+      const auto beforeFade = sent;
+      check(!device.setFadeToBlack(true) && !device.setFadeToBlack(false) && sent == beforeFade,
+            "USB rejects unsupported FTB without sending a different model's command");
+      device.requestTally(); device.receiveMidiBytes(response(0));
+      device.requestTally(); device.receiveMidiBytes(response(f.inputs));
+      check(changes == 1, "transient missing PGM tally cannot retrigger");
+      device.close(); device.queryPending_ = true; device.receiveMidiBytes(response(f.inputs));
+      check(ready == 2 && changes == 1, "reconnect establishes a fresh baseline");
+      RolandV8HdMidiSwitcher disabled(f.model, settings, false);
+      int disabledChanges = 0;
+      QObject::connect(&disabled, &SwitcherDevice::programInputChanged, &disabled, [&](int) { ++disabledChanges; });
+      disabled.queryPending_ = true; disabled.receiveMidiBytes(response(1));
+      disabled.queryPending_ = true; disabled.receiveMidiBytes(response(f.inputs));
+      check(disabled.modelReady_ && disabledChanges == 0, "USB handshake remains available with input linking off");
+      device.queryPending_ = true;
+      QMetaObject::invokeMethod(&device.responseTimeout_, "timeout", Qt::DirectConnection);
+      check(!device.modelReady_ && !device.queryPending_, "USB response timeout clears readiness and stale query");
+    }
+    for (auto model : {RolandSwitcherModel::Vr50HdMk2, RolandSwitcherModel::V600Uhd, RolandSwitcherModel::V1HdPlus}) {
+      RolandV8HdMidiSwitcher unsupported(model, {}, false);
+      check(!rolandHasUsbMidiChoice(model) && !unsupported.open(), "models without documented USB MIDI keep their original transport");
+    }
+  }
   static void run() {
+    runLanUsbModels();
     const auto query = rolandSysEx(RolandSwitcherModel::V1Hd, 0x10, 0x11, QByteArray::fromHex("710008000001"));
     check(query == QByteArray::fromHex("f04110000000201171000800000106f7"), "V-1HD documented model ID, address and checksum");
     check(rolandSysEx(RolandSwitcherModel::V02HdMk2, 0x10, 0x12, QByteArray::fromHex("00250001")) ==
@@ -246,6 +319,19 @@ bool runRolandSwitcherTrialRegression() {
   report.stop(); settings.password = "SECRET";
   QJsonObject profiles{{"v160hd", rolandSettingsJson(settings, true)}};
   check(!QJsonDocument(publicRolandProfilesJson(profiles)).toJson().contains("SECRET"), "settings export removes network passwords");
+  check(rolandTransport(RolandSwitcherModel::V160Hd, rolandSettingsFromJson(QJsonObject{{"host", "127.0.0.1"}})) == RolandTransport::Lan,
+        "legacy profile without USB key stays on LAN");
+  settings.useUsbMidi = true; settings.ftbFollowsProgram = true;
+  report.start(RolandSwitcherModel::Vr120Hd, settings);
+  const auto usbReport = report.report();
+  check(usbReport["transport"] == "USB MIDI" && !usbReport["capabilities"].toObject()["fade"].toBool() &&
+        !usbReport["settings"].toObject()["fadeEnabled"].toBool(), "USB report records selected transport and actual FTB capability");
+  check(rolandSupportsFade(RolandSwitcherModel::Vr120Hd, RolandTransport::Lan), "LAN VR-120HD FTB remains supported");
+  profiles["vr120hd"] = rolandSettingsJson(settings, true);
+  check(validRolandProfilesJson(profiles) && rolandSettingsFromJson(publicRolandProfilesJson(profiles)["vr120hd"].toObject()).useUsbMidi,
+        "USB choice round-trips through public settings without passwords");
+  check(!validRolandProfilesJson({{"v600uhd", QJsonObject{{"useUsbMidi", true}}}}), "unsupported USB choice rejected on import");
+  check(!validRolandProfilesJson({{"v160hd", QJsonObject{{"useUsbMidi", "yes"}}}}), "non-boolean USB choice rejected on import");
   profiles["v160hd"] = QJsonObject{{"sourceNumber", 16.5}};
   check(!validRolandProfilesJson(profiles), "fractional source numbers rejected");
   if (ok) std::cout << "PASS: Roland trial profiles, protocol, MIDI baseline and diagnostic report\n";

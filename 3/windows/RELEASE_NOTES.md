@@ -1,5 +1,15 @@
 # Windows release notes
 
+## Unreleased
+
+- Add optional USB MIDI control for V-160HD, V-80HD, V-1-4K, VR-6HD, and
+  VR-120HD. Choose LAN or USB MIDI under **Settings → Roland integration →
+  Connection**. Existing settings keep LAN selected, and switching to USB retains
+  the saved LAN connection settings. USB control requires the model's MIDI input
+  and output ports; additional models remain trial support pending hardware checks.
+- VR-120HD FTB linking is available over LAN only. Selecting USB MIDI disables
+  FTB linking and preserves the saved LAN FTB preference.
+
 ## VTR-PON 3.0.0-beta.2 — released 2026-10-25
 
 - Move Windows sources to `3/windows`, alongside the Mac source in `3/mac`.

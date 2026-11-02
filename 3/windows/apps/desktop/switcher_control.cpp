@@ -96,7 +96,7 @@ public:
         : settings_.rolandModel == RolandSwitcherModel::Vr50HdMk2
             ? static_cast<SwitcherDevice *>(new RolandVr50HdLanSwitcher(
                   settings_.rolandVr50HdHost, settings_.rolandVr50HdPort, receive_, this))
-            : rolandSwitcherProfile(settings_.rolandModel).transport == RolandTransport::Midi
+            : rolandTransport(settings_.rolandModel, activeRolandSettings(settings_)) == RolandTransport::Midi
                 ? static_cast<SwitcherDevice *>(new RolandV8HdMidiSwitcher(settings_.rolandModel,
                       activeRolandSettings(settings_), receive_, this))
                 : static_cast<SwitcherDevice *>(new RolandRemoteSwitcher(settings_.rolandModel,
@@ -365,7 +365,8 @@ void SwitcherController::applySettings(
       settings_.rolandVr50HdHost != normalized.rolandVr50HdHost ||
       settings_.rolandVr50HdPort != normalized.rolandVr50HdPort ||
       before.sourceNumber != after.sourceNumber || before.host != after.host || before.port != after.port || before.password != after.password ||
-      before.serialPort != after.serialPort || before.baudRate != after.baudRate || before.midiDeviceId != after.midiDeviceId;
+      before.serialPort != after.serialPort || before.baudRate != after.baudRate || before.midiDeviceId != after.midiDeviceId ||
+      before.useUsbMidi != after.useUsbMidi;
   settings_ = normalized;
   if (deviceEnableChanged || receiveModeChanged || rolandConnectionChanged) {
     rebuildDevice();
@@ -490,8 +491,10 @@ bool SwitcherController::activeTakeOnAirWhenProgramSelected() const {
 }
 
 bool SwitcherController::activeFtbFollowsProgram() const {
-  return settings_.atemEnabled ? settings_.atemFtbFollowsProgram
-      : activeRolandSettings(settings_).ftbFollowsProgram;
+  if (settings_.atemEnabled) return settings_.atemFtbFollowsProgram;
+  const auto model = activeRolandSettings(settings_);
+  return model.ftbFollowsProgram && rolandSupportsFade(settings_.rolandModel,
+      rolandTransport(settings_.rolandModel, model));
 }
 
 void SwitcherController::reportDeviceError(const QString &detail) {

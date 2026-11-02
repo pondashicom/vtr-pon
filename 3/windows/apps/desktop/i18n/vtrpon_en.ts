@@ -1849,6 +1849,8 @@
         <translation>Roland and ATEM control are mutually exclusive. Enabling one automatically disables the other.</translation>
     </message>
     <message id="settings.switcher.roland.model"><source>Model</source><translation>Model</translation></message>
+    <message id="settings.switcher.roland.transport"><source>Connection</source><translation>Connection</translation></message>
+    <message id="switcher.trial.vr120_usb_help"><source>For input-to-ON AIR, disable AUX, PinP&amp;Key and DSK in Tally Settings. FTB linking is available via LAN only; the saved LAN FTB preference is retained.</source><translation>For input-to-ON AIR, disable AUX, PinP&amp;Key and DSK in Tally Settings. FTB linking is available via LAN only; the saved LAN FTB preference is retained.</translation></message>
     <message id="settings.switcher.roland.host"><source>Switcher IPv4 address</source><translation>Switcher IPv4 address</translation></message>
     <message id="settings.switcher.roland.port"><source>TCP port</source><translation>TCP port</translation></message>
     <message id="settings.switcher.roland.midi_help"><source>Connect the selected model by USB MIDI. Its MIDI ports are detected by model name. New models require a valid status reply before Ready.</source><translation>Connect the selected model by USB MIDI. Its MIDI ports are detected by model name. New models require a valid status reply before Ready.</translation></message>

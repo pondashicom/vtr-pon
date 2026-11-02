@@ -43,8 +43,13 @@ struct RolandModelSettings {
   bool takeProgramWhenOnAir = false;
   bool takeOnAirWhenProgramSelected = false;
   bool ftbFollowsProgram = false;
+  // Missing in older settings: keep the model's original transport (LAN).
+  bool useUsbMidi = false;
   bool operator==(const RolandModelSettings &) const = default;
 };
+bool rolandHasUsbMidiChoice(RolandSwitcherModel model);
+RolandTransport rolandTransport(RolandSwitcherModel model, const RolandModelSettings &settings);
+bool rolandSupportsFade(RolandSwitcherModel model, RolandTransport transport);
 RolandModelSettings normalizeRolandSettings(RolandSwitcherModel model, RolandModelSettings settings);
 QJsonObject rolandSettingsJson(const RolandModelSettings &settings, bool includePassword = false);
 RolandModelSettings rolandSettingsFromJson(const QJsonObject &json);

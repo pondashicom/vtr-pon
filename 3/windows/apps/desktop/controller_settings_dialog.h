@@ -252,6 +252,9 @@ private:
   vtrpon::SwitcherControlSettings rolandModelSettings_;
   QLabel *rolandModelLabel_ = nullptr;
   QComboBox *rolandModelComboBox_ = nullptr;
+  QWidget *rolandTransportSettings_ = nullptr;
+  QLabel *rolandTransportLabel_ = nullptr;
+  QComboBox *rolandTransportComboBox_ = nullptr;
   QWidget *rolandLanSettings_ = nullptr;
   QLabel *rolandHostLabel_ = nullptr;
   QLineEdit *rolandHostEdit_ = nullptr;

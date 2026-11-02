@@ -38,6 +38,7 @@ public:
 
 private:
   friend class RolandMidiTrialTest;
+  std::function<bool(const QByteArray &)> writeForTest_;
   RolandSwitcherModel model_ = RolandSwitcherModel::V8Hd;
   RolandModelSettings settings_;
   QTimer responseTimeout_;

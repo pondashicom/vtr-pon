@@ -35,19 +35,21 @@ void SwitcherCheckSession::setAnswers(const QString &firmware, const QJsonObject
 QJsonObject SwitcherCheckSession::report() const {
   if (!exists()) return {};
   const auto &p = rolandSwitcherProfile(model_);
+  const auto transport = rolandTransport(model_, settings_);
+  const bool fade = rolandSupportsFade(model_, transport);
   return {{"format", "vtr-pon-switcher-check"}, {"version", 1},
     {"applicationVersion", QCoreApplication::applicationVersion()},
     {"implementation", "roland-trial-1"}, {"build", QStringLiteral(__DATE__ " " __TIME__)},
     {"os", QSysInfo::prettyProductName()}, {"architecture", QSysInfo::buildCpuArchitecture()},
     {"model", QLatin1String(p.id)}, {"modelName", QLatin1String(p.name)},
-    {"transport", rolandTransportName(p.transport)},
+    {"transport", rolandTransportName(transport)},
     {"firmwareReportedByUser", firmware_}, {"startedAt", started_}, {"endedAt", ended_},
     {"recording", active_}, {"stopReason", reason_},
-    {"capabilities", QJsonObject{{"inputSend", true}, {"inputReceive", p.receive}, {"fade", p.fade}}},
+    {"capabilities", QJsonObject{{"inputSend", true}, {"inputReceive", p.receive}, {"fade", fade}}},
     {"settings", QJsonObject{{"sourceNumber", settings_.sourceNumber}, {"tcpPort", settings_.port},
       {"baudRate", settings_.baudRate}, {"midiDeviceId", settings_.midiDeviceId},
       {"inputSendEnabled", settings_.takeProgramWhenOnAir},
-      {"inputReceiveEnabled", settings_.takeOnAirWhenProgramSelected}, {"fadeEnabled", settings_.ftbFollowsProgram}}},
+      {"inputReceiveEnabled", settings_.takeOnAirWhenProgramSelected}, {"fadeEnabled", settings_.ftbFollowsProgram && fade}}},
     {"operatorResults", answers_}, {"operatorComment", comment_},
     {"droppedEventCount", dropped_}, {"events", events_}};
 }

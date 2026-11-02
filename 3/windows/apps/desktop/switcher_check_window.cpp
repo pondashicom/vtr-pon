@@ -221,9 +221,12 @@ private:
     const auto report = controller_->checkSession().report();
     const auto model = report.isEmpty() ? controller_->settings().rolandModel : rolandSwitcherModel(report["model"].toString());
     const auto &p = rolandSwitcherProfile(model);
+    const bool fade = report.isEmpty()
+        ? rolandSupportsFade(model, rolandTransport(model, activeRolandSettings(controller_->settings())))
+        : report["capabilities"].toObject()["fade"].toBool();
     updating_ = true;
     for (const auto i : {2, 3}) {
-      const bool supported = i == 2 ? p.receive : p.fade;
+      const bool supported = i == 2 ? p.receive : fade;
       answers_[i]->setEnabled(supported);
       if (!supported) answers_[i]->setCurrentIndex(3);
     }
@@ -259,7 +262,11 @@ private:
     const auto &session = controller_->checkSession(); const auto report = session.report();
     const auto model = report.isEmpty() ? controller_->settings().rolandModel : rolandSwitcherModel(report["model"].toString());
     const auto &p = rolandSwitcherProfile(model);
-    model_->setText(QString::fromLatin1(p.name) + " / " + rolandTransportName(p.transport) + "\n" +
+    const auto transport = rolandTransport(model, activeRolandSettings(controller_->settings()));
+    const bool fade = report.isEmpty() ? rolandSupportsFade(model, transport)
+        : report["capabilities"].toObject()["fade"].toBool();
+    model_->setText(QString::fromLatin1(p.name) + " / " +
+                    (report.isEmpty() ? rolandTransportName(transport) : report["transport"].toString()) + "\n" +
                     uiText(session.active() ? "switcher.check.recording" : "switcher.check.stopped"));
     connection_->setText(uiText(controller_->switcherReady() ? "settings.switcher.connection.ready" : "settings.switcher.connection.no_connection") +
                          " / " + controller_->switcherConnectionDetail());
@@ -276,7 +283,7 @@ private:
     openEmail_->setEnabled(!session.active() && !saving_ && !preparingEmail_);
     const bool editable = session.exists() && !saving_ && !preparingEmail_;
     firmware_->setEnabled(editable); comment_->setEnabled(editable);
-    for (int i = 0; i < 5; ++i) answers_[i]->setEnabled(editable && (i != 2 || p.receive) && (i != 3 || p.fade));
+    for (int i = 0; i < 5; ++i) answers_[i]->setEnabled(editable && (i != 2 || p.receive) && (i != 3 || fade));
     const auto text = report.isEmpty() ? QString() : QString::fromUtf8(QJsonDocument(report).toJson());
     if (preview_->toPlainText() != text) preview_->setPlainText(text);
   }

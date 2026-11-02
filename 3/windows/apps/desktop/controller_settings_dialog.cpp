@@ -805,6 +805,18 @@ ControllerSettingsDialog::ControllerSettingsDialog(
   modelLayout->addWidget(rolandModelLabel_);
   modelLayout->addWidget(rolandModelComboBox_, 1);
   switcherCardLayout->addLayout(modelLayout);
+  rolandTransportSettings_ = new QWidget(switcherCard);
+  auto *transportLayout = new QFormLayout(rolandTransportSettings_);
+  transportLayout->setContentsMargins(0, 0, 0, 0);
+  rolandTransportLabel_ = new QLabel(rolandTransportSettings_);
+  vtrpon::setSettingsRole(rolandTransportLabel_, "fieldLabel");
+  rolandTransportComboBox_ = new QComboBox(rolandTransportSettings_);
+  rolandTransportComboBox_->setObjectName(QStringLiteral("rolandTransportComboBox"));
+  rolandTransportComboBox_->addItem(QStringLiteral("LAN"), false);
+  rolandTransportComboBox_->addItem(QStringLiteral("USB MIDI"), true);
+  rolandTransportLabel_->setBuddy(rolandTransportComboBox_);
+  transportLayout->addRow(rolandTransportLabel_, rolandTransportComboBox_);
+  switcherCardLayout->addWidget(rolandTransportSettings_);
   rolandLanSettings_ = new QWidget(switcherCard);
   rolandLanSettings_->setObjectName(QStringLiteral("rolandLanSettings"));
   auto *lanLayout = new QFormLayout(rolandLanSettings_);
@@ -1481,6 +1493,11 @@ ControllerSettingsDialog::ControllerSettingsDialog(
     saveSwitcherControlSettings();
   });
   connect(rolandPasswordEdit_, &QLineEdit::editingFinished, this, &ControllerSettingsDialog::saveSwitcherControlSettings);
+  connect(rolandTransportComboBox_, &QComboBox::currentIndexChanged, this, [this] {
+    const auto settings = switcherControlSettings();
+    updateRolandModelControls(settings);
+    saveSwitcherControlSettings();
+  });
   connect(rolandSerialEdit_, &QLineEdit::editingFinished, this, &ControllerSettingsDialog::saveSwitcherControlSettings);
   connect(rolandBaudCombo_, &QComboBox::currentIndexChanged, this, &ControllerSettingsDialog::saveSwitcherControlSettings);
   connect(rolandMidiIdSpin_, qOverload<int>(&QSpinBox::valueChanged), this, &ControllerSettingsDialog::saveSwitcherControlSettings);
@@ -1980,10 +1997,13 @@ ControllerSettingsDialog::switcherControlSettings() const {
   model.host = rolandHostEdit_->text().trimmed(); model.port = rolandPortSpinBox_->value();
   model.password = rolandPasswordEdit_->text(); model.serialPort = rolandSerialEdit_->text();
   model.baudRate = rolandBaudCombo_->currentData().toInt(); model.midiDeviceId = rolandMidiIdSpin_->value();
+  model.useUsbMidi = rolandTransportComboBox_->currentData().toBool();
   model.sourceNumber = rolandV8HdSourceSpinBox_->value();
   model.takeProgramWhenOnAir = rolandTakeProgramWhenOnAirCheckBox_->isChecked();
   model.takeOnAirWhenProgramSelected = rolandTakeOnAirWhenProgramSelectedCheckBox_->isChecked();
-  model.ftbFollowsProgram = rolandFtbFollowsProgramCheckBox_->isChecked();
+  // Keep the LAN-only FTB preference while USB MIDI is selected.
+  if (rolandFtbFollowsProgramCheckBox_->isEnabled())
+    model.ftbFollowsProgram = rolandFtbFollowsProgramCheckBox_->isChecked();
   vtrpon::setActiveRolandSettings(settings, model);
   settings.atemEnabled =
       atemEnabledCheckBox_ && atemEnabledCheckBox_->isChecked();
@@ -2071,6 +2091,7 @@ void ControllerSettingsDialog::updateRolandModelControls(
     const vtrpon::SwitcherControlSettings &settings) {
   rolandModelSettings_ = settings;
   const QSignalBlocker modelBlock(rolandModelComboBox_);
+  const QSignalBlocker transportBlock(rolandTransportComboBox_);
   const QSignalBlocker sourceBlock(rolandV8HdSourceSpinBox_);
   const QSignalBlocker takeBlock(rolandTakeProgramWhenOnAirCheckBox_);
   const QSignalBlocker receiveBlock(rolandTakeOnAirWhenProgramSelectedCheckBox_);
@@ -2079,8 +2100,12 @@ void ControllerSettingsDialog::updateRolandModelControls(
   const QSignalBlocker midiBlock(rolandMidiIdSpin_);
   const auto &profile = vtrpon::rolandSwitcherProfile(settings.rolandModel);
   const auto model = vtrpon::activeRolandSettings(settings);
+  const auto transport = vtrpon::rolandTransport(settings.rolandModel, model);
+  const bool fade = vtrpon::rolandSupportsFade(settings.rolandModel, transport);
   rolandModelComboBox_->setCurrentIndex(rolandModelComboBox_->findData(static_cast<int>(settings.rolandModel)));
-  rolandLanSettings_->setVisible(profile.transport == vtrpon::RolandTransport::Lan);
+  rolandTransportSettings_->setVisible(vtrpon::rolandHasUsbMidiChoice(settings.rolandModel));
+  rolandTransportComboBox_->setCurrentIndex(model.useUsbMidi ? 1 : 0);
+  rolandLanSettings_->setVisible(transport == vtrpon::RolandTransport::Lan);
   rolandHostEdit_->setText(model.host); rolandPortSpinBox_->setValue(model.port);
   rolandPasswordLabel_->setVisible(profile.passwordLength > 0); rolandPasswordEdit_->setVisible(profile.passwordLength > 0);
   rolandPasswordEdit_->setMaxLength(qMax(1, profile.passwordLength)); rolandPasswordEdit_->setText(model.password);
@@ -2092,8 +2117,8 @@ void ControllerSettingsDialog::updateRolandModelControls(
   rolandTakeProgramWhenOnAirCheckBox_->setChecked(model.takeProgramWhenOnAir);
   rolandTakeOnAirWhenProgramSelectedCheckBox_->setEnabled(profile.receive);
   rolandTakeOnAirWhenProgramSelectedCheckBox_->setChecked(model.takeOnAirWhenProgramSelected);
-  rolandFtbFollowsProgramCheckBox_->setEnabled(profile.fade);
-  rolandFtbFollowsProgramCheckBox_->setChecked(model.ftbFollowsProgram);
+  rolandFtbFollowsProgramCheckBox_->setEnabled(fade);
+  rolandFtbFollowsProgramCheckBox_->setChecked(model.ftbFollowsProgram && fade);
   rolandTakeProgramWhenOnAirCheckBox_->setText(vtrpon::uiText(
       "settings.switcher.roland_v8hd.take_program_when_on_air").arg(rolandV8HdSourceSpinBox_->value()));
   rolandTakeOnAirWhenProgramSelectedCheckBox_->setText(vtrpon::uiText(
@@ -2104,12 +2129,16 @@ void ControllerSettingsDialog::updateRolandModelControls(
 void ControllerSettingsDialog::refreshRolandModelText() {
   rolandModelLabel_->setText(vtrpon::uiText("settings.switcher.roland.model"));
   rolandModelComboBox_->setAccessibleName(rolandModelLabel_->text());
+  rolandTransportLabel_->setText(vtrpon::uiText("settings.switcher.roland.transport"));
+  rolandTransportComboBox_->setAccessibleName(rolandTransportLabel_->text());
   rolandHostLabel_->setText(vtrpon::uiText("settings.switcher.roland.host"));
   rolandHostEdit_->setAccessibleName(rolandHostLabel_->text());
   rolandPortLabel_->setText(vtrpon::uiText("settings.switcher.roland.port"));
   rolandPortSpinBox_->setAccessibleName(rolandPortLabel_->text());
   const auto model = rolandModelSettings_.rolandModel;
   const auto &profile = vtrpon::rolandSwitcherProfile(model);
+  const auto transport = vtrpon::rolandTransport(model, vtrpon::activeRolandSettings(rolandModelSettings_));
+  const bool fade = vtrpon::rolandSupportsFade(model, transport);
   rolandPasswordLabel_->setText(vtrpon::uiText("switcher.trial.password").arg(profile.passwordLength));
   rolandPasswordEdit_->setAccessibleName(rolandPasswordLabel_->text());
   rolandSerialLabel_->setText(vtrpon::uiText("switcher.trial.serial_port"));
@@ -2119,21 +2148,23 @@ void ControllerSettingsDialog::refreshRolandModelText() {
   QStringList help;
   if (model != vtrpon::RolandSwitcherModel::V8Hd) help << vtrpon::uiText("switcher.trial.unverified");
   help << vtrpon::rolandInputDescription(model);
-  if (profile.transport == vtrpon::RolandTransport::Midi) help << vtrpon::uiText("settings.switcher.roland.midi_help");
+  if (transport == vtrpon::RolandTransport::Midi) help << vtrpon::uiText("settings.switcher.roland.midi_help");
   if (model == vtrpon::RolandSwitcherModel::V1Hd || model == vtrpon::RolandSwitcherModel::V1Sdi)
     help << vtrpon::uiText("switcher.trial.pgm_mode");
   if (profile.transport == vtrpon::RolandTransport::Serial) help << vtrpon::uiText("switcher.trial.serial_help");
   if (model == vtrpon::RolandSwitcherModel::Vr50HdMk2) help << vtrpon::uiText("settings.switcher.roland.lan_help");
   if (model == vtrpon::RolandSwitcherModel::V600Uhd) help << vtrpon::uiText("switcher.trial.v600_help");
-  if (model == vtrpon::RolandSwitcherModel::Vr120Hd) help << vtrpon::uiText("switcher.trial.vr120_help");
+  if (model == vtrpon::RolandSwitcherModel::Vr120Hd) help << vtrpon::uiText(
+      transport == vtrpon::RolandTransport::Midi ? "switcher.trial.vr120_usb_help" : "switcher.trial.vr120_help");
   if (!profile.receive) help << vtrpon::uiText("switcher.trial.no_receive");
-  if (!profile.fade) help << vtrpon::uiText("switcher.trial.no_fade");
+  if (!fade) help << vtrpon::uiText("switcher.trial.no_fade");
   rolandModelHelp_->setText(help.join('\n'));
   rolandTakeOnAirWhenProgramSelectedCheckBox_->setToolTip(profile.receive ? QString() : vtrpon::uiText("switcher.trial.no_receive"));
-  rolandFtbFollowsProgramCheckBox_->setToolTip(profile.fade ? QString() : vtrpon::uiText("switcher.trial.no_fade"));
+  rolandFtbFollowsProgramCheckBox_->setToolTip(fade ? QString() : vtrpon::uiText("switcher.trial.no_fade"));
   for (int i = 0; i < rolandModelComboBox_->count(); ++i) {
     const auto &p = vtrpon::rolandSwitcherProfile(static_cast<vtrpon::RolandSwitcherModel>(rolandModelComboBox_->itemData(i).toInt()));
-    rolandModelComboBox_->setItemText(i, QString::fromLatin1(p.name) + " (" + vtrpon::rolandTransportName(p.transport) + ")" +
+    rolandModelComboBox_->setItemText(i, QString::fromLatin1(p.name) + " (" + vtrpon::rolandTransportName(p.transport) +
+        (vtrpon::rolandHasUsbMidiChoice(p.model) ? QStringLiteral(" / USB MIDI") : QString()) + ")" +
         (p.model == vtrpon::RolandSwitcherModel::V8Hd ? QString() : vtrpon::uiText("switcher.trial.suffix")));
   }
 

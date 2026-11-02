@@ -49,6 +49,10 @@ RolandV8HdMidiSwitcher::RolandV8HdMidiSwitcher(RolandSwitcherModel model, Roland
 RolandV8HdMidiSwitcher::~RolandV8HdMidiSwitcher() { close(); }
 
 bool RolandV8HdMidiSwitcher::open(QString *errorDetail) {
+  if (!*rolandSwitcherProfile(model_).midiModelId) {
+    if (errorDetail) *errorDetail = QStringLiteral("USB MIDI control is unavailable for this model.");
+    return false;
+  }
 #ifdef _WIN32
   close();
   closing_ = false;
@@ -213,6 +217,10 @@ bool RolandV8HdMidiSwitcher::setProgramInput(int sourceNumber,
 
 bool RolandV8HdMidiSwitcher::setFadeToBlack(bool enabled,
                                             QString *errorDetail) {
+  if (!rolandSupportsFade(model_, RolandTransport::Midi)) {
+    if (errorDetail) *errorDetail = QStringLiteral("FTB is unavailable over USB MIDI for this model.");
+    return false;
+  }
 #ifdef _WIN32
   if (model_ != RolandSwitcherModel::V8Hd) {
     if (!modelReady_) { if (errorDetail) *errorDetail = QStringLiteral("MIDI status is not ready."); return false; }
@@ -312,7 +320,12 @@ void RolandV8HdMidiSwitcher::requestTally() {
   if (model_ != RolandSwitcherModel::V8Hd) {
 #ifdef _WIN32
     if (queryPending_) return;
-    const auto body = QByteArray::fromHex(rolandSwitcherProfile(model_).programAddress) + QByteArray::fromHex("000001");
+    // LAN-capable models expose physical-input tallies as well as virtual
+    // INPUT assignments. Read the physical entries, matching the LAN route.
+    const auto &p = rolandSwitcherProfile(model_);
+    const bool tallies = rolandHasUsbMidiChoice(model_);
+    const auto body = QByteArray::fromHex(tallies ? "0c0000" : p.programAddress) +
+        QByteArray::fromHex("0000") + QByteArray(1, char(tallies ? p.inputs : 1));
     QString error;
     if (!sendSysEx(rolandSysEx(model_, settings_.midiDeviceId, 0x11, body), &error)) { emit errorOccurred(error); return; }
     queryPending_ = true; responseTimeout_.start();
@@ -346,11 +359,22 @@ void RolandV8HdMidiSwitcher::parseDataSetMessage(const QByteArray &message) {
   QByteArray address, data;
   if (!decodeRolandSysEx(model_, settings_.midiDeviceId, message, &address, &data)) return;
   if (model_ != RolandSwitcherModel::V8Hd) {
-    if (!queryPending_ || address != QByteArray::fromHex(rolandSwitcherProfile(model_).programAddress) || data.size() != 1) return;
-    const int source = static_cast<unsigned char>(data[0]) + 1;
-    if (source < 1 || source > rolandSwitcherProfile(model_).inputs) return;
+    const auto &p = rolandSwitcherProfile(model_);
+    const bool tallies = rolandHasUsbMidiChoice(model_);
+    if (!queryPending_ || address != QByteArray::fromHex(tallies ? "0c0000" : p.programAddress) ||
+        data.size() != (tallies ? p.inputs : 1)) return;
+    int source;
+    if (tallies) {
+      for (unsigned char value : data) if (value > 2) return;
+      source = data[settings_.sourceNumber - 1] == char(1) ? settings_.sourceNumber : 0;
+    } else {
+      source = static_cast<unsigned char>(data[0]) + 1;
+      if (source < 1 || source > p.inputs) return;
+    }
     emit diagnosticEvent(QStringLiteral("RX"), QString::fromLatin1(message.toHex(' ')));
     queryPending_ = false; responseTimeout_.stop();
+    // No PGM tally may be reported during a transition; retain the baseline.
+    if (tallies && modelReady_ && !data.contains(char(1))) return;
     if (localTarget_ > 0) {
       if (source == localTarget_) localTarget_ = 0;
       else if (localTargetDeadline_.hasExpired()) {
@@ -510,6 +534,7 @@ bool RolandV8HdMidiSwitcher::sendShortMessage(DWORD message, QString *errorDetai
 }
 
 bool RolandV8HdMidiSwitcher::sendSysEx(const QByteArray &message, QString *errorDetail) {
+  if (writeForTest_) return writeForTest_(message);
   return queueOutput(message, 0, errorDetail);
 }
 

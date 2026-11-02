@@ -124,6 +124,22 @@ int main(int argc, char **argv) {
   qputenv("VTRPON_TEST_SWITCHER_COMPOSE", "unavailable");
   email->click(); window->close();
   CHECK(until([&] { return !window; }));
+  for (bool usb : {true, false}) {
+    vtrpon::RolandModelSettings settings; settings.useUsbMidi = usb; settings.ftbFollowsProgram = true;
+    controller.checkSession().start(vtrpon::RolandSwitcherModel::Vr120Hd, settings);
+    controller.stopCheck();
+    vtrpon::showSwitcherCheckWindow(&controller, nullptr, &owner);
+    window = owner.findChild<QWidget *>("switcherCheckWindow"); CHECK(window);
+    auto *fade = window->findChild<QComboBox *>("switcherCheckResult3");
+    auto *preview = window->findChild<QPlainTextEdit *>("switcherCheckPreview");
+    CHECK(fade && preview && fade->isEnabled() == !usb);
+    const auto snapshot = QJsonDocument::fromJson(preview->toPlainText().toUtf8()).object();
+    CHECK(snapshot["transport"] == (usb ? "USB MIDI" : "LAN"));
+    CHECK(snapshot["capabilities"].toObject()["fade"].toBool() == !usb);
+    if (!captures.isEmpty()) CHECK(window->grab().save(QDir(captures).filePath(
+        QFileInfo(QString::fromLocal8Bit(argv[1])).baseName() + (usb ? "-vr120-usb.png" : "-vr120-lan.png"))));
+    window->close(); CHECK(until([&] { return !window; }));
+  }
   QDesktopServices::unsetUrlHandler("mailto"); QDesktopServices::unsetUrlHandler("file");
   std::puts("PASS: attachment steps before mail, saved snapshot, mail body, edits, missing file, save failure, native completion/cancellation and close");
   return 0;

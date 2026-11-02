@@ -9,16 +9,16 @@ const QList<RolandSwitcherProfile> &rolandSwitcherProfiles() {
     {RolandSwitcherModel::V8Hd, "v8hd", "V-8HD", RolandTransport::Midi, 8, 7, "001200", "00000068", true, true, 0, "V-8HD_reference_v2_eng03_W.pdf"},
     {RolandSwitcherModel::Vr50HdMk2, "vr50hd-mk2", "VR-50HD MK II", RolandTransport::Lan, 4, 4, "", "", true, true, 0, "VR-50HD-MK2_reference_eng02_W.pdf"},
     {RolandSwitcherModel::V600Uhd, "v600uhd", "V-600UHD", RolandTransport::Lan, 8, 7, "", "", false, true, 4, "V-600UHD_reference_eng07_W.pdf"},
-    {RolandSwitcherModel::V160Hd, "v160hd", "V-160HD", RolandTransport::Lan, 16, 51, "002100", "", true, false, 4, "V-160HD_Control_jpn04_W.pdf"},
-    {RolandSwitcherModel::V80Hd, "v80hd", "V-80HD", RolandTransport::Lan, 8, 56, "001500", "", true, false, 8, "V-80HD_Control_eng01_W.pdf"},
-    {RolandSwitcherModel::V1_4K, "v1-4k", "V-1-4K", RolandTransport::Lan, 5, 15, "001200", "", true, false, 8, "V-1-4K_Remote_Control_eng01_W.pdf"},
+    {RolandSwitcherModel::V160Hd, "v160hd", "V-160HD", RolandTransport::Lan, 16, 51, "002100", "0000000002", true, false, 4, "V-160HD_Control_jpn04_W.pdf"},
+    {RolandSwitcherModel::V80Hd, "v80hd", "V-80HD", RolandTransport::Lan, 8, 56, "001500", "010514", true, false, 8, "V-80HD_Control_eng01_W.pdf"},
+    {RolandSwitcherModel::V1_4K, "v1-4k", "V-1-4K", RolandTransport::Lan, 5, 15, "001200", "010610", true, false, 8, "V-1-4K_Remote_Control_eng01_W.pdf"},
     {RolandSwitcherModel::V1HdPlus, "v1hd-plus", "V-1HD+", RolandTransport::Serial, 4, 3, "", "", true, true, 0, "V-1HD_plus_reference_eng02_W.pdf"},
     {RolandSwitcherModel::V1Sdi, "v1sdi", "V-1SDI", RolandTransport::Midi, 4, 3, "710308", "00000031", true, true, 0, "V-1SDI_reference_v15_eng02_W.pdf"},
     {RolandSwitcherModel::V1Hd, "v1hd", "V-1HD", RolandTransport::Midi, 4, 3, "710008", "00000020", true, true, 0, "V-1HD_RC_guide_e01_W.pdf"},
     {RolandSwitcherModel::V02HdMk2, "v02hd-mk2", "V-02HD MK II", RolandTransport::Midi, 2, 1, "002500", "000000000a", true, true, 0, "V-02HD_MKII_reference_eng03_W.pdf"},
     {RolandSwitcherModel::Vr4Hd, "vr4hd", "VR-4HD", RolandTransport::Midi, 4, 3, "000700", "00000029", true, true, 0, "VR-4HD_reference_v2_eng01_W.pdf"},
-    {RolandSwitcherModel::Vr6Hd, "vr6hd", "VR-6HD", RolandTransport::Lan, 6, 28, "000f00", "", true, false, 4, "VR-6HD_Control_eng02_W.pdf"},
-    {RolandSwitcherModel::Vr120Hd, "vr120hd", "VR-120HD", RolandTransport::Lan, 12, 36, "001b00", "", true, true, 4, "VR-120HD_Control_eng04_W.pdf"}
+    {RolandSwitcherModel::Vr6Hd, "vr6hd", "VR-6HD", RolandTransport::Lan, 6, 28, "000f00", "000000002c", true, false, 4, "VR-6HD_Control_eng02_W.pdf"},
+    {RolandSwitcherModel::Vr120Hd, "vr120hd", "VR-120HD", RolandTransport::Lan, 12, 36, "001b00", "0000000025", true, true, 4, "VR-120HD_Control_eng04_W.pdf"}
   };
   return profiles;
 }
@@ -37,6 +37,20 @@ bool isRolandSwitcherModel(const QString &id) {
 QString rolandTransportName(RolandTransport transport) {
   return transport == RolandTransport::Lan ? QStringLiteral("LAN")
       : transport == RolandTransport::Midi ? QStringLiteral("USB MIDI") : QStringLiteral("RS-232 / USB–RS-232");
+}
+bool rolandHasUsbMidiChoice(RolandSwitcherModel model) {
+  const auto &p = rolandSwitcherProfile(model);
+  return p.transport == RolandTransport::Lan && *p.midiModelId;
+}
+RolandTransport rolandTransport(RolandSwitcherModel model, const RolandModelSettings &settings) {
+  return settings.useUsbMidi && rolandHasUsbMidiChoice(model)
+      ? RolandTransport::Midi : rolandSwitcherProfile(model).transport;
+}
+bool rolandSupportsFade(RolandSwitcherModel model, RolandTransport transport) {
+  // VR-120HD's explicit FTB ON/OFF commands are LAN/RS-232 commands.
+  // MIDI button assignments/actions are not an explicit output-fade state.
+  return rolandSwitcherProfile(model).fade &&
+      !(rolandHasUsbMidiChoice(model) && transport == RolandTransport::Midi);
 }
 QString rolandInputDescription(RolandSwitcherModel model) {
   if (model == RolandSwitcherModel::V160Hd) return QStringLiteral("1–8: HDMI 1–8 / 9–16: SDI 1–8");
@@ -57,13 +71,15 @@ RolandModelSettings normalizeRolandSettings(RolandSwitcherModel model, RolandMod
   s.sourceNumber = qBound(1, s.sourceNumber, p.inputs);
   s.takeOnAirWhenProgramSelected &= p.receive;
   s.ftbFollowsProgram &= p.fade;
+  s.useUsbMidi &= rolandHasUsbMidiChoice(model);
   return s;
 }
 QJsonObject rolandSettingsJson(const RolandModelSettings &s, bool includePassword) {
   QJsonObject result{{"host", s.host}, {"port", s.port}, {"serialPort", s.serialPort},
     {"baudRate", s.baudRate}, {"midiDeviceId", s.midiDeviceId}, {"sourceNumber", s.sourceNumber},
     {"takeProgramWhenOnAir", s.takeProgramWhenOnAir},
-    {"takeOnAirWhenProgramSelected", s.takeOnAirWhenProgramSelected}, {"ftbFollowsProgram", s.ftbFollowsProgram}};
+    {"takeOnAirWhenProgramSelected", s.takeOnAirWhenProgramSelected}, {"ftbFollowsProgram", s.ftbFollowsProgram},
+    {"useUsbMidi", s.useUsbMidi}};
   if (includePassword) result.insert("password", s.password);
   return result;
 }
@@ -71,7 +87,7 @@ RolandModelSettings rolandSettingsFromJson(const QJsonObject &o) {
   return {o["host"].toString(), o["port"].toInt(8023), o["password"].toString(),
     o["serialPort"].toString(), o["baudRate"].toInt(38400), o["midiDeviceId"].toInt(16),
     o["sourceNumber"].toInt(1), o["takeProgramWhenOnAir"].toBool(),
-    o["takeOnAirWhenProgramSelected"].toBool(), o["ftbFollowsProgram"].toBool()};
+    o["takeOnAirWhenProgramSelected"].toBool(), o["ftbFollowsProgram"].toBool(), o["useUsbMidi"].toBool()};
 }
 bool validRolandProfilesJson(const QJsonObject &json) {
   for (auto it = json.begin(); it != json.end(); ++it) {

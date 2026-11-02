@@ -2705,11 +2705,12 @@ int main(int argc, char *argv[]) {
     CHECK(rolandEnabled != nullptr);
     auto *rolandModel = settingsDialog.findChild<QComboBox *>(QStringLiteral("rolandModelComboBox"));
     auto *rolandLan = settingsDialog.findChild<QWidget *>(QStringLiteral("rolandLanSettings"));
+    auto *rolandTransport = settingsDialog.findChild<QComboBox *>(QStringLiteral("rolandTransportComboBox"));
     auto *rolandHost = settingsDialog.findChild<QLineEdit *>(QStringLiteral("rolandHostEdit"));
     auto *rolandPort = settingsDialog.findChild<QSpinBox *>(QStringLiteral("rolandPortSpinBox"));
     auto *rolandSource = settingsDialog.findChild<QSpinBox *>(QStringLiteral("rolandV8HdSourceSpinBox"));
     auto *rolandTake = settingsDialog.findChild<QCheckBox *>(QStringLiteral("rolandTakeProgramWhenOnAirCheckBox"));
-    CHECK(rolandModel && rolandLan && rolandHost && rolandPort && rolandSource && rolandTake);
+    CHECK(rolandModel && rolandLan && rolandTransport && rolandHost && rolandPort && rolandSource && rolandTake);
     CHECK(rolandModel->count() == 13 && rolandLan->isHidden());
     CHECK(rolandSource->maximum() == 8);
     rolandSource->setValue(8);
@@ -2757,6 +2758,21 @@ int main(int argc, char *argv[]) {
         CHECK(password->text() == QStringLiteral("P@55"));
         CHECK(receive->isChecked() && fade->isChecked());
       }
+      if (vtrpon::rolandHasUsbMidiChoice(profile.model)) {
+        const auto lanSettings = vtrpon::activeRolandSettings(settingsDialog.switcherControlSettings());
+        CHECK(!rolandTransport->parentWidget()->isHidden() && rolandTransport->currentIndex() == 0);
+        rolandTransport->setCurrentIndex(1);
+        CHECK(rolandLan->isHidden() && receive->isEnabled() && !fade->isEnabled() && !fade->isChecked());
+        CHECK(vtrpon::activeRolandSettings(vtrpon::loadSwitcherControlSettings()).useUsbMidi);
+        rolandModel->setCurrentIndex(0);
+        rolandModel->setCurrentIndex(rolandModel->findData(static_cast<int>(profile.model)));
+        settingsDialog.reloadSavedSettings();
+        CHECK(rolandTransport->currentIndex() == 1 && rolandLan->isHidden());
+        rolandTransport->setCurrentIndex(0);
+        CHECK(!rolandLan->isHidden());
+        CHECK(vtrpon::activeRolandSettings(settingsDialog.switcherControlSettings()) == lanSettings);
+        CHECK(fade->isEnabled() == profile.fade && fade->isChecked() == lanSettings.ftbFollowsProgram);
+      } else CHECK(rolandTransport->parentWidget()->isHidden());
     }
     rolandModel->setCurrentIndex(0);
     rolandSource->setValue(1);
@@ -4534,6 +4550,7 @@ int main(int argc, char *argv[]) {
       auto *rolandEnabled = settingsDialog.findChild<QCheckBox *>(QStringLiteral("rolandV8HdEnabledCheckBox"));
       auto *rolandHost = settingsDialog.findChild<QLineEdit *>(QStringLiteral("rolandHostEdit"));
       auto *rolandModel = settingsDialog.findChild<QComboBox *>(QStringLiteral("rolandModelComboBox"));
+      auto *rolandTransport = settingsDialog.findChild<QComboBox *>(QStringLiteral("rolandTransportComboBox"));
       CHECK(rolandEnabled && rolandHost && rolandModel);
       rolandEnabled->setChecked(false);
       rolandHost->setText(QStringLiteral("192.168.2.1"));
@@ -4548,6 +4565,13 @@ int main(int argc, char *argv[]) {
           application.processEvents();
           CHECK(settingsDialog.grab().save(QDir(capture).filePath(
               skin + "-" + vtrpon::rolandSwitcherProfile(static_cast<vtrpon::RolandSwitcherModel>(rolandModel->itemData(model).toInt())).id + ".png")));
+          const auto selectedModel = static_cast<vtrpon::RolandSwitcherModel>(rolandModel->currentData().toInt());
+          if (vtrpon::rolandHasUsbMidiChoice(selectedModel)) {
+            rolandTransport->setCurrentIndex(1); application.processEvents();
+            CHECK(settingsDialog.grab().save(QDir(capture).filePath(
+                skin + "-" + vtrpon::rolandSwitcherProfile(selectedModel).id + "-usb.png")));
+            rolandTransport->setCurrentIndex(0);
+          }
         }
         const auto atemPages = settingsNavigation->findItems(QStringLiteral("ATEM連携"), Qt::MatchExactly);
         CHECK(atemPages.size() == (vtrpon::AtemAddonSwitcher::addonInstalled() ? 1 : 0));
