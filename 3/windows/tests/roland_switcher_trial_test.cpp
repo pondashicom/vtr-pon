@@ -144,6 +144,112 @@ public:
 };
 class RolandRemoteProtocolTest {
 public:
+  static void runLanAuthentication() {
+    for (auto model : {RolandSwitcherModel::V600Uhd, RolandSwitcherModel::V160Hd,
+                       RolandSwitcherModel::V80Hd, RolandSwitcherModel::V1_4K,
+                       RolandSwitcherModel::Vr6Hd, RolandSwitcherModel::Vr120Hd}) {
+      RolandModelSettings settings;
+      settings.password = rolandSwitcherProfile(model).passwordLength == 8 ? "Password" : "Pass";
+      RolandRemoteSwitcher device(model, settings, true);
+      QList<QByteArray> sent; QStringList errors, diagnostics;
+      device.writeForTest_ = [&](const QByteArray &wire) { sent.append(wire); return true; };
+      QObject::connect(&device, &SwitcherDevice::errorOccurred, &device, [&](const QString &s) { errors.append(s); });
+      QObject::connect(&device, &SwitcherDevice::diagnosticEvent, &device, [&](const QString &kind, const QString &s) { if (kind == "AUTH") diagnostics.append(s); });
+      const auto begin = [&] { device.close(); sent.clear(); errors.clear(); device.active_ = device.authenticating_ = true; };
+      begin();
+      device.receive(QByteArray::fromHex("fffb01") + "Enter pass");
+      check(!device.passwordSent_, "split prompt does not send password early");
+      device.receive("word:");
+      const auto passwordLine = settings.password.toLatin1() + (model == RolandSwitcherModel::V80Hd || model == RolandSwitcherModel::Vr120Hd ? "\r\n" : "\n");
+      check(sent.count(passwordLine) == 1, "model-specific password framing after prompt");
+      settle(180);
+      check(device.authenticating_ && device.pending_.reply == RolandRemoteSwitcher::Reply::None, "elapsed time cannot establish authentication");
+      device.receive(settings.password.toLatin1() + "\r\n");
+      check(errors.isEmpty() && device.authenticating_, "password echo is not a repeated prompt");
+      const auto welcome = QByteArray("Welcome to ") + (model == RolandSwitcherModel::V600Uhd ? "Roland " : "") + rolandSwitcherProfile(model).name + '.';
+      device.receive(welcome.left(7)); check(device.authenticating_, "split Welcome cannot authenticate prematurely");
+      device.receive(welcome.mid(7)); settle(5);
+      check(!device.authenticating_ && device.pending_.reply == RolandRemoteSwitcher::Reply::Version, "unterminated model Welcome releases version query");
+      check(sent.last() == QByteArray("VER;") + device.lanLineEnding(false), "normal LAN commands have model-specific line endings");
+      check(diagnostics == QStringList{"Password sent (omitted).", "Authentication accepted."}, "authentication diagnostics contain only fixed messages, never password echoes");
+      if (device.needsQueryAck()) {
+        device.receive(frame("ACK"));
+        check(device.pending_.reply == RolandRemoteSwitcher::Reply::Version, "query ACK before version data cannot complete it alone");
+      }
+      device.receive(frame(QByteArray("VER:") + rolandSwitcherProfile(model).name + ",1.20")); settle(5);
+      check(rolandSwitcherProfile(model).receive ? device.pending_.reply == RolandRemoteSwitcher::Reply::Program : device.ready_,
+            "documented ACK-plus-data and data-only query families both complete");
+
+      for (const auto &failure : {QByteArray("Authentication error\r\n"), QByteArray("Wait a moment\r\n"), QByteArray("Enter password:")}) {
+        begin(); device.receive("Enter password:"); device.receive(failure);
+        check(!device.active_ && !device.reconnect_.isActive() && sent.count(passwordLine) == 1 && !errors.isEmpty(), "rejected or locked-out authentication stops without retrying password");
+      }
+      begin(); device.receive("Enter password:"); device.responseTimeout();
+      check(!device.active_ && !device.reconnect_.isActive() && errors.last().contains("authentication result"), "silent password response stops automatic retries");
+      begin(); device.responseTimeout();
+      check(device.reconnect_.isActive() && errors.last().contains("prompt"), "unprompted second session has its own diagnostic and may reconnect");
+      begin(); device.authenticating_ = false; device.connecting_ = true; device.responseTimeout();
+      check(errors.last().contains("TCP connection timed out") && !errors.last().contains("No response to"), "TCP timeout is distinct from command timeout");
+      device.close();
+      for (const auto &echo : (rolandSwitcherProfile(model).passwordLength == 8 ?
+          QList<QByteArray>{"VER:ABCD", "Welcome "} : QList<QByteArray>{"VER:"})) {
+        settings.password = QString::fromLatin1(echo);
+        RolandRemoteSwitcher echoed(model, settings, true);
+        QList<QByteArray> echoWrites;
+        echoed.writeForTest_ = [&](const QByteArray &wire) { echoWrites.append(wire); return true; };
+        echoed.active_ = echoed.authenticating_ = true;
+        echoed.receive("Enter password:"); echoed.receive(echo + "\r\n"); settle(5);
+        check(echoed.authenticating_ && echoed.pending_.reply == RolandRemoteSwitcher::Reply::None && echoWrites.size() == 1,
+              "password echo resembling an auth marker cannot release command traffic");
+        echoed.receive(frame(QByteArray("VER:") + rolandSwitcherProfile(model).name + ",1.20")); settle(5);
+        check(!echoed.authenticating_ && echoed.pending_.reply == RolandRemoteSwitcher::Reply::Version,
+              "complete matching version-as-login is accepted and still formally verified");
+        echoed.close();
+      }
+    }
+  }
+  static void runScalarState() {
+    RolandModelSettings settings; settings.sourceNumber = 2;
+    RolandRemoteSwitcher device(RolandSwitcherModel::V80Hd, settings, true);
+    QList<QByteArray> sent;
+    device.writeForTest_ = [&](const QByteArray &wire) { sent.append(wire); return true; };
+    device.active_ = true;
+    int changes = 0;
+    QObject::connect(&device, &SwitcherDevice::programInputChanged, &device, [&](int) { ++changes; });
+    const auto respond = [&](const QByteArray &value) {
+      settle(3);
+      const auto address = device.pending_.body.mid(4, 6);
+      device.receive(frame("DTH:" + address + ',' + value));
+      device.receive(frame("ACK")); settle(3);
+    };
+    device.enqueue({device.statusQuery(), RolandRemoteSwitcher::Reply::Program});
+    respond("00"); respond("01"); respond("00");
+    check(device.ready_ && !device.baselineKnown_ && changes == 0, "initial all-dark is ready but has no false off-target baseline");
+    device.poll(); respond("01");
+    check(device.baselineKnown_ && changes == 0, "first target after initial dark is baseline only");
+    device.poll(); respond("00"); respond("08"); respond("01"); respond("00");
+    check(changes == 1, "single-byte STILL observation confirms target departure");
+    device.poll(); respond("01"); check(changes == 2, "return from STILL is observed");
+    device.poll(); respond("00"); respond("01"); respond("00");
+    device.poll(); respond("01"); check(changes == 2, "FTB dark and restoration never retakes the target");
+    device.poll(); respond("00"); respond("29"); respond("01"); respond("01");
+    check(changes == 2, "fresh target positive overrides an older negative during logical source reads");
+    device.poll(); settle(3);
+    device.receive(frame("ACK"));
+    check(device.pending_.reply == RolandRemoteSwitcher::Reply::Program && device.pending_.response.isEmpty(), "query ACK before scalar data cannot complete it alone");
+    device.receive(frame("DTH:0C0001,01")); settle(3);
+    check(device.pending_.reply == RolandRemoteSwitcher::Reply::None && changes == 2, "ACK-first scalar reply completes without false input changes");
+    device.poll(); settle(3);
+    device.receive(frame("DTH:0C0000,01"));
+    check(device.pending_.response.isEmpty(), "unrequested parameter address cannot complete a state query");
+    device.receive(frame("DTH:0C0001,01"));
+    check(!device.pending_.response.isEmpty(), "data is retained while its query ACK is pending");
+    device.setProgramInput(2); settle(5);
+    check(device.pending_.reply == RolandRemoteSwitcher::Reply::Program, "setter cannot overtake a split query ACK");
+    device.receive(frame("ACK")); settle(5);
+    check(device.pending_.reply == RolandRemoteSwitcher::Reply::Ack, "query ACK releases the queued setter without acknowledging it");
+    device.receive(frame("ACK")); device.close();
+  }
   static void runSerial() {
     RolandModelSettings settings; settings.sourceNumber = 4;
     RolandRemoteSwitcher device(RolandSwitcherModel::V1HdPlus, settings, true);
@@ -153,9 +259,9 @@ public:
     bool ready = false; int changes = 0;
     QObject::connect(&device, &SwitcherDevice::connectionOpened, &device, [&](bool value, const QString &) { ready = value; });
     QObject::connect(&device, &SwitcherDevice::programInputChanged, &device, [&](int) { ++changes; });
-    device.enqueue({"VER;", RolandRemoteSwitcher::Reply::Version});
+    device.enqueue({"VER;", RolandRemoteSwitcher::Reply::Version}); settle(5);
     check(sent.last() == frame("VER"), "RS-232 uses STX framing");
-    device.receive("VER:V-1HD PLUS,1.0;");
+    device.receive("VER:V-1HD PLUS,1.0;"); settle(5);
     check(sent.last() == frame("TLY"), "V-1HD+ queries documented tally status");
     device.receive(frame("TLY:1,0,2,0"));
     check(ready && changes == 0, "serial baseline does not trigger ON AIR");
@@ -181,7 +287,7 @@ bool runRolandSwitcherTrialRegression() {
   using namespace vtrpon;
   ok = true;
   check(rolandSwitcherProfiles().size() == 13, "all requested models including VR-120HD");
-  RolandMidiTrialTest::run(); RolandRemoteProtocolTest::runSerial();
+  RolandMidiTrialTest::run(); RolandRemoteProtocolTest::runLanAuthentication(); RolandRemoteProtocolTest::runScalarState(); RolandRemoteProtocolTest::runSerial();
   struct Fixture { RolandSwitcherModel model; const char *name; const char *address; int inputs; int tallies; bool rawAck; int source = 2; };
   const QList<Fixture> fixtures{
     {RolandSwitcherModel::V600Uhd, "V-600UHD", "", 8, 8, false},
@@ -195,7 +301,7 @@ bool runRolandSwitcherTrialRegression() {
     QTcpServer server; check(server.listen(QHostAddress::LocalHost), "LAN simulator listens");
     QPointer<QTcpSocket> peer; QByteArray buffer; QList<QByteArray> commands;
     bool authenticated = false, wrongModel = false, ignoreQuery = false, holdAck = false, rejectFade = false;
-    int currentInput = 0;
+    int currentInput = 0, programSelection = 0;
     const QByteArray secret = rolandSwitcherProfile(f.model).passwordLength == 8 ? "P@55W0rd" : "P@55";
     QObject::connect(&server, &QTcpServer::newConnection, &server, [&] {
       peer = server.nextPendingConnection(); auto *client = peer.data(); buffer.clear(); authenticated = false;
@@ -206,18 +312,35 @@ bool runRolandSwitcherTrialRegression() {
         if (!authenticated) {
           const int end = buffer.indexOf('\n'); if (end < 0) return;
           check(buffer.left(end).trimmed() == secret, "correct password delivered to transport");
-          buffer.remove(0, end + 1); authenticated = true; client->write("Welcome\r\n");
+          buffer.remove(0, end + 1); authenticated = true;
+          const auto welcome = QByteArray("Welcome to ") + (f.model == RolandSwitcherModel::V600Uhd ? "Roland " : "") + f.name + '.';
+          QTimer::singleShot(220, client, [client, welcome] { client->write(welcome); });
         }
         while (buffer.contains(';')) {
-          const int end = buffer.indexOf(';'); const auto body = buffer.left(end + 1); buffer.remove(0, end + 1); commands.append(body);
+          const int end = buffer.indexOf(';'); const auto body = buffer.left(end + 1).trimmed(); buffer.remove(0, end + 1); commands.append(body);
           check(!body.startsWith(char(2)), "LAN omits STX according to command reference");
           if (body == "VER;") {
             const auto reply = frame(QByteArray("VER:") + (wrongModel ? "OTHER" : f.name)
                 + (f.model == RolandSwitcherModel::Vr120Hd ? ",2.10" : ",1.00"));
-            client->write(reply.left(4)); QTimer::singleShot(5, client, [client, reply] { client->write(reply.mid(4)); });
+            client->write(reply.left(4)); QTimer::singleShot(5, client, [client, reply, needsAck = f.model == RolandSwitcherModel::V80Hd || f.model == RolandSwitcherModel::V1_4K] { client->write(reply.mid(4) + (needsAck ? frame("ACK") : QByteArray())); });
           } else if (body.startsWith("RQH:")) {
-            check(body == QByteArray("RQH:0C0000,") + QByteArray::number(f.tallies,16).rightJustified(6,'0').toUpper() + ';', "correct per-model input query address");
-            if (!ignoreQuery) { QByteArray tallies(f.tallies, char(0)); if (currentInput >= 0) tallies[currentInput] = char(1); client->write(frame("DTH:0C0000," + tallies.toHex())); }
+            const auto address = body.mid(4, 6);
+            check(body.endsWith(",000001;"), "LAN never requires unsupported multi-byte parameter reads");
+            if (currentInput >= 0) programSelection = currentInput;
+            int value = 0;
+            if (address == f.address) value = programSelection;
+            else {
+              check(address.startsWith("0C"), "state query uses documented program or tally address");
+              const int index = address.mid(2).toInt(nullptr, 16);
+              check(index >= 0 && index < f.tallies, "tally query stays within the model's documented range");
+              value = currentInput == index ? 1 : 0;
+            }
+            if (!ignoreQuery) {
+              const auto answer = frame("DTH:" + address + ',' + QByteArray::number(value, 16).rightJustified(2, '0').toUpper());
+              client->write(answer);
+              if (f.model == RolandSwitcherModel::V80Hd || f.model == RolandSwitcherModel::V1_4K)
+                QTimer::singleShot(3, client, [client] { client->write(frame("ACK")); });
+            }
           } else {
             if (body.startsWith("DTH:")) currentInput = body.mid(body.indexOf(',')+1,2).toInt(nullptr,16);
             else if (body.startsWith("PGM:")) currentInput = body.mid(4,1).toInt();
@@ -246,6 +369,13 @@ bool runRolandSwitcherTrialRegression() {
       check(waitFor([&] { return changes == 2; }), "change to STILL clears target presence");
       currentInput = f.source - 1;
       check(waitFor([&] { return changes == 3; }), "return from STILL detects the physical input");
+    }
+    if (f.model == RolandSwitcherModel::V1_4K) {
+      const int beforeBlack = changes; currentInput = 15;
+      check(waitFor([&] { return changes == beforeBlack + 1; }), "V-1-4K explicit BLACK is a real source change");
+      check(!commands.contains("RQH:0C000F,000001;"), "BLACK has no tally address and is never queried as one");
+      currentInput = f.source - 1;
+      check(waitFor([&] { return changes == beforeBlack + 2; }), "return from explicit BLACK is observed");
     }
     check(!device.setProgramInput(f.inputs+1), "physical source range enforced");
     check(device.setProgramInput(f.source), "program input queues");
