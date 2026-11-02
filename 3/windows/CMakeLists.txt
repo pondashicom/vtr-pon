@@ -494,6 +494,35 @@ if(BUILD_TESTING)
   add_test(NAME update-window COMMAND update-window-test)
   set_tests_properties(update-window PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=windows")
 
+  qt_add_executable(switcher-report-mail-test
+    tests/switcher_report_mail_test.cpp
+    apps/desktop/switcher_check_window.cpp
+    apps/desktop/switcher_check_session.cpp
+    apps/desktop/switcher_control.cpp
+    apps/desktop/controller_operations.h
+    apps/desktop/roland_switcher_profiles.cpp
+    apps/desktop/roland_remote_switcher.cpp
+    apps/desktop/roland_v8hd_midi_switcher.cpp
+    apps/desktop/roland_vr50hd_lan_switcher.cpp
+    apps/desktop/atem_addon_switcher.cpp
+    apps/desktop/language_manager.cpp
+    apps/desktop/language_text.cpp)
+  target_include_directories(switcher-report-mail-test PRIVATE apps/desktop)
+  target_compile_definitions(switcher-report-mail-test PRIVATE
+    NOMINMAX WIN32_LEAN_AND_MEAN VTRPON_SWITCHER_REPORT_TEST_HOOKS)
+  target_link_libraries(switcher-report-mail-test PRIVATE
+    Qt6::Widgets Qt6::Network PkgConfig::GSTREAMER PkgConfig::GSTREAMER_D3D11 winmm)
+  if(MSVC)
+    target_compile_options(switcher-report-mail-test PRIVATE /utf-8)
+  endif()
+  add_dependencies(switcher-report-mail-test release_translations)
+  foreach(_report_language IN ITEMS en ja)
+    add_test(NAME switcher-report-mail-${_report_language}
+      COMMAND switcher-report-mail-test "${CMAKE_CURRENT_BINARY_DIR}/vtrpon_${_report_language}.qm")
+    set_tests_properties(switcher-report-mail-${_report_language} PROPERTIES
+      ENVIRONMENT "QT_QPA_PLATFORM=windows" TIMEOUT 20)
+  endforeach()
+
   qt_add_executable(addon-package-test tests/addon_package_test.cpp)
   if(WIN32)
     add_dependencies(addon-package-test vtr-pon-addon-manager)

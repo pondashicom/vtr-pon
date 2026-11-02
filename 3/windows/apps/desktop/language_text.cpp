@@ -15,11 +15,11 @@ constexpr auto kUiTextIds = std::to_array<const char *>({
     QT_TRID_NOOP("settings.switcher.atem.description"),
     //% "Connect VTR-PON to a Roland switcher. Select your model and configure its connection. Only one switcher integration can be enabled at a time."
     QT_TRID_NOOP("settings.switcher.roland.description"),
-    //% "Send report"
+    //% "Create report email"
     QT_TRID_NOOP("switcher.check.email"),
-    //% "Stop recording first. Save the report and open an email to info@pondashi.com. Review the message and press Send yourself. If automatic attachment is unavailable, attach the saved JSON file using Open report folder."
+    //% "Stop recording first. This saves a JSON report and prepares an email to info@pondashi.com. If automatic attachment is unavailable, follow the displayed steps to attach the saved JSON yourself before sending."
     QT_TRID_NOOP("switcher.check.email_help"),
-    //% "Open report folder"
+    //% "Show attachment folder"
     QT_TRID_NOOP("switcher.check.folder"),
     //% "Could not open the folder. The report is saved at: %1"
     QT_TRID_NOOP("switcher.check.folder_failed"),
@@ -27,21 +27,29 @@ constexpr auto kUiTextIds = std::to_array<const char *>({
     QT_TRID_NOOP("switcher.check.no_report_folder"),
     //% "Saving the report and preparing an email…"
     QT_TRID_NOOP("switcher.check.preparing_email"),
-    //% "The report is saved. Review the email to info@pondashi.com and press Send in your mail app.\nSaved: %1"
+    //% "The report is saved. Preparing the email…\nSaved: %1"
     QT_TRID_NOOP("switcher.check.email_ready"),
     //% "Email creation was cancelled. The report is still saved: %1"
     QT_TRID_NOOP("switcher.check.email_cancelled"),
     //% "The mail app has finished its operation. Check sending status in your mail app.\nSaved report: %1"
     QT_TRID_NOOP("switcher.check.email_finished"),
-    //% "Requested an email to info@pondashi.com. Automatic attachment is unavailable with this mail app. Use Open report folder, attach the JSON file below, then press Send yourself.\n%1"
+    //% "The report is saved. You must attach the JSON file yourself.\n1. Select Show attachment folder to find the JSON file below.\n2. Select Open email, attach that JSON file, then press Send in your mail app.\nSaved: %1"
     QT_TRID_NOOP("switcher.check.email_manual_attachment"),
     //% "Could not open a mail app. Send the saved JSON file to info@pondashi.com using your usual email or webmail.\n%1"
     QT_TRID_NOOP("switcher.check.email_failed"),
+    //% "Open email"
+    QT_TRID_NOOP("switcher.check.open_email"),
+    //% "Requested an email to info@pondashi.com. Attach the saved JSON file before pressing Send in your mail app."
+    QT_TRID_NOOP("switcher.check.email_manual_opened"),
+    //% "The saved JSON file could not be found. Select Create report email again to save a new copy."
+    QT_TRID_NOOP("switcher.check.attachment_missing"),
+    //% "Before sending, check that this JSON file is attached: %1"
+    QT_TRID_NOOP("switcher.check.mail_attachment_check"),
     //% "VTR-PON switcher operation report: %1"
     QT_TRID_NOOP("switcher.check.mail_subject"),
     //% "VTR-PON switcher operation check results:"
     QT_TRID_NOOP("switcher.check.mail_intro"),
-    //% "Please attach the report file before sending: %1"
+    //% "Attachment required: This email does not attach the report automatically.\nBefore sending, attach this JSON file: %1\nIn VTR-PON Operation Check, select Show attachment folder (normally Documents/VTR-PON/SwitcherReports)."
     QT_TRID_NOOP("switcher.check.mail_attachment"),
     //% "Reconnect"
     QT_TRID_NOOP("switcher.check.retry"),
@@ -71,7 +79,7 @@ constexpr auto kUiTextIds = std::to_array<const char *>({
     QT_TRID_NOOP("switcher.trial.no_fade"),
     //% "Operation Check"
     QT_TRID_NOOP("switcher.check.title"),
-    //% "Enable the links you want to test in Roland Integration before starting. Start Recording reconnects to capture the handshake; it does not select an input or change FTB.\n1. Confirm the connection.\n2. Take an item ON AIR in the normal controller and check the switcher input.\n3. Switch from another input to the configured input on the switcher and check ON AIR.\n4. Turn FTB on and off in the normal controller and check the output.\n5. Disconnect and reconnect, then check recovery and that old operations are not replayed.\nRecord what you observed for each item. Protocol responses are recorded separately. Stop recording, review the report, then select Send report to create an email to info@pondashi.com. Review the email and press Send yourself. If automatic attachment is unavailable, use Open report folder to attach the JSON file. Save report is also available. Network passwords, IP addresses and media paths are excluded from the automatic report."
+    //% "Enable the links you want to test in Roland Integration before starting. Start Recording reconnects to capture the handshake; it does not select an input or change FTB.\n1. Confirm the connection.\n2. Take an item ON AIR in the normal controller and check the switcher input.\n3. Switch from another input to the configured input on the switcher and check ON AIR.\n4. Turn FTB on and off in the normal controller and check the output.\n5. Disconnect and reconnect, then check recovery and that old operations are not replayed.\nRecord what you observed for each item. Protocol responses are recorded separately. Stop recording, review the report, then select Create report email. The JSON report is saved, normally in Documents/VTR-PON/SwitcherReports. If automatic attachment is unavailable, follow the displayed steps: Show attachment folder, then Open email and attach the JSON yourself. Confirm the attachment before sending to info@pondashi.com. Save report is also available. Network passwords, IP addresses and media paths are excluded from the automatic report."
     QT_TRID_NOOP("switcher.check.instructions"),
     //% "Switcher firmware (as displayed on the device)"
     QT_TRID_NOOP("switcher.check.firmware"),

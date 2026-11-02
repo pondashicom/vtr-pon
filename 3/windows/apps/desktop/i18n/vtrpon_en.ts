@@ -4982,13 +4982,13 @@ Different connectors or video formats on the same channel cannot be used togethe
 3. Switch from another input to the configured input on the switcher and check ON AIR.
 4. Turn FTB on and off in the normal controller and check the output.
 5. Disconnect and reconnect, then check recovery and that old operations are not replayed.
-Record what you observed for each item. Protocol responses are recorded separately. Stop recording, review the report, then select Send report to create an email to info@pondashi.com. Review the email and press Send yourself. If automatic attachment is unavailable, use Open report folder to attach the JSON file. Save report is also available. Network passwords, IP addresses and media paths are excluded from the automatic report.</source><translation>Enable the links you want to test in Roland Integration before starting. Start Recording reconnects to capture the handshake; it does not select an input or change FTB.
+Record what you observed for each item. Protocol responses are recorded separately. Stop recording, review the report, then select Create report email. The JSON report is saved, normally in Documents/VTR-PON/SwitcherReports. If automatic attachment is unavailable, follow the displayed steps: Show attachment folder, then Open email and attach the JSON yourself. Confirm the attachment before sending to info@pondashi.com. Save report is also available. Network passwords, IP addresses and media paths are excluded from the automatic report.</source><translation>Enable the links you want to test in Roland Integration before starting. Start Recording reconnects to capture the handshake; it does not select an input or change FTB.
 1. Confirm the connection.
 2. Take an item ON AIR in the normal controller and check the switcher input.
 3. Switch from another input to the configured input on the switcher and check ON AIR.
 4. Turn FTB on and off in the normal controller and check the output.
 5. Disconnect and reconnect, then check recovery and that old operations are not replayed.
-Record what you observed for each item. Protocol responses are recorded separately. Stop recording, review the report, then select Send report to create an email to info@pondashi.com. Review the email and press Send yourself. If automatic attachment is unavailable, use Open report folder to attach the JSON file. Save report is also available. Network passwords, IP addresses and media paths are excluded from the automatic report.</translation></message>
+Record what you observed for each item. Protocol responses are recorded separately. Stop recording, review the report, then select Create report email. The JSON report is saved, normally in Documents/VTR-PON/SwitcherReports. If automatic attachment is unavailable, follow the displayed steps: Show attachment folder, then Open email and attach the JSON yourself. Confirm the attachment before sending to info@pondashi.com. Save report is also available. Network passwords, IP addresses and media paths are excluded from the automatic report.</translation></message>
     <message id="switcher.check.firmware"><source>Switcher firmware (as displayed on the device)</source><translation>Switcher firmware (as displayed on the device)</translation></message>
     <message id="switcher.check.connection"><source>Connection</source><translation>Connection</translation></message>
     <message id="switcher.check.send"><source>ON AIR → switcher input</source><translation>ON AIR → switcher input</translation></message>
@@ -5017,27 +5017,39 @@ Attach this JSON file when reporting the results to the author.</translation></m
     <message id="settings.category.roland"><source>Roland Integration</source><translation>Roland Integration</translation></message>
     <message id="settings.switcher.atem.description"><source>Connect VTR-PON to a Blackmagic ATEM switcher. Only one switcher integration can be enabled at a time.</source><translation>Connect VTR-PON to a Blackmagic ATEM switcher. Only one switcher integration can be enabled at a time.</translation></message>
     <message id="settings.switcher.roland.description"><source>Connect VTR-PON to a Roland switcher. Select your model and configure its connection. Only one switcher integration can be enabled at a time.</source><translation>Connect VTR-PON to a Roland switcher. Select your model and configure its connection. Only one switcher integration can be enabled at a time.</translation></message>
-    <message id="switcher.check.email"><source>Send report</source><translation>Send report</translation></message>
-    <message id="switcher.check.email_help"><source>Stop recording first. Save the report and open an email to info@pondashi.com. Review the message and press Send yourself. If automatic attachment is unavailable, attach the saved JSON file using Open report folder.</source><translation>Stop recording first. Save the report and open an email to info@pondashi.com. Review the message and press Send yourself. If automatic attachment is unavailable, attach the saved JSON file using Open report folder.</translation></message>
-    <message id="switcher.check.folder"><source>Open report folder</source><translation>Open report folder</translation></message>
+    <message id="switcher.check.email"><source>Create report email</source><translation>Create report email</translation></message>
+    <message id="switcher.check.email_help"><source>Stop recording first. This saves a JSON report and prepares an email to info@pondashi.com. If automatic attachment is unavailable, follow the displayed steps to attach the saved JSON yourself before sending.</source><translation>Stop recording first. This saves a JSON report and prepares an email to info@pondashi.com. If automatic attachment is unavailable, follow the displayed steps to attach the saved JSON yourself before sending.</translation></message>
+    <message id="switcher.check.folder"><source>Show attachment folder</source><translation>Show attachment folder</translation></message>
     <message id="switcher.check.folder_failed"><source>Could not open the folder. The report is saved at: %1</source><translation>Could not open the folder. The report is saved at: %1</translation></message>
     <message id="switcher.check.no_report_folder"><source>Could not find a report folder. Use Save report to choose a location.</source><translation>Could not find a report folder. Use Save report to choose a location.</translation></message>
     <message id="switcher.check.preparing_email"><source>Saving the report and preparing an email…</source><translation>Saving the report and preparing an email…</translation></message>
-    <message id="switcher.check.email_ready"><source>The report is saved. Review the email to info@pondashi.com and press Send in your mail app.
-Saved: %1</source><translation>The report is saved. Review the email to info@pondashi.com and press Send in your mail app.
+    <message id="switcher.check.email_ready"><source>The report is saved. Preparing the email…
+Saved: %1</source><translation>The report is saved. Preparing the email…
 Saved: %1</translation></message>
     <message id="switcher.check.email_cancelled"><source>Email creation was cancelled. The report is still saved: %1</source><translation>Email creation was cancelled. The report is still saved: %1</translation></message>
     <message id="switcher.check.email_finished"><source>The mail app has finished its operation. Check sending status in your mail app.
 Saved report: %1</source><translation>The mail app has finished its operation. Check sending status in your mail app.
 Saved report: %1</translation></message>
-    <message id="switcher.check.email_manual_attachment"><source>Requested an email to info@pondashi.com. Automatic attachment is unavailable with this mail app. Use Open report folder, attach the JSON file below, then press Send yourself.
-%1</source><translation>Requested an email to info@pondashi.com. Automatic attachment is unavailable with this mail app. Use Open report folder, attach the JSON file below, then press Send yourself.
-%1</translation></message>
+    <message id="switcher.check.email_manual_attachment"><source>The report is saved. You must attach the JSON file yourself.
+1. Select Show attachment folder to find the JSON file below.
+2. Select Open email, attach that JSON file, then press Send in your mail app.
+Saved: %1</source><translation>The report is saved. You must attach the JSON file yourself.
+1. Select Show attachment folder to find the JSON file below.
+2. Select Open email, attach that JSON file, then press Send in your mail app.
+Saved: %1</translation></message>
     <message id="switcher.check.email_failed"><source>Could not open a mail app. Send the saved JSON file to info@pondashi.com using your usual email or webmail.
 %1</source><translation>Could not open a mail app. Send the saved JSON file to info@pondashi.com using your usual email or webmail.
 %1</translation></message>
+    <message id="switcher.check.open_email"><source>Open email</source><translation>Open email</translation></message>
+    <message id="switcher.check.email_manual_opened"><source>Requested an email to info@pondashi.com. Attach the saved JSON file before pressing Send in your mail app.</source><translation>Requested an email to info@pondashi.com. Attach the saved JSON file before pressing Send in your mail app.</translation></message>
+    <message id="switcher.check.attachment_missing"><source>The saved JSON file could not be found. Select Create report email again to save a new copy.</source><translation>The saved JSON file could not be found. Select Create report email again to save a new copy.</translation></message>
+    <message id="switcher.check.mail_attachment_check"><source>Before sending, check that this JSON file is attached: %1</source><translation>Before sending, check that this JSON file is attached: %1</translation></message>
     <message id="switcher.check.mail_subject"><source>VTR-PON switcher operation report: %1</source><translation>VTR-PON switcher operation report: %1</translation></message>
     <message id="switcher.check.mail_intro"><source>VTR-PON switcher operation check results:</source><translation>VTR-PON switcher operation check results:</translation></message>
-    <message id="switcher.check.mail_attachment"><source>Please attach the report file before sending: %1</source><translation>Please attach the report file before sending: %1</translation></message>
+    <message id="switcher.check.mail_attachment"><source>Attachment required: This email does not attach the report automatically.
+Before sending, attach this JSON file: %1
+In VTR-PON Operation Check, select Show attachment folder (normally Documents/VTR-PON/SwitcherReports).</source><translation>Attachment required: This email does not attach the report automatically.
+Before sending, attach this JSON file: %1
+In VTR-PON Operation Check, select Show attachment folder (normally Documents/VTR-PON/SwitcherReports).</translation></message>
 </context>
 </TS>

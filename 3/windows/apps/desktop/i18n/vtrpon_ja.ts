@@ -4982,13 +4982,13 @@ Different connectors or video formats on the same channel cannot be used togethe
 3. Switch from another input to the configured input on the switcher and check ON AIR.
 4. Turn FTB on and off in the normal controller and check the output.
 5. Disconnect and reconnect, then check recovery and that old operations are not replayed.
-Record what you observed for each item. Protocol responses are recorded separately. Stop recording, review the report, then select Send report to create an email to info@pondashi.com. Review the email and press Send yourself. If automatic attachment is unavailable, use Open report folder to attach the JSON file. Save report is also available. Network passwords, IP addresses and media paths are excluded from the automatic report.</source><translation>開始前に「Roland連携」で試す連携を有効にします。「記録開始」で接続をやり直して通信を記録します。開始だけで入力やFTBは変更されません。
+Record what you observed for each item. Protocol responses are recorded separately. Stop recording, review the report, then select Create report email. The JSON report is saved, normally in Documents/VTR-PON/SwitcherReports. If automatic attachment is unavailable, follow the displayed steps: Show attachment folder, then Open email and attach the JSON yourself. Confirm the attachment before sending to info@pondashi.com. Save report is also available. Network passwords, IP addresses and media paths are excluded from the automatic report.</source><translation>開始前に「Roland連携」で試す連携を有効にします。「記録開始」で接続をやり直して通信を記録します。開始だけで入力やFTBは変更されません。
 1. 接続できることを確認します。
 2. 通常の操作画面から素材をオンエアし、本体の入力切替を確認します。
 3. 本体を別の入力から設定した入力へ切り替え、オンエアを確認します。
 4. 通常の操作画面でFTBをON→OFFにし、本体の出力を確認します。
 5. 切断・再接続後の復帰と、切断中の操作が後から実行されないことを確認します。
-各項目に見た結果を記入します。通信の応答は別に記録されます。記録終了後、内容を確認して「レポートを送信」を押すと、info@pondashi.com宛てのメールを作成します。メールを確認し、ご自身で送信してください。自動添付できない場合は「保存先を開く」からJSONファイルを添付します。「レポートを保存」からファイルの保存だけを行うこともできます。自動収集する内容にネットワークパスワード・IPアドレス・素材のパスは含めません。</translation></message>
+各項目に見た結果を記入します。通信の応答は別に記録されます。記録終了後、内容を確認して「報告メールを作成」を押すと、JSONレポートを保存します。通常の保存先は「ドキュメント」→「VTR-PON」→「SwitcherReports」です。自動添付できない場合は、表示される手順に沿って「添付ファイルの場所を開く」→「メールを開く」と進み、JSONをご自身で添付してください。添付を確認してからinfo@pondashi.com宛てに送信します。「レポートを保存」からファイルの保存だけを行うこともできます。自動収集する内容にネットワークパスワード・IPアドレス・素材のパスは含めません。</translation></message>
     <message id="switcher.check.firmware"><source>Switcher firmware (as displayed on the device)</source><translation>本体のファームウェア（本体表示の値）</translation></message>
     <message id="switcher.check.connection"><source>Connection</source><translation>接続</translation></message>
     <message id="switcher.check.send"><source>ON AIR → switcher input</source><translation>オンエア → スイッチャー入力</translation></message>
@@ -5017,27 +5017,39 @@ Attach this JSON file when reporting the results to the author.</source><transla
     <message id="settings.category.roland"><source>Roland Integration</source><translation>Roland連携</translation></message>
     <message id="settings.switcher.atem.description"><source>Connect VTR-PON to a Blackmagic ATEM switcher. Only one switcher integration can be enabled at a time.</source><translation>VTR-PONをBlackmagic ATEMスイッチャーへ接続します。同時に有効にできるスイッチャー連携は1台です。</translation></message>
     <message id="settings.switcher.roland.description"><source>Connect VTR-PON to a Roland switcher. Select your model and configure its connection. Only one switcher integration can be enabled at a time.</source><translation>VTR-PONをRolandスイッチャーへ接続します。機種を選んで接続を設定してください。同時に有効にできるスイッチャー連携は1台です。</translation></message>
-    <message id="switcher.check.email"><source>Send report</source><translation>レポートを送信</translation></message>
-    <message id="switcher.check.email_help"><source>Stop recording first. Save the report and open an email to info@pondashi.com. Review the message and press Send yourself. If automatic attachment is unavailable, attach the saved JSON file using Open report folder.</source><translation>記録を終了してから押してください。レポートを保存し、info@pondashi.com宛てのメールを作成します。内容を確認し、メールソフトの送信ボタンを押してください。自動添付できない場合は「保存先を開く」からJSONファイルを添付します。</translation></message>
-    <message id="switcher.check.folder"><source>Open report folder</source><translation>保存先を開く</translation></message>
+    <message id="switcher.check.email"><source>Create report email</source><translation>報告メールを作成</translation></message>
+    <message id="switcher.check.email_help"><source>Stop recording first. This saves a JSON report and prepares an email to info@pondashi.com. If automatic attachment is unavailable, follow the displayed steps to attach the saved JSON yourself before sending.</source><translation>記録を終了してから押してください。JSONレポートを保存し、info@pondashi.com宛てのメールを準備します。自動添付できない場合は、表示される手順に沿って保存済みのJSONをご自身で添付してから送信してください。</translation></message>
+    <message id="switcher.check.folder"><source>Show attachment folder</source><translation>添付ファイルの場所を開く</translation></message>
     <message id="switcher.check.folder_failed"><source>Could not open the folder. The report is saved at: %1</source><translation>保存先を開けませんでした。レポートの保存先: %1</translation></message>
     <message id="switcher.check.no_report_folder"><source>Could not find a report folder. Use Save report to choose a location.</source><translation>レポートの保存先を取得できませんでした。「レポートを保存」で保存先を指定してください。</translation></message>
     <message id="switcher.check.preparing_email"><source>Saving the report and preparing an email…</source><translation>レポートを保存してメールを準備しています…</translation></message>
-    <message id="switcher.check.email_ready"><source>The report is saved. Review the email to info@pondashi.com and press Send in your mail app.
-Saved: %1</source><translation>レポートを保存しました。info@pondashi.com宛てのメールを確認し、メールソフトの送信ボタンを押してください。
+    <message id="switcher.check.email_ready"><source>The report is saved. Preparing the email…
+Saved: %1</source><translation>レポートを保存しました。メールの準備中です…
 保存先: %1</translation></message>
     <message id="switcher.check.email_cancelled"><source>Email creation was cancelled. The report is still saved: %1</source><translation>メール作成をキャンセルしました。レポートは保存されています: %1</translation></message>
     <message id="switcher.check.email_finished"><source>The mail app has finished its operation. Check sending status in your mail app.
 Saved report: %1</source><translation>メールソフトでの操作が終了しました。送信状況はメールソフトで確認してください。
 レポートの保存先: %1</translation></message>
-    <message id="switcher.check.email_manual_attachment"><source>Requested an email to info@pondashi.com. Automatic attachment is unavailable with this mail app. Use Open report folder, attach the JSON file below, then press Send yourself.
-%1</source><translation>info@pondashi.com宛てのメール作成を依頼しました。このメールソフトでは自動添付できないため、「保存先を開く」から次のJSONファイルを添付し、送信してください。
-%1</translation></message>
+    <message id="switcher.check.email_manual_attachment"><source>The report is saved. You must attach the JSON file yourself.
+1. Select Show attachment folder to find the JSON file below.
+2. Select Open email, attach that JSON file, then press Send in your mail app.
+Saved: %1</source><translation>レポートを保存しました。JSONファイルは自動添付されません。
+1.「添付ファイルの場所を開く」で、次のJSONファイルを確認します。
+2.「メールを開く」を押し、そのJSONをメールに添付してから送信してください。
+保存先: %1</translation></message>
     <message id="switcher.check.email_failed"><source>Could not open a mail app. Send the saved JSON file to info@pondashi.com using your usual email or webmail.
 %1</source><translation>メールソフトを開けませんでした。普段お使いのメールやWebメールから、保存したJSONファイルをinfo@pondashi.comへ送ってください。
 %1</translation></message>
+    <message id="switcher.check.open_email"><source>Open email</source><translation>メールを開く</translation></message>
+    <message id="switcher.check.email_manual_opened"><source>Requested an email to info@pondashi.com. Attach the saved JSON file before pressing Send in your mail app.</source><translation>info@pondashi.com宛てのメール作成を依頼しました。保存済みのJSONファイルをメールに添付してから送信してください。</translation></message>
+    <message id="switcher.check.attachment_missing"><source>The saved JSON file could not be found. Select Create report email again to save a new copy.</source><translation>保存済みのJSONファイルが見つかりません。「報告メールを作成」をもう一度押して保存し直してください。</translation></message>
+    <message id="switcher.check.mail_attachment_check"><source>Before sending, check that this JSON file is attached: %1</source><translation>送信前に、次のJSONファイルが添付されていることを確認してください: %1</translation></message>
     <message id="switcher.check.mail_subject"><source>VTR-PON switcher operation report: %1</source><translation>VTR-PON スイッチャー動作確認レポート: %1</translation></message>
     <message id="switcher.check.mail_intro"><source>VTR-PON switcher operation check results:</source><translation>VTR-PONのスイッチャー動作確認結果をご報告します。</translation></message>
-    <message id="switcher.check.mail_attachment"><source>Please attach the report file before sending: %1</source><translation>送信前にレポートファイルの添付を確認してください: %1</translation></message>
+    <message id="switcher.check.mail_attachment"><source>Attachment required: This email does not attach the report automatically.
+Before sending, attach this JSON file: %1
+In VTR-PON Operation Check, select Show attachment folder (normally Documents/VTR-PON/SwitcherReports).</source><translation>【添付が必要です】このメールにはレポートが自動添付されません。
+送信前に次のJSONファイルを添付してください: %1
+VTR-PONの動作確認画面で「添付ファイルの場所を開く」から確認できます（通常は「ドキュメント」→「VTR-PON」→「SwitcherReports」）。</translation></message>
 </context>
 </TS>
