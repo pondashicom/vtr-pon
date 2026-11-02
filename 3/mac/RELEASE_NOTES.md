@@ -1,8 +1,8 @@
 # Mac release notes / Mac版リリースノート
 
-## VTR-PON 3.0.0-beta.2 — 公開準備中 / prepared, not distributed
+## VTR-PON 3.0.0-beta.2 — 2026-10-25
 
-Windows版とバージョン番号を揃えました。Mac版beta.1の機能を引き継ぎ、本体の表示・更新確認・配布ファイル名を `3.0.0-beta.2` に統一します。配布物のアップロードと最終検証が完了するまで、公式ダウンロードと更新通知はbeta.1のままです。
+Windows版とバージョン番号を揃えました。Mac版beta.1の機能を引き継ぎ、本体の表示・更新確認・配布ファイル名を `3.0.0-beta.2` に統一します。DMG・対応ソース・チェックサムを公式サイトへ配置し、取得した実ファイルのハッシュを照合しています。
 
 - macOS 15.0以降、Apple Silicon arm64向け。Intel Macは対象外です。
 - オンエア／エディット、動画・音声・静止画・PDF、UVC/UAC、Metal合成、DSK・FTB、BGM・PFL、返しモニター、仮想カメラを提供します。PPTX・PowerPoint・Keynoteの直接連携は含みません。
@@ -12,8 +12,8 @@ Windows版とバージョン番号を揃えました。Mac版beta.1の機能を�
 
 The Mac version is aligned with Windows at `3.0.0-beta.2`. Mac beta.1 features
 are retained. Version display, update checks and distribution filenames use the
-new version; current public beta.1 downloads remain active until final upload
-and verification.
+new version. The DMG, corresponding source and checksums are available on the
+official site, with the actual downloaded bytes verified against their pins.
 
 - macOS 15.0+ / Apple Silicon arm64; Intel Macs are outside the supported scope.
 - Retains Mac playback/PDF, UVC/UAC, Metal composition, DSK/FTB, BGM/PFL, return
@@ -38,4 +38,4 @@ alongside existing ATEM/NDI/VST3 support. The signed and notarized application,
 four separate add-ons, corresponding source, bilingual website and Mac update
 channel were published. Hardware and separate-Mac acceptance remain pending.
 
-[Mac downloads and verification volunteers](https://pondashi.com/vtr-pon/download/mac/index.html#mac-decklink)
+[Mac downloads](https://pondashi.com/vtr-pon/download/mac/index.html) · [Hardware verification volunteers](https://pondashi.com/vtr-pon/development.html#hardware-verification)

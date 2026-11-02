@@ -1,0 +1,43 @@
+{
+  "version": "3.0.0-beta.2",
+  "platform": "macos-arm64",
+  "sourceCommit": "4dabe205c1ff7c8d429cc101d3604984122d970c",
+  "sourceDirectory": "3/mac",
+  "notarized": true,
+  "notarySubmissions": [
+    {
+      "message": "Processing complete",
+      "status": "Accepted",
+      "id": "380fb098-2231-4a22-ba33-1313cf52b1d7"
+    },
+    {
+      "message": "Processing complete",
+      "id": "18151445-ab7c-449f-be27-e17ab4372e5e",
+      "status": "Accepted"
+    }
+  ],
+  "minimumMacOS": "15.0",
+  "developerIDSigned": true,
+  "hardwareVerification": "unverified",
+  "volunteersWanted": true,
+  "files": [
+    {
+      "file": "VTR-PON-3.0.0-beta.2-macos-arm64.dmg",
+      "bytes": 81360723,
+      "sha256": "c32c6f1c51bc53900e61960039db726788ede86f61e444151751cb9c0b69ecf0",
+      "url": "https://pondashi.com/vtr-pon/download/files/VTR-PON-3.0.0-beta.2-macos-arm64.dmg"
+    },
+    {
+      "file": "VTR-PON-3.0.0-beta.2-macos-arm64-corresponding-source.zip",
+      "bytes": 973667596,
+      "sha256": "bf1205cd9c5998de562bd0f7f3f467bda3843ba04ecc801837b2573e956aeb3c",
+      "url": "https://pondashi.com/vtr-pon/download/files/VTR-PON-3.0.0-beta.2-macos-arm64-corresponding-source.zip"
+    },
+    {
+      "file": "VTR-PON-3.0.0-beta.2-macos-arm64-SHA256SUMS.txt",
+      "bytes": 227,
+      "sha256": "29e4303316d238e3b9a658bd7f328f07a459e738fc8458920664580c8daf9227",
+      "url": "https://pondashi.com/vtr-pon/download/files/VTR-PON-3.0.0-beta.2-macos-arm64-SHA256SUMS.txt"
+    }
+  ]
+}
