@@ -862,6 +862,7 @@ ControllerSettingsDialog::ControllerSettingsDialog(
   rolandMidiIdLabel_->setBuddy(rolandMidiIdSpin_); rolandMidiForm->addRow(rolandMidiIdLabel_, rolandMidiIdSpin_);
   switcherCardLayout->addWidget(rolandMidiSettings_);
   rolandModelHelp_ = new QLabel(switcherCard);
+  rolandModelHelp_->setObjectName(QStringLiteral("rolandModelHelp"));
   rolandModelHelp_->setWordWrap(true);
   vtrpon::setSettingsRole(rolandModelHelp_, "description");
   switcherCardLayout->addWidget(rolandModelHelp_);
@@ -2149,6 +2150,7 @@ void ControllerSettingsDialog::refreshRolandModelText() {
   if (model != vtrpon::RolandSwitcherModel::V8Hd) help << vtrpon::uiText("switcher.trial.unverified");
   help << vtrpon::rolandInputDescription(model);
   if (transport == vtrpon::RolandTransport::Midi) help << vtrpon::uiText("settings.switcher.roland.midi_help");
+  if (model == vtrpon::RolandSwitcherModel::V8Hd) help << vtrpon::uiText("switcher.trial.v8_pgm_mode");
   if (model == vtrpon::RolandSwitcherModel::V1Hd || model == vtrpon::RolandSwitcherModel::V1Sdi)
     help << vtrpon::uiText("switcher.trial.pgm_mode");
   if (profile.transport == vtrpon::RolandTransport::Serial) help << vtrpon::uiText("switcher.trial.serial_help");
@@ -2156,6 +2158,9 @@ void ControllerSettingsDialog::refreshRolandModelText() {
   if (model == vtrpon::RolandSwitcherModel::V600Uhd) help << vtrpon::uiText("switcher.trial.v600_help");
   if (model == vtrpon::RolandSwitcherModel::Vr120Hd) help << vtrpon::uiText(
       transport == vtrpon::RolandTransport::Midi ? "switcher.trial.vr120_usb_help" : "switcher.trial.vr120_help");
+  const auto minimumFade = vtrpon::rolandMinimumFadeVersion(model);
+  if (transport == vtrpon::RolandTransport::Lan && !minimumFade.isEmpty())
+    help << vtrpon::uiText("switcher.trial.fade_firmware").arg(minimumFade);
   if (!profile.receive) help << vtrpon::uiText("switcher.trial.no_receive");
   if (!fade) help << vtrpon::uiText("switcher.trial.no_fade");
   rolandModelHelp_->setText(help.join('\n'));

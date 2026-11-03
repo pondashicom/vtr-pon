@@ -22,13 +22,14 @@ public:
 private:
   friend class RolandRemoteProtocolTest;
   std::function<bool(const QByteArray &)> writeForTest_;
-  enum class Reply { None, Version, Program, ProgramSource, SelectedTally, ConfirmTarget, Ack };
+  enum class Reply { None, Version, Program, Ack };
   struct Command {
     QByteArray body;
     Reply reply = Reply::None;
     int localInput = -1;
     QByteArray response;
     bool ackReceived = false;
+    int readRetries = 0;
   };
   void connectTransport();
   bool writeBytes(const QByteArray &bytes);
@@ -52,7 +53,6 @@ private:
   void observe(int input);
   void poll();
   QByteArray statusQuery() const;
-  QByteArray targetTallyAddress() const;
   void fail(const QString &detail, bool retry = true);
   void abortTransport();
   RolandSwitcherModel model_;
@@ -61,7 +61,8 @@ private:
   bool receive_, active_ = false, ready_ = false, authenticating_ = false;
   bool passwordSent_ = false, flowPaused_ = false;
   bool connecting_ = false, baselineKnown_ = false;
-  int selectedProgram_ = -1;
+  RolandProgramQuery programQuery_;
+  QString firmwareVersion_;
   int lastInput_ = -1, telnetState_ = 0;
   int localTarget_ = -1;
   QDeadlineTimer localTargetDeadline_;

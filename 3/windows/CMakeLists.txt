@@ -851,6 +851,10 @@ if(BUILD_TESTING)
     add_test(NAME program-playout-transition COMMAND program-playout-transition-test)
     add_test(NAME document-import-queue
       COMMAND program-playout-transition-test --document-import-queue-only)
+    add_test(NAME switcher-control
+      COMMAND program-playout-transition-test --switcher-only)
+    set_tests_properties(switcher-control PROPERTIES TIMEOUT 90
+      ENVIRONMENT "QT_QPA_PLATFORM=windows")
     set_tests_properties(document-import-queue PROPERTIES
       TIMEOUT 90 ENVIRONMENT "QT_QPA_PLATFORM=windows")
     set_tests_properties(program-playout-transition PROPERTIES
@@ -1755,4 +1759,9 @@ if(WIN32 AND CMAKE_CONFIGURATION_TYPES)
       --no-translations --dir "${CMAKE_BINARY_DIR}" "$<TARGET_FILE:vtr-pon>"
     COMMENT "Updating the fixed development runtime in the build root"
     VERBATIM)
+endif()
+
+# Protocol-only tests use the production Roland adapters without media/GPU dependencies.
+if(BUILD_TESTING AND WIN32)
+  add_subdirectory(tests/roland-protocol)
 endif()

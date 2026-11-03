@@ -8,7 +8,7 @@
 namespace {
 
 bool isRolandModelName(const QString &name, vtrpon::RolandSwitcherModel model) {
-  const auto normalized = [](QString value) { value = value.toUpper(); value.remove('-'); value.remove(' '); return value; };
+  const auto normalized = [](QString value) { value = value.toUpper(); value.remove('-'); value.remove(' '); value.replace("MKII", "MK2"); return value; };
   if (model == vtrpon::RolandSwitcherModel::V1Hd && (name.contains('+') || name.contains("PLUS", Qt::CaseInsensitive))) return false;
   if (model == vtrpon::RolandSwitcherModel::V8Hd && normalized(name).contains("V8HD")) return true;
   return normalized(name).contains(normalized(QLatin1String(vtrpon::rolandSwitcherProfile(model).name)));
@@ -26,7 +26,7 @@ RolandV8HdMidiSwitcher::RolandV8HdMidiSwitcher(
 RolandV8HdMidiSwitcher::RolandV8HdMidiSwitcher(RolandSwitcherModel model, RolandModelSettings settings,
                                            bool receiveProgramInputChanges, QObject *parent)
     : SwitcherDevice(parent), model_(model), settings_(normalizeRolandSettings(model, std::move(settings))),
-      receiveProgramInputChanges_(receiveProgramInputChanges) {
+      programQuery_(model), receiveProgramInputChanges_(receiveProgramInputChanges) {
   responseTimeout_.setSingleShot(true); responseTimeout_.setInterval(2500);
   connect(&responseTimeout_, &QTimer::timeout, this, [this] {
     close();
@@ -96,7 +96,7 @@ bool RolandV8HdMidiSwitcher::open(QString *errorDetail) {
   outputNotifier_ = new QWinEventNotifier(outputEvent_, this);
   connect(outputNotifier_, &QWinEventNotifier::activated, this, [this] { completeOutput(); });
 
-  if (receiveProgramInputChanges_ || model_ != RolandSwitcherModel::V8Hd) {
+  { // A valid status reply is required even when receive linking is off.
     const UINT inDeviceCount = midiInGetNumDevs();
     for (UINT index = 0; index < inDeviceCount; ++index) {
       MIDIINCAPSW caps{};
@@ -113,7 +113,7 @@ bool RolandV8HdMidiSwitcher::open(QString *errorDetail) {
       }
     }
 
-    if (!midiIn_ && model_ != RolandSwitcherModel::V8Hd) {
+    if (!midiIn_) {
       if (errorDetail) *errorDetail = QStringLiteral("Selected switcher's MIDI input could not be opened.");
       close(); return false;
     }
@@ -131,6 +131,10 @@ bool RolandV8HdMidiSwitcher::open(QString *errorDetail) {
         return false;
       }
       requestTally();
+      if (!queryPending_) {
+        if (errorDetail) *errorDetail = QStringLiteral("Could not send the initial MIDI status query.");
+        close(); return false;
+      }
       tallyPollTimer_.start();
     }
   }
@@ -143,8 +147,19 @@ bool RolandV8HdMidiSwitcher::open(QString *errorDetail) {
 #endif
 }
 
+void RolandV8HdMidiSwitcher::resetReceiveState() {
+  responseTimeout_.stop(); queryPending_ = modelReady_ = baselineKnown_ = false;
+  localTarget_ = lastProgramInputNumber_ = 0; midiReceiveBuffer_.clear();
+  localTargetDeadline_ = QDeadlineTimer(); programQuery_.reset();
+  panelModePending_ = fadeAssignPending_ = false; v1SdiFadeAssign_ = -1;
+}
 void RolandV8HdMidiSwitcher::close() {
-  responseTimeout_.stop(); queryPending_ = modelReady_ = legacyBaselineSeen_ = false; localTarget_ = 0; midiReceiveBuffer_.clear();
+#ifdef _WIN32
+  closing_ = true; ++inputGeneration_;
+#endif
+  resetReceiveState();
+  tallyPollTimer_.stop(); outputFadeTimer_.stop();
+  outputFadeLevel_ = outputFadeTargetLevel_ = 0;
 #ifdef _WIN32
   ++outputGeneration_; outputCooldown_ = false;
 #endif
@@ -194,7 +209,7 @@ void RolandV8HdMidiSwitcher::close() {
 
 bool RolandV8HdMidiSwitcher::setProgramInput(int sourceNumber,
                                              QString *errorDetail) {
-  if (sourceNumber < 1 || sourceNumber > rolandSwitcherProfile(model_).inputs || (model_ != RolandSwitcherModel::V8Hd && !modelReady_)) {
+  if (sourceNumber < 1 || sourceNumber > rolandSwitcherProfile(model_).inputs || !modelReady_) {
     if (errorDetail) {
       *errorDetail = QStringLiteral("%1 requires a ready MIDI connection and input 1-%2.").arg(QLatin1String(rolandSwitcherProfile(model_).name)).arg(rolandSwitcherProfile(model_).inputs);
     }
@@ -202,13 +217,9 @@ bool RolandV8HdMidiSwitcher::setProgramInput(int sourceNumber,
   }
   if (model_ != RolandSwitcherModel::V8Hd) {
     const auto address = QByteArray::fromHex(rolandSwitcherProfile(model_).programAddress);
-#ifdef _WIN32
     const bool result = sendSysEx(rolandSysEx(model_, settings_.midiDeviceId, 0x12, address + QByteArray(1, char(sourceNumber-1))), errorDetail);
     if (result) { lastProgramInputNumber_ = localTarget_ = sourceNumber; localTargetDeadline_.setRemainingTime(5000); }
     return result;
-#else
-    return false;
-#endif
   }
   const bool result = sendSysEx(makeDataSetMessage(0x00, 0x12, 0x00, QByteArray(1, char(sourceNumber - 1))), errorDetail);
   if (result) { lastProgramInputNumber_ = localTarget_ = sourceNumber; localTargetDeadline_.setRemainingTime(5000); }
@@ -221,7 +232,6 @@ bool RolandV8HdMidiSwitcher::setFadeToBlack(bool enabled,
     if (errorDetail) *errorDetail = QStringLiteral("FTB is unavailable over USB MIDI for this model.");
     return false;
   }
-#ifdef _WIN32
   if (model_ != RolandSwitcherModel::V8Hd) {
     if (!modelReady_) { if (errorDetail) *errorDetail = QStringLiteral("MIDI status is not ready."); return false; }
     QByteArray body;
@@ -232,12 +242,17 @@ bool RolandV8HdMidiSwitcher::setFadeToBlack(bool enabled,
       if (enabled && !sendSysEx(rolandSysEx(model_, settings_.midiDeviceId, 0x12, QByteArray::fromHex("02010400")), errorDetail)) return false;
       body = QByteArray::fromHex("002503"); body.append(char(enabled ? 0 : 64));
     } else {
+      if (model_ == RolandSwitcherModel::V1Sdi && (v1SdiFadeAssign_ < 0 || v1SdiFadeAssign_ == 2)) {
+        if (errorDetail) *errorDetail = QStringLiteral("V-1SDI OUTPUT FADER must be VIDEO, V & A, or BLACK / A for FTB.");
+        return false;
+      }
       body = QByteArray::fromHex(model_ == RolandSwitcherModel::V1Hd ? "710006" : "710306");
       body.append(char(enabled ? 0 : 1)); body.append(char(0));
     }
     return sendSysEx(rolandSysEx(model_, settings_.midiDeviceId, 0x12, body), errorDetail);
   }
 
+  if (!modelReady_) { if (errorDetail) *errorDetail = QStringLiteral("MIDI status is not ready."); return false; }
   if (enabled) {
     if (!sendSysEx(makeDataSetMessage(0x02, 0x01, 0x07,
                                       QByteArray(1, char(0x00))),
@@ -247,12 +262,6 @@ bool RolandV8HdMidiSwitcher::setFadeToBlack(bool enabled,
   }
   startOutputFadeRamp(enabled);
   return true;
-#else
-  if (errorDetail) {
-    *errorDetail = QStringLiteral("Roland V-8HD MIDI control is Windows-only.");
-  }
-  return false;
-#endif
 }
 
 void RolandV8HdMidiSwitcher::startOutputFadeRamp(bool enabled) {
@@ -302,44 +311,26 @@ QByteArray RolandV8HdMidiSwitcher::makeDataSetMessage(
   return rolandSysEx(model_, settings_.midiDeviceId, 0x12, addressAndData);
 }
 
-QByteArray RolandV8HdMidiSwitcher::makeDataRequestMessage(
-    quint8 address1, quint8 address2, quint8 address3, quint8 size1,
-    quint8 size2, quint8 size3) const {
-  QByteArray addressAndSize;
-  addressAndSize.append(char(address1));
-  addressAndSize.append(char(address2));
-  addressAndSize.append(char(address3));
-  addressAndSize.append(char(size1));
-  addressAndSize.append(char(size2));
-  addressAndSize.append(char(size3));
-
-  return rolandSysEx(model_, settings_.midiDeviceId, 0x11, addressAndSize);
+QByteArray RolandV8HdMidiSwitcher::currentQueryAddress() const {
+  if (panelModePending_) return QByteArray::fromHex(model_ == RolandSwitcherModel::V8Hd ? "020105" :
+      model_ == RolandSwitcherModel::V1Hd ? "700115" : "700100");
+  if (fadeAssignPending_) return QByteArray::fromHex("700121");
+  return programQuery_.address();
 }
-
+bool RolandV8HdMidiSwitcher::sendProgramQuery() {
+  QString error;
+  if (!sendSysEx(rolandSysEx(model_, settings_.midiDeviceId, 0x11,
+          currentQueryAddress() + QByteArray::fromHex("000001")), &error)) {
+    close(); emit connectionOpened(false, error); emit errorOccurred(error); return false;
+  }
+  queryPending_ = true; responseTimeout_.start(); return true;
+}
 void RolandV8HdMidiSwitcher::requestTally() {
-  if (model_ != RolandSwitcherModel::V8Hd) {
-#ifdef _WIN32
-    if (queryPending_) return;
-    // LAN-capable models expose physical-input tallies as well as virtual
-    // INPUT assignments. Read the physical entries, matching the LAN route.
-    const auto &p = rolandSwitcherProfile(model_);
-    const bool tallies = rolandHasUsbMidiChoice(model_);
-    const auto body = QByteArray::fromHex(tallies ? "0c0000" : p.programAddress) +
-        QByteArray::fromHex("0000") + QByteArray(1, char(tallies ? p.inputs : 1));
-    QString error;
-    if (!sendSysEx(rolandSysEx(model_, settings_.midiDeviceId, 0x11, body), &error)) { emit errorOccurred(error); return; }
-    queryPending_ = true; responseTimeout_.start();
-#endif
-    return;
-  }
-  if (!receiveProgramInputChanges_) {
-    return;
-  }
-  QString errorDetail;
-  if (!sendSysEx(makeDataRequestMessage(0x0C, 0x00, 0x00, 0x00, 0x00, 0x08),
-               &errorDetail)) {
-    emit errorOccurred(errorDetail);
-  }
+  if (queryPending_) return;
+  programQuery_.reset();
+  panelModePending_ = model_ == RolandSwitcherModel::V8Hd || model_ == RolandSwitcherModel::V1Sdi || model_ == RolandSwitcherModel::V1Hd;
+  fadeAssignPending_ = model_ == RolandSwitcherModel::V1Sdi;
+  sendProgramQuery();
 }
 
 void RolandV8HdMidiSwitcher::receiveMidiBytes(const QByteArray &bytes) {
@@ -357,80 +348,57 @@ void RolandV8HdMidiSwitcher::receiveMidiBytes(const QByteArray &bytes) {
 
 void RolandV8HdMidiSwitcher::parseDataSetMessage(const QByteArray &message) {
   QByteArray address, data;
-  if (!decodeRolandSysEx(model_, settings_.midiDeviceId, message, &address, &data)) return;
-  if (model_ != RolandSwitcherModel::V8Hd) {
-    const auto &p = rolandSwitcherProfile(model_);
-    const bool tallies = rolandHasUsbMidiChoice(model_);
-    if (!queryPending_ || address != QByteArray::fromHex(tallies ? "0c0000" : p.programAddress) ||
-        data.size() != (tallies ? p.inputs : 1)) return;
-    int source;
-    if (tallies) {
-      for (unsigned char value : data) if (value > 2) return;
-      source = data[settings_.sourceNumber - 1] == char(1) ? settings_.sourceNumber : 0;
-    } else {
-      source = static_cast<unsigned char>(data[0]) + 1;
-      if (source < 1 || source > p.inputs) return;
-    }
-    emit diagnosticEvent(QStringLiteral("RX"), QString::fromLatin1(message.toHex(' ')));
-    queryPending_ = false; responseTimeout_.stop();
-    // No PGM tally may be reported during a transition; retain the baseline.
-    if (tallies && modelReady_ && !data.contains(char(1))) return;
-    if (localTarget_ > 0) {
-      if (source == localTarget_) localTarget_ = 0;
-      else if (localTargetDeadline_.hasExpired()) {
-        close(); emit connectionOpened(false, QStringLiteral("MIDI input did not reach the requested source."));
-        emit errorOccurred(QStringLiteral("MIDI input did not reach the requested source."));
-      }
+  if (!decodeRolandSysEx(model_, settings_.midiDeviceId, message, &address, &data) || data.size() != 1) return;
+  // Program Change recalls a preset memory. Physical tally entries may include
+  // AUX/composite layers and must not be interpreted as logical INPUT numbers.
+  if (!queryPending_ || address != currentQueryAddress()) return;
+  const int value = static_cast<unsigned char>(data[0]);
+  if (panelModePending_) {
+    if (value != 1) {
+      close();
+      const auto error = QStringLiteral("Set the switcher to PGM/PST mode before enabling input linking.");
+      emit connectionOpened(false, error); emit errorOccurred(error);
       return;
     }
-    const int previous = lastProgramInputNumber_; lastProgramInputNumber_ = source;
-    if (!modelReady_) { modelReady_ = true; emit connectionOpened(true, QString::fromLatin1(rolandSwitcherProfile(model_).name) + QStringLiteral(" USB MIDI status received")); }
-    else if (receiveProgramInputChanges_ && previous != source) emit programInputChanged(source);
-    return;
-  }
-  if (address == QByteArray::fromHex("001200") || address.left(2) == QByteArray::fromHex("0c00"))
     emit diagnosticEvent(QStringLiteral("RX"), QString::fromLatin1(message.toHex(' ')));
-  if (message.size() < 13 ||
-      static_cast<unsigned char>(message.at(0)) != 0xF0 ||
-      static_cast<unsigned char>(message.at(1)) != 0x41 ||
-      static_cast<unsigned char>(message.at(7)) != 0x12 ||
-      static_cast<unsigned char>(message.at(message.size() - 1)) != 0xF7) {
-    return;
+    panelModePending_ = false; queryPending_ = false; responseTimeout_.stop(); sendProgramQuery(); return;
   }
-  const unsigned char address1 = static_cast<unsigned char>(message.at(8));
-  const unsigned char address2 = static_cast<unsigned char>(message.at(9));
-  const unsigned char address3 = static_cast<unsigned char>(message.at(10));
-  if (address1 == 0x00 && address2 == 0x12 && address3 == 0x00) {
-    const int sourceNumber =
-        static_cast<unsigned char>(message.at(11)) + 1;
-    if (sourceNumber >= 1 && sourceNumber <= 8) {
-      observeLegacyInput(sourceNumber);
-    }
-    return;
+  if (fadeAssignPending_) {
+    if (value > 3) return;
+    emit diagnosticEvent(QStringLiteral("RX"), QString::fromLatin1(message.toHex(' ')));
+    v1SdiFadeAssign_ = value; fadeAssignPending_ = false; queryPending_ = false; responseTimeout_.stop(); sendProgramQuery(); return;
   }
-  if (address1 == 0x0C && address2 == 0x00 && address3 <= 0x07) {
-    const int dataStart = 11;
-    const int dataEnd = message.size() - 2;
-    for (int index = dataStart; index < dataEnd; ++index) {
-      const int sourceNumber = address3 + (index - dataStart) + 1;
-      if (sourceNumber < 1 || sourceNumber > 8) {
-        continue;
-      }
-      const int tally = static_cast<unsigned char>(message.at(index));
-      if (tally == 0x01) {
-        observeLegacyInput(sourceNumber);
-        return;
-      }
-    }
-  }
+  const auto result = programQuery_.accept(static_cast<unsigned char>(data[0]));
+  if (result == RolandProgramQuery::Result::Invalid) return;
+  emit diagnosticEvent(QStringLiteral("RX"), QString::fromLatin1(message.toHex(' ')));
+  queryPending_ = false; responseTimeout_.stop();
+  if (result == RolandProgramQuery::Result::More) { sendProgramQuery(); return; }
+  const int physical = programQuery_.input();
+  const int source = rolandHasUsbMidiChoice(model_) ? (physical == settings_.sourceNumber-1 ? physical+1 : 0) : physical+1;
+  observeInput(source);
 }
-
-void RolandV8HdMidiSwitcher::observeLegacyInput(int sourceNumber) {
-  if (!legacyBaselineSeen_) { legacyBaselineSeen_ = true; lastProgramInputNumber_ = sourceNumber; return; }
-  if (localTarget_ > 0) {
-    if (sourceNumber == localTarget_) { localTarget_ = 0; lastProgramInputNumber_ = sourceNumber; return; }
+void RolandV8HdMidiSwitcher::markMidiReady() {
+  if (modelReady_) return;
+  modelReady_ = true;
+  emit connectionOpened(true, QString::fromLatin1(rolandSwitcherProfile(model_).name) + QStringLiteral(" USB MIDI status received"));
+}
+void RolandV8HdMidiSwitcher::observeInput(int sourceNumber) {
+  if (sourceNumber < 0 || sourceNumber > rolandSwitcherProfile(model_).inputs) return;
+  const bool baseline = baselineKnown_;
+  baselineKnown_ = true;
+  markMidiReady();
+  if (!baseline) {
+    lastProgramInputNumber_ = sourceNumber;
+    emit diagnosticEvent("BASELINE", QStringLiteral("Initial input state %1; no ON AIR request.").arg(sourceNumber));
+    return;
+  }
+  if (localTarget_) {
+    if (sourceNumber == localTarget_) {
+      localTarget_ = 0; lastProgramInputNumber_ = sourceNumber; return;
+    }
     if (!localTargetDeadline_.hasExpired()) return;
     localTarget_ = 0;
+    emit diagnosticEvent("OBSERVATION", QStringLiteral("Requested input was not observed before another source became active."));
   }
   if (lastProgramInputNumber_ == sourceNumber) return;
   lastProgramInputNumber_ = sourceNumber;
@@ -448,23 +416,28 @@ QString RolandV8HdMidiSwitcher::midiErrorText(unsigned int result) const {
   return QStringLiteral("MIDI operation failed (%1).").arg(result);
 }
 
+void RolandV8HdMidiSwitcher::handleShortMessage(quint32 message) {
+  Q_UNUSED(message);
+  // V-8HD Program Change recalls a preset. Poll the actual PGM selection.
+  // V-1HD can use bank-dependent Program Change; its PGM is read by SysEx too.
+}
+
 #ifdef _WIN32
 void CALLBACK RolandV8HdMidiSwitcher::midiInCallback(
     HMIDIIN handle, UINT message, DWORD_PTR instance, DWORD_PTR param1,
     DWORD_PTR param2) {
-  Q_UNUSED(handle);
   Q_UNUSED(param2);
   auto *self = reinterpret_cast<RolandV8HdMidiSwitcher *>(instance);
-  if (!self || self->closing_) {
-    return;
-  }
+  if (!self) return;
+  const auto generation = self->inputGeneration_.load();
+  if (self->closing_) return;
   if (message == MIM_DATA) {
     const DWORD shortMessage = static_cast<DWORD>(param1);
     const QPointer<RolandV8HdMidiSwitcher> guard(self);
     QMetaObject::invokeMethod(
         self,
-        [guard, shortMessage] {
-          if (guard && !guard->closing_) {
+        [guard, shortMessage, generation, handle] {
+          if (guard && !guard->closing_ && guard->inputGeneration_.load() == generation && guard->midiIn_ == handle) {
             guard->handleShortMessage(shortMessage);
           }
         },
@@ -479,8 +452,8 @@ void CALLBACK RolandV8HdMidiSwitcher::midiInCallback(
     const QPointer<RolandV8HdMidiSwitcher> guard(self);
     QMetaObject::invokeMethod(
         self,
-        [guard, payload] {
-          if (!guard || guard->closing_) {
+        [guard, payload, generation, handle] {
+          if (!guard || guard->closing_ || guard->inputGeneration_.load() != generation || guard->midiIn_ != handle) {
             return;
           }
           guard->receiveMidiBytes(payload);
@@ -492,17 +465,6 @@ void CALLBACK RolandV8HdMidiSwitcher::midiInCallback(
           }
         },
         Qt::QueuedConnection);
-  }
-}
-
-void RolandV8HdMidiSwitcher::handleShortMessage(DWORD message) {
-  if (model_ != RolandSwitcherModel::V8Hd) return;
-  const int status = message & 0xFF;
-  if ((status & 0xF0) == 0xC0) {
-    const int program = (message >> 8) & 0x7F;
-    if (program >= 0 && program < 8) {
-      observeLegacyInput(program + 1);
-    }
   }
 }
 
@@ -586,7 +548,8 @@ void RolandV8HdMidiSwitcher::pumpOutput() {
 void RolandV8HdMidiSwitcher::completeOutput() {
   if (!outputPending_ || !midiOut_) return;
   auto &header = outputQueue_.front()->header;
-  const auto result = midiOutUnprepareHeader(midiOut_, &header, sizeof(header));
+  const auto result = unprepareForTest_ ? unprepareForTest_(&header)
+      : midiOutUnprepareHeader(midiOut_, &header, sizeof(header));
   if (result == MIDIERR_STILLPLAYING) return;
   if (result != MMSYSERR_NOERROR) {
     outputFailed_ = true;
@@ -597,14 +560,14 @@ void RolandV8HdMidiSwitcher::completeOutput() {
   outputPending_ = false;
   emit diagnosticEvent(QStringLiteral("DRIVER"), QStringLiteral("MIDI buffer returned by driver (not a device acknowledgement)."));
   outputQueue_.pop_front();
-  if (model_ == RolandSwitcherModel::V8Hd) pumpOutput();
-  else {
-    outputCooldown_ = true; const auto generation = outputGeneration_;
-    QTimer::singleShot(20, this, [this, generation] {
-      if (generation != outputGeneration_) return;
-      outputCooldown_ = false; pumpOutput();
-    });
-  }
+  // V-8HD has the same documented minimum as the other SysEx models.
+  // State the minimum-delay requirement explicitly instead of relying on
+  // the Qt version's short-singleShot default timer selection.
+  outputCooldown_ = true; const auto generation = outputGeneration_;
+  QTimer::singleShot(20, Qt::PreciseTimer, this, [this, generation] {
+    if (generation != outputGeneration_) return;
+    outputCooldown_ = false; pumpOutput();
+  });
 }
 
 void RolandV8HdMidiSwitcher::outputTimedOut() {
@@ -617,6 +580,12 @@ void RolandV8HdMidiSwitcher::outputTimedOut() {
   // not release it just because the deadline expired or reset returned.
   midiOutReset(midiOut_);
   completeOutput();
+}
+#else
+bool RolandV8HdMidiSwitcher::sendSysEx(const QByteArray &message, QString *errorDetail) {
+  if (writeForTest_) return writeForTest_(message);
+  if (errorDetail) *errorDetail = QStringLiteral("WinMM MIDI output is unavailable on this platform.");
+  return false;
 }
 #endif
 

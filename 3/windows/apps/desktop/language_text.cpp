@@ -67,11 +67,15 @@ constexpr auto kUiTextIds = std::to_array<const char *>({
     QT_TRID_NOOP("switcher.trial.suffix"),
     //% "Set the switcher to PGM/PST mode. For V-1HD, set MIDI Rx SOURCE to USB and match the SysEx device ID to MIDI DEVICE ID (device ID minus one). For V-1SDI, assign OUTPUT FADER to VIDEO, V & A, or BLACK / A."
     QT_TRID_NOOP("switcher.trial.pgm_mode"),
+    //% "Set PANEL OPERATION to PGM/PST. Source numbers refer to INPUT 1–8 after the switcher’s input assignments."
+    QT_TRID_NOOP("switcher.trial.v8_pgm_mode"),
+    //% "LAN FTB requires firmware %1 or later and Output Fade set to Black."
+    QT_TRID_NOOP("switcher.trial.fade_firmware"),
     //% "Enable RS-232 on the switcher. Select the COM port of the RS-232 or USB–RS-232 adapter and match the baud rate. Use a crossover cable. For FTB, assign the left side of OUTPUT FADE to black."
     QT_TRID_NOOP("switcher.trial.serial_help"),
-    //% "Use LAN port 8023 and the four-character network password. For FTB, set Output Fade Mode to Fade to Background and set its background color to black. Source numbers refer to XPT 1–8."
+    //% "Use firmware 3.00 or later, LAN port 8023 and the four-character network password. For FTB, set Output Fade Mode to Fade to Background and set its background color to black. Source numbers refer to XPT 1–8."
     QT_TRID_NOOP("switcher.trial.v600_help"),
-    //% "Use TCP port 8023 and the four-character network password. For FTB, set Output Fade Assign > Video Fade to Black and use firmware 2.10 or later (LAN/RS-232 Basic Control Commands). For input-to-ON AIR, disable AUX, PinP&Key and DSK in Tally Settings."
+    //% "Use TCP port 8023 and the four-character network password. For FTB, set Output Fade Assign > Video Fade to Black and use firmware 2.10 or later (LAN/RS-232 Basic Control Commands)."
     QT_TRID_NOOP("switcher.trial.vr120_help"),
     //% "Switcher-to-ON AIR is unavailable in this trial because the input-status response format is not established by the reference used."
     QT_TRID_NOOP("switcher.trial.no_receive"),
@@ -1493,7 +1497,7 @@ constexpr auto kUiTextIds = std::to_array<const char *>({
     QT_TRID_NOOP("settings.switcher.roland.host"),
     //% "TCP port"
     QT_TRID_NOOP("settings.switcher.roland.port"),
-    //% "Connect the selected model by USB MIDI. Its MIDI ports are detected by model name. New models require a valid status reply before Ready."
+    //% "Connect the selected model by USB MIDI. Its MIDI ports are detected by model name. A valid status reply is required before Ready."
     QT_TRID_NOOP("settings.switcher.roland.midi_help"),
     //% "VR-50HD MK II LAN control is awaiting hardware verification. Enter the device's IP address (TCP port 8023) and select INPUT 1-4. For FTB, set Output Fade Color to Black on the switcher. Initial connection and reconnection do not start ON AIR."
     QT_TRID_NOOP("settings.switcher.roland.lan_help"),

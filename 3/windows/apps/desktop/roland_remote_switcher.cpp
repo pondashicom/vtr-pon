@@ -10,7 +10,7 @@ namespace vtrpon {
 RolandRemoteSwitcher::RolandRemoteSwitcher(RolandSwitcherModel model, RolandModelSettings settings,
                                          bool receive, QObject *parent)
     : SwitcherDevice(parent), model_(model), profile_(rolandSwitcherProfile(model)),
-      settings_(normalizeRolandSettings(model, std::move(settings))), receive_(receive), socket_(new QTcpSocket(this)) {
+      settings_(normalizeRolandSettings(model, std::move(settings))), receive_(receive), programQuery_(model), socket_(new QTcpSocket(this)) {
   socket_->setReadBufferSize(4096);
   deadline_.setSingleShot(true); deadline_.setInterval(4000);
   reconnect_.setSingleShot(true); reconnect_.setInterval(3000);
@@ -56,7 +56,7 @@ void RolandRemoteSwitcher::abortTransport() {
 }
 void RolandRemoteSwitcher::close() {
   active_ = ready_ = authenticating_ = passwordSent_ = flowPaused_ = false;
-  connecting_ = baselineKnown_ = false; selectedProgram_ = -1;
+  connecting_ = baselineKnown_ = false; programQuery_.reset(); firmwareVersion_.clear();
   deadline_.stop(); pollTimer_.stop(); reconnect_.stop(); abortTransport();
   queue_.clear(); pending_ = {}; frame_.clear(); loginText_.clear(); lastInput_ = localTarget_ = -1; telnetState_ = 0;
 }
@@ -112,7 +112,7 @@ void RolandRemoteSwitcher::fail(const QString &detail, bool retry) {
   if (retry) reconnect_.start();
   else { active_ = false; reconnect_.stop(); }
   ready_ = authenticating_ = passwordSent_ = flowPaused_ = false;
-  connecting_ = baselineKnown_ = false; selectedProgram_ = -1;
+  connecting_ = baselineKnown_ = false; programQuery_.reset(); firmwareVersion_.clear();
   deadline_.stop(); pollTimer_.stop(); queue_.clear(); pending_ = {};
   frame_.clear(); loginText_.clear(); lastInput_ = localTarget_ = -1; telnetState_ = 0; abortTransport();
   const QString message = QString::fromLatin1(profile_.name) + QStringLiteral(": ") + detail;
@@ -150,7 +150,19 @@ bool RolandRemoteSwitcher::setProgramInput(int source, QString *error) {
 bool RolandRemoteSwitcher::setFadeToBlack(bool enabled, QString *error) {
   if (!ready_ || !profile_.fade) { if (error) *error = QStringLiteral("FTB is unavailable for this model or connection."); return false; }
   // The basic command guide defines explicit states; never send the FTB toggle.
-  if (model_ == RolandSwitcherModel::Vr120Hd)
+  const auto minimum = rolandMinimumFadeVersion(model_);
+  if (!minimum.isEmpty()) {
+    const auto versionCode = [](const QString &s) {
+      const auto match = QRegularExpression(QStringLiteral("^(\\d+)\\.(\\d+)")).match(s);
+      if (!match.hasMatch()) return -1;
+      return match.captured(1).toInt()*100 + match.captured(2).leftJustified(2, '0').toInt();
+    };
+    if (versionCode(firmwareVersion_) < versionCode(minimum)) {
+      if (error) *error = QStringLiteral("LAN FTB requires firmware %1 or later (reported: %2).").arg(minimum, firmwareVersion_);
+      return false;
+    }
+  }
+  if (rolandHasUsbMidiChoice(model_))
     return enqueue({enabled ? QByteArrayLiteral("FTB:ON;") : QByteArrayLiteral("FTB:OFF;"), Reply::Ack}, error);
   return enqueue({model_ == RolandSwitcherModel::V1HdPlus
       ? (enabled ? QByteArrayLiteral("OFD:-63;") : QByteArrayLiteral("OFD:0;"))
@@ -159,14 +171,11 @@ bool RolandRemoteSwitcher::setFadeToBlack(bool enabled, QString *error) {
 void RolandRemoteSwitcher::poll() {
   if (!ready_ || pending_.reply != Reply::None || !queue_.isEmpty()) return;
   if (!profile_.receive) enqueue({"VER;", Reply::Version});
-  else enqueue({statusQuery(), Reply::Program});
-}
-QByteArray RolandRemoteSwitcher::targetTallyAddress() const {
-  return "0C" + QByteArray::number(settings_.sourceNumber - 1, 16).rightJustified(4, '0').toUpper();
+  else { programQuery_.reset(); enqueue({statusQuery(), Reply::Program}); }
 }
 QByteArray RolandRemoteSwitcher::statusQuery() const {
-  // Each documented tally parameter is one byte. V-80HD hardware ignores block reads.
-  return *profile_.programAddress ? "RQH:" + targetTallyAddress() + ",000001;" : QByteArrayLiteral("TLY;");
+  // The hardware-backed V-80HD client found that only single-byte reads work.
+  return *profile_.programAddress ? "RQH:" + programQuery_.address().toHex().toUpper() + ",000001;" : QByteArrayLiteral("TLY;");
 }
 QByteArray RolandRemoteSwitcher::lanLineEnding(bool password) const {
   // Match the model-specific, hardware-backed clients; retain VR-120HD's existing framing.
@@ -180,6 +189,14 @@ void RolandRemoteSwitcher::responseTimeout() {
     fail(QStringLiteral("No authentication result after sending the password. Check the password and reconnect manually."), false);
   else if (authenticating_)
     fail(QStringLiteral("No authentication prompt received. Another controller may hold the LAN session."));
+  else if (model_ == RolandSwitcherModel::V80Hd && !flowPaused_ &&
+           (isParameterRead() || pending_.reply == Reply::Version) &&
+           pending_.response.isEmpty() && !pending_.ackReceived && pending_.readRetries++ == 0) {
+    // Packet-capture-backed Companion reports dropped read requests. Retry only
+    // a wholly unanswered read, preserving the same pending command/ACK pair.
+    if (!writeBytes(pending_.body + lanLineEnding(false))) { fail(QStringLiteral("Read retry send failed.")); return; }
+    emit diagnosticEvent(QStringLiteral("RETRY"), QString::fromLatin1(pending_.body)); deadline_.start(4000);
+  }
   else fail(pending_.body.isEmpty() ? QStringLiteral("Transport response timed out.") :
       QStringLiteral("No response to %1").arg(QString::fromLatin1(pending_.body)));
 }
@@ -260,8 +277,7 @@ void RolandRemoteSwitcher::consume(unsigned char b) {
   frame_.append(char(b));
 }
 bool RolandRemoteSwitcher::isParameterRead() const {
-  return *profile_.programAddress && (pending_.reply == Reply::Program || pending_.reply == Reply::ProgramSource ||
-      pending_.reply == Reply::SelectedTally || pending_.reply == Reply::ConfirmTarget);
+  return *profile_.programAddress && pending_.reply == Reply::Program;
 }
 bool RolandRemoteSwitcher::needsQueryAck() const {
   // These models document a received-command ACK in addition to query data.
@@ -288,32 +304,11 @@ void RolandRemoteSwitcher::markReady() {
   if (!ready_) { ready_ = true; pollTimer_.start(); emit connectionOpened(true, connectionDetail()); }
 }
 void RolandRemoteSwitcher::handleParameterValue(int value) {
-  const auto reply = pending_.reply;
+  const auto result = programQuery_.accept(value);
   complete();
-  const auto read = [](const QByteArray &address) { return "RQH:" + address.toUpper() + ",000001;"; };
-  if (reply == Reply::ProgramSource) {
-    if (value > profile_.maximumProgramValue) { fail(QStringLiteral("Invalid program source response.")); return; }
-    selectedProgram_ = value;
-    if (model_ == RolandSwitcherModel::V1_4K && value == 15) { observe(-1); return; }
-    const auto address = "0C" + QByteArray::number(value, 16).rightJustified(4, '0').toUpper();
-    enqueue({read(address), Reply::SelectedTally}); return;
-  }
-  if (value > 2) { fail(QStringLiteral("Invalid tally value.")); return; }
-  if (reply == Reply::Program) {
-    if (value == 1) observe(settings_.sourceNumber - 1);
-    else enqueue({read(profile_.programAddress), Reply::ProgramSource});
-  } else if (reply == Reply::SelectedTally) {
-    if (value == 1) {
-      if (selectedProgram_ == settings_.sourceNumber - 1) observe(settings_.sourceNumber - 1);
-      else enqueue({statusQuery(), Reply::ConfirmTarget});
-    } else {
-      // No positive PGM observation: preserve the baseline through FTB/all-dark.
-      markReady();
-    }
-  } else if (reply == Reply::ConfirmTarget) {
-    // The target may have changed during the preceding reads. Fresh positive wins.
-    observe(value == 1 ? settings_.sourceNumber - 1 : -1);
-  }
+  if (result == RolandProgramQuery::Result::Invalid) { fail(QStringLiteral("Invalid PGM source or INPUT assignment response.")); return; }
+  if (result == RolandProgramQuery::Result::More) { enqueue({statusQuery(), Reply::Program}); return; }
+  observe(programQuery_.input() == settings_.sourceNumber - 1 ? programQuery_.input() : -1);
 }
 void RolandRemoteSwitcher::finishResponse() {
   if (needsQueryAck() && !pending_.ackReceived) return;
@@ -327,7 +322,7 @@ void RolandRemoteSwitcher::finishResponse() {
     emit diagnosticEvent(QStringLiteral("VERSION"), QString::fromLatin1(pending_.response.left(100)));
     complete();
     if (!profile_.receive) markReady();
-    else enqueue({statusQuery(), Reply::Program});
+    else { programQuery_.reset(); enqueue({statusQuery(), Reply::Program}); }
   }
 }
 void RolandRemoteSwitcher::observe(int input) {
@@ -356,6 +351,7 @@ void RolandRemoteSwitcher::handleFrame(const QByteArray &frame) {
     const QByteArray name = frame.mid(4).split(',').value(0).trimmed();
     const QByteArray expected = model_ == RolandSwitcherModel::V1HdPlus ? QByteArrayLiteral("V-1HD PLUS") : QByteArray(profile_.name);
     if (name != expected) { fail(QStringLiteral("Connected device does not match the selected model.")); return; }
+    firmwareVersion_ = QString::fromLatin1(frame.mid(4).split(',').value(1)).trimmed();
     pending_.response = frame;
     finishResponse(); return;
   }

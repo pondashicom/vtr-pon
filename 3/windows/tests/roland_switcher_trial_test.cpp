@@ -28,90 +28,152 @@ namespace vtrpon {
 class RolandMidiTrialTest {
 public:
   static void runLanUsbModels() {
-    struct Fixture { RolandSwitcherModel model; int inputs; const char *program; };
+    struct Fixture { RolandSwitcherModel model; int inputs; const char *query; const char *program; const char *address; };
     const Fixture fixtures[]{
-      {RolandSwitcherModel::V160Hd, 16, "f041100000000002120021000f50f7"},
-      {RolandSwitcherModel::V80Hd, 8, "f04110010514120015000764f7"},
-      {RolandSwitcherModel::V1_4K, 5, "f0411001061012001200046af7"},
-      {RolandSwitcherModel::Vr6Hd, 6, "f04110000000002c12000f00056cf7"},
-      {RolandSwitcherModel::Vr120Hd, 12, "f04110000000002512001b000b5af7"}
+      {RolandSwitcherModel::V160Hd,16,"f041100000000002110021000000015ef7","f041100000000002120021000f50f7","002100"},
+      {RolandSwitcherModel::V80Hd,8,"f04110010514110015000000016af7","f04110010514120015000764f7","001500"},
+      {RolandSwitcherModel::V1_4K,5,"f04110010610110012000000016df7","f0411001061012001200046af7","001200"},
+      {RolandSwitcherModel::Vr6Hd,6,"f04110000000002c11000f0000000170f7","f04110000000002c12000f00056cf7","000f00"},
+      {RolandSwitcherModel::Vr120Hd,12,"f04110000000002511001b0000000164f7","f04110000000002512001b000b5af7","001b00"}
     };
     for (const auto &f : fixtures) {
       RolandModelSettings settings; settings.useUsbMidi = true; settings.sourceNumber = f.inputs;
-      check(rolandTransport(f.model, {}) == RolandTransport::Lan &&
-            rolandTransport(f.model, settings) == RolandTransport::Midi, "LAN remains default; USB is opt-in");
-      RolandV8HdMidiSwitcher device(f.model, settings, true);
-      QByteArray sent;
-      device.writeForTest_ = [&](const QByteArray &message) { sent = message; return true; };
-      int ready = 0, changes = 0;
-      QObject::connect(&device, &SwitcherDevice::connectionOpened, &device, [&](bool value, const QString &) { if (value) ++ready; });
-      QObject::connect(&device, &SwitcherDevice::programInputChanged, &device, [&](int value) { if (value == f.inputs) ++changes; });
-      const auto response = [&](int selected) {
-        QByteArray tallies(f.inputs, char(0)); if (selected) tallies[selected - 1] = 1;
-        return rolandSysEx(f.model, 16, 0x12, QByteArray::fromHex("0c0000") + tallies);
-      };
-      device.requestTally();
-      QByteArray address, size;
-      auto reply = sent; // Decode the RQ1 with the same checksum after changing its command to DT1.
-      reply[reply.size() - 9] = 0x12;
-      check(decodeRolandSysEx(f.model, 16, reply, &address, &size) && address == QByteArray::fromHex("0c0000") &&
-            size == QByteArray::fromHex("0000") + QByteArray(1, char(f.inputs)), "physical-input tally request has model-specific size");
-      auto corrupt = response(1); corrupt[corrupt.size() - 2] ^= 1;
-      device.receiveMidiBytes(corrupt);
-      check(device.queryPending_ && ready == 0, "invalid checksum cannot establish USB readiness");
-      device.receiveMidiBytes(rolandSysEx(f.model, 1, 0x12, QByteArray::fromHex("0c0000") + QByteArray(f.inputs, char(0))));
-      device.receiveMidiBytes(rolandSysEx(RolandSwitcherModel::V8Hd, 16, 0x12, QByteArray::fromHex("0c0000") + QByteArray(f.inputs, char(0))));
-      device.receiveMidiBytes(rolandSysEx(f.model, 16, 0x12, QByteArray::fromHex("0c0000") + QByteArray(f.inputs, char(3))));
-      device.receiveMidiBytes(rolandSysEx(f.model, 16, 0x12, QByteArray::fromHex("0c0000") + QByteArray(f.inputs - 1, char(0))));
-      check(device.queryPending_ && ready == 0, "wrong model, device, tally range and size rejected");
-      const auto initial = response(1);
-      device.receiveMidiBytes(initial.left(5)); device.receiveMidiBytes(QByteArray(1, char(0xf8)) + initial.mid(5));
-      check(ready == 1 && changes == 0, "valid split tally establishes baseline without ON AIR");
-      device.requestTally(); device.receiveMidiBytes(response(f.inputs));
-      check(changes == 1, "last physical input including SDI is detected over USB");
-      device.requestTally(); device.receiveMidiBytes(response(f.inputs));
-      check(changes == 1, "duplicate tally cannot retrigger ON AIR");
-      check(device.setProgramInput(f.inputs) && sent == QByteArray::fromHex(f.program), "documented USB PGM command, model ID and checksum");
-      device.requestTally(); device.receiveMidiBytes(response(1));
-      check(device.localTarget_ == f.inputs && changes == 1, "stale tally after local command cannot retrigger");
-      device.requestTally(); device.receiveMidiBytes(response(f.inputs));
-      check(device.localTarget_ == 0 && changes == 1, "local command reflection is suppressed");
-      const auto beforeFade = sent;
-      check(!device.setFadeToBlack(true) && !device.setFadeToBlack(false) && sent == beforeFade,
-            "USB rejects unsupported FTB without sending a different model's command");
-      device.requestTally(); device.receiveMidiBytes(response(0));
-      device.requestTally(); device.receiveMidiBytes(response(f.inputs));
-      check(changes == 1, "transient missing PGM tally cannot retrigger");
-      device.close(); device.queryPending_ = true; device.receiveMidiBytes(response(f.inputs));
-      check(ready == 2 && changes == 1, "reconnect establishes a fresh baseline");
-      RolandV8HdMidiSwitcher disabled(f.model, settings, false);
-      int disabledChanges = 0;
-      QObject::connect(&disabled, &SwitcherDevice::programInputChanged, &disabled, [&](int) { ++disabledChanges; });
-      disabled.queryPending_ = true; disabled.receiveMidiBytes(response(1));
-      disabled.queryPending_ = true; disabled.receiveMidiBytes(response(f.inputs));
-      check(disabled.modelReady_ && disabledChanges == 0, "USB handshake remains available with input linking off");
-      device.queryPending_ = true;
-      QMetaObject::invokeMethod(&device.responseTimeout_, "timeout", Qt::DirectConnection);
-      check(!device.modelReady_ && !device.queryPending_, "USB response timeout clears readiness and stale query");
-    }
-    for (auto model : {RolandSwitcherModel::Vr50HdMk2, RolandSwitcherModel::V600Uhd, RolandSwitcherModel::V1HdPlus}) {
-      RolandV8HdMidiSwitcher unsupported(model, {}, false);
-      check(!rolandHasUsbMidiChoice(model) && !unsupported.open(), "models without documented USB MIDI keep their original transport");
+      check(rolandTransport(f.model,{}) == RolandTransport::Lan && rolandTransport(f.model,settings) == RolandTransport::Midi,"LAN remains default; USB is opt-in");
+      RolandV8HdMidiSwitcher device(f.model,settings,true);
+      QByteArray sent; device.writeForTest_ = [&](const QByteArray &m) { sent=m; return true; };
+      int ready=0; QList<int> changes;
+      QObject::connect(&device,&SwitcherDevice::connectionOpened,&device,[&](bool v,const QString &) { if(v) ++ready; });
+      QObject::connect(&device,&SwitcherDevice::programInputChanged,&device,[&](int v) { changes.append(v); });
+      const auto response=[&](int raw) { return rolandSysEx(f.model,16,0x12,QByteArray::fromHex(f.address)+char(raw)); };
+      device.requestTally(); check(sent==QByteArray::fromHex(f.query),"literal official single-byte PGM RQ1 fixture");
+      auto corrupt=response(0); corrupt[corrupt.size()-2]^=1; device.receiveMidiBytes(corrupt);
+      device.receiveMidiBytes(rolandSysEx(f.model,1,0x12,QByteArray::fromHex(f.address)+char(0)));
+      device.receiveMidiBytes(rolandSysEx(f.model,16,0x12,QByteArray::fromHex(f.address)+QByteArray::fromHex("0001")));
+      device.receiveMidiBytes(response(0x7f));
+      device.receiveMidiBytes(rolandSysEx(f.model,16,0x12,QByteArray::fromHex("0c000001")));
+      check(device.queryPending_ && ready==0,"checksum, device, size, value and unrequested tally cannot establish readiness");
+      const auto initial=response(0); device.receiveMidiBytes(initial.left(5)); device.receiveMidiBytes(QByteArray(1,char(0xf8))+initial.mid(5));
+      check(ready==1 && changes.isEmpty(),"fragmented initial source is baseline only");
+      const auto reply=[&](int value) { device.requestTally(); device.receiveMidiBytes(response(value)); };
+      reply(f.inputs-1); check(changes==QList<int>{f.inputs},"last physical input including SDI observed");
+      reply(f.inputs-1); check(changes.size()==1,"duplicate status cannot retrigger");
+      check(device.setProgramInput(f.inputs) && sent==QByteArray::fromHex(f.program),"literal PGM DT1 fixture, model ID and checksum");
+      reply(0); check(device.localTarget_==f.inputs && changes.size()==1,"stale status suppressed during local operation");
+      reply(f.inputs-1); check(device.localTarget_==0 && changes.size()==1,"local reflection is not another take");
+      reply(f.inputs); check(changes.size()==2 && changes.last()==0,"STILL clears physical target presence");
+      reply(f.inputs-1); check(changes.size()==3 && changes.last()==f.inputs,"return from STILL takes once");
+      const auto before=sent; check(!device.setFadeToBlack(true) && sent==before,"LAN FTB is not sent over MIDI");
+      device.close(); reply(f.inputs-1); check(ready==2 && changes.size()==3,"reconnect has a fresh silent baseline");
+      QMetaObject::invokeMethod(&device.responseTimeout_,"timeout",Qt::DirectConnection);
+      check(!device.modelReady_ && !device.queryPending_,"response failure clears readiness");
+      RolandV8HdMidiSwitcher disabled(f.model,settings,false); disabled.writeForTest_=[](const QByteArray &) { return true; };
+      disabled.requestTally(); disabled.receiveMidiBytes(response(0)); disabled.requestTally(); disabled.receiveMidiBytes(response(f.inputs-1));
+      check(disabled.modelReady_,"MIDI handshake required even with receive linking disabled");
     }
   }
+  static void runParameterMaps() {
+    struct Mapping { RolandSwitcherModel model; int logicalFirst; int logicalLast; const char *lastAddress; int nativeLast; int assignMaximum; };
+    const Mapping cases[]{
+      {RolandSwitcherModel::V160Hd,0x20,0x33,"00002d",15,0x20},
+      {RolandSwitcherModel::V80Hd,0x29,0x38,"00000f",7,0x2c},
+      {RolandSwitcherModel::V1_4K,0x07,0x0e,"000007",4,4},
+      {RolandSwitcherModel::Vr6Hd,0x17,0x1c,"000005",5,0x17},
+      {RolandSwitcherModel::Vr120Hd,0x1d,0x24,"000007",11,0x20}
+    };
+    for(const auto &f:cases) {
+      RolandProgramQuery query(f.model);
+      check(query.accept(f.nativeLast)==RolandProgramQuery::Result::Observed && query.input()==f.nativeLast,"last native HDMI/SDI PGM source");
+      query.reset(); check(query.accept(f.nativeLast+1)==RolandProgramQuery::Result::Observed && query.input()==-1,"first still is not a physical input");
+      query.reset(); check(query.accept(f.logicalLast)==RolandProgramQuery::Result::More && query.address()==QByteArray::fromHex(f.lastAddress),"last logical slot has its documented assignment address");
+      const int assigned=f.model==RolandSwitcherModel::V1_4K?1:f.nativeLast;
+      check(query.accept(assigned)==RolandProgramQuery::Result::More,"assignment requires fresh PGM confirmation");
+      check(query.accept(f.logicalLast)==RolandProgramQuery::Result::Observed && query.input()==(f.model==RolandSwitcherModel::V1_4K?-1:f.nativeLast),"logical source resolves without treating slot number as HDMI");
+      query.reset(); query.accept(f.logicalFirst); query.accept(0);
+      check(query.accept(f.nativeLast)==RolandProgramQuery::Result::Observed && query.input()==f.nativeLast,"PGM changed during assignment read follows newest source");
+      query.reset(); query.accept(f.logicalFirst); check(query.accept(f.assignMaximum+1)==RolandProgramQuery::Result::Invalid,"invalid assignment rejected");
+      query.reset(); query.accept(f.logicalFirst); query.accept(0); query.accept(f.logicalFirst);
+      check(query.input()==0,"first logical INPUT maps to native HDMI1 when assigned");
+    }
+    RolandProgramQuery v160(RolandSwitcherModel::V160Hd);
+    v160.accept(0x29); check(v160.address()==QByteArray::fromHex("000009"),"V-160HD INPUT10 assignment boundary");
+    v160.reset(); v160.accept(0x2a); check(v160.address()==QByteArray::fromHex("000024"),"V-160HD INPUT11 noncontiguous assignment boundary");
+    RolandProgramQuery v1(RolandSwitcherModel::V1_4K);
+    check(v1.accept(15)==RolandProgramQuery::Result::Observed && v1.input()==-1,"V-1-4K direct BLACK");
+    v1.reset(); v1.accept(11); v1.accept(0); v1.accept(11); check(v1.input()==4,"V-1-4K slot5 assignment0 means HDMI5, not HDMI1");
+    v1.reset(); v1.accept(12); check(v1.accept(0)==RolandProgramQuery::Result::Invalid,"V-1-4K slots6-8 have no native HDMI");
+  }
   static void run() {
-    runLanUsbModels();
+    runLanUsbModels(); runParameterMaps();
+    {
+      RolandV8HdMidiSwitcher failed(true); failed.modelReady_=true;
+      int failures=0; QObject::connect(&failed,&SwitcherDevice::connectionOpened,&failed,[&](bool ok,const QString &) { if(!ok) ++failures; });
+      failed.writeForTest_=[](const QByteArray &) { return false; };
+      failed.requestTally();
+      check(!failed.modelReady_ && !failed.queryPending_ && failures==1,"MIDI read-send failure invalidates Ready and cancels the pending state");
+    }
+
+    {
+      // V-1SDI Reference p.11/20: A/PGM is valid only in PGM/PST;
+      // OUTPUT FADER ASSIGN=2 controls audio alone, and must not be used as FTB.
+      RolandV8HdMidiSwitcher device(RolandSwitcherModel::V1Sdi,{},true);
+      QByteArray sent; device.writeForTest_=[&](const QByteArray &wire) { sent=wire; return true; };
+      const auto mode=QByteArray::fromHex("f041100000003112700100010ef7");
+      const auto pgm=QByteArray::fromHex("f0411000000031127103080004f7");
+      device.requestTally();
+      check(sent==QByteArray::fromHex("f0411000000031117001000000010ef7"),"V-1SDI starts with documented panel mode RQ1");
+      device.receiveMidiBytes(mode);
+      check(sent==QByteArray::fromHex("f0411000000031117001210000016df7"),"V-1SDI reads output fader assignment");
+      device.receiveMidiBytes(QByteArray::fromHex("f041100000003112700121026cf7"));
+      check(sent==QByteArray::fromHex("f04110000000311171030800000103f7"),"V-1SDI reads A/PGM after prerequisites");
+      device.receiveMidiBytes(pgm); const auto before=sent;
+      check(device.modelReady_ && !device.setFadeToBlack(true) && sent==before,"audio-only fader assignment refuses FTB without a write");
+      device.requestTally(); device.receiveMidiBytes(QByteArray::fromHex("f041100000003112700100000ff7"));
+      check(!device.modelReady_ && !device.setProgramInput(1),"V-1SDI A/B mode cannot control the wrong active bus");
+      device.close(); device.requestTally(); device.receiveMidiBytes(mode);
+      device.receiveMidiBytes(QByteArray::fromHex("f041100000003112700121006ef7")); device.receiveMidiBytes(pgm);
+      check(device.setFadeToBlack(true) && sent==QByteArray::fromHex("f041100000003112710306000006f7"),"V-1SDI black endpoint is a two-byte value");
+      check(device.setFadeToBlack(false) && sent==QByteArray::fromHex("f041100000003112710306010005f7"),"V-1SDI neutral endpoint is 128, encoded as 01 00");
+    }
     const auto query = rolandSysEx(RolandSwitcherModel::V1Hd, 0x10, 0x11, QByteArray::fromHex("710008000001"));
     check(query == QByteArray::fromHex("f04110000000201171000800000106f7"), "V-1HD documented model ID, address and checksum");
     check(rolandSysEx(RolandSwitcherModel::V02HdMk2, 0x10, 0x12, QByteArray::fromHex("00250001")) ==
           QByteArray::fromHex("f04110000000000a12002500015af7"), "V-02HD MK II five-byte model ID");
     {
-      RolandV8HdMidiSwitcher legacy(true); int changes = 0;
-      QObject::connect(&legacy, &SwitcherDevice::programInputChanged, &legacy, [&](int) { ++changes; });
-      legacy.parseDataSetMessage(rolandSysEx(RolandSwitcherModel::V8Hd, 16, 0x12, QByteArray::fromHex("0c00000100000000000000")));
-      check(changes == 0, "V-8HD initial tally cannot trigger ON AIR on diagnostic reconnect");
-      legacy.parseDataSetMessage(rolandSysEx(RolandSwitcherModel::V8Hd, 16, 0x12, QByteArray::fromHex("0c00000001000000000000")));
-      check(changes == 1, "V-8HD subsequent input change still works");
+      RolandV8HdMidiSwitcher legacy(true); int changes=0, ready=0;
+      legacy.writeForTest_=[](const QByteArray &) { return true; };
+      QObject::connect(&legacy,&SwitcherDevice::programInputChanged,&legacy,[&](int) { ++changes; });
+      QObject::connect(&legacy,&SwitcherDevice::connectionOpened,&legacy,[&](bool v,const QString &) { if(v) ++ready; });
+      check(legacy.opensAsynchronously() && !legacy.setProgramInput(1),"V-8HD cannot operate before a real status reply");
+      legacy.handleShortMessage(0x03c0);
+      legacy.requestTally();
+      legacy.parseDataSetMessage(QByteArray::fromHex("f0411000000068120201050177f7"));
+      legacy.parseDataSetMessage(QByteArray::fromHex("f041100000006812001200006ef7"));
+      check(ready==1 && changes==0,"V-8HD PGM source baseline");
+      legacy.handleShortMessage(0x05c0); check(changes==0,"WinMM preset Program Change must not select INPUT6");
+      legacy.requestTally();
+      legacy.parseDataSetMessage(QByteArray::fromHex("f0411000000068120201050177f7"));
+      legacy.parseDataSetMessage(rolandSysEx(RolandSwitcherModel::V8Hd,16,0x12,QByteArray::fromHex("0c00000001000000000000")));
+      check(changes==0 && legacy.queryPending_,"physical HDMI tally cannot be a logical INPUT selection");
+      legacy.parseDataSetMessage(QByteArray::fromHex("f041100000006812001200016df7"));
+      check(changes==1,"V-8HD subsequent actual PGM source still works");
+      legacy.requestTally(); legacy.parseDataSetMessage(QByteArray::fromHex("f0411000000068120201050078f7"));
+      check(!legacy.modelReady_ && !legacy.setProgramInput(1),"A/B mode cannot be reported as verified PGM linking");
+    }
+    for (int id : {0,31}) {
+      RolandModelSettings settings; settings.midiDeviceId=id;
+      RolandV8HdMidiSwitcher device(RolandSwitcherModel::V1Hd,settings,true);
+      QByteArray sent; device.writeForTest_=[&](const QByteArray &wire) { sent=wire; return true; };
+      const auto fixture=[&](const char *hex) { auto wire=QByteArray::fromHex(hex); wire[2]=char(id); return wire; };
+      device.requestTally();
+      check(sent==fixture("f04100000000201170011500000179f7"),"V-1HD reads PGM/PST at its own mode address with configured ID");
+      device.receiveMidiBytes(fixture("f0410000000020127001150179f7"));
+      check(sent==fixture("f04100000000201171000800000106f7"),"V-1HD polls VIDEO SEL A, not a V-8HD address");
+      device.receiveMidiBytes(fixture("f0410000000020127100080007f7"));
+      check(device.modelReady_ && device.setProgramInput(4) && sent==fixture("f0410000000020127100080304f7"),"V-1HD endpoints 1/4 and Device ID 00/1F preserved");
+      check(device.setFadeToBlack(true) && sent==fixture("f041000000002012710006000009f7"),"V-1HD retains its own two-byte output fade address");
+      check(device.setFadeToBlack(false) && sent==fixture("f041000000002012710006010008f7"),"V-1HD fade off restores center");
+      device.requestTally(); device.receiveMidiBytes(fixture("f041000000002012700115007af7"));
+      check(!device.modelReady_ && !device.setProgramInput(1),"V-1HD A/B mode refuses wrong-bus control");
     }
     for (auto model : {RolandSwitcherModel::V1Hd, RolandSwitcherModel::V1Sdi, RolandSwitcherModel::V02HdMk2, RolandSwitcherModel::Vr4Hd}) {
       RolandV8HdMidiSwitcher device(model, {}, true);
@@ -209,46 +271,54 @@ public:
     }
   }
   static void runScalarState() {
-    RolandModelSettings settings; settings.sourceNumber = 2;
-    RolandRemoteSwitcher device(RolandSwitcherModel::V80Hd, settings, true);
-    QList<QByteArray> sent;
-    device.writeForTest_ = [&](const QByteArray &wire) { sent.append(wire); return true; };
-    device.active_ = true;
-    int changes = 0;
-    QObject::connect(&device, &SwitcherDevice::programInputChanged, &device, [&](int) { ++changes; });
-    const auto respond = [&](const QByteArray &value) {
-      settle(3);
-      const auto address = device.pending_.body.mid(4, 6);
-      device.receive(frame("DTH:" + address + ',' + value));
-      device.receive(frame("ACK")); settle(3);
+    RolandModelSettings settings; settings.sourceNumber=2;
+    RolandRemoteSwitcher device(RolandSwitcherModel::V80Hd,settings,true);
+    QList<QByteArray> sent; QList<int> changes;
+    device.writeForTest_=[&](const QByteArray &wire) { sent.append(wire); return true; }; device.active_=true;
+    QObject::connect(&device,&SwitcherDevice::programInputChanged,&device,[&](int v) { changes.append(v); });
+    const auto respond=[&](const QByteArray &value) {
+      settle(3); const auto address=device.pending_.body.mid(4,6);
+      device.receive(frame("DTH:"+address+','+value)); device.receive(frame("ACK")); settle(3);
     };
-    device.enqueue({device.statusQuery(), RolandRemoteSwitcher::Reply::Program});
-    respond("00"); respond("01"); respond("00");
-    check(device.ready_ && !device.baselineKnown_ && changes == 0, "initial all-dark is ready but has no false off-target baseline");
-    device.poll(); respond("01");
-    check(device.baselineKnown_ && changes == 0, "first target after initial dark is baseline only");
-    device.poll(); respond("00"); respond("08"); respond("01"); respond("00");
-    check(changes == 1, "single-byte STILL observation confirms target departure");
-    device.poll(); respond("01"); check(changes == 2, "return from STILL is observed");
-    device.poll(); respond("00"); respond("01"); respond("00");
-    device.poll(); respond("01"); check(changes == 2, "FTB dark and restoration never retakes the target");
-    device.poll(); respond("00"); respond("29"); respond("01"); respond("01");
-    check(changes == 2, "fresh target positive overrides an older negative during logical source reads");
-    device.poll(); settle(3);
-    device.receive(frame("ACK"));
-    check(device.pending_.reply == RolandRemoteSwitcher::Reply::Program && device.pending_.response.isEmpty(), "query ACK before scalar data cannot complete it alone");
-    device.receive(frame("DTH:0C0001,01")); settle(3);
-    check(device.pending_.reply == RolandRemoteSwitcher::Reply::None && changes == 2, "ACK-first scalar reply completes without false input changes");
-    device.poll(); settle(3);
-    device.receive(frame("DTH:0C0000,01"));
-    check(device.pending_.response.isEmpty(), "unrequested parameter address cannot complete a state query");
-    device.receive(frame("DTH:0C0001,01"));
-    check(!device.pending_.response.isEmpty(), "data is retained while its query ACK is pending");
-    device.setProgramInput(2); settle(5);
-    check(device.pending_.reply == RolandRemoteSwitcher::Reply::Program, "setter cannot overtake a split query ACK");
-    device.receive(frame("ACK")); settle(5);
-    check(device.pending_.reply == RolandRemoteSwitcher::Reply::Ack, "query ACK releases the queued setter without acknowledging it");
-    device.receive(frame("ACK")); device.close();
+    device.enqueue({device.statusQuery(),RolandRemoteSwitcher::Reply::Program});
+    check(waitFor([&] { return !sent.isEmpty(); }) && sent.last()=="RQH:001500,000001;\r\n","LAN starts at actual PGM source");
+    respond("00"); check(device.ready_ && changes.isEmpty(),"initial off-target state is silent baseline");
+    device.poll(); respond("01"); check(changes==QList<int>{2},"native HDMI2 PGM selection detected");
+    device.poll(); settle(3); device.receive(frame("DTH:0C0001,00"));
+    check(device.pending_.response.isEmpty(),"tally/AUX/FTB unsolicited data cannot override PGM selection");
+    respond("01"); check(changes.size()==1,"FTB without a source change never retakes");
+    device.poll(); respond("08"); check(changes.size()==2 && changes.last()==0,"STILL clears configured target");
+    device.poll(); respond("29");
+    check(device.pending_.body=="RQH:000000,000001;","logical INPUT1 reads assignment instead of assuming HDMI1");
+    respond("01"); check(device.pending_.body=="RQH:001500,000001;","assignment rechecks PGM selection");
+    respond("29"); check(changes.size()==3 && changes.last()==2,"reassigned logical INPUT1 resolves to HDMI2");
+    device.poll(); respond("29"); respond("01"); respond("02");
+    check(changes.size()==4 && changes.last()==0,"source change during assignment read follows latest HDMI3");
+    device.poll(); settle(3); device.receive(frame("ACK"));
+    check(device.pending_.reply==RolandRemoteSwitcher::Reply::Program && device.pending_.response.isEmpty(),"ACK alone cannot complete read");
+    device.receive(frame("DTH:001500,01")); settle(3);
+    check(changes.size()==5,"ACK before data completes read");
+    device.poll(); settle(3); device.receive(frame("DTH:001500,01")); device.setProgramInput(2); settle(3);
+    check(device.pending_.reply==RolandRemoteSwitcher::Reply::Program,"write waits for query ACK");
+    device.receive(frame("ACK")); settle(3); check(device.pending_.reply==RolandRemoteSwitcher::Reply::Ack,"query ACK releases write without acknowledging it");
+    device.receive(frame("ACK")); settle(3);
+    device.poll(); settle(3); const auto before=sent.size(); device.responseTimeout();
+    check(sent.size()==before+1 && device.pending_.readRetries==1 && device.ready_,"one dropped V-80HD read is retried on the same session");
+    respond("01"); check(!device.reconnect_.isActive(),"read retry can recover");
+    device.poll(); settle(3); device.responseTimeout(); device.responseTimeout();
+    check(device.reconnect_.isActive() && !device.ready_,"second read timeout fails and clears readiness"); device.close();
+    for (auto model:{RolandSwitcherModel::V160Hd,RolandSwitcherModel::V80Hd,RolandSwitcherModel::V1_4K,RolandSwitcherModel::Vr6Hd,RolandSwitcherModel::Vr120Hd}) {
+      RolandRemoteSwitcher fade(model,settings,false); fade.active_=fade.ready_=true;
+      fade.writeForTest_=[](const QByteArray &) { return true; }; QString error;
+      check(!fade.setFadeToBlack(true,&error),"FTB cannot use an unknown firmware version");
+      fade.firmwareVersion_="1.00";
+      if(model!=RolandSwitcherModel::V1_4K) check(!fade.setFadeToBlack(true,&error),"older firmware cannot receive unsupported FTB command");
+      fade.firmwareVersion_=rolandMinimumFadeVersion(model);
+      check(fade.setFadeToBlack(true,&error),"documented minimum firmware accepts explicit FTB"); settle(3);
+      check(fade.pending_.body=="FTB:ON;","basic FTB uses explicit ON, never toggle or panel lock");
+      const int queued=fade.queue_.size(); fade.responseTimeout();
+      check(!fade.ready_ && fade.queue_.isEmpty() && queued==0,"unacknowledged write is never retried"); fade.close();
+    }
   }
   static void runSerial() {
     RolandModelSettings settings; settings.sourceNumber = 4;
@@ -321,7 +391,7 @@ bool runRolandSwitcherTrialRegression() {
           check(!body.startsWith(char(2)), "LAN omits STX according to command reference");
           if (body == "VER;") {
             const auto reply = frame(QByteArray("VER:") + (wrongModel ? "OTHER" : f.name)
-                + (f.model == RolandSwitcherModel::Vr120Hd ? ",2.10" : ",1.00"));
+                + ",9.90");
             client->write(reply.left(4)); QTimer::singleShot(5, client, [client, reply, needsAck = f.model == RolandSwitcherModel::V80Hd || f.model == RolandSwitcherModel::V1_4K] { client->write(reply.mid(4) + (needsAck ? frame("ACK") : QByteArray())); });
           } else if (body.startsWith("RQH:")) {
             const auto address = body.mid(4, 6);
@@ -373,7 +443,7 @@ bool runRolandSwitcherTrialRegression() {
     if (f.model == RolandSwitcherModel::V1_4K) {
       const int beforeBlack = changes; currentInput = 15;
       check(waitFor([&] { return changes == beforeBlack + 1; }), "V-1-4K explicit BLACK is a real source change");
-      check(!commands.contains("RQH:0C000F,000001;"), "BLACK has no tally address and is never queried as one");
+      check(!commands.contains("RQH:0C000F,000001;"), "BLACK does not require a fabricated tally address");
       currentInput = f.source - 1;
       check(waitFor([&] { return changes == beforeBlack + 2; }), "return from explicit BLACK is observed");
     }
@@ -384,7 +454,7 @@ bool runRolandSwitcherTrialRegression() {
     settle(350);
     const int before = changes; settle(300); check(changes == before, "local input echo never retriggers");
     const bool fade = device.setFadeToBlack(true);
-    check(fade == (f.model == RolandSwitcherModel::V600Uhd || f.model == RolandSwitcherModel::Vr120Hd), "only models with established FTB commands accept fading");
+    check(fade, "all LAN models with documented explicit FTB accept fading");
     if (f.model == RolandSwitcherModel::V600Uhd)
       check(waitFor([&] { return commands.contains("FDE:1;"); }), "V-600UHD documented fade command");
     if (f.model == RolandSwitcherModel::Vr120Hd) {
@@ -406,6 +476,9 @@ bool runRolandSwitcherTrialRegression() {
       const int fadeOnCount = commands.count("FTB:ON;");
       check(waitFor([&] { return ready; }, 5000), "VR-120HD reconnects after a command rejection");
       check(commands.count("FTB:ON;") == fadeOnCount && commands.count("FTB:OFF;") == fadeOffCount, "VR-120HD reconnect never replays rejected or queued fades");
+    }
+    if (rolandHasUsbMidiChoice(f.model) && f.model != RolandSwitcherModel::Vr120Hd) {
+      check(waitFor([&] { return commands.contains("FTB:ON;"); }),"documented modern LAN model sends FTB ON"); settle(30);
     }
     if (f.model == RolandSwitcherModel::V80Hd) {
       holdAck = true; device.setProgramInput(3);
