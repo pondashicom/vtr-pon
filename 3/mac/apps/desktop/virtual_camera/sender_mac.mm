@@ -70,10 +70,11 @@ struct Sink {
         NSDictionary *aux=@{(__bridge NSString*)kCVPixelBufferPoolAllocationThresholdKey:@6};
         if(CVPixelBufferPoolCreatePixelBufferWithAuxAttributes(nullptr,pool,(__bridge CFDictionaryRef)aux,&pixel)!=kCVReturnSuccess) return false;
         bool fresh=false;
-        uint64_t pts=0;
+        uint64_t pts=0, generation=0;
         if(!pthread_mutex_trylock(&shared->mutex)) {
             pts=shared->publishedNs;
-            fresh=shared->enabled.load() && pts && nowNs()-pts<1500000000ULL;
+            generation=shared->frameGeneration;
+            fresh=shared->enabled.load() && generation==shared->sourceGeneration.load() && pts && nowNs()-pts<1500000000ULL;
             if(fresh && CVPixelBufferLockBaseAddress(pixel,0)==kCVReturnSuccess) {
                 auto *out=static_cast<unsigned char*>(CVPixelBufferGetBaseAddress(pixel));
                 const auto row=CVPixelBufferGetBytesPerRow(pixel);
@@ -88,6 +89,7 @@ struct Sink {
         const auto status=CMSampleBufferCreateForImageBuffer(nullptr,pixel,true,nullptr,nullptr,format,&timing,&sample);
         CFRelease(pixel);
         if(status!=noErr || !sample) return false;
+        if(!shared->enabled.load() || generation!=shared->sourceGeneration.load()) { CFRelease(sample); return false; }
         // Queue takes the retained sample; the CMIO consumer releases it.
         if(CMSimpleQueueEnqueue(queue,sample)!=noErr) { CFRelease(sample); shared->dropped.fetch_add(1); return false; }
         shared->sent.fetch_add(1); return true;

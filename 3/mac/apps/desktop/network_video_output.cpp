@@ -23,7 +23,7 @@ public:
     quint64 serial = 0, published = 0;
     void publish(ID3D11RenderTargetView *target, ID3D11RenderTargetView *alpha, qint64 timecode) {
         const auto generation = networkVideoOutputGeneration();
-        const auto requested = networkVideoOutputMask();
+        const auto requested = networkVideoOutputMask() & 15u;
         if (!generation || !target || !requested) {
             readbacks = {}; context.Reset(); device.Reset(); width = height = mask = 0;
             return;

@@ -44,7 +44,31 @@ struct RolandModelSettings {
   bool takeProgramWhenOnAir = false;
   bool takeOnAirWhenProgramSelected = false;
   bool ftbFollowsProgram = false;
+  // Missing in older settings: keep the model's original transport (LAN).
+  bool useUsbMidi = false;
   bool operator==(const RolandModelSettings &) const = default;
+};
+bool rolandHasUsbMidiChoice(RolandSwitcherModel model);
+RolandTransport rolandTransport(RolandSwitcherModel model, const RolandModelSettings &settings);
+bool rolandSupportsFade(RolandSwitcherModel model, RolandTransport transport);
+// Minimum firmware for the explicit LAN FTB command (empty for legacy protocols).
+QString rolandMinimumFadeVersion(RolandSwitcherModel model);
+// One-byte PGM read, optional INPUT assignment read, then PGM recheck. Keeping
+// this query independent of tally avoids AUX/PinP/DSK and FTB tally side effects.
+class RolandProgramQuery {
+public:
+  explicit RolandProgramQuery(RolandSwitcherModel model) : model_(model) {}
+  enum class Result { Invalid, More, Observed };
+  void reset();
+  QByteArray address() const;
+  Result accept(int value);
+  int input() const { return input_; } // zero-based; -1 means STILL/player/BLACK/N/A
+private:
+  int logicalIndex(int value) const;
+  Result select(int value);
+  RolandSwitcherModel model_;
+  enum class Step { Program, Assignment, Confirm } step_ = Step::Program;
+  int selection_ = -1, logical_ = -1, input_ = -1;
 };
 RolandModelSettings normalizeRolandSettings(RolandSwitcherModel model, RolandModelSettings settings);
 QJsonObject rolandSettingsJson(const RolandModelSettings &settings, bool includePassword = false);

@@ -1990,7 +1990,8 @@ endif()
 if(APPLE AND BUILD_TESTING)
   qt_add_executable(controller-shortcuts-headless-test
     tests/controller_shortcuts_headless_main.cpp tests/controller_shortcuts_test.cpp
-    tests/platform_capabilities_test.cpp tests/mac_roland_midi_test.mm tests/mac_atem_test.cpp tests/switcher_report_test.cpp
+    tests/mac_addon_readiness_test.cpp
+    tests/mac_return_output_settings_test.cpp tests/platform_capabilities_test.cpp tests/mac_roland_midi_test.mm tests/mac_atem_test.cpp tests/switcher_report_test.cpp
     apps/desktop/controller_shortcuts.cpp apps/desktop/controller_scaling.cpp
     apps/desktop/language_text.cpp apps/desktop/playlist_item_operations.cpp
     apps/desktop/playlist_model.cpp apps/desktop/playlist_play_sequence.cpp
@@ -2048,7 +2049,7 @@ endif()
 if(APPLE)
   qt_add_library(vtrpon-operator-monitor-output STATIC apps/desktop/operator_monitor_output_mac.cpp)
   target_include_directories(vtrpon-operator-monitor-output PUBLIC apps/desktop)
-  target_link_libraries(vtrpon-operator-monitor-output PUBLIC Qt6::Core Qt6::Gui)
+  target_link_libraries(vtrpon-operator-monitor-output PUBLIC Qt6::Core Qt6::Gui vtrpon-network-video vtrpon-decklink vtrpon-mac-virtual-camera)
   qt_add_executable(vtr-pon-operator-monitor MACOSX_BUNDLE apps/desktop/operator_monitor_mac_main.cpp)
   set_target_properties(vtr-pon-operator-monitor PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER "com.pondashi.vtrpon3.development.return-monitor"
@@ -2155,6 +2156,10 @@ if(APPLE AND BUILD_TESTING)
     "$<TARGET_FILE:vtr-pon-addon-runtime-probe>" "$<TARGET_FILE:vtr-pon-addon-manager>")
   add_test(NAME mac-addon-processes COMMAND mac-addon-test --processes "$<TARGET_FILE:mac-addon-fixture>"
     "$<TARGET_FILE:vtr-pon-addon-runtime-probe>" "$<TARGET_FILE:vtr-pon-addon-manager>")
+  add_test(NAME mac-addon-readiness COMMAND controller-shortcuts-headless-test --addon-readiness-only)
+  add_test(NAME mac-addon-readiness-ja COMMAND controller-shortcuts-headless-test --addon-readiness-only --japanese)
+  set_tests_properties(mac-addon-readiness mac-addon-readiness-ja PROPERTIES
+    ENVIRONMENT "QT_QPA_PLATFORM=offscreen" LABELS "mac-headless" TIMEOUT 40)
   add_test(NAME mac-addon-runtime-ui COMMAND mac-addon-ui-test "$<TARGET_FILE:mac-addon-fixture>"
     "$<TARGET_FILE:vtr-pon-addon-runtime-probe>")
   set_tests_properties(mac-addon-package mac-addon-processes mac-addon-runtime-ui PROPERTIES
@@ -2280,4 +2285,30 @@ if(APPLE AND BUILD_TESTING)
   add_test(NAME decklink-report COMMAND decklink-report-test)
   add_test(NAME decklink-report-ja COMMAND decklink-report-test --japanese)
   set_tests_properties(decklink-report decklink-report-ja PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen" TIMEOUT 20 RUN_SERIAL TRUE)
+endif()
+
+if(APPLE AND BUILD_TESTING)
+  add_library(mac-return-output-fixture SHARED tests/mac_return_output_fixture.cpp)
+  target_include_directories(mac-return-output-fixture PRIVATE apps/desktop)
+  set_target_properties(mac-return-output-fixture PROPERTIES PREFIX "")
+  add_custom_command(TARGET mac-return-output-fixture POST_BUILD
+    COMMAND /usr/bin/codesign --force --sign - "$<TARGET_FILE:mac-return-output-fixture>" VERBATIM)
+  qt_add_executable(mac-return-output-test tests/mac_return_output_test.cpp
+    apps/desktop/roland_switcher_profiles.cpp apps/desktop/decklink_check_window.cpp
+    apps/desktop/program_gpu_compositor_mac.mm apps/desktop/controller_settings_io.cpp
+    apps/desktop/controller_scaling.cpp apps/desktop/language_text.cpp)
+  target_include_directories(mac-return-output-test PRIVATE apps/desktop)
+  target_compile_definitions(mac-return-output-test PRIVATE VTRPON_RETURN_TRANSLATION_FILE="${CMAKE_CURRENT_BINARY_DIR}/vtrpon_ja.qm")
+  target_link_libraries(mac-return-output-test PRIVATE Qt6::Widgets Qt6::Network
+    vtrpon-network-video vtrpon-decklink vtrpon-addon-package vtrpon-operator-monitor-output
+    vtrpon-gpu-configuration vtrpon-mac-system-load vtrpon-mac-virtual-camera
+    PkgConfig::GSTREAMER PkgConfig::GSTREAMER_APP "-framework Metal" "-framework QuartzCore" "-framework Cocoa")
+  add_dependencies(mac-return-output-test mac-return-output-fixture mac-decklink-fixture release_translations)
+  add_test(NAME mac-return-output COMMAND mac-return-output-test "$<TARGET_FILE:mac-return-output-fixture>" "$<TARGET_FILE:mac-decklink-fixture>")
+  add_test(NAME mac-return-output-4k COMMAND mac-return-output-test "$<TARGET_FILE:mac-return-output-fixture>" "$<TARGET_FILE:mac-decklink-fixture>" --4k)
+  set_tests_properties(mac-return-output mac-return-output-4k PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=cocoa" TIMEOUT 60 RUN_SERIAL TRUE)
+  add_test(NAME mac-return-output-absent COMMAND mac-return-output-test --absent)
+  set_tests_properties(mac-return-output-absent PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen" TIMEOUT 15 RUN_SERIAL TRUE)
+  add_test(NAME mac-return-output-settings COMMAND controller-shortcuts-headless-test --return-output-settings-only)
+  set_tests_properties(mac-return-output-settings PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen" TIMEOUT 30)
 endif()

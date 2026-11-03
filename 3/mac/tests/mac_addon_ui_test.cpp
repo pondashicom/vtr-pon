@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
   vtrpon::AddonRuntimeStatusWidget missing(vtrpon::AddonRuntimeKind::Atem, library, nullptr, "/missing/helper");
   app.processEvents(); CHECK(missing.property("runtimeState").toString() == "check_unavailable");
   vtrpon::AddonRuntimeStatusWidget ndi(vtrpon::AddonRuntimeKind::NetworkVideo, library, nullptr, probe);
-  CHECK(ndi.downloadUrl().host() == "ndi.video" && !ndi.downloadUrl().toString().contains("NDIRedistV6"));
+  CHECK(ndi.downloadUrl() == QUrl("https://ndi.link/NDIRedistV6Apple"));
   const auto *button = ndi.findChild<QPushButton *>("addonRuntimeDownload");
   CHECK(button && !button->accessibleDescription().contains("x64"));
   vtrpon::AddonRuntimeStatusWidget vst3(vtrpon::AddonRuntimeKind::Vst3, library, nullptr, probe);

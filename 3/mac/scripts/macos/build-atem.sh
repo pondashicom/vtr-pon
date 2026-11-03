@@ -4,7 +4,7 @@ set -euo pipefail
 vtrpon_script_dir="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
 vtrpon_source_dir="$(CDPATH= cd -- "$vtrpon_script_dir/../.." && pwd)"
 source "$vtrpon_script_dir/activate.sh"
-vtrpon_addon_source="${VTRPON_MAC_ATEM_SOURCE_DIR:-$vtrpon_source_dir/../vtr-pon-atem-addon-mac-dev}"
+vtrpon_addon_source="${VTRPON_MAC_ATEM_SOURCE_DIR:-$vtrpon_source_dir/addons/atem}"
 vtrpon_addon_build="${VTRPON_MAC_ATEM_BUILD_DIR:-$vtrpon_addon_source/build/macos-debug}"
 vtrpon_sdk_dir="${1:-/Applications/Blackmagic ATEM Switchers/Developer SDK/Mac OS X}"
 cmake -S "$vtrpon_addon_source" -B "$vtrpon_addon_build" -G Ninja \

@@ -27,9 +27,11 @@
     <message id="settings.switcher.mac.unavailable"><source>This switcher model is unavailable in this Mac version.</source><translation>This switcher model is unavailable in this Mac version.</translation></message>
     <message id="switcher.trial.no_fade"><source>FTB following is unavailable in this trial: the reference does not establish a command that sets the active fade state. Panel-lock settings are not used as fade commands.</source><translation>FTB following is unavailable in this trial: the reference does not establish a command that sets the active fade state. Panel-lock settings are not used as fade commands.</translation></message>
     <message id="switcher.trial.no_receive"><source>Switcher-to-ON AIR is unavailable in this trial because the input-status response format is not established by the reference used.</source><translation>Switcher-to-ON AIR is unavailable in this trial because the input-status response format is not established by the reference used.</translation></message>
-    <message id="switcher.trial.vr120_help"><source>Use TCP port 8023 and the four-character network password. For FTB, set Output Fade Assign &gt; Video Fade to Black and use firmware 2.10 or later (LAN/RS-232 Basic Control Commands). For input-to-ON AIR, disable AUX, PinP&amp;Key and DSK in Tally Settings.</source><translation>Use TCP port 8023 and the four-character network password. For FTB, set Output Fade Assign &gt; Video Fade to Black and use firmware 2.10 or later (LAN/RS-232 Basic Control Commands). For input-to-ON AIR, disable AUX, PinP&amp;Key and DSK in Tally Settings.</translation></message>
-    <message id="switcher.trial.v600_help"><source>Use LAN port 8023 and the four-character network password. For FTB, set Output Fade Mode to Fade to Background and set its background color to black. Source numbers refer to XPT 1–8.</source><translation>Use LAN port 8023 and the four-character network password. For FTB, set Output Fade Mode to Fade to Background and set its background color to black. Source numbers refer to XPT 1–8.</translation></message>
+    <message id="switcher.trial.vr120_help"><source>Use TCP port 8023 and the four-character network password. For FTB, set Output Fade Assign &gt; Video Fade to Black and use firmware 2.10 or later (LAN/RS-232 Basic Control Commands).</source><translation>Use TCP port 8023 and the four-character network password. For FTB, set Output Fade Assign &gt; Video Fade to Black and use firmware 2.10 or later (LAN/RS-232 Basic Control Commands).</translation></message>
+    <message id="switcher.trial.v600_help"><source>Use firmware 3.00 or later, LAN port 8023 and the four-character network password. For FTB, set Output Fade Mode to Fade to Background and set its background color to black. Source numbers refer to XPT 1–8.</source><translation>Use firmware 3.00 or later, LAN port 8023 and the four-character network password. For FTB, set Output Fade Mode to Fade to Background and set its background color to black. Source numbers refer to XPT 1–8.</translation></message>
     <message id="switcher.trial.serial_help"><source>Enable RS-232 on the switcher. Select the COM port of the RS-232 or USB–RS-232 adapter and match the baud rate. Use a crossover cable. For FTB, assign the left side of OUTPUT FADE to black.</source><translation>Enable RS-232 on the switcher. Select the COM port of the RS-232 or USB–RS-232 adapter and match the baud rate. Use a crossover cable. For FTB, assign the left side of OUTPUT FADE to black.</translation></message>
+    <message id="switcher.trial.fade_firmware"><source>LAN FTB requires firmware %1 or later and Output Fade set to Black.</source><translation>LAN FTB requires firmware %1 or later and Output Fade set to Black.</translation></message>
+    <message id="switcher.trial.v8_pgm_mode"><source>Set PANEL OPERATION to PGM/PST. Source numbers refer to INPUT 1–8 after the switcher’s input assignments.</source><translation>Set PANEL OPERATION to PGM/PST. Source numbers refer to INPUT 1–8 after the switcher’s input assignments.</translation></message>
     <message id="switcher.trial.pgm_mode"><source>Set the switcher to PGM/PST mode. For V-1HD, set MIDI Rx SOURCE to USB and match the SysEx device ID to MIDI DEVICE ID (device ID minus one). For V-1SDI, assign OUTPUT FADER to VIDEO, V &amp; A, or BLACK / A.</source><translation>Set the switcher to PGM/PST mode. For V-1HD, set MIDI Rx SOURCE to USB and match the SysEx device ID to MIDI DEVICE ID (device ID minus one). For V-1SDI, assign OUTPUT FADER to VIDEO, V &amp; A, or BLACK / A.</translation></message>
     <message id="switcher.trial.suffix"><source> — trial</source><translation> — trial</translation></message>
     <message id="switcher.trial.unverified"><source>Trial support; physical hardware verification is pending. Record results using Operation Check.</source><translation>Trial support; physical hardware verification is pending. Record results using Operation Check.</translation></message>
@@ -38,7 +40,7 @@
     <message id="switcher.trial.serial_port"><source>COM port</source><translation>COM port</translation></message>
     <message id="switcher.trial.password"><source>Network password (%1 characters)</source><translation>Network password (%1 characters)</translation></message>
     <message id="settings.switcher.roland.lan_help"><source>VR-50HD MK II LAN control is awaiting hardware verification. Enter the device's IP address (TCP port 8023) and select INPUT 1-4. For FTB, set Output Fade Color to Black on the switcher. Initial connection and reconnection do not start ON AIR.</source><translation>VR-50HD MK II LAN control is awaiting hardware verification. Enter the device's IP address (TCP port 8023) and select INPUT 1-4. For FTB, set Output Fade Color to Black on the switcher. Initial connection and reconnection do not start ON AIR.</translation></message>
-    <message id="settings.switcher.roland.midi_help"><source>Connect the selected model by USB MIDI. Its MIDI ports are detected by model name. New models require a valid status reply before Ready.</source><translation>Connect the selected model by USB MIDI. Its MIDI ports are detected by model name. New models require a valid status reply before Ready.</translation></message>
+    <message id="settings.switcher.roland.midi_help"><source>Connect the selected model by USB MIDI. Its MIDI ports are detected by model name. A valid status reply is required before Ready.</source><translation>Connect the selected model by USB MIDI. Its MIDI ports are detected by model name. A valid status reply is required before Ready.</translation></message>
     <message id="settings.switcher.roland.port"><source>TCP port</source><translation>TCP port</translation></message>
     <message id="settings.switcher.roland.host"><source>Switcher IPv4 address</source><translation>Switcher IPv4 address</translation></message>
     <message id="settings.switcher.roland.model"><source>Model</source><translation>Model</translation></message>
@@ -49,13 +51,13 @@
 3. Switch from another input to the configured input on the switcher and check ON AIR.
 4. Turn FTB on and off in the normal controller and check the output.
 5. Disconnect and reconnect, then check recovery and that old operations are not replayed.
-Record what you observed for each item. Protocol responses are recorded separately. Stop recording, review the report, then select Send report to create an email to info@pondashi.com. Review the email and press Send yourself. If automatic attachment is unavailable, use Open report folder to attach the JSON file. Save report is also available. Network passwords, IP addresses and media paths are excluded from the automatic report.</source><translation>Enable the links you want to test in Roland Integration before starting. Start Recording reconnects to capture the handshake; it does not select an input or change FTB.
+Record what you observed for each item. Protocol responses are recorded separately. Stop recording, review the report, then select Create report email. The JSON report is saved, normally in Documents/VTR-PON/SwitcherReports. If automatic attachment is unavailable, follow the displayed steps: Show attachment folder, then Open email and attach the JSON yourself. Confirm the attachment before sending to info@pondashi.com. Save report is also available. Network passwords, IP addresses and media paths are excluded from the automatic report.</source><translation>Enable the links you want to test in Roland Integration before starting. Start Recording reconnects to capture the handshake; it does not select an input or change FTB.
 1. Confirm the connection.
 2. Take an item ON AIR in the normal controller and check the switcher input.
 3. Switch from another input to the configured input on the switcher and check ON AIR.
 4. Turn FTB on and off in the normal controller and check the output.
 5. Disconnect and reconnect, then check recovery and that old operations are not replayed.
-Record what you observed for each item. Protocol responses are recorded separately. Stop recording, review the report, then select Send report to create an email to info@pondashi.com. Review the email and press Send yourself. If automatic attachment is unavailable, use Open report folder to attach the JSON file. Save report is also available. Network passwords, IP addresses and media paths are excluded from the automatic report.</translation></message>
+Record what you observed for each item. Protocol responses are recorded separately. Stop recording, review the report, then select Create report email. The JSON report is saved, normally in Documents/VTR-PON/SwitcherReports. If automatic attachment is unavailable, follow the displayed steps: Show attachment folder, then Open email and attach the JSON yourself. Confirm the attachment before sending to info@pondashi.com. Save report is also available. Network passwords, IP addresses and media paths are excluded from the automatic report.</translation></message>
     <message id="switcher.check.firmware"><source>Switcher firmware (as displayed on the device)</source><translation>Switcher firmware (as displayed on the device)</translation></message>
     <message id="switcher.check.connection"><source>Connection</source><translation>Connection</translation></message>
     <message id="switcher.check.send"><source>ON AIR → switcher input</source><translation>ON AIR → switcher input</translation></message>
@@ -84,28 +86,40 @@ Attach this JSON file when reporting the results to the author.</translation></m
     <message id="settings.category.roland"><source>Roland Integration</source><translation>Roland Integration</translation></message>
     <message id="settings.switcher.atem.description"><source>Connect VTR-PON to a Blackmagic ATEM switcher. Only one switcher integration can be enabled at a time.</source><translation>Connect VTR-PON to a Blackmagic ATEM switcher. Only one switcher integration can be enabled at a time.</translation></message>
     <message id="settings.switcher.roland.description"><source>Connect VTR-PON to a Roland switcher. Select your model and configure its connection. Only one switcher integration can be enabled at a time.</source><translation>Connect VTR-PON to a Roland switcher. Select your model and configure its connection. Only one switcher integration can be enabled at a time.</translation></message>
-    <message id="switcher.check.email"><source>Send report</source><translation>Send report</translation></message>
-    <message id="switcher.check.email_help"><source>Stop recording first. Save the report and open an email to info@pondashi.com. Review the message and press Send yourself. If automatic attachment is unavailable, attach the saved JSON file using Open report folder.</source><translation>Stop recording first. Save the report and open an email to info@pondashi.com. Review the message and press Send yourself. If automatic attachment is unavailable, attach the saved JSON file using Open report folder.</translation></message>
-    <message id="switcher.check.folder"><source>Open report folder</source><translation>Open report folder</translation></message>
+    <message id="switcher.check.email"><source>Create report email</source><translation>Create report email</translation></message>
+    <message id="switcher.check.email_help"><source>Stop recording first. This saves a JSON report and prepares an email to info@pondashi.com. If automatic attachment is unavailable, follow the displayed steps to attach the saved JSON yourself before sending.</source><translation>Stop recording first. This saves a JSON report and prepares an email to info@pondashi.com. If automatic attachment is unavailable, follow the displayed steps to attach the saved JSON yourself before sending.</translation></message>
+    <message id="switcher.check.folder"><source>Show attachment folder</source><translation>Show attachment folder</translation></message>
     <message id="switcher.check.folder_failed"><source>Could not open the folder. The report is saved at: %1</source><translation>Could not open the folder. The report is saved at: %1</translation></message>
     <message id="switcher.check.no_report_folder"><source>Could not find a report folder. Use Save report to choose a location.</source><translation>Could not find a report folder. Use Save report to choose a location.</translation></message>
     <message id="switcher.check.preparing_email"><source>Saving the report and preparing an email…</source><translation>Saving the report and preparing an email…</translation></message>
-    <message id="switcher.check.email_ready"><source>The report is saved. Review the email to info@pondashi.com and press Send in your mail app.
-Saved: %1</source><translation>The report is saved. Review the email to info@pondashi.com and press Send in your mail app.
+    <message id="switcher.check.email_ready"><source>The report is saved. Preparing the email…
+Saved: %1</source><translation>The report is saved. Preparing the email…
 Saved: %1</translation></message>
     <message id="switcher.check.email_cancelled"><source>Email creation was cancelled. The report is still saved: %1</source><translation>Email creation was cancelled. The report is still saved: %1</translation></message>
     <message id="switcher.check.email_finished"><source>The mail app has finished its operation. Check sending status in your mail app.
 Saved report: %1</source><translation>The mail app has finished its operation. Check sending status in your mail app.
 Saved report: %1</translation></message>
-    <message id="switcher.check.email_manual_attachment"><source>Requested an email to info@pondashi.com. Automatic attachment is unavailable with this mail app. Use Open report folder, attach the JSON file below, then press Send yourself.
-%1</source><translation>Requested an email to info@pondashi.com. Automatic attachment is unavailable with this mail app. Use Open report folder, attach the JSON file below, then press Send yourself.
-%1</translation></message>
+    <message id="switcher.check.email_manual_attachment"><source>The report is saved. You must attach the JSON file yourself.
+1. Select Show attachment folder to find the JSON file below.
+2. Select Open email, attach that JSON file, then press Send in your mail app.
+Saved: %1</source><translation>The report is saved. You must attach the JSON file yourself.
+1. Select Show attachment folder to find the JSON file below.
+2. Select Open email, attach that JSON file, then press Send in your mail app.
+Saved: %1</translation></message>
     <message id="switcher.check.email_failed"><source>Could not open a mail app. Send the saved JSON file to info@pondashi.com using your usual email or webmail.
 %1</source><translation>Could not open a mail app. Send the saved JSON file to info@pondashi.com using your usual email or webmail.
 %1</translation></message>
+    <message id="switcher.check.open_email"><source>Open email</source><translation>Open email</translation></message>
+    <message id="switcher.check.email_manual_opened"><source>Requested an email to info@pondashi.com. Attach the saved JSON file before pressing Send in your mail app.</source><translation>Requested an email to info@pondashi.com. Attach the saved JSON file before pressing Send in your mail app.</translation></message>
+    <message id="switcher.check.attachment_missing"><source>The saved JSON file could not be found. Select Create report email again to save a new copy.</source><translation>The saved JSON file could not be found. Select Create report email again to save a new copy.</translation></message>
+    <message id="switcher.check.mail_attachment_check"><source>Before sending, check that this JSON file is attached: %1</source><translation>Before sending, check that this JSON file is attached: %1</translation></message>
     <message id="switcher.check.mail_subject"><source>VTR-PON switcher operation report: %1</source><translation>VTR-PON switcher operation report: %1</translation></message>
     <message id="switcher.check.mail_intro"><source>VTR-PON switcher operation check results:</source><translation>VTR-PON switcher operation check results:</translation></message>
-    <message id="switcher.check.mail_attachment"><source>Please attach the report file before sending: %1</source><translation>Please attach the report file before sending: %1</translation></message>
+    <message id="switcher.check.mail_attachment"><source>Attachment required: This email does not attach the report automatically.
+Before sending, attach this JSON file: %1
+In VTR-PON Operation Check, select Show attachment folder (normally Documents/VTR-PON/SwitcherReports).</source><translation>Attachment required: This email does not attach the report automatically.
+Before sending, attach this JSON file: %1
+In VTR-PON Operation Check, select Show attachment folder (normally Documents/VTR-PON/SwitcherReports).</translation></message>
     <message id="midi.title"><source>MIDI Control</source><translation>MIDI Control</translation></message>
     <message id="midi.description"><source>Select an input, select an action, then click MIDI Learn and operate your controller. Save to apply. MIDI actions are suspended while Settings or another modal dialog is open. Volume uses absolute or relative CC; Pickup waits for the hardware to reach the on-screen value. CC 0 is silence and CC 127 is +6 dB by default, following the on-screen fader scale.</source><translation>Select an input, select an action, then click MIDI Learn and operate your controller. Save to apply. MIDI actions are suspended while Settings or another modal dialog is open. Volume uses absolute or relative CC; Pickup waits for the hardware to reach the on-screen value. CC 0 is silence and CC 127 is +6 dB by default, following the on-screen fader scale.</translation></message>
     <message id="midi.enable"><source>Enable MIDI control</source><translation>Enable MIDI control</translation></message>
@@ -341,6 +355,78 @@ Saved report: %1</translation></message>
         <source>%1 VST stopped because of a plug-in error. Playback continues with original audio.</source>
         <translation>%1 VST stopped because of a plug-in error. Playback continues with original audio.</translation>
     </message>
+    <message id="addons.runtime.startup_title">
+        <source>Some add-ons need attention</source>
+        <translation>Some add-ons need attention</translation>
+    </message>
+    <message id="addons.runtime.startup_description">
+        <source>The following add-ons are missing required software or could not be checked. Follow the instructions below. You can close this notice and continue using VTR-PON. To check again later, open Settings → Add-ons.</source>
+        <translation>The following add-ons are missing required software or could not be checked. Follow the instructions below. You can close this notice and continue using VTR-PON. To check again later, open Settings → Add-ons.</translation>
+    </message>
+    <message id="addons.runtime.initialized">
+        <source>Initialization check passed for %1. Actual input and output status is shown separately.</source>
+        <translation>Initialization check passed for %1. Actual input and output status is shown separately.</translation>
+    </message>
+    <message id="addons.runtime.initialization_failed">
+        <source>Unavailable: %1 could not be initialized. Check the diagnostic details and vendor software setup, then check again.</source>
+        <translation>Unavailable: %1 could not be initialized. Check the diagnostic details and vendor software setup, then check again.</translation>
+    </message>
+    <message id="addons.runtime.no_devices">
+        <source>Device not detected: %1 initialized, but no DeckLink device was found. Check the device connection and driver permissions.</source>
+        <translation>Device not detected: %1 initialized, but no DeckLink device was found. Check the device connection and driver permissions.</translation>
+    </message>
+    <message id="addons.runtime.ndi_setup">
+        <source>NDI Tools alone may not install the shared NDI Runtime for macOS. If the Runtime is missing, use the official download button to obtain it. If NDI still does not work, complete any first-run setup requested by NDI Tools, restart VTR-PON and check again. Initialization alone does not verify network discovery or media transfer.</source>
+        <translation>NDI Tools alone may not install the shared NDI Runtime for macOS. If the Runtime is missing, use the official download button to obtain it. If NDI still does not work, complete any first-run setup requested by NDI Tools, restart VTR-PON and check again. Initialization alone does not verify network discovery or media transfer.</translation>
+    </message>
+    <message id="addons.runtime.decklink_setup">
+        <source>If DeckLink does not work, open Desktop Video Setup and complete any first-run setup or registration it requests. Check that the device is recognized and OS driver permissions are allowed, then restart VTR-PON and check again. Detecting a device does not verify capture or playback.</source>
+        <translation>If DeckLink does not work, open Desktop Video Setup and complete any first-run setup or registration it requests. Check that the device is recognized and OS driver permissions are allowed, then restart VTR-PON and check again. Detecting a device does not verify capture or playback.</translation>
+    </message>
+    <message id="addons.runtime.operation_off">
+        <source>Current operation: Off</source>
+        <translation>Current operation: Off</translation>
+    </message>
+    <message id="addons.runtime.operation_error">
+        <source>Current operation: Error — %1</source>
+        <translation>Current operation: Error — %1</translation>
+    </message>
+    <message id="addons.runtime.operation_running">
+        <source>Current operation: Sending output</source>
+        <translation>Current operation: Sending output</translation>
+    </message>
+    <message id="addons.runtime.operation_starting">
+        <source>Current operation: Starting / waiting for output</source>
+        <translation>Current operation: Starting / waiting for output</translation>
+    </message>
+    <message id="addons.runtime.operation_input">
+        <source>Current operation: Input enabled; %1 sources found</source>
+        <translation>Current operation: Input enabled; %1 sources found</translation>
+    </message>
+    <message id="addons.runtime.operation_devices">
+        <source>Current operation: %1 DeckLink channels detected</source>
+        <translation>Current operation: %1 DeckLink channels detected</translation>
+    </message>
+    <message id="addons.runtime.operation_no_devices">
+        <source>Current operation: No DeckLink device detected</source>
+        <translation>Current operation: No DeckLink device detected</translation>
+    </message>
+    <message id="addons.runtime.operation_checking">
+        <source>Current operation: Checking</source>
+        <translation>Current operation: Checking</translation>
+    </message>
+    <message id="addons.runtime.operation_unavailable">
+        <source>Current operation: Unavailable</source>
+        <translation>Current operation: Unavailable</translation>
+    </message>
+    <message id="addons.runtime.operation_input_starting">
+        <source>Current operation: Starting input discovery</source>
+        <translation>Current operation: Starting input discovery</translation>
+    </message>
+    <message id="addons.runtime.operation_partial">
+        <source>Current operation: %1 of %2 outputs running; waiting for the rest</source>
+        <translation>Current operation: %1 of %2 outputs running; waiting for the rest</translation>
+    </message>
     <message id="addons.runtime.checking">
         <source>Checking %1...</source>
         <translation>Checking %1...</translation>
@@ -389,10 +475,7 @@ Saved report: %1</translation></message>
         <source>Could not open the browser. Open this URL manually:</source>
         <translation>Could not open the browser. Open this URL manually:</translation>
     </message>
-    <message id="network_video.description">
-        <source>Select the ON AIR outputs to send over NDI. Enable input to find sources on the LAN.</source>
-        <translation>Select the ON AIR outputs to send over NDI. Enable input to find sources on the LAN.</translation>
-    </message>
+    <message id="network_video.description"><source>Select ON AIR and return monitor outputs to send over NDI. Both can be sent as separate sources at the same time. Enable input to find sources on the LAN.</source><translation>Select ON AIR and return monitor outputs to send over NDI. Both can be sent as separate sources at the same time. Enable input to find sources on the LAN.</translation></message>
     <message id="network_video.outputs">
         <source>Output video</source>
         <translation>Output video</translation>
@@ -534,8 +617,8 @@ Saved report: %1</translation></message>
       <translation>Open macOS Extension Settings</translation>
     </message>
     <message id="virtual_camera.mac.description">
-      <source>Sends the final ON AIR video to VTR-PON Virtual Camera at 1920×1080, 30 fps. Enable the camera extension in macOS once, then select it in the receiving app. Audio uses a separate output.</source>
-      <translation>Sends the final ON AIR video to VTR-PON Virtual Camera at 1920×1080, 30 fps. Enable the camera extension in macOS once, then select it in the receiving app. Audio uses a separate output.</translation>
+      <source>1920 x 1080 / 30 fps, video only. Select ON AIR or the return monitor. Return output includes the information band, timer and messages. First place this app in Applications, enable the bundled Camera Extension, and allow it in System Settings. One sending app can connect at a time.</source>
+      <translation>1920 x 1080 / 30 fps, video only. Select ON AIR or the return monitor. Return output includes the information band, timer and messages. First place this app in Applications, enable the bundled Camera Extension, and allow it in System Settings. One sending app can connect at a time.</translation>
     </message>
     <message id="virtual_camera.mac.off">
       <source>Virtual camera output is OFF.</source>
@@ -4977,7 +5060,7 @@ Adjust the slider to find a comfortable text size.</translation>
         <translation>Directory setting saved.</translation>
     </message>
     <message id="settings.addons.title"><source>Add-ons</source><translation>Add-ons</translation></message>
-    <message id="settings.addons.description_mac"><source>Manage add-ons for this VTR-PON copy. Changes apply after VTR-PON exits. ATEM, NDI and VST3 features are still being prepared for Mac. Feature settings are kept; vendor runtimes are installed separately.</source><translation>Manage add-ons for this VTR-PON copy. Changes apply after VTR-PON exits. ATEM, NDI and VST3 features are still being prepared for Mac. Feature settings are kept; vendor runtimes are installed separately.</translation></message>
+    <message id="settings.addons.description_mac"><source>Manage add-ons for this VTR-PON copy. Changes apply after VTR-PON exits. Feature settings are kept; install vendor runtimes separately. Check runtime readiness and current operation below.</source><translation>Manage add-ons for this VTR-PON copy. Changes apply after VTR-PON exits. Feature settings are kept; install vendor runtimes separately. Check runtime readiness and current operation below.</translation></message>
     <message id="settings.addons.catalog_no_platform"><source>No add-ons are currently available for this OS and CPU.</source><translation>No add-ons are currently available for this OS and CPU.</translation></message>
     <message id="settings.addons.description"><source>Install and remove add-ons for this VTR-PON copy. Changes are applied after VTR-PON exits; your feature settings are kept. Vendor runtimes are installed separately.</source><translation>Install and remove add-ons for this VTR-PON copy. Changes are applied after VTR-PON exits; your feature settings are kept. Vendor runtimes are installed separately.</translation></message>
     <message id="settings.addons.atem"><source>ATEM switcher control</source><translation>ATEM switcher control</translation></message>
@@ -5018,10 +5101,7 @@ Adjust the slider to find a comfortable text size.</translation>
         <source>DeckLink</source>
         <translation>DeckLink</translation>
     </message>
-    <message id="decklink.description">
-        <source>Choose the output channel and format for Composite, Fill and Key, then enable each output. DeckLink input channels appear in the INPUT dropdown. Input format changes apply to newly added items.</source>
-        <translation>Choose the output channel and format for Composite, Fill and Key, then enable each output. DeckLink input channels appear in the INPUT dropdown. Input format changes apply to newly added items.</translation>
-    </message>
+    <message id="decklink.description"><source>Select a separate output channel and format for ON AIR Composite, Fill, Key and the return monitor. ON AIR and the return monitor can run at the same time. Input channels appear in INPUT; input format changes apply to newly added items.</source><translation>Select a separate output channel and format for ON AIR Composite, Fill, Key and the return monitor. ON AIR and the return monitor can run at the same time. Input channels appear in INPUT; input format changes apply to newly added items.</translation></message>
     <message id="decklink.enable_input">
         <source>Enable DeckLink input</source>
         <translation>Enable DeckLink input</translation>
@@ -5164,5 +5244,20 @@ Different connectors or video formats on the same channel cannot be used togethe
         <source>Changes are saved immediately and apply after restarting VTR-PON. For a physical 4K output, also set the destination display to 3840 x 2160 in macOS. The ON AIR monitor fits the same composed video to its window; the return monitor remains at most 1080p.</source>
         <translation>Changes are saved immediately and apply after restarting VTR-PON. For a physical 4K output, also set the destination display to 3840 x 2160 in macOS. The ON AIR monitor fits the same composed video to its window; the return monitor remains at most 1080p.</translation>
     </message>
+<message id="output.destinations"><source>Output destinations</source><translation>Output destinations</translation></message>
+<message id="output.source"><source>Output source</source><translation>Output source</translation></message>
+<message id="output.on_air"><source>ON AIR</source><translation>ON AIR</translation></message>
+<message id="output.on_air_composite"><source>ON AIR — Composite (with background)</source><translation>ON AIR — Composite (with background)</translation></message>
+<message id="output.on_air_fill"><source>ON AIR — Fill</source><translation>ON AIR — Fill</translation></message>
+<message id="output.on_air_key"><source>ON AIR — Key</source><translation>ON AIR — Key</translation></message>
+<message id="output.on_air_alpha"><source>ON AIR — Alpha</source><translation>ON AIR — Alpha</translation></message>
+<message id="output.return_monitor"><source>Return monitor</source><translation>Return monitor</translation></message>
+<message id="output.window"><source>Regular window output</source><translation>Regular window output</translation></message>
+<message id="output.decklink"><source>DeckLink output</source><translation>DeckLink output</translation></message>
+<message id="output.ndi"><source>NDI output</source><translation>NDI output</translation></message>
+<message id="output.virtual_camera"><source>Virtual camera output</source><translation>Virtual camera output</translation></message>
+<message id="output.return_help"><source>These checkboxes are linked to each output settings page. Select a separate hardware channel and format in DeckLink settings. NDI adds a separate source named "Return Monitor" after the output name. The information band, timer and messages are included. NDI and DeckLink carry the ON AIR audio mix.</source><translation>These checkboxes are linked to each output settings page. Select a separate hardware channel and format in DeckLink settings. NDI adds a separate source named "Return Monitor" after the output name. The information band, timer and messages are included. NDI and DeckLink carry the ON AIR audio mix.</translation></message>
+<message id="settings.switcher.roland.transport"><source>Connection</source><translation>Connection</translation></message>
+<message id="switcher.trial.vr120_usb_help"><source>For input-to-ON AIR, disable AUX, PinP&amp;Key and DSK in Tally Settings. FTB linking is available via LAN only; the saved LAN FTB preference is retained.</source><translation>For input-to-ON AIR, disable AUX, PinP&amp;Key and DSK in Tally Settings. FTB linking is available via LAN only; the saved LAN FTB preference is retained.</translation></message>
 </context>
 </TS>

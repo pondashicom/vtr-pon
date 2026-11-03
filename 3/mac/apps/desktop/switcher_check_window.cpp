@@ -40,8 +40,10 @@ QString reportMailSubject(const QJsonObject &report) {
   return uiText("switcher.check.mail_subject").arg(report["modelName"].toString());
 }
 
-QString reportMailBody(const QJsonObject &report, const QString &fileName, bool includeComment) {
-  QStringList lines{uiText("switcher.check.mail_intro"),
+QString reportMailBody(const QJsonObject &report, const QString &fileName, bool includeComment, bool manualAttachment) {
+  QStringList lines{uiText(manualAttachment ? "switcher.check.mail_attachment" : "switcher.check.mail_attachment_check")
+                        .arg(QFileInfo(fileName).fileName()),
+                    QString(), uiText("switcher.check.mail_intro"),
                     report["modelName"].toString() + " / " + report["transport"].toString(),
                     "VTR-PON: " + report["applicationVersion"].toString(),
                     "Firmware: " + report["firmwareReportedByUser"].toString()};
@@ -58,8 +60,7 @@ QString reportMailBody(const QJsonObject &report, const QString &fileName, bool 
   }
   if (includeComment && !report["operatorComment"].toString().isEmpty())
     lines << QString() << report["operatorComment"].toString();
-  lines << QString() << uiText("switcher.check.mail_attachment").arg(QFileInfo(fileName).fileName());
-  return lines.join(QStringLiteral("\r\n"));
+  return lines.join(QStringLiteral("\n")).replace("\r\n", "\n").replace("\n", "\r\n");
 }
 
 enum class MailComposeResult { Completed, Cancelled, Unavailable };
@@ -129,28 +130,38 @@ public:
     preview_ = new QPlainTextEdit(body); preview_->setObjectName("switcherCheckPreview"); preview_->setReadOnly(true);
     preview_->setMinimumHeight(140); preview_->setTabChangesFocus(true); content->addWidget(preview_, 1);
     scroll->setWidget(body); layout->addWidget(scroll, 1);
-    status_ = new QLabel(this); status_->setWordWrap(true); layout->addWidget(status_);
+    status_ = new QLabel(this); status_->setWordWrap(true); status_->setTextFormat(Qt::PlainText);
+    status_->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard); layout->addWidget(status_);
+    manualHelp_ = new QLabel(this); manualHelp_->setObjectName("switcherCheckManualAttachment");
+    manualHelp_->setWordWrap(true); manualHelp_->setTextFormat(Qt::PlainText);
+    manualHelp_->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard); layout->addWidget(manualHelp_);
     auto *buttons = new QHBoxLayout;
     start_ = new QPushButton(this); start_->setObjectName("switcherCheckStart");
     stop_ = new QPushButton(this); stop_->setObjectName("switcherCheckStop");
     save_ = new QPushButton(this); save_->setObjectName("switcherCheckSave");
     email_ = new QPushButton(this); email_->setObjectName("switcherCheckEmail");
     folder_ = new QPushButton(this); folder_->setObjectName("switcherCheckReportFolder");
+    openEmail_ = new QPushButton(this); openEmail_->setObjectName("switcherCheckOpenEmail");
     close_ = new QPushButton(this);
     for (auto *b : {start_, stop_, close_}) { b->setMinimumHeight(32); buttons->addWidget(b); }
     auto *reportButtons = new QHBoxLayout;
-    for (auto *b : {save_, email_, folder_}) { b->setMinimumHeight(32); reportButtons->addWidget(b); }
+    for (auto *b : {save_, email_}) { b->setMinimumHeight(32); reportButtons->addWidget(b); }
     layout->addLayout(reportButtons);
+    auto *attachmentButtons = new QHBoxLayout;
+    for (auto *b : {folder_, openEmail_}) { b->setMinimumHeight(32); attachmentButtons->addWidget(b); }
+    layout->addLayout(attachmentButtons);
     layout->addLayout(buttons);
     QWidget::setTabOrder(preview_, save_);
     QWidget::setTabOrder(save_, email_);
     QWidget::setTabOrder(email_, folder_);
-    QWidget::setTabOrder(folder_, start_);
+    QWidget::setTabOrder(folder_, openEmail_);
+    QWidget::setTabOrder(openEmail_, start_);
     QWidget::setTabOrder(start_, stop_);
     QWidget::setTabOrder(stop_, close_);
     connect(close_, &QPushButton::clicked, this, &QWidget::close);
     connect(start_, &QPushButton::clicked, this, [this] {
       if (!controller_ || !controller_->startCheck()) { status_->setText(uiText("switcher.check.enable_first")); return; }
+      clearManualEmail();
       updating_ = true;
       firmware_->clear(); comment_->clear();
       for (auto *a : answers_) a->setCurrentIndex(0);
@@ -159,6 +170,15 @@ public:
     connect(stop_, &QPushButton::clicked, this, [this] { if (controller_) controller_->stopCheck(); refresh(); });
     connect(save_, &QPushButton::clicked, this, [this] { saveReport(); });
     connect(email_, &QPushButton::clicked, this, [this] { emailReport(); });
+    connect(openEmail_, &QPushButton::clicked, this, [this] {
+      if (!controller_ || controller_->checkSession().active() || saving_ || preparingEmail_ || manualReportPath_.isEmpty()) return;
+      if (!QFileInfo::exists(manualReportPath_)) {
+        status_->setText(uiText("switcher.check.attachment_missing")); clearManualEmail(); refresh(); return;
+      }
+      const bool opened = QDesktopServices::openUrl(switcherCheckReportMailUrl(manualReport_, manualReportPath_));
+      status_->setText(opened ? uiText("switcher.check.email_manual_opened") :
+          uiText("switcher.check.email_failed").arg(QDir::toNativeSeparators(manualReportPath_)));
+    });
     connect(folder_, &QPushButton::clicked, this, [this] {
       if (!lastReportPath_.isEmpty() && !QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(lastReportPath_).absolutePath())))
         status_->setText(uiText("switcher.check.folder_failed").arg(lastReportPath_));
@@ -195,9 +215,12 @@ private:
     const auto report = controller_->checkSession().report();
     const auto model = report.isEmpty() ? controller_->settings().rolandModel : rolandSwitcherModel(report["model"].toString());
     const auto &p = rolandSwitcherProfile(model);
+    const bool fade = report.isEmpty()
+        ? rolandSupportsFade(model, rolandTransport(model, activeRolandSettings(controller_->settings())))
+        : report["capabilities"].toObject()["fade"].toBool();
     updating_ = true;
     for (const auto i : {2, 3}) {
-      const bool supported = i == 2 ? p.receive : p.fade;
+      const bool supported = i == 2 ? p.receive : fade;
       answers_[i]->setEnabled(supported);
       if (!supported) answers_[i]->setCurrentIndex(3);
     }
@@ -208,6 +231,9 @@ private:
     QJsonObject results;
     for (int i = 0; i < 5; ++i) results.insert(QLatin1String(keys_[i]), answers_[i]->currentData().toString());
     controller_->checkSession().setAnswers(firmware_->text(), results, comment_->toPlainText());
+    if (!manualReportPath_.isEmpty() && controller_->checkSession().report() != manualReport_) {
+      clearManualEmail(); status_->clear(); refresh();
+    }
   }
   void translate() {
     setWindowTitle(uiText("switcher.check.title")); help_->setText(uiText("switcher.check.instructions"));
@@ -222,6 +248,7 @@ private:
     save_->setText(uiText("switcher.check.save")); close_->setText(uiText("switcher.check.close"));
     email_->setText(uiText("switcher.check.email")); email_->setToolTip(uiText("switcher.check.email_help"));
     folder_->setText(uiText("switcher.check.folder"));
+    openEmail_->setText(uiText("switcher.check.open_email"));
     retry_->setText(uiText("switcher.check.retry"));
   }
   void refresh() {
@@ -229,7 +256,11 @@ private:
     const auto &session = controller_->checkSession(); const auto report = session.report();
     const auto model = report.isEmpty() ? controller_->settings().rolandModel : rolandSwitcherModel(report["model"].toString());
     const auto &p = rolandSwitcherProfile(model);
-    model_->setText(QString::fromLatin1(p.name) + " / " + rolandTransportName(p.transport) + "\n" +
+    const auto transport = rolandTransport(model, activeRolandSettings(controller_->settings()));
+    const bool fade = report.isEmpty() ? rolandSupportsFade(model, transport)
+        : report["capabilities"].toObject()["fade"].toBool();
+    model_->setText(QString::fromLatin1(p.name) + " / " +
+                    (report.isEmpty() ? rolandTransportName(transport) : report["transport"].toString()) + "\n" +
                     uiText(session.active() ? "switcher.check.recording" : "switcher.check.stopped"));
     connection_->setText(uiText(controller_->switcherReady() ? "settings.switcher.connection.ready" : "settings.switcher.connection.no_connection") +
                          " / " + controller_->switcherConnectionDetail());
@@ -240,8 +271,14 @@ private:
     stop_->setEnabled(session.active()); save_->setEnabled(session.exists() && !saving_ && !preparingEmail_);
     email_->setEnabled(session.exists() && !session.active() && !saving_ && !preparingEmail_);
     folder_->setEnabled(!lastReportPath_.isEmpty());
-    firmware_->setEnabled(session.exists()); comment_->setEnabled(session.exists());
-    for (int i = 0; i < 5; ++i) answers_[i]->setEnabled(session.exists() && (i != 2 || p.receive) && (i != 3 || p.fade));
+    manualHelp_->setVisible(!manualReportPath_.isEmpty());
+    manualHelp_->setText(manualReportPath_.isEmpty() ? QString() :
+        uiText("switcher.check.email_manual_attachment").arg(QDir::toNativeSeparators(manualReportPath_)));
+    openEmail_->setVisible(!manualReportPath_.isEmpty());
+    openEmail_->setEnabled(!session.active() && !saving_ && !preparingEmail_);
+    const bool editable = session.exists() && !saving_ && !preparingEmail_;
+    firmware_->setEnabled(editable); comment_->setEnabled(editable);
+    for (int i = 0; i < 5; ++i) answers_[i]->setEnabled(editable && (i != 2 || p.receive) && (i != 3 || fade));
     const auto text = report.isEmpty() ? QString() : QString::fromUtf8(QJsonDocument(report).toJson());
     if (preview_->toPlainText() != text) preview_->setPlainText(text);
   }
@@ -258,7 +295,7 @@ private:
       if (!file.open(QIODevice::WriteOnly) || file.write(data) != data.size() || !file.commit()) *error = file.errorString();
     }, [this, path, error](const QString &workerError) {
       saving_ = false; const auto detail = workerError.isEmpty() ? *error : workerError;
-      if (detail.isEmpty()) lastReportPath_ = path;
+      if (detail.isEmpty()) { lastReportPath_ = path; clearManualEmail(); }
       status_->setText(detail.isEmpty() ? uiText("switcher.check.saved").arg(path) : uiText("switcher.check.save_failed").arg(detail)); refresh();
     });
   }
@@ -266,6 +303,7 @@ private:
     if (!controller_ || controller_->checkSession().active() || saving_ || preparingEmail_) return;
     storeAnswers(); const auto report = controller_->checkSession().report();
     if (report.isEmpty()) return;
+    clearManualEmail();
     auto directory = qEnvironmentVariable("VTRPON_TEST_SWITCHER_REPORT_DIR");
     if (directory.isEmpty()) directory = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     if (directory.isEmpty()) directory = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
@@ -288,7 +326,7 @@ private:
       }
       lastReportPath_ = path;
       status_->setText(uiText("switcher.check.email_ready").arg(path)); refresh();
-      const auto subject = reportMailSubject(report), body = reportMailBody(report, path, true);
+      const auto subject = reportMailSubject(report), body = reportMailBody(report, path, true, false);
       auto result = std::make_shared<MailComposeResult>(MailComposeResult::Unavailable);
       fileIo_->enqueue([subject, body, path, result] { *result = composeReportMail(subject, body, path); },
                        [this, report, path, result](const QString &composeError) {
@@ -298,33 +336,36 @@ private:
         else if (composeError.isEmpty() && *result == MailComposeResult::Completed)
           status_->setText(uiText("switcher.check.email_finished").arg(path));
         else {
-          const bool opened = QDesktopServices::openUrl(switcherCheckReportMailUrl(report, path));
-          status_->setText(uiText(opened ? "switcher.check.email_manual_attachment" : "switcher.check.email_failed").arg(path));
+          // Show the attachment steps before opening a composer that cannot attach files.
+          manualReport_ = report; manualReportPath_ = path; status_->clear();
         }
         refresh();
       });
     });
   }
+  void clearManualEmail() { manualReport_ = {}; manualReportPath_.clear(); }
   inline static const std::array<const char *, 5> keys_{"connection", "inputSend", "inputReceive", "fade", "reconnect"};
   inline static const std::array<const char *, 5> labelKeys_{"switcher.check.connection", "switcher.check.send", "switcher.check.receive", "switcher.check.fade", "switcher.check.reconnect"};
   inline static const std::array<const char *, 4> resultKeys_{"switcher.check.not_tested", "switcher.check.worked", "switcher.check.failed", "switcher.check.unavailable"};
   QPointer<SwitcherController> controller_;
   BackgroundIoQueue *fileIo_;
   QTimer timer_;
-  QLabel *model_, *connection_, *help_, *firmwareLabel_, *commentLabel_, *previewLabel_, *status_;
+  QLabel *model_, *connection_, *help_, *firmwareLabel_, *commentLabel_, *previewLabel_, *status_, *manualHelp_;
   QLineEdit *firmware_;
   QPlainTextEdit *comment_, *preview_;
   std::array<QLabel *, 5> labels_{};
   std::array<QComboBox *, 5> answers_{};
-  QPushButton *start_, *stop_, *save_, *email_, *folder_, *close_, *retry_;
+  QPushButton *start_, *stop_, *save_, *email_, *folder_, *openEmail_, *close_, *retry_;
   QString lastReportPath_;
+  QString manualReportPath_;
+  QJsonObject manualReport_;
   bool updating_ = false, saving_ = false, preparingEmail_ = false;
 };
 }
 QUrl switcherCheckReportMailUrl(const QJsonObject &report, const QString &fileName) {
   // Keep protocol events and long comments in the JSON attachment, not in a URL.
   return QUrl::fromEncoded("mailto:info@pondashi.com?subject=" + QUrl::toPercentEncoding(reportMailSubject(report)) +
-                          "&body=" + QUrl::toPercentEncoding(reportMailBody(report, fileName, false)));
+                          "&body=" + QUrl::toPercentEncoding(reportMailBody(report, fileName, false, true)));
 }
 void showSwitcherCheckWindow(SwitcherController *controller, UiLanguageManager *language, QWidget *parent) {
   if (!controller) return;

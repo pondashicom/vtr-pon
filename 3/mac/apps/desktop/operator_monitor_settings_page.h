@@ -5,6 +5,9 @@
 #include "controller_scaling.h"
 #include "language_text.h"
 #include "settings_style.h"
+#include "network_video.h"
+#include "decklink.h"
+#include "virtual_camera/output.h"
 #include <QApplication>
 #include <QCheckBox>
 #include <QComboBox>
@@ -16,6 +19,7 @@
 #include <QScreen>
 #include <QSignalBlocker>
 #include <QVBoxLayout>
+#include <QTimer>
 #include <functional>
 
 class OperatorMonitorSettingsPage final : public QWidget {
@@ -32,6 +36,19 @@ public:
     title_->setObjectName(QStringLiteral("settingsPageTitle"));
     vtrpon::setSettingsRole(title_, "pageTitle");
     layout->addWidget(title_);
+    auto *destinations = vtrpon::createSettingsGroup(this, "output.destinations");
+    auto *destinationLayout = new QVBoxLayout(destinations);
+    const std::array<const char *, 4> names{"operatorMonitorWindowOutput", "operatorMonitorDeckLinkOutput",
+        "operatorMonitorNdiOutput", "operatorMonitorVirtualCameraOutput"};
+    for (unsigned i = 0; i < outputs_.size(); ++i) {
+      outputs_[i] = new QCheckBox(destinations);
+      outputs_[i]->setObjectName(QString::fromLatin1(names[i]));
+      destinationLayout->addWidget(outputs_[i]);
+      connect(outputs_[i], &QCheckBox::toggled, this, [this, i](bool checked) { saveOutput(i, checked); });
+    }
+    outputHelp_ = new QLabel(destinations); outputHelp_->setWordWrap(true);
+    vtrpon::setSettingsRole(outputHelp_, "description"); destinationLayout->addWidget(outputHelp_);
+    layout->addWidget(destinations);
     auto *monitorGroup = vtrpon::createSettingsGroup(this, "operator_monitor.settings");
     layout->addWidget(monitorGroup);
     auto *monitorLayout = new QVBoxLayout(monitorGroup);
@@ -83,6 +100,9 @@ public:
     connect(qApp, &QGuiApplication::screenRemoved, this, [this] { refreshDisplays(); });
     reload();
     retranslate();
+    auto *timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, [this] { refreshOutputs(); });
+    timer->start(500);
   }
   void reload() {
     auto settings = vtrpon::makeControllerSettings();
@@ -97,10 +117,14 @@ public:
     }
     updateEnabledControls();
     refreshDisplays();
+    refreshOutputs();
   }
   void retranslate() {
     vtrpon::retranslateSettingsGroups(this);
     title_->setText(vtrpon::uiText("operator_monitor.settings"));
+    const std::array<const char *, 4> labels{"output.window", "output.decklink", "output.ndi", "output.virtual_camera"};
+    for (unsigned i = 0; i < outputs_.size(); ++i) outputs_[i]->setText(vtrpon::uiText(labels[i]));
+    outputHelp_->setText(vtrpon::uiText("output.return_help"));
     displayLabel_->setText(vtrpon::uiText("operator_monitor.display"));
     information_->setText(vtrpon::uiText("operator_monitor.information"));
     timerEnabled_->setText(vtrpon::uiText("operator_timer.enable"));
@@ -112,6 +136,52 @@ public:
       status_->setText(vtrpon::uiText(vtrpon::platformFeatureUnavailableTextId(vtrpon::PlatformFeature::OperatorMonitor)));
   }
 private:
+  void refreshOutputs() {
+    auto settings = vtrpon::makeControllerSettings();
+    const auto ndi = vtrpon::savedNetworkVideoSettings();
+    const auto deck = vtrpon::savedDeckLinkSettings();
+    const std::array<bool, 4> values{settings.value("operatorMonitor/windowEnabled", false).toBool(),
+        deck.outputEnabled && deck.returnMonitorEnabled, ndi.outputEnabled && ndi.returnMonitorEnabled,
+        vtrpon::virtualCameraEnabled() && vtrpon::virtualCameraReturnMonitor()};
+    for (unsigned i = 0; i < outputs_.size(); ++i) {
+      const QSignalBlocker blocker(outputs_[i]); outputs_[i]->setChecked(values[i]);
+    }
+    outputs_[1]->setEnabled(vtrpon::deckLinkAddonInstalled());
+    outputs_[2]->setEnabled(vtrpon::networkVideoAddonInstalled());
+    displays_->setEnabled(values[0]); displayLabel_->setEnabled(values[0]);
+  }
+  void saveOutput(unsigned i, bool checked) {
+    bool ok = true;
+    if (i == 0) {
+      auto settings = vtrpon::makeControllerSettings();
+      settings.setValue("operatorMonitor/windowEnabled", checked); settings.sync();
+      ok = settings.status() == QSettings::NoError;
+    } else if (i == 1) {
+      auto settings = vtrpon::savedDeckLinkSettings();
+      if (checked && !settings.outputEnabled) {
+        settings.compositeEnabled = settings.fillEnabled = settings.keyEnabled = false;
+        settings.outputEnabled = true;
+      }
+      settings.returnMonitorEnabled = checked;
+      vtrpon::saveDeckLinkSettings(settings);
+      ok = vtrpon::savedDeckLinkSettings() == settings;
+    } else if (i == 2) {
+      auto settings = vtrpon::savedNetworkVideoSettings();
+      if (checked && !settings.outputEnabled) {
+        settings.compositeEnabled = settings.fillEnabled = settings.keyEnabled = settings.alphaEnabled = false;
+        settings.outputEnabled = true;
+      }
+      settings.returnMonitorEnabled = checked;
+      vtrpon::saveNetworkVideoSettings(settings);
+      ok = vtrpon::savedNetworkVideoSettings() == settings;
+    } else {
+      if (checked) ok = vtrpon::setVirtualCameraReturnMonitor(true) && vtrpon::setVirtualCameraEnabled(true);
+      else ok = vtrpon::setVirtualCameraEnabled(false);
+    }
+    refreshOutputs();
+    status_->setText(ok ? QString() : vtrpon::uiText("settings.manage.failed"));
+    if (ok && changed) changed();
+  }
   void updateEnabledControls() {
     const bool supported = vtrpon::platformFeatureImplemented(vtrpon::PlatformFeature::OperatorMonitor);
     displays_->setEnabled(supported);
@@ -156,4 +226,6 @@ private:
   std::array<QCheckBox *, 5> fields_{};
   QCheckBox *timerEnabled_;
   QPushButton *timerSettingsButton_;
+  std::array<QCheckBox *, 4> outputs_{};
+  QLabel *outputHelp_;
 };

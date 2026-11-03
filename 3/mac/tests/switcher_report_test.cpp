@@ -130,6 +130,11 @@ public:
       }
       ++supported; models->setCurrentIndex(i);
       CHECK(sources->maximum() == p.inputs && receive->isEnabled() == p.receive && fade->isEnabled() == p.fade);
+      auto *help=dialog.findChild<QLabel *>("rolandModelHelp"); CHECK(help);
+      if (!rolandMinimumFadeVersion(model).isEmpty()) CHECK(help->text().contains(rolandMinimumFadeVersion(model)) && !help->text().contains("fade_firmware"));
+      if(model==RolandSwitcherModel::V8Hd) CHECK(help->text().contains("PGM/PST") && !help->text().contains("v8_pgm_mode"));
+      if(model==RolandSwitcherModel::Vr120Hd) CHECK(!help->text().contains("Tally Settings"));
+      if(model==RolandSwitcherModel::Vr6Hd) CHECK(help->text().contains("VIDEO IN 1–6 (HDMI)"));
       sources->setValue(p.inputs);
       host->setText("127.0.0.1"); QMetaObject::invokeMethod(host, "editingFinished", Qt::DirectConnection);
       if (p.passwordLength) { password->setText(QString(p.passwordLength, 'P')); QMetaObject::invokeMethod(password, "editingFinished", Qt::DirectConnection); }
@@ -183,10 +188,13 @@ public:
     auto *save = window->findChild<QPushButton *>("switcherCheckSave");
     auto *email = window->findChild<QPushButton *>("switcherCheckEmail");
     auto *folder = window->findChild<QPushButton *>("switcherCheckReportFolder");
+    auto *openEmail = window->findChild<QPushButton *>("switcherCheckOpenEmail");
+    auto *attachmentHelp = window->findChild<QLabel *>("switcherCheckManualAttachment");
     auto *firmware = window->findChild<QLineEdit *>("switcherCheckFirmware");
     auto *answer = window->findChild<QComboBox *>("switcherCheckResult0");
     auto *comment = window->findChild<QPlainTextEdit *>("switcherCheckComment");
-    CHECK(start && stop && save && email && folder && firmware && answer && comment);
+    CHECK(start && stop && save && email && folder && openEmail && attachmentHelp && firmware && answer && comment);
+    CHECK(openEmail->isHidden() && attachmentHelp->isHidden());
     CHECK(!email->isEnabled() && !folder->isEnabled());
     start->click(); CHECK(controller.checkSession().active());
     CHECK(until([&] { return controller.switcherReady(); }));
@@ -206,18 +214,21 @@ public:
     QUrlQuery query(mail); CHECK(mail.path() == "info@pondashi.com" && query.queryItems().size() == 2);
     const auto body = query.queryItemValue("body", QUrl::FullyDecoded);
     CHECK(body.contains("2.10 + 日本語 & #") && body.contains("report.json"));
+    CHECK(body.startsWith(uiText("switcher.check.mail_attachment").arg("report.json").replace("\n", "\r\n")));
     CHECK(!body.contains(temporary.path()) && !body.contains(QString(4096, 'X')));
     MailCapture capture;
     QDesktopServices::setUrlHandler("mailto", &capture, "handle");
     QDesktopServices::setUrlHandler("file", &capture, "handle");
     // The actual background save and mailto fallback run against a temporary directory and intercepted URLs.
-    email->click(); CHECK(until([&] { return capture.urls.size() == 1 && folder->isEnabled(); }));
-    CHECK(capture.urls.front().scheme() == "mailto");
+    email->click(); CHECK(until([&] { return !openEmail->isHidden() && folder->isEnabled(); }));
+    CHECK(capture.urls.isEmpty() && !attachmentHelp->isHidden());
     const QDir directory(temporary.filePath("VTR-PON/SwitcherReports"));
     const auto files = directory.entryList({"*.json"}, QDir::Files); CHECK(files.size() == 1);
     QFile saved(directory.filePath(files.front())); CHECK(saved.open(QIODevice::ReadOnly));
     CHECK(QJsonDocument::fromJson(saved.readAll()).object() == observed); saved.close();
-    folder->click(); CHECK(capture.urls.size() == 2 && capture.urls.last().toLocalFile() == directory.path());
+    CHECK(attachmentHelp->text().contains(saved.fileName()));
+    folder->click(); CHECK(capture.urls.size() == 1 && capture.urls.last().toLocalFile() == directory.path());
+    openEmail->click(); CHECK(capture.urls.size() == 2 && capture.urls.last().scheme() == "mailto");
     if (!captures.isEmpty()) CHECK(window->grab().save(QDir(captures).filePath("report-window.png")));
     // A failed write must leave the previous JSON available and never open mail.
     const auto blockedPath = temporary.filePath("blocked-directory");

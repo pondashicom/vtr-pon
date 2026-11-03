@@ -6,6 +6,7 @@
 #include "media_contract.h"
 #include "decklink_platform.h"
 #include "DeckLinkAPIVersion.h"
+#include "runtime_diagnostics.h"
 #include <algorithm>
 #include <cstring>
 #include <cstdio>
@@ -61,13 +62,21 @@ int32_t runtime(char *error, uint32_t capacity) noexcept {
     ComPtr<IDeckLinkAPIInformation> info;
     info.Attach(CreateDeckLinkAPIInformationInstance());
     if (!info) {
-        message(error, capacity, "Blackmagic Desktop Video for macOS is missing or could not be initialized.");
-        return VtrPonAddonRuntimeMissing;
+        const auto diagnosis = vtrpon::decklink::diagnoseUnavailableRuntime();
+        message(error, capacity, diagnosis.detail.c_str());
+        return diagnosis.status;
     }
     int64_t version = 0;
-    if (FAILED(info->GetInt(BMDDeckLinkAPIVersion, &version)) || version < BLACKMAGIC_DECKLINK_API_VERSION) {
-        message(error, capacity, "Desktop Video API 16.0 or newer is required."); return VtrPonAddonRuntimeIncompatible;
+    if (FAILED(info->GetInt(BMDDeckLinkAPIVersion, &version))) {
+        message(error, capacity, "Desktop Video was loaded but its API version could not be queried.");
+        return VtrPonAddonRuntimeError;
     }
+    char description[256]{};
+    std::snprintf(description, sizeof(description), "Desktop Video API %u.%u.%u; API 16.0 or newer is required.\nFramework: %s",
+        unsigned((version >> 24) & 0xff), unsigned((version >> 16) & 0xff), unsigned((version >> 8) & 0xff),
+        vtrpon::decklink::runtimePath);
+    message(error, capacity, description);
+    if (version < BLACKMAGIC_DECKLINK_API_VERSION) return VtrPonAddonRuntimeIncompatible;
     return VtrPonAddonRuntimeReady;
 }
 int32_t VTRPON_DECKLINK_CALL create(void **out, char *error, uint32_t capacity) noexcept {

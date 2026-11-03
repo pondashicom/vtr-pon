@@ -33,6 +33,7 @@ public:
   SInt32 sourceUid = 0, destinationUid = 0;
   std::shared_ptr<Wire> wire = std::make_shared<Wire>();
   QString name;
+  int generation = 0;
   VirtualSwitcher(QString modelName = "VTR-PON Test V-8HD") : name(std::move(modelName)) { MIDIClientCreateWithBlock(CFSTR("VTR-PON Roland test"), &client, nullptr); create(); }
   ~VirtualSwitcher() { disconnect(); if (client) MIDIClientDispose(client); }
   bool create() {
@@ -72,7 +73,7 @@ public:
     return source && packet && MIDIReceived(source, list) == noErr;
   }
   QByteArray bytes() { std::lock_guard lock(wire->mutex); return wire->bytes; }
-  void clear() { std::lock_guard lock(wire->mutex); wire->bytes.clear(); wire->times.clear(); }
+  void clear() { ++generation; std::lock_guard lock(wire->mutex); wire->bytes.clear(); wire->times.clear(); }
   QList<qint64> times() { std::lock_guard lock(wire->mutex); return wire->times; }
 };
 QByteArray dataset(QByteArray body) {
@@ -108,79 +109,71 @@ int runMacRolandMidiRegression() {
   QObject::connect(&roland, &vtrpon::SwitcherDevice::errorOccurred, &app, [&](const QString &) { ++errors; });
   QObject::connect(&roland, &vtrpon::SwitcherDevice::connectionOpened, &app, [&](bool ok, const QString &) { if (ok) ++ready; });
   QString error;
-  CHECK(roland.open(&error));
-  CHECK(generic.reserved());
-  CHECK(until([&] { return device.bytes().contains(QByteArray::fromHex("f0411000000068110c00000000086cf7")); }));
-  // Corrupt/wrong-model messages must not consume the first status baseline.
-  auto invalidInitial = dataset(QByteArray::fromHex("00120000"));
-  invalidInitial[invalidInitial.size()-2] ^= 1;
-  CHECK(device.send(invalidInitial));
-  CHECK(device.send(dataset(QByteArray::fromHex("00120000")))); pump(100);
-  CHECK(selections.isEmpty());
-  CHECK(roland.setProgramInput(6, &error));
+  CHECK(roland.opensAsynchronously() && roland.open(&error));
+  CHECK(generic.reserved() && ready==0 && !roland.setProgramInput(1,&error));
+  const auto query=QByteArray::fromHex("f0411000000068110012000000016df7");
+  const auto modeQuery=QByteArray::fromHex("f04110000000681102010500000177f7");
+  CHECK(until([&] { return device.bytes().contains(modeQuery); }));
+  CHECK(device.send(dataset(QByteArray::fromHex("02010501"))));
+  CHECK(until([&] { return device.bytes().contains(query); }));
+  auto invalidInitial=dataset(QByteArray::fromHex("00120000")); invalidInitial[invalidInitial.size()-2]^=1;
+  CHECK(device.send(invalidInitial)); pump(40); CHECK(ready==0);
+  int current=0, seenQueries=0, seenModes=device.bytes().count(modeQuery), seenGeneration=device.generation;
+  bool fragment=false;
+  QTimer replies; replies.setInterval(5);
+  QObject::connect(&replies,&QTimer::timeout,&app,[&] {
+    if(seenGeneration!=device.generation) { seenGeneration=device.generation; seenQueries=seenModes=0; }
+    const int modes=device.bytes().count(modeQuery);
+    if(modes>seenModes) { seenModes=modes; device.send(dataset(QByteArray::fromHex("02010501"))); }
+    const int n=device.bytes().count(query);
+    if(n<=seenQueries) return;
+    seenQueries=n; const auto response=dataset(QByteArray::fromHex("001200")+char(current));
+    if(fragment) {
+      fragment=false; device.send(response.left(9));
+      QTimer::singleShot(15,&replies,[&,response] { device.send(QByteArray(1,char(0xf8))+response.mid(9)); });
+    } else device.send(response);
+  });
+  replies.start(); CHECK(until([&] { return ready==1; })); CHECK(selections.isEmpty());
+  CHECK(roland.setProgramInput(6,&error));
   CHECK(until([&] { return device.bytes().contains(dataset(QByteArray::fromHex("00120005"))); }));
-  CHECK(!roland.setProgramInput(0, &error) && !roland.setProgramInput(9, &error));
-  CHECK(roland.setFadeToBlack(true, &error));
+  CHECK(!roland.setProgramInput(0,&error) && !roland.setProgramInput(9,&error));
+  CHECK(roland.setFadeToBlack(true,&error));
   CHECK(until([&] { return device.bytes().contains(QByteArray::fromHex("b02300b0223f")); }));
   CHECK(device.bytes().contains(dataset(QByteArray::fromHex("02010700"))));
-  CHECK(roland.setFadeToBlack(false, &error));
+  CHECK(roland.setFadeToBlack(false,&error));
   CHECK(until([&] { return device.bytes().contains(QByteArray::fromHex("b02300b02200")); }));
-  std::puts("PASS CoreMIDI RQ1/DT1 output, bounds, ordered FTB on/off ramps");
-
-  CHECK(device.send(QByteArray::fromHex("c003"))); pump(50);
-  CHECK(selections.isEmpty()); // Stale state during a local switch is suppressed.
-  CHECK(device.send(dataset(QByteArray::fromHex("00120005")))); pump(50);
-  CHECK(selections.isEmpty()); // Our own switch is observed, never taken again.
-  CHECK(device.send(QByteArray::fromHex("c003")));
-  CHECK(until([&] { return selections == QList<int>{4}; }));
-  const auto tally = dataset(QByteArray::fromHex("0c00000000000000010000"));
-  CHECK(device.send(tally.left(10))); pump(15);
-  CHECK(device.send(tally.mid(10)));
-  CHECK(until([&] { return selections == (QList<int>{4, 6}); }));
-  CHECK(device.send(tally)); pump(100); CHECK(selections.size() == 2);
-  auto bad = dataset(QByteArray::fromHex("00120001")); bad[bad.size() - 2] ^= 1;
-  CHECK(device.send(bad));
-  auto otherModel = dataset(QByteArray::fromHex("00120001")); otherModel[6] = 0x69;
-  CHECK(device.send(otherModel)); pump(100); CHECK(selections.size() == 2);
-  const auto genericPending = queue->take(); CHECK(genericPending.received == 0);
+  CHECK(device.send(QByteArray::fromHex("c003"))); pump(50); CHECK(selections.isEmpty());
+  current=5; pump(300); CHECK(selections.isEmpty()); // Local echo is observed silently.
+  CHECK(device.send(QByteArray::fromHex("c003"))); pump(80); CHECK(selections.isEmpty());
+  current=3; CHECK(until([&] { return selections==QList<int>{4}; }));
+  // Physical HDMI tally belongs to a different namespace than logical INPUT.
+  const auto tally=dataset(QByteArray::fromHex("0c00000000000000010000"));
+  CHECK(device.send(tally)); pump(80); CHECK(selections==QList<int>{4});
+  fragment=true; current=5; CHECK(until([&] { return selections==(QList<int>{4,6}); }));
+  pump(300); CHECK(selections.size()==2);
+  auto bad=dataset(QByteArray::fromHex("00120001")); bad[bad.size()-2]^=1; CHECK(device.send(bad));
+  auto otherModel=dataset(QByteArray::fromHex("00120001")); otherModel[6]=0x69; CHECK(device.send(otherModel)); pump(80); CHECK(selections.size()==2);
+  const auto genericPending=queue->take(); CHECK(genericPending.received==0);
   generic.close(); CHECK(!generic.open(*found).isEmpty());
-  std::puts("PASS Program Change, fragmented tally, duplicate/bad-checksum/model rejection, generic input reservation");
+  std::puts("PASS V-8HD official RQ1/DT1, real status readiness, Program Change/tally rejection, fragmented PGM, FTB and generic reservation");
 
-  device.disconnect();
-  CHECK(until([&] { return errors > 0; }));
-  const int countBefore = selections.size();
-  CHECK(device.create());
-  CHECK(until([&] { return ready > 0; }));
-  CHECK(selections.size() == countBefore);
-  CHECK(device.send(dataset(QByteArray::fromHex("00120002")))); pump(100);
-  CHECK(selections.size() == countBefore); // Initial state after reconnect is silent.
-  CHECK(device.send(QByteArray::fromHex("c003")));
-  CHECK(until([&] { return selections.size() == countBefore + 1 && selections.last() == 4; }));
-  CHECK(device.send(dataset(QByteArray::fromHex("00120004"))));
-  CHECK(until([&] { return selections.last() == 5; }));
-  CHECK(roland.setProgramInput(7, &error));
-  CHECK(device.send(QByteArray::fromHex("c001"))); pump(50);
-  CHECK(selections.last() == 5);
-  pump(5050); // Expired local acknowledgement wait must not block future operations.
-  CHECK(device.send(QByteArray::fromHex("c001")));
-  CHECK(until([&] { return selections.last() == 2; }));
-  CHECK(roland.setProgramInput(8, &error));
+  const int previousReady=ready; device.disconnect(); CHECK(until([&] { return errors>0; }));
+  const int countBefore=selections.size(); device.clear(); current=2; CHECK(device.create());
+  CHECK(until([&] { return ready>previousReady; })); CHECK(selections.size()==countBefore);
+  CHECK(device.send(QByteArray::fromHex("c003"))); pump(80); CHECK(selections.size()==countBefore);
+  current=3; CHECK(until([&] { return selections.size()==countBefore+1 && selections.last()==4; }));
+  current=4; CHECK(until([&] { return selections.last()==5; }));
+  CHECK(roland.setProgramInput(7,&error)); current=1; pump(300); CHECK(selections.last()==5);
+  CHECK(until([&] { return selections.last()==2; },6000)); // A failed local switch cannot suppress later observations forever.
+  CHECK(roland.setProgramInput(8,&error));
   CHECK(until([&] { return device.bytes().contains(dataset(QByteArray::fromHex("00120007"))); }));
-  CHECK(device.send(QByteArray::fromHex("c001"))); // Pending receive is discarded at close.
-  roland.close();
-  const auto afterClose = selections.size(); pump(100); CHECK(selections.size() == afterClose);
+  roland.close(); const auto afterClose=selections.size(); pump(100); CHECK(selections.size()==afterClose);
   CHECK(!vtrpon::macMidi::sourceReserved(device.source));
-  CHECK(generic.open({id, "VTR-PON Test V-8HD", device.source}).isEmpty());
-  generic.close();
-  std::puts("PASS initial status/echo suppression, deadline expiry, same-UniqueID reconnect baseline, first subsequent operation and close");
-  // Program Change is an explicit operation, not a reply to the initial RQ1.
-  CHECK(roland.open(&error));
-  const int beforeFirstOperation = selections.size();
-  CHECK(device.send(QByteArray::fromHex("c002")));
-  CHECK(until([&] { return selections.size() == beforeFirstOperation + 1 && selections.last() == 3; }));
-  CHECK(device.send(dataset(QByteArray::fromHex("00120000")))); pump(100);
-  CHECK(selections.size() == beforeFirstOperation + 1); // Late initial reply cannot undo that operation.
+  CHECK(generic.open({id,"VTR-PON Test V-8HD",device.source}).isEmpty()); generic.close();
+  CHECK(roland.open(&error)); current=2;
+  CHECK(until([&] { return ready>previousReady+1; })); CHECK(selections.size()==afterClose);
   roland.close();
+  std::puts("PASS V-8HD persistent-ID reconnect, silent fresh baseline, subsequent operation, local deadline and close");
 
   {
     vtrpon::MacRolandMidi transport(stalled);
@@ -280,6 +273,17 @@ int runMacRolandProfilesRegression() {
     const auto &p = rolandSwitcherProfile(model);
     VirtualSwitcher device(QStringLiteral("VTR-PON Test ") + QLatin1String(p.name));
     CHECK(device.source && device.destination);
+    QTimer prerequisites; prerequisites.setInterval(5);
+    int generation=-1, modes=0, assignments=0;
+    QObject::connect(&prerequisites,&QTimer::timeout,&app,[&] {
+      if(model!=RolandSwitcherModel::V1Sdi) return;
+      if(generation!=device.generation) { generation=device.generation; modes=assignments=0; }
+      const auto bytes=device.bytes();
+      const int nextModes=bytes.count(QByteArray::fromHex("f0411000000031117001000000010ef7"));
+      if(nextModes>modes) { modes=nextModes; device.send(QByteArray::fromHex("f041100000003112700100010ef7")); }
+      const int nextAssignments=bytes.count(QByteArray::fromHex("f0411000000031117001210000016df7"));
+      if(nextAssignments>assignments) { assignments=nextAssignments; device.send(QByteArray::fromHex("f041100000003112700121006ef7")); }
+    }); prerequisites.start();
     const auto address = QByteArray::fromHex(p.programAddress);
     const auto query = rolandSysEx(model, 0x10, 0x11, address + QByteArray::fromHex("000001"));
     const auto response = [&](int source) { return rolandSysEx(model, 0x10, 0x12, address + QByteArray(1, char(source-1))); };
@@ -378,6 +382,31 @@ int runMacRolandProfilesRegression() {
     controller.applySettings(excludedSettings);
     CHECK(!controller.switcherReady() && controller.switcherConnectionDetail().contains("unavailable"));
     CHECK(!controller.startCheck()); controller.requestShutdown(); CHECK(controller.isShutdownComplete());
+  }
+  for(auto model:{RolandSwitcherModel::V160Hd,RolandSwitcherModel::V80Hd,RolandSwitcherModel::V1_4K,RolandSwitcherModel::Vr6Hd,RolandSwitcherModel::Vr120Hd}) {
+    const auto &p=rolandSwitcherProfile(model);
+    VirtualSwitcher device(QStringLiteral("VTR-PON Test ")+QLatin1String(p.name)); CHECK(device.source && device.destination);
+    RolandModelSettings settings; settings.useUsbMidi=true; settings.sourceNumber=p.inputs;
+    RolandV8HdMidiSwitcher adapter(model,settings,true); int ready=0,errors=0; QList<int> changes;
+    QObject::connect(&adapter,&SwitcherDevice::connectionOpened,&app,[&](bool value,const QString &) { if(value) ++ready; });
+    QObject::connect(&adapter,&SwitcherDevice::errorOccurred,&app,[&](const QString &) { ++errors; });
+    QObject::connect(&adapter,&SwitcherDevice::programInputChanged,&app,[&](int input) { changes.append(input); });
+    const auto query=rolandSysEx(model,16,0x11,QByteArray::fromHex(p.programAddress)+QByteArray::fromHex("000001"));
+    const auto response=[&](int selected) { return rolandSysEx(model,16,0x12,QByteArray::fromHex(p.programAddress)+char(selected-1)); };
+    QString error; CHECK(adapter.open(&error)); CHECK(until([&] { return device.bytes().contains(query); }));
+    CHECK(ready==0 && device.send(response(1))); CHECK(until([&] { return ready==1; })); CHECK(changes.isEmpty());
+    int queries=device.bytes().count(query);
+    CHECK(until([&] { return device.bytes().count(query)>queries; }));
+    CHECK(device.send(response(p.inputs))); CHECK(until([&] { return changes==QList<int>{p.inputs}; }));
+    CHECK(adapter.setProgramInput(p.inputs,&error));
+    CHECK(until([&] { return device.bytes().contains(rolandSysEx(model,16,0x12,QByteArray::fromHex(p.programAddress)+char(p.inputs-1))); }));
+    CHECK(!adapter.setFadeToBlack(true,&error));
+    CHECK(device.send(response(p.inputs))); pump(50); CHECK(changes.size()==1);
+    device.disconnect(); CHECK(until([&] { return errors>0; })); device.clear(); CHECK(device.create());
+    CHECK(until([&] { return device.bytes().contains(query); })); CHECK(device.send(response(p.inputs)));
+    CHECK(until([&] { return ready==2; })); CHECK(changes.size()==1);
+    adapter.close(); CHECK(!macMidi::sourceReserved(device.source));
+    std::printf("PASS CoreMIDI %s optional USB: PGM handshake, physical input, send, FTB refusal, reconnect baseline\n",p.name);
   }
   std::puts("MAC_ROLAND_PROFILES result=PASS");
   return 0;

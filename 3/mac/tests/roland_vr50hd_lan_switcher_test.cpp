@@ -38,7 +38,7 @@ bool runRolandVr50HdLanRegression() {
   QList<QByteArray> received;
   int input = 0;
   int connections = 0;
-  bool holdAck = false, ignoreStatus = false, wrongModel = false, rejectFade = false;
+  bool holdAck = false, ignoreStatus = false, wrongModel = false, rejectFade = false, holdReflection = false;
   QObject::connect(&server, &QTcpServer::newConnection, &server, [&] {
     peer = server.nextPendingConnection();
     ++connections;
@@ -63,7 +63,7 @@ bool runRolandVr50HdLanRegression() {
         } else if (command == "QPG;") {
           if (!ignoreStatus) client->write(frame("QPG:" + QByteArray::number(input)));
         } else if (command.startsWith("PGM:")) {
-          input = command.mid(4, 1).toInt();
+          if (!holdReflection) input = command.mid(4, 1).toInt();
           if (!holdAck) client->write(QByteArray(1, '\x06'));
         } else if (command.startsWith("FDE:")) {
           if (rejectFade) client->write(frame("ERR:4"));
@@ -114,6 +114,19 @@ bool runRolandVr50HdLanRegression() {
   input = 1;
   check(waitFor([&] { return notifications.size() == 3; }), "return from STILL detected");
   check(notifications.last() == 2, "returned input is one-based");
+
+  holdReflection = true;
+  const int beforeDelayedReflection = notifications.size();
+  check(device.setProgramInput(3), "local input with delayed hardware reflection queues");
+  check(waitFor([&] { return received.contains("PGM:2;"); }), "delayed local setter reaches the device");
+  settle(550);
+  check(notifications.size() == beforeDelayedReflection, "stale QPG after setter ACK cannot trigger ON AIR");
+  input = 2; holdReflection = false; settle(350);
+  check(notifications.size() == beforeDelayedReflection, "eventual local input reflection cannot trigger ON AIR");
+  input = 0;
+  check(waitFor([&] { return notifications.size() == beforeDelayedReflection + 1; }), "later external departure remains observable");
+  input = 2;
+  check(waitFor([&] { return notifications.size() == beforeDelayedReflection + 2; }), "later external return remains observable");
 
   rejectFade = true;
   device.setFadeToBlack(true);

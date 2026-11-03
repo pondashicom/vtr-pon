@@ -7,6 +7,32 @@
 namespace {
 
 constexpr auto kUiTextIds = std::to_array<const char *>({
+    //% "Output destinations"
+    QT_TRID_NOOP("output.destinations"),
+    //% "Output source"
+    QT_TRID_NOOP("output.source"),
+    //% "ON AIR"
+    QT_TRID_NOOP("output.on_air"),
+    //% "ON AIR — Composite (with background)"
+    QT_TRID_NOOP("output.on_air_composite"),
+    //% "ON AIR — Fill"
+    QT_TRID_NOOP("output.on_air_fill"),
+    //% "ON AIR — Key"
+    QT_TRID_NOOP("output.on_air_key"),
+    //% "ON AIR — Alpha"
+    QT_TRID_NOOP("output.on_air_alpha"),
+    //% "Return monitor"
+    QT_TRID_NOOP("output.return_monitor"),
+    //% "Regular window output"
+    QT_TRID_NOOP("output.window"),
+    //% "DeckLink output"
+    QT_TRID_NOOP("output.decklink"),
+    //% "NDI output"
+    QT_TRID_NOOP("output.ndi"),
+    //% "Virtual camera output"
+    QT_TRID_NOOP("output.virtual_camera"),
+    //% "These checkboxes are linked to each output settings page. Select a separate hardware channel and format in DeckLink settings. NDI adds a separate source named \"Return Monitor\" after the output name. The information band, timer and messages are included. NDI and DeckLink carry the ON AIR audio mix."
+    QT_TRID_NOOP("output.return_help"),
     //% "Hardware operation unverified — volunteers wanted. Mac DeckLink input, output, audio and Fill/Key require testing with real devices. Please share your results using Operation Report."
     QT_TRID_NOOP("decklink.trial.notice"),
     //% "DeckLink Operation Report"
@@ -52,8 +78,10 @@ constexpr auto kUiTextIds = std::to_array<const char *>({
     QT_TRID_NOOP("settings.switcher.mac.suffix"),
     //% "VR-50HD MK II LAN control is awaiting hardware verification. Enter the device's IP address (TCP port 8023) and select INPUT 1-4. For FTB, set Output Fade Color to Black on the switcher. Initial connection and reconnection do not start ON AIR."
     QT_TRID_NOOP("settings.switcher.roland.lan_help"),
-    //% "Connect the selected model by USB MIDI. Its MIDI ports are detected by model name. New models require a valid status reply before Ready."
+    //% "Connect the selected model by USB MIDI. Its MIDI ports are detected by model name. A valid status reply is required before Ready."
     QT_TRID_NOOP("settings.switcher.roland.midi_help"),
+    QT_TRID_NOOP("settings.switcher.roland.transport"),
+    QT_TRID_NOOP("switcher.trial.vr120_usb_help"),
     //% "TCP port"
     QT_TRID_NOOP("settings.switcher.roland.port"),
     //% "Switcher IPv4 address"
@@ -64,14 +92,18 @@ constexpr auto kUiTextIds = std::to_array<const char *>({
     QT_TRID_NOOP("switcher.trial.no_fade"),
     //% "Switcher-to-ON AIR is unavailable in this trial because the input-status response format is not established by the reference used."
     QT_TRID_NOOP("switcher.trial.no_receive"),
-    //% "Use TCP port 8023 and the four-character network password. For FTB, set Output Fade Assign > Video Fade to Black and use firmware 2.10 or later (LAN/RS-232 Basic Control Commands). For input-to-ON AIR, disable AUX, PinP&Key and DSK in Tally Settings."
+    //% "Use TCP port 8023 and the four-character network password. For FTB, set Output Fade Assign > Video Fade to Black and use firmware 2.10 or later (LAN/RS-232 Basic Control Commands)."
     QT_TRID_NOOP("switcher.trial.vr120_help"),
-    //% "Use LAN port 8023 and the four-character network password. For FTB, set Output Fade Mode to Fade to Background and set its background color to black. Source numbers refer to XPT 1–8."
+    //% "Use firmware 3.00 or later, LAN port 8023 and the four-character network password. For FTB, set Output Fade Mode to Fade to Background and set its background color to black. Source numbers refer to XPT 1–8."
     QT_TRID_NOOP("switcher.trial.v600_help"),
     //% "Enable RS-232 on the switcher. Select the COM port of the RS-232 or USB–RS-232 adapter and match the baud rate. Use a crossover cable. For FTB, assign the left side of OUTPUT FADE to black."
     QT_TRID_NOOP("switcher.trial.serial_help"),
     //% "Set the switcher to PGM/PST mode. For V-1HD, set MIDI Rx SOURCE to USB and match the SysEx device ID to MIDI DEVICE ID (device ID minus one). For V-1SDI, assign OUTPUT FADER to VIDEO, V & A, or BLACK / A."
     QT_TRID_NOOP("switcher.trial.pgm_mode"),
+    //% "LAN FTB requires firmware %1 or later and Output Fade set to Black."
+    QT_TRID_NOOP("switcher.trial.fade_firmware"),
+    //% "Set PANEL OPERATION to PGM/PST. Source numbers refer to INPUT 1–8 after the switcher’s input assignments."
+    QT_TRID_NOOP("switcher.trial.v8_pgm_mode"),
     //% " — trial"
     QT_TRID_NOOP("switcher.trial.suffix"),
     //% "Trial support; physical hardware verification is pending. Record results using Operation Check."
@@ -92,11 +124,11 @@ constexpr auto kUiTextIds = std::to_array<const char *>({
     QT_TRID_NOOP("settings.switcher.atem.description"),
     //% "Connect VTR-PON to a Roland switcher. Select your model and configure its connection. Only one switcher integration can be enabled at a time."
     QT_TRID_NOOP("settings.switcher.roland.description"),
-    //% "Send report"
+    //% "Create report email"
     QT_TRID_NOOP("switcher.check.email"),
-    //% "Stop recording first. Save the report and open an email to info@pondashi.com. Review the message and press Send yourself. If automatic attachment is unavailable, attach the saved JSON file using Open report folder."
+    //% "Stop recording first. This saves a JSON report and prepares an email to info@pondashi.com. If automatic attachment is unavailable, follow the displayed steps to attach the saved JSON yourself before sending."
     QT_TRID_NOOP("switcher.check.email_help"),
-    //% "Open report folder"
+    //% "Show attachment folder"
     QT_TRID_NOOP("switcher.check.folder"),
     //% "Could not open the folder. The report is saved at: %1"
     QT_TRID_NOOP("switcher.check.folder_failed"),
@@ -104,27 +136,35 @@ constexpr auto kUiTextIds = std::to_array<const char *>({
     QT_TRID_NOOP("switcher.check.no_report_folder"),
     //% "Saving the report and preparing an email…"
     QT_TRID_NOOP("switcher.check.preparing_email"),
-    //% "The report is saved. Review the email to info@pondashi.com and press Send in your mail app.\nSaved: %1"
+    //% "The report is saved. Preparing the email…\nSaved: %1"
     QT_TRID_NOOP("switcher.check.email_ready"),
     //% "Email creation was cancelled. The report is still saved: %1"
     QT_TRID_NOOP("switcher.check.email_cancelled"),
     //% "The mail app has finished its operation. Check sending status in your mail app.\nSaved report: %1"
     QT_TRID_NOOP("switcher.check.email_finished"),
-    //% "Requested an email to info@pondashi.com. Automatic attachment is unavailable with this mail app. Use Open report folder, attach the JSON file below, then press Send yourself.\n%1"
+    //% "The report is saved. You must attach the JSON file yourself.\n1. Select Show attachment folder to find the JSON file below.\n2. Select Open email, attach that JSON file, then press Send in your mail app.\nSaved: %1"
     QT_TRID_NOOP("switcher.check.email_manual_attachment"),
     //% "Could not open a mail app. Send the saved JSON file to info@pondashi.com using your usual email or webmail.\n%1"
     QT_TRID_NOOP("switcher.check.email_failed"),
+    //% "Open email"
+    QT_TRID_NOOP("switcher.check.open_email"),
+    //% "Requested an email to info@pondashi.com. Attach the saved JSON file before pressing Send in your mail app."
+    QT_TRID_NOOP("switcher.check.email_manual_opened"),
+    //% "The saved JSON file could not be found. Select Create report email again to save a new copy."
+    QT_TRID_NOOP("switcher.check.attachment_missing"),
+    //% "Before sending, check that this JSON file is attached: %1"
+    QT_TRID_NOOP("switcher.check.mail_attachment_check"),
     //% "VTR-PON switcher operation report: %1"
     QT_TRID_NOOP("switcher.check.mail_subject"),
     //% "VTR-PON switcher operation check results:"
     QT_TRID_NOOP("switcher.check.mail_intro"),
-    //% "Please attach the report file before sending: %1"
+    //% "Attachment required: This email does not attach the report automatically.\nBefore sending, attach this JSON file: %1\nIn VTR-PON Operation Check, select Show attachment folder (normally Documents/VTR-PON/SwitcherReports)."
     QT_TRID_NOOP("switcher.check.mail_attachment"),
     //% "Reconnect"
     QT_TRID_NOOP("switcher.check.retry"),
     //% "Operation Check"
     QT_TRID_NOOP("switcher.check.title"),
-    //% "Enable the links you want to test in Roland Integration before starting. Start Recording reconnects to capture the handshake; it does not select an input or change FTB.\n1. Confirm the connection.\n2. Take an item ON AIR in the normal controller and check the switcher input.\n3. Switch from another input to the configured input on the switcher and check ON AIR.\n4. Turn FTB on and off in the normal controller and check the output.\n5. Disconnect and reconnect, then check recovery and that old operations are not replayed.\nRecord what you observed for each item. Protocol responses are recorded separately. Stop recording, review the report, then select Send report to create an email to info@pondashi.com. Review the email and press Send yourself. If automatic attachment is unavailable, use Open report folder to attach the JSON file. Save report is also available. Network passwords, IP addresses and media paths are excluded from the automatic report."
+    //% "Enable the links you want to test in Roland Integration before starting. Start Recording reconnects to capture the handshake; it does not select an input or change FTB.\n1. Confirm the connection.\n2. Take an item ON AIR in the normal controller and check the switcher input.\n3. Switch from another input to the configured input on the switcher and check ON AIR.\n4. Turn FTB on and off in the normal controller and check the output.\n5. Disconnect and reconnect, then check recovery and that old operations are not replayed.\nRecord what you observed for each item. Protocol responses are recorded separately. Stop recording, review the report, then select Create report email. The JSON report is saved, normally in Documents/VTR-PON/SwitcherReports. If automatic attachment is unavailable, follow the displayed steps: Show attachment folder, then Open email and attach the JSON yourself. Confirm the attachment before sending to info@pondashi.com. Save report is also available. Network passwords, IP addresses and media paths are excluded from the automatic report."
     QT_TRID_NOOP("switcher.check.instructions"),
     //% "Switcher firmware (as displayed on the device)"
     QT_TRID_NOOP("switcher.check.firmware"),
@@ -310,7 +350,7 @@ constexpr auto kUiTextIds = std::to_array<const char *>({
     QT_TRID_NOOP("decklink.pair_unsynchronized"),
     //% "DeckLink"
     QT_TRID_NOOP("decklink.title"),
-    //% "Choose the output channel and format for Composite, Fill and Key, then enable each output. DeckLink input channels appear in the INPUT dropdown. Input format changes apply to newly added items."
+    //% "Select a separate output channel and format for ON AIR Composite, Fill, Key and the return monitor. ON AIR and the return monitor can run at the same time. Input channels appear in INPUT; input format changes apply to newly added items."
     QT_TRID_NOOP("decklink.description"),
     //% "Enable DeckLink input"
     QT_TRID_NOOP("decklink.enable_input"),
@@ -417,7 +457,7 @@ constexpr auto kUiTextIds = std::to_array<const char *>({
     QT_TRID_NOOP("settings.addons.title"),
     //% "Install and remove add-ons for this VTR-PON copy. Changes are applied after VTR-PON exits; your feature settings are kept. Vendor runtimes are installed separately."
     QT_TRID_NOOP("settings.addons.description"),
-    //% "Manage add-ons for this VTR-PON copy. Changes apply after VTR-PON exits. ATEM, NDI and VST3 features are still being prepared for Mac. Feature settings are kept; vendor runtimes are installed separately."
+    //% "Manage add-ons for this VTR-PON copy. Changes apply after VTR-PON exits. Feature settings are kept; install vendor runtimes separately. Check runtime readiness and current operation below."
     QT_TRID_NOOP("settings.addons.description_mac"),
     //% "No add-ons are currently available for this OS and CPU."
     QT_TRID_NOOP("settings.addons.catalog_no_platform"),
@@ -575,7 +615,7 @@ constexpr auto kUiTextIds = std::to_array<const char *>({
     QT_TRID_NOOP("addons.runtime.retry"),
     //% "Could not open the browser. Open this URL manually:"
     QT_TRID_NOOP("addons.runtime.browser_failed"),
-    //% "Select the ON AIR outputs to send over NDI. Enable input to find sources on the LAN."
+    //% "Select ON AIR and return monitor outputs to send over NDI. Both can be sent as separate sources at the same time. Enable input to find sources on the LAN."
     QT_TRID_NOOP("network_video.description"),
     //% "Output video"
     QT_TRID_NOOP("network_video.outputs"),

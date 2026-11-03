@@ -1,6 +1,8 @@
 #include "program_gpu_compositor.h"
 #include "virtual_camera/output.h"
 #include "dsk_playback.h"
+#include "operator_monitor_output.h"
+#include <QJsonArray>
 #include "uvc_input_guard.h"
 #include <QApplication>
 #include <QWidget>
@@ -81,6 +83,20 @@ int main(int argc,char **argv) {
     capture("red",QColor(255,0,0));
     QImage redFrame(QDir(evidence).filePath("red/first-frame.png"));
     ok &= !redFrame.isNull() && redFrame.pixelColor(10,540)==QColor(0,0,255);
+    vtrpon::OperatorMonitorControlFeed feed;
+    feed.publish(QJsonDocument(QJsonObject{{"information",true},{"fields",QJsonArray{QJsonObject{{"key","file"},{"label","FILE"},{"value","Mac Return Monitor"}}}}}).toJson(QJsonDocument::Compact));
+    const auto oldGeneration=vtrpon::virtualCameraSourceGeneration();
+    ok &= vtrpon::setVirtualCameraReturnMonitor(true); pump(200);
+    QImage obsolete(1920,1080,QImage::Format_ARGB32); obsolete.fill(Qt::green);
+    ok &= !vtrpon::publishVirtualCameraFrame(obsolete,999,false,oldGeneration);
+    auto returned=capture("return-monitor",QColor(255,0,0),960,400);
+    ok &= !returned.isNull() && returned.pixelColor(10,540)==QColor(0,0,0);
+    int returnWhite=0;
+    if(!returned.isNull()) for(int y=864;y<1080;++y) for(int x=0;x<1920;++x)
+      if(returned.pixelColor(x,y)==QColor(Qt::white)) ++returnWhite;
+    ok &= returnWhite>0;
+    for(int i=0;i<10;++i) ok &= vtrpon::setVirtualCameraReturnMonitor(i%2==0);
+    pump(200); capture("source-restored",QColor(0,0,255),10,540);
     compositor.setFtbCoverage(.5F); pump(200); capture("half-ftb",QColor(128,0,128));
     compositor.setFtbCoverage(0);
     DskPlayback dsk; ok &= dsk.initialize(); dsk.attachCompositor(&compositor);

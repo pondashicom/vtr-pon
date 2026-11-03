@@ -29,3 +29,17 @@ if(APPLE)
 endif()
 install(TARGETS vtr-pon-network-video-addon
   RUNTIME DESTINATION network-video-addons LIBRARY DESTINATION network-video-addons)
+
+include(CTest)
+if(APPLE AND BUILD_TESTING)
+  add_library(ndi-runtime-fixture SHARED tests/runtime_fixture.cpp)
+  add_library(ndi-runtime-old-fixture SHARED tests/runtime_fixture.cpp)
+  target_compile_definitions(ndi-runtime-old-fixture PRIVATE VTRPON_NDI_NO_V6)
+  foreach(fixture ndi-runtime-fixture ndi-runtime-old-fixture)
+    target_include_directories(${fixture} PRIVATE "${VTRPON_NETWORK_VIDEO_INCLUDE_DIR}")
+  endforeach()
+  add_executable(ndi-runtime-loader-test tests/runtime_loader_test.cpp)
+  target_include_directories(ndi-runtime-loader-test PRIVATE src include)
+  add_test(NAME ndi-runtime-loader COMMAND ndi-runtime-loader-test
+    "$<TARGET_FILE:vtr-pon-network-video-addon>" "$<TARGET_FILE:ndi-runtime-fixture>" "$<TARGET_FILE:ndi-runtime-old-fixture>")
+endif()

@@ -15,9 +15,11 @@
 #include <QVBoxLayout>
 #include <QSet>
 #include <cstring>
+#include <functional>
 
 class DeckLinkSettingsPage final : public QWidget {
 public:
+    std::function<void()> changed;
     explicit DeckLinkSettingsPage(QWidget *parent = nullptr) : QWidget(parent) {
         setObjectName(QStringLiteral("deckLinkSettingsPage")); vtrpon::setSettingsRole(this, "page");
         auto *outer = new QVBoxLayout(this); outer->setContentsMargins(0, 0, 0, 0);
@@ -33,10 +35,10 @@ public:
         deviceStatus_ = new QLabel(this); deviceStatus_->setWordWrap(true); deviceStatus_->setTextFormat(Qt::PlainText);
         vtrpon::setSettingsRole(deviceStatus_, "status"); layout->addWidget(deviceStatus_);
         output_ = new QCheckBox(this); output_->setObjectName(QStringLiteral("deckLinkOutputEnabled")); layout->addWidget(output_);
-        const std::array<const char *, 3> enableNames{"deckLinkCompositeEnabled", "deckLinkFillEnabled", "deckLinkKeyEnabled"};
-        const std::array<const char *, 3> channelNames{"deckLinkOutputChannel", "deckLinkFillChannel", "deckLinkKeyChannel"};
-        const std::array<const char *, 3> modeNames{"deckLinkOutputMode", "deckLinkFillMode", "deckLinkKeyMode"};
-        for (unsigned i = 0; i < 3; ++i) {
+        const std::array<const char *, 4> enableNames{"deckLinkCompositeEnabled", "deckLinkFillEnabled", "deckLinkKeyEnabled", "deckLinkReturnMonitorEnabled"};
+        const std::array<const char *, 4> channelNames{"deckLinkOutputChannel", "deckLinkFillChannel", "deckLinkKeyChannel", "deckLinkReturnMonitorChannel"};
+        const std::array<const char *, 4> modeNames{"deckLinkOutputMode", "deckLinkFillMode", "deckLinkKeyMode", "deckLinkReturnMonitorMode"};
+        for (unsigned i = 0; i < 4; ++i) {
             kinds_[i] = new QCheckBox(this); kinds_[i]->setObjectName(QString::fromLatin1(enableNames[i])); layout->addWidget(kinds_[i]);
             auto *form = new QFormLayout;
             channelLabels_[i] = new QLabel(this); channels_[i] = new QComboBox(this); channels_[i]->setObjectName(QString::fromLatin1(channelNames[i]));
@@ -70,16 +72,16 @@ public:
         settings_ = vtrpon::savedDeckLinkSettings();
         const QSignalBlocker a(input_), b(output_), c(fillFormat_);
         input_->setChecked(settings_.inputEnabled); output_->setChecked(settings_.outputEnabled); fillFormat_->setCurrentIndex(settings_.premultipliedFill ? 1 : 0);
-        const std::array<bool, 3> enabled{settings_.compositeEnabled, settings_.fillEnabled, settings_.keyEnabled};
-        for (unsigned i = 0; i < 3; ++i) { const QSignalBlocker block(kinds_[i]); kinds_[i]->setChecked(enabled[i]); }
+        const std::array<bool, 4> enabled{settings_.compositeEnabled, settings_.fillEnabled, settings_.keyEnabled, settings_.returnMonitorEnabled};
+        for (unsigned i = 0; i < 4; ++i) { const QSignalBlocker block(kinds_[i]); kinds_[i]->setChecked(enabled[i]); }
         channelSnapshot_.clear(); channels_[0]->clear(); refresh(); updateControls();
     }
     void retranslate() {
         trial_->setText(vtrpon::uiText("decklink.trial.notice"));check_->setText(vtrpon::uiText("decklink.check.title"));
         runtime_->retranslate(); title_->setText(vtrpon::uiText("decklink.title")); description_->setText(vtrpon::uiText("decklink.description"));
         input_->setText(vtrpon::uiText("decklink.enable_input")); output_->setText(vtrpon::uiText("decklink.enable_output"));
-        const std::array<const char *, 3> labels{"network_video.composite", "network_video.fill", "network_video.key"};
-        for (unsigned i = 0; i < 3; ++i) {
+        const std::array<const char *, 4> labels{"output.on_air_composite", "output.on_air_fill", "output.on_air_key", "output.return_monitor"};
+        for (unsigned i = 0; i < 4; ++i) {
             kinds_[i]->setText(vtrpon::uiText(labels[i])); channelLabels_[i]->setText(vtrpon::uiText("decklink.output_channel")); modeLabels_[i]->setText(vtrpon::uiText("decklink.output_mode"));
             channels_[i]->setAccessibleName(kinds_[i]->text() + QStringLiteral(" — ") + channelLabels_[i]->text());
             modes_[i]->setAccessibleName(kinds_[i]->text() + QStringLiteral(" — ") + modeLabels_[i]->text());
@@ -91,7 +93,7 @@ public:
     }
 private:
     void updateControls() {
-        for (unsigned i = 0; i < 3; ++i) {
+        for (unsigned i = 0; i < 4; ++i) {
             kinds_[i]->setEnabled(output_->isChecked()); const bool enabled = output_->isChecked() && kinds_[i]->isChecked();
             channels_[i]->setEnabled(enabled); modes_[i]->setEnabled(enabled); channelLabels_[i]->setEnabled(enabled); modeLabels_[i]->setEnabled(enabled);
         }
@@ -102,8 +104,12 @@ private:
         settings_.compositeEnabled = kinds_[0]->isChecked(); settings_.fillEnabled = kinds_[1]->isChecked(); settings_.keyEnabled = kinds_[2]->isChecked(); settings_.premultipliedFill = fillFormat_->currentIndex() == 1;
         settings_.outputChannel = channels_[0]->currentData().toString(); settings_.fillChannel = channels_[1]->currentData().toString(); settings_.keyChannel = channels_[2]->currentData().toString();
         settings_.outputMode = modes_[0]->currentData().toUInt(); settings_.fillMode = modes_[1]->currentData().toUInt(); settings_.keyMode = modes_[2]->currentData().toUInt();
+        settings_.returnMonitorEnabled = kinds_[3]->isChecked();
+        settings_.returnMonitorChannel = channels_[3]->currentData().toString();
+        settings_.returnMonitorMode = modes_[3]->currentData().toUInt();
         if (inputMode_->currentData().isValid()) settings_.inputMode = inputMode_->currentData().toUInt();
         vtrpon::saveDeckLinkSettings(settings_); updateControls();
+        if (changed) changed();
     }
     void refreshModes(unsigned i) {
         const QSignalBlocker blocker(modes_[i]); modes_[i]->clear(); modes_[i]->addItem(vtrpon::uiText("decklink.select_format"), 0u);
@@ -117,7 +123,7 @@ private:
         for (const auto &channel : state.channels) { snapshot.append(channel.path + channel.name + QString::number(channel.input)); for (const auto &mode : channel.modes) snapshot.append(QString::number(mode.modeId)); }
         if (snapshot != channelSnapshot_ || !channels_[0]->count()) {
             channelSnapshot_ = snapshot;
-            for (unsigned i = 0; i < 3; ++i) {
+            for (unsigned i = 0; i < 4; ++i) {
                 const QSignalBlocker block(channels_[i]); channels_[i]->clear(); channels_[i]->addItem(vtrpon::uiText("decklink.select_channel"), QString{});
                 for (const auto &channel : state.channels) if (!channel.input) channels_[i]->addItem(channel.name, channel.path);
                 const int index = channels_[i]->findData(settings_.channel(i));
@@ -138,8 +144,8 @@ private:
         deviceStatus_->setVisible(state.availability == vtrpon::DeckLinkState::Availability::NoDevices);
         if (!state.error.isEmpty()) text.append(state.error);
         if (!state.readbackError.isEmpty()) text.append(state.readbackError);
-        const std::array<QString, 3> names{QStringLiteral("Composite"), QStringLiteral("Fill"), QStringLiteral("Key")};
-        if (settings_.outputEnabled) for (unsigned i = 0; i < 3; ++i) if (settings_.outputMask() & (1u << i)) {
+        const std::array<QString, 4> names{vtrpon::uiText("output.on_air_composite"), vtrpon::uiText("output.on_air_fill"), vtrpon::uiText("output.on_air_key"), vtrpon::uiText("output.return_monitor")};
+        if (settings_.outputEnabled) for (unsigned i = 0; i < 4; ++i) if (settings_.outputMask() & (1u << i)) {
             const auto &out = state.outputs[i]; text.append(names[i] + QStringLiteral(": ") + (out.error.isEmpty() ?
                 vtrpon::uiText(out.running ? "decklink.output_running" : "decklink.output_starting") : out.error));
         }
@@ -158,7 +164,7 @@ private:
     QPushButton *check_;
     QCheckBox *input_, *output_;
     QComboBox *inputMode_, *fillFormat_;
-    std::array<QCheckBox *, 3> kinds_{};
-    std::array<QComboBox *, 3> channels_{}, modes_{};
-    std::array<QLabel *, 3> channelLabels_{}, modeLabels_{};
+    std::array<QCheckBox *, 4> kinds_{};
+    std::array<QComboBox *, 4> channels_{}, modes_{};
+    std::array<QLabel *, 4> channelLabels_{}, modeLabels_{};
 };

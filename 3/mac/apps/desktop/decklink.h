@@ -21,9 +21,12 @@ struct DeckLinkSettings {
     bool compositeEnabled = true, fillEnabled = false, keyEnabled = false, premultipliedFill = false;
     QString fillChannel, keyChannel;
     uint32_t fillMode = 0, keyMode = 0;
-    unsigned outputMask() const { return outputEnabled ? (compositeEnabled ? 1u : 0u) | (fillEnabled ? 2u : 0u) | (keyEnabled ? 4u : 0u) : 0; }
-    QString channel(unsigned i) const { return i == 0 ? outputChannel : i == 1 ? fillChannel : keyChannel; }
-    uint32_t mode(unsigned i) const { return i == 0 ? outputMode : i == 1 ? fillMode : keyMode; }
+    bool returnMonitorEnabled = false;
+    QString returnMonitorChannel;
+    uint32_t returnMonitorMode = 0;
+    unsigned outputMask() const { return outputEnabled ? (compositeEnabled ? 1u : 0u) | (fillEnabled ? 2u : 0u) | (keyEnabled ? 4u : 0u) | (returnMonitorEnabled ? 8u : 0u) : 0; }
+    QString channel(unsigned i) const { return i == 0 ? outputChannel : i == 1 ? fillChannel : i == 2 ? keyChannel : returnMonitorChannel; }
+    uint32_t mode(unsigned i) const { return i == 0 ? outputMode : i == 1 ? fillMode : i == 2 ? keyMode : returnMonitorMode; }
     bool operator==(const DeckLinkSettings &) const = default;
 };
 struct DeckLinkChannel {
@@ -39,7 +42,7 @@ struct DeckLinkState {
     bool outputRunning = false;
     quint64 sentFrames = 0;
     struct Output { bool running = false; QString error; quint64 sentFrames = 0; };
-    std::array<Output, 3> outputs{};
+    std::array<Output, 4> outputs{};
     QString syncWarning;
     bool pairSynchronized = false;
 };
@@ -59,6 +62,7 @@ quint64 deckLinkOutputGeneration();
 unsigned deckLinkOutputMask();
 void publishDeckLinkVideo(QByteArray, int width, int height, quint64 generation, qint64 time100ns = 0);
 void publishDeckLinkVideo(QByteArray composite, QByteArray alpha, int width, int height, quint64 generation, qint64 time100ns = 0);
+void publishDeckLinkReturnMonitor(QByteArray pixels, int width, int height, quint64 generation, qint64 time100ns = 0);
 void publishDeckLinkAudio(GstBuffer *, qint64 time100ns = 0);
 void reportDeckLinkOutputError(const QString &);
 class DeckLinkOutput final {

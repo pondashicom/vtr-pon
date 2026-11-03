@@ -26,10 +26,13 @@ struct Receiver { std::shared_ptr<Channel> channel; uint64_t vs=0, as=0; unsigne
 std::mutex mutex;
 std::map<std::string, std::shared_ptr<Channel>> channels;
 std::atomic<unsigned> errors{0}, created{0};
-std::atomic<bool> slow{false};
+std::atomic<bool> slow{false}, discoveryFailure{false};
+std::atomic<unsigned> discoveryChecks{0};
 void *create(char *, uint32_t) { return new int(1); }
 void destroy(void *p) { delete static_cast<int *>(p); }
 int find(void *, VtrPonNetworkSourceCallback callback, void *user) {
+    ++discoveryChecks;
+    if (discoveryFailure.load()) return 0;
     std::vector<std::string> names;
     { std::lock_guard lock(mutex); for (const auto &[name,c] : channels) if (c->online) names.push_back(name); }
     for (const auto &name : names) callback(user,name.c_str());
@@ -80,3 +83,5 @@ extern "C" __attribute__((visibility("default"))) const VtrPonNetworkVideoApi *v
 extern "C" __attribute__((visibility("default"))) void vtrpon_ndi_fixture_error() { ++errors; }
 extern "C" __attribute__((visibility("default"))) unsigned vtrpon_ndi_fixture_receivers() { return created; }
 extern "C" __attribute__((visibility("default"))) void vtrpon_ndi_fixture_slow(int value) { slow=value; }
+extern "C" __attribute__((visibility("default"))) void vtrpon_ndi_fixture_discovery_failure(int value) { discoveryFailure = value != 0; }
+extern "C" __attribute__((visibility("default"))) unsigned vtrpon_ndi_fixture_discovery_checks() { return discoveryChecks.load(); }

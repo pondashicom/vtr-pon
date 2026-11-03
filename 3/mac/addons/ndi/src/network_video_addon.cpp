@@ -8,6 +8,7 @@
 #include <dlfcn.h>
 #include <cstdlib>
 #include <filesystem>
+#include "mac_runtime_loader.h"
 #endif
 #include <algorithm>
 #include <cstring>
@@ -24,6 +25,7 @@ struct Runtime {
     void *module = nullptr;
 #endif
     const NDIlib_v6 *api = nullptr;
+    std::string description;
     ~Runtime() {
         if (api) api->destroy();
 #ifdef _WIN32
@@ -49,9 +51,15 @@ std::wstring environment(const wchar_t *name) {
 std::shared_ptr<Runtime> loadRuntime(int *status = nullptr, std::string *detail = nullptr) {
     if (status) *status = VtrPonAddonRuntimeReady;
     std::lock_guard lock(runtimeMutex);
-    if (auto runtime = sharedRuntime.lock()) return runtime;
+    if (auto runtime = sharedRuntime.lock()) {
+        if (detail) *detail = runtime->description;
+        return runtime;
+    }
     auto runtime = std::make_shared<Runtime>();
     bool candidateFound = false;
+#ifndef _WIN32
+    std::string checked, loadedPath;
+#endif
 #ifdef _WIN32
     std::vector<std::wstring> directories;
     const auto configured = environment(L"NDI_RUNTIME_DIR_V6");
@@ -78,13 +86,11 @@ std::shared_ptr<Runtime> loadRuntime(int *status = nullptr, std::string *detail 
     // Official macOS redistributable location. Never search the working
     // directory, another app's private runtime, or implicit dylib search paths.
     directories.emplace_back("/usr/local/lib");
-    for (const auto &directory : directories) {
-        const auto path = directory / "libndi.dylib";
-        std::error_code error;
-        candidateFound = std::filesystem::exists(path, error) || bool(error) || candidateFound;
-        runtime->module = dlopen(path.c_str(), RTLD_LOCAL | RTLD_NOW);
-        if (runtime->module) break;
-    }
+    auto library = vtrpon::ndi::loadMacRuntime(directories);
+    runtime->module = library.module;
+    candidateFound = library.candidateFound;
+    loadedPath = std::move(library.path);
+    checked = std::move(library.checked);
 #endif
     if (!runtime->module) {
         if (status) *status = candidateFound ? VtrPonAddonRuntimeIncompatible : VtrPonAddonRuntimeMissing;
@@ -94,8 +100,8 @@ std::shared_ptr<Runtime> loadRuntime(int *status = nullptr, std::string *detail 
             : "NDI Runtime 6 (x64) was not found in its registered or standard installation directory.";
 #else
         if (detail) *detail = candidateFound
-            ? "The NDI Runtime could not be loaded. Check this Mac's CPU architecture and runtime dependencies."
-            : "NDI Runtime 6 for macOS was not found. Install the official macOS redistributable and restart VTR-PON.";
+            ? "The NDI Runtime installation was found but could not be loaded. Check its CPU architecture, signature and dependencies.\nChecked:\n" + checked
+            : "The shared NDI Runtime for macOS is not installed in the checked locations. NDI Tools can contain private libraries without installing this shared runtime. Install the official macOS Runtime and restart VTR-PON.\nChecked:\n" + checked;
 #endif
         return {};
     }
@@ -114,16 +120,28 @@ std::shared_ptr<Runtime> loadRuntime(int *status = nullptr, std::string *detail 
         || !api->recv_create_v3 || !api->recv_destroy || !api->recv_capture_v2
         || !api->recv_free_video_v2 || !api->recv_free_audio_v2) {
         if (status) *status = VtrPonAddonRuntimeIncompatible;
-        if (detail) *detail = "The installed NDI Runtime does not provide the required v6 interface.";
+        if (detail) *detail = "The installed NDI Runtime does not provide the required v6 interface."
+#ifndef _WIN32
+            "\nLibrary: " + loadedPath
+#endif
+            ;
         return {};
     }
     if (!api->initialize()) {
         if (status) *status = VtrPonAddonRuntimeError;
-        if (detail) *detail = "NDI Runtime initialization failed. Check runtime and CPU compatibility.";
+        if (detail) *detail = "NDI Runtime was loaded but initialization failed. Check runtime and CPU compatibility."
+#ifndef _WIN32
+            "\nLibrary: " + loadedPath
+#endif
+            ;
         return {};
     }
     runtime->api = api;
-    if (detail) *detail = api->version();
+    runtime->description = api->version() ? api->version() : "NDI Runtime v6";
+#ifndef _WIN32
+    runtime->description += "\nLibrary: " + loadedPath;
+#endif
+    if (detail) *detail = runtime->description;
     sharedRuntime = runtime;
     return runtime;
 }

@@ -27,9 +27,11 @@
     <message id="settings.switcher.mac.unavailable"><source>This switcher model is unavailable in this Mac version.</source><translation>このMac版ではこの機種を利用できません。</translation></message>
     <message id="switcher.trial.no_fade"><source>FTB following is unavailable in this trial: the reference does not establish a command that sets the active fade state. Panel-lock settings are not used as fade commands.</source><translation>参照資料からフェード状態を指定するコマンドを確定できないため、今回の試験対応ではFTB連動を無効にしています。</translation></message>
     <message id="switcher.trial.no_receive"><source>Switcher-to-ON AIR is unavailable in this trial because the input-status response format is not established by the reference used.</source><translation>入力状態の応答形式を参照資料から確定できないため、今回の試験対応ではスイッチャーからのオンエア連携を無効にしています。</translation></message>
-    <message id="switcher.trial.vr120_help"><source>Use TCP port 8023 and the four-character network password. For FTB, set Output Fade Assign &gt; Video Fade to Black and use firmware 2.10 or later (LAN/RS-232 Basic Control Commands). For input-to-ON AIR, disable AUX, PinP&amp;Key and DSK in Tally Settings.</source><translation>TCPポート8023と4文字のネットワークパスワードを使います。FTBは本体のOutput Fade Assign → Video FadeをBlackにし、本体Ver.2.10以上（LAN/RS-232基本制御コマンド対応）を使ってください。入力選択からオンエアする場合はTally SettingsのAUX・PinP&amp;Key・DSKをDisableにします。</translation></message>
-    <message id="switcher.trial.v600_help"><source>Use LAN port 8023 and the four-character network password. For FTB, set Output Fade Mode to Fade to Background and set its background color to black. Source numbers refer to XPT 1–8.</source><translation>LANのTCPポート8023と4文字のネットワークパスワードを使います。FTBは本体のOutput Fade ModeをFade to Backgroundにし、背景色を黒に設定します。ソース番号はXPT 1～8です。</translation></message>
+    <message id="switcher.trial.vr120_help"><source>Use TCP port 8023 and the four-character network password. For FTB, set Output Fade Assign &gt; Video Fade to Black and use firmware 2.10 or later (LAN/RS-232 Basic Control Commands).</source><translation>TCPポート8023と4文字のネットワークパスワードを使います。FTBは本体のOutput Fade Assign → Video FadeをBlackにし、本体Ver.2.10以上（LAN/RS-232基本制御コマンド対応）を使ってください。</translation></message>
+    <message id="switcher.trial.v600_help"><source>Use firmware 3.00 or later, LAN port 8023 and the four-character network password. For FTB, set Output Fade Mode to Fade to Background and set its background color to black. Source numbers refer to XPT 1–8.</source><translation>本体Ver.3.00以降、LANのTCPポート8023と4文字のネットワークパスワードを使います。FTBは本体のOutput Fade ModeをFade to Backgroundにし、背景色を黒に設定します。ソース番号はXPT 1～8です。</translation></message>
     <message id="switcher.trial.serial_help"><source>Enable RS-232 on the switcher. Select the COM port of the RS-232 or USB–RS-232 adapter and match the baud rate. Use a crossover cable. For FTB, assign the left side of OUTPUT FADE to black.</source><translation>本体のRS-232を有効にし、RS-232またはUSB–RS-232変換器のCOMポートと通信速度を合わせます。クロスケーブルを使用します。FTBを使う場合はOUTPUT FADEの左側を黒に設定してください。</translation></message>
+    <message id="switcher.trial.fade_firmware"><source>LAN FTB requires firmware %1 or later and Output Fade set to Black.</source><translation>LANのFTB連動にはファームウェア%1以降が必要です。本体のOutput FadeをBlackに設定します。</translation></message>
+    <message id="switcher.trial.v8_pgm_mode"><source>Set PANEL OPERATION to PGM/PST. Source numbers refer to INPUT 1–8 after the switcher’s input assignments.</source><translation>本体のPANEL OPERATIONをPGM/PSTにします。ソース番号は本体の入力割当後のINPUT 1～8に対応します。</translation></message>
     <message id="switcher.trial.pgm_mode"><source>Set the switcher to PGM/PST mode. For V-1HD, set MIDI Rx SOURCE to USB and match the SysEx device ID to MIDI DEVICE ID (device ID minus one). For V-1SDI, assign OUTPUT FADER to VIDEO, V &amp; A, or BLACK / A.</source><translation>本体をPGM/PSTモードにします。V-1HDはMIDI Rx SOURCEをUSBにし、SysExデバイスIDを本体のMIDI DEVICE IDから1を引いた値に合わせます。V-1SDIのOUTPUT FADERはVIDEO、V &amp; A、BLACK / Aのいずれかにします。</translation></message>
     <message id="switcher.trial.suffix"><source> — trial</source><translation>（試験対応）</translation></message>
     <message id="switcher.trial.unverified"><source>Trial support; physical hardware verification is pending. Record results using Operation Check.</source><translation>試験対応・実機未確認です。「動作確認モード」で結果を記録できます。</translation></message>
@@ -38,7 +40,7 @@
     <message id="switcher.trial.serial_port"><source>COM port</source><translation>COMポート</translation></message>
     <message id="switcher.trial.password"><source>Network password (%1 characters)</source><translation>ネットワークパスワード（%1文字）</translation></message>
     <message id="settings.switcher.roland.lan_help"><source>VR-50HD MK II LAN control is awaiting hardware verification. Enter the device's IP address (TCP port 8023) and select INPUT 1-4. For FTB, set Output Fade Color to Black on the switcher. Initial connection and reconnection do not start ON AIR.</source><translation>VR-50HD MK IIのLAN連携は実機検証待ちです。本体のIPアドレス（TCPポート8023）を入力し、INPUT 1～4を選びます。FTBを使う場合は、本体のOutput Fade ColorをBlackにしてください。接続・再接続だけではオンエアしません。</translation></message>
-    <message id="settings.switcher.roland.midi_help"><source>Connect the selected model by USB MIDI. Its MIDI ports are detected by model name. New models require a valid status reply before Ready.</source><translation>選択した機種をUSB MIDIで接続します。MIDIポートは機種名で自動検出します。追加機種では状態の応答を受信してからReadyになります。</translation></message>
+    <message id="settings.switcher.roland.midi_help"><source>Connect the selected model by USB MIDI. Its MIDI ports are detected by model name. A valid status reply is required before Ready.</source><translation>選択した機種をUSB MIDIで接続します。MIDIポートは機種名で自動検出します。状態の応答を受信してから接続済みになります。</translation></message>
     <message id="settings.switcher.roland.port"><source>TCP port</source><translation>TCPポート</translation></message>
     <message id="settings.switcher.roland.host"><source>Switcher IPv4 address</source><translation>スイッチャーのIPv4アドレス</translation></message>
     <message id="settings.switcher.roland.model"><source>Model</source><translation>機種</translation></message>
@@ -49,13 +51,13 @@
 3. Switch from another input to the configured input on the switcher and check ON AIR.
 4. Turn FTB on and off in the normal controller and check the output.
 5. Disconnect and reconnect, then check recovery and that old operations are not replayed.
-Record what you observed for each item. Protocol responses are recorded separately. Stop recording, review the report, then select Send report to create an email to info@pondashi.com. Review the email and press Send yourself. If automatic attachment is unavailable, use Open report folder to attach the JSON file. Save report is also available. Network passwords, IP addresses and media paths are excluded from the automatic report.</source><translation>開始前に「Roland連携」で試す連携を有効にします。「記録開始」で接続をやり直して通信を記録します。開始だけで入力やFTBは変更されません。
+Record what you observed for each item. Protocol responses are recorded separately. Stop recording, review the report, then select Create report email. The JSON report is saved, normally in Documents/VTR-PON/SwitcherReports. If automatic attachment is unavailable, follow the displayed steps: Show attachment folder, then Open email and attach the JSON yourself. Confirm the attachment before sending to info@pondashi.com. Save report is also available. Network passwords, IP addresses and media paths are excluded from the automatic report.</source><translation>開始前に「Roland連携」で試す連携を有効にします。「記録開始」で接続をやり直して通信を記録します。開始だけで入力やFTBは変更されません。
 1. 接続できることを確認します。
 2. 通常の操作画面から素材をオンエアし、本体の入力切替を確認します。
 3. 本体を別の入力から設定した入力へ切り替え、オンエアを確認します。
 4. 通常の操作画面でFTBをON→OFFにし、本体の出力を確認します。
 5. 切断・再接続後の復帰と、切断中の操作が後から実行されないことを確認します。
-各項目に見た結果を記入します。通信の応答は別に記録されます。記録終了後、内容を確認して「レポートを送信」を押すと、info@pondashi.com宛てのメールを作成します。メールを確認し、ご自身で送信してください。自動添付できない場合は「保存先を開く」からJSONファイルを添付します。「レポートを保存」からファイルの保存だけを行うこともできます。自動収集する内容にネットワークパスワード・IPアドレス・素材のパスは含めません。</translation></message>
+各項目に見た結果を記入します。通信の応答は別に記録されます。記録終了後、内容を確認して「報告メールを作成」を押すと、JSONレポートを保存します。通常の保存先は「ドキュメント」→「VTR-PON」→「SwitcherReports」です。自動添付できない場合は、表示される手順に沿って「添付ファイルの場所を開く」→「メールを開く」と進み、JSONをご自身で添付してください。添付を確認してからinfo@pondashi.com宛てに送信します。「レポートを保存」からファイルの保存だけを行うこともできます。自動収集する内容にネットワークパスワード・IPアドレス・素材のパスは含めません。</translation></message>
     <message id="switcher.check.firmware"><source>Switcher firmware (as displayed on the device)</source><translation>本体のファームウェア（本体表示の値）</translation></message>
     <message id="switcher.check.connection"><source>Connection</source><translation>接続</translation></message>
     <message id="switcher.check.send"><source>ON AIR → switcher input</source><translation>オンエア → スイッチャー入力</translation></message>
@@ -84,28 +86,40 @@ Attach this JSON file when reporting the results to the author.</source><transla
     <message id="settings.category.roland"><source>Roland Integration</source><translation>Roland連携</translation></message>
     <message id="settings.switcher.atem.description"><source>Connect VTR-PON to a Blackmagic ATEM switcher. Only one switcher integration can be enabled at a time.</source><translation>VTR-PONをBlackmagic ATEMスイッチャーへ接続します。同時に有効にできるスイッチャー連携は1台です。</translation></message>
     <message id="settings.switcher.roland.description"><source>Connect VTR-PON to a Roland switcher. Select your model and configure its connection. Only one switcher integration can be enabled at a time.</source><translation>VTR-PONをRolandスイッチャーへ接続します。機種を選んで接続を設定してください。同時に有効にできるスイッチャー連携は1台です。</translation></message>
-    <message id="switcher.check.email"><source>Send report</source><translation>レポートを送信</translation></message>
-    <message id="switcher.check.email_help"><source>Stop recording first. Save the report and open an email to info@pondashi.com. Review the message and press Send yourself. If automatic attachment is unavailable, attach the saved JSON file using Open report folder.</source><translation>記録を終了してから押してください。レポートを保存し、info@pondashi.com宛てのメールを作成します。内容を確認し、メールソフトの送信ボタンを押してください。自動添付できない場合は「保存先を開く」からJSONファイルを添付します。</translation></message>
-    <message id="switcher.check.folder"><source>Open report folder</source><translation>保存先を開く</translation></message>
+    <message id="switcher.check.email"><source>Create report email</source><translation>報告メールを作成</translation></message>
+    <message id="switcher.check.email_help"><source>Stop recording first. This saves a JSON report and prepares an email to info@pondashi.com. If automatic attachment is unavailable, follow the displayed steps to attach the saved JSON yourself before sending.</source><translation>記録を終了してから押してください。JSONレポートを保存し、info@pondashi.com宛てのメールを準備します。自動添付できない場合は、表示される手順に沿って保存済みのJSONをご自身で添付してから送信してください。</translation></message>
+    <message id="switcher.check.folder"><source>Show attachment folder</source><translation>添付ファイルの場所を開く</translation></message>
     <message id="switcher.check.folder_failed"><source>Could not open the folder. The report is saved at: %1</source><translation>保存先を開けませんでした。レポートの保存先: %1</translation></message>
     <message id="switcher.check.no_report_folder"><source>Could not find a report folder. Use Save report to choose a location.</source><translation>レポートの保存先を取得できませんでした。「レポートを保存」で保存先を指定してください。</translation></message>
     <message id="switcher.check.preparing_email"><source>Saving the report and preparing an email…</source><translation>レポートを保存してメールを準備しています…</translation></message>
-    <message id="switcher.check.email_ready"><source>The report is saved. Review the email to info@pondashi.com and press Send in your mail app.
-Saved: %1</source><translation>レポートを保存しました。info@pondashi.com宛てのメールを確認し、メールソフトの送信ボタンを押してください。
+    <message id="switcher.check.email_ready"><source>The report is saved. Preparing the email…
+Saved: %1</source><translation>レポートを保存しました。メールの準備中です…
 保存先: %1</translation></message>
     <message id="switcher.check.email_cancelled"><source>Email creation was cancelled. The report is still saved: %1</source><translation>メール作成をキャンセルしました。レポートは保存されています: %1</translation></message>
     <message id="switcher.check.email_finished"><source>The mail app has finished its operation. Check sending status in your mail app.
 Saved report: %1</source><translation>メールソフトでの操作が終了しました。送信状況はメールソフトで確認してください。
 レポートの保存先: %1</translation></message>
-    <message id="switcher.check.email_manual_attachment"><source>Requested an email to info@pondashi.com. Automatic attachment is unavailable with this mail app. Use Open report folder, attach the JSON file below, then press Send yourself.
-%1</source><translation>info@pondashi.com宛てのメール作成を依頼しました。このメールソフトでは自動添付できないため、「保存先を開く」から次のJSONファイルを添付し、送信してください。
-%1</translation></message>
+    <message id="switcher.check.email_manual_attachment"><source>The report is saved. You must attach the JSON file yourself.
+1. Select Show attachment folder to find the JSON file below.
+2. Select Open email, attach that JSON file, then press Send in your mail app.
+Saved: %1</source><translation>レポートを保存しました。JSONファイルは自動添付されません。
+1.「添付ファイルの場所を開く」で、次のJSONファイルを確認します。
+2.「メールを開く」を押し、そのJSONをメールに添付してから送信してください。
+保存先: %1</translation></message>
     <message id="switcher.check.email_failed"><source>Could not open a mail app. Send the saved JSON file to info@pondashi.com using your usual email or webmail.
 %1</source><translation>メールソフトを開けませんでした。普段お使いのメールやWebメールから、保存したJSONファイルをinfo@pondashi.comへ送ってください。
 %1</translation></message>
+    <message id="switcher.check.open_email"><source>Open email</source><translation>メールを開く</translation></message>
+    <message id="switcher.check.email_manual_opened"><source>Requested an email to info@pondashi.com. Attach the saved JSON file before pressing Send in your mail app.</source><translation>info@pondashi.com宛てのメール作成を依頼しました。保存済みのJSONファイルをメールに添付してから送信してください。</translation></message>
+    <message id="switcher.check.attachment_missing"><source>The saved JSON file could not be found. Select Create report email again to save a new copy.</source><translation>保存済みのJSONファイルが見つかりません。「報告メールを作成」をもう一度押して保存し直してください。</translation></message>
+    <message id="switcher.check.mail_attachment_check"><source>Before sending, check that this JSON file is attached: %1</source><translation>送信前に、次のJSONファイルが添付されていることを確認してください: %1</translation></message>
     <message id="switcher.check.mail_subject"><source>VTR-PON switcher operation report: %1</source><translation>VTR-PON スイッチャー動作確認レポート: %1</translation></message>
     <message id="switcher.check.mail_intro"><source>VTR-PON switcher operation check results:</source><translation>VTR-PONのスイッチャー動作確認結果をご報告します。</translation></message>
-    <message id="switcher.check.mail_attachment"><source>Please attach the report file before sending: %1</source><translation>送信前にレポートファイルの添付を確認してください: %1</translation></message>
+    <message id="switcher.check.mail_attachment"><source>Attachment required: This email does not attach the report automatically.
+Before sending, attach this JSON file: %1
+In VTR-PON Operation Check, select Show attachment folder (normally Documents/VTR-PON/SwitcherReports).</source><translation>【添付が必要です】このメールにはレポートが自動添付されません。
+送信前に次のJSONファイルを添付してください: %1
+VTR-PONの動作確認画面で「添付ファイルの場所を開く」から確認できます（通常は「ドキュメント」→「VTR-PON」→「SwitcherReports」）。</translation></message>
     <message id="midi.title"><source>MIDI Control</source><translation>MIDI制御</translation></message>
     <message id="midi.description"><source>Select an input, select an action, then click MIDI Learn and operate your controller. Save to apply. MIDI actions are suspended while Settings or another modal dialog is open. Volume uses absolute or relative CC; Pickup waits for the hardware to reach the on-screen value. CC 0 is silence and CC 127 is +6 dB by default, following the on-screen fader scale.</source><translation>入力機器と機能を選び、「MIDI Learn」を押して機器を操作します。保存して適用します。設定画面などのダイアログを開いている間はMIDIによる操作を停止します。音量は絶対値または相対値のCCを使用します。ピックアップは画面の値に追いつくまで音量を変えません。初期値ではCCの0が無音、127が+6 dBです。画面のフェーダーと同じ目盛りで動きます。</translation></message>
     <message id="midi.enable"><source>Enable MIDI control</source><translation>MIDI制御を有効にする</translation></message>
@@ -341,6 +355,78 @@ Saved report: %1</source><translation>メールソフトでの操作が終了し
         <source>%1 VST stopped because of a plug-in error. Playback continues with original audio.</source>
         <translation>%1のVSTに異常が発生したため停止しました。元の音声で再生を継続します。</translation>
     </message>
+    <message id="addons.runtime.startup_title">
+        <source>Some add-ons need attention</source>
+        <translation>アドオンの動作環境に注意が必要です</translation>
+    </message>
+    <message id="addons.runtime.startup_description">
+        <source>The following add-ons are missing required software or could not be checked. Follow the instructions below. You can close this notice and continue using VTR-PON. To check again later, open Settings → Add-ons.</source>
+        <translation>次のアドオンに、必要なソフトの不足や確認できない項目があります。各案内に従って確認してください。この画面を閉じてもVTR-PONの操作を続けられます。後から「設定 → アドオン」で再確認できます。</translation>
+    </message>
+    <message id="addons.runtime.initialized">
+        <source>Initialization check passed for %1. Actual input and output status is shown separately.</source>
+        <translation>利用準備：%1 の初期化を確認しました。実際の入出力の状態は別途表示します。</translation>
+    </message>
+    <message id="addons.runtime.initialization_failed">
+        <source>Unavailable: %1 could not be initialized. Check the diagnostic details and vendor software setup, then check again.</source>
+        <translation>利用不可：%1 を初期化できません。診断の詳細と外部ソフトの設定を確認してから再確認してください。</translation>
+    </message>
+    <message id="addons.runtime.no_devices">
+        <source>Device not detected: %1 initialized, but no DeckLink device was found. Check the device connection and driver permissions.</source>
+        <translation>機器未検出：%1 の初期化は成功しましたが、DeckLink機器が見つかりません。接続とドライバーの許可を確認してください。</translation>
+    </message>
+    <message id="addons.runtime.ndi_setup">
+        <source>NDI Tools alone may not install the shared NDI Runtime for macOS. If the Runtime is missing, use the official download button to obtain it. If NDI still does not work, complete any first-run setup requested by NDI Tools, restart VTR-PON and check again. Initialization alone does not verify network discovery or media transfer.</source>
+        <translation>NDI Toolsだけでは、VTR-PONが使うMac用の共有NDI Runtimeが導入されていない場合があります。Runtime不足の場合は「公式ダウンロードを開く」から入手してください。導入後も動作しない場合はNDI Toolsで求められた初期設定を確認し、VTR-PONを再起動してください。初期化の成功だけでは、ネットワーク上のソース検出や映像・音声の送受信は確認できません。</translation>
+    </message>
+    <message id="addons.runtime.decklink_setup">
+        <source>If DeckLink does not work, open Desktop Video Setup and complete any first-run setup or registration it requests. Check that the device is recognized and OS driver permissions are allowed, then restart VTR-PON and check again. Detecting a device does not verify capture or playback.</source>
+        <translation>DeckLinkが動作しない場合は、Desktop Video Setupを一度起動し、求められた初期設定・利用登録を完了してください。機器の認識とOSのドライバー許可を確認してからVTR-PONを再起動し、再確認してください。機器の検出だけでは、映像・音声の入出力は確認できません。</translation>
+    </message>
+    <message id="addons.runtime.operation_off">
+        <source>Current operation: Off</source>
+        <translation>現在の動作：OFF</translation>
+    </message>
+    <message id="addons.runtime.operation_error">
+        <source>Current operation: Error — %1</source>
+        <translation>現在の動作：エラー — %1</translation>
+    </message>
+    <message id="addons.runtime.operation_running">
+        <source>Current operation: Sending output</source>
+        <translation>現在の動作：出力中</translation>
+    </message>
+    <message id="addons.runtime.operation_starting">
+        <source>Current operation: Starting / waiting for output</source>
+        <translation>現在の動作：出力の開始待ち</translation>
+    </message>
+    <message id="addons.runtime.operation_input">
+        <source>Current operation: Input enabled; %1 sources found</source>
+        <translation>現在の動作：入力有効・%1 ソース検出</translation>
+    </message>
+    <message id="addons.runtime.operation_devices">
+        <source>Current operation: %1 DeckLink channels detected</source>
+        <translation>現在の動作：DeckLinkの入出力 %1 チャンネル検出</translation>
+    </message>
+    <message id="addons.runtime.operation_no_devices">
+        <source>Current operation: No DeckLink device detected</source>
+        <translation>現在の動作：DeckLink機器未検出</translation>
+    </message>
+    <message id="addons.runtime.operation_checking">
+        <source>Current operation: Checking</source>
+        <translation>現在の動作：確認中</translation>
+    </message>
+    <message id="addons.runtime.operation_unavailable">
+        <source>Current operation: Unavailable</source>
+        <translation>現在の動作：利用不可</translation>
+    </message>
+    <message id="addons.runtime.operation_input_starting">
+        <source>Current operation: Starting input discovery</source>
+        <translation>現在の動作：入力の開始待ち</translation>
+    </message>
+    <message id="addons.runtime.operation_partial">
+        <source>Current operation: %1 of %2 outputs running; waiting for the rest</source>
+        <translation>現在の動作：%1 / %2 出力中（残りは開始待ち）</translation>
+    </message>
     <message id="addons.runtime.checking">
         <source>Checking %1...</source>
         <translation>%1 を確認しています…</translation>
@@ -389,10 +475,7 @@ Saved report: %1</source><translation>メールソフトでの操作が終了し
         <source>Could not open the browser. Open this URL manually:</source>
         <translation>ブラウザーを開けませんでした。次のURLをブラウザーで開いてください。</translation>
     </message>
-    <message id="network_video.description">
-        <source>Select the ON AIR outputs to send over NDI. Enable input to find sources on the LAN.</source>
-        <translation>NDIで送出するオンエア映像を選択します。入力を有効にするとLAN内のソースを検索します。</translation>
-    </message>
+    <message id="network_video.description"><source>Select ON AIR and return monitor outputs to send over NDI. Both can be sent as separate sources at the same time. Enable input to find sources on the LAN.</source><translation>NDIへ送るオンエア映像と返しモニターを選択します。両方を別ソースで同時に送信できます。入力を有効にするとLAN上のソースを検索します。</translation></message>
     <message id="network_video.outputs">
         <source>Output video</source>
         <translation>出力する映像</translation>
@@ -534,8 +617,8 @@ Saved report: %1</source><translation>メールソフトでの操作が終了し
       <translation>macOSの機能拡張設定を開く</translation>
     </message>
     <message id="virtual_camera.mac.description">
-      <source>Sends the final ON AIR video to VTR-PON Virtual Camera at 1920×1080, 30 fps. Enable the camera extension in macOS once, then select it in the receiving app. Audio uses a separate output.</source>
-      <translation>オンエアの最終映像をVTR-PON Virtual Cameraへ1920×1080・30 fpsで送ります。初回はmacOSでカメラ拡張を有効にし、受信アプリで選択してください。音声は別の出力を使います。</translation>
+      <source>1920 x 1080 / 30 fps, video only. Select ON AIR or the return monitor. Return output includes the information band, timer and messages. First place this app in Applications, enable the bundled Camera Extension, and allow it in System Settings. One sending app can connect at a time.</source>
+      <translation>1920×1080／30fps・映像のみ。オンエアまたは返しモニターを選びます。返しには情報欄・タイマー・メッセージを含みます。初回はアプリをApplicationsに配置し、同梱のカメラ拡張を有効化してシステム設定で許可してください。送信できるアプリは同時に1つです。</translation>
     </message>
     <message id="virtual_camera.mac.off">
       <source>Virtual camera output is OFF.</source>
@@ -4977,7 +5060,7 @@ Adjust the slider to find a comfortable text size.</source>
         <translation>保存先の設定を保存しました。</translation>
     </message>
     <message id="settings.addons.title"><source>Add-ons</source><translation>アドオン</translation></message>
-    <message id="settings.addons.description_mac"><source>Manage add-ons for this VTR-PON copy. Changes apply after VTR-PON exits. ATEM, NDI and VST3 features are still being prepared for Mac. Feature settings are kept; vendor runtimes are installed separately.</source><translation>このVTR-PON用のアドオンを管理します。変更はVTR-PON終了後に反映されます。Mac版のATEM・NDI・VST3機能は準備中です。機能設定は保持し、ベンダーのRuntimeは別途導入します。</translation></message>
+    <message id="settings.addons.description_mac"><source>Manage add-ons for this VTR-PON copy. Changes apply after VTR-PON exits. Feature settings are kept; install vendor runtimes separately. Check runtime readiness and current operation below.</source><translation>このVTR-PON用のアドオンを管理します。変更はVTR-PON終了後に反映されます。機能設定は保持されます。ベンダーのRuntimeは別途導入し、利用準備と現在の動作を下で確認してください。</translation></message>
     <message id="settings.addons.catalog_no_platform"><source>No add-ons are currently available for this OS and CPU.</source><translation>このOS・CPU向けのアドオンはまだ提供されていません。</translation></message>
     <message id="settings.addons.description"><source>Install and remove add-ons for this VTR-PON copy. Changes are applied after VTR-PON exits; your feature settings are kept. Vendor runtimes are installed separately.</source><translation>このVTR-PONにアドオンを導入・削除します。変更はVTR-PON終了後に反映され、機能の設定は保持されます。ベンダーのRuntimeは別途導入してください。</translation></message>
     <message id="settings.addons.atem"><source>ATEM switcher control</source><translation>ATEMスイッチャーの制御</translation></message>
@@ -5018,10 +5101,7 @@ Adjust the slider to find a comfortable text size.</source>
         <source>DeckLink</source>
         <translation>DeckLink</translation>
     </message>
-    <message id="decklink.description">
-        <source>Choose the output channel and format for Composite, Fill and Key, then enable each output. DeckLink input channels appear in the INPUT dropdown. Input format changes apply to newly added items.</source>
-        <translation>通常映像・フィル・キーの出力先と映像形式を選び、各出力を有効にしてください。DeckLink 入力は入力のプルダウンに表示されます。入力形式の変更は新しく追加する項目に適用されます。</translation>
-    </message>
+    <message id="decklink.description"><source>Select a separate output channel and format for ON AIR Composite, Fill, Key and the return monitor. ON AIR and the return monitor can run at the same time. Input channels appear in INPUT; input format changes apply to newly added items.</source><translation>オンエアの合成映像・Fill・Keyと返しモニターに、それぞれ別の出力チャネルと映像形式を選択します。オンエアと返しモニターを同時に出力できます。入力チャネルはINPUTに表示され、入力形式の変更は新規登録する項目から適用されます。</translation></message>
     <message id="decklink.enable_input">
         <source>Enable DeckLink input</source>
         <translation>DeckLink 入力を有効にする</translation>
@@ -5164,5 +5244,20 @@ Different connectors or video formats on the same channel cannot be used togethe
         <source>Changes are saved immediately and apply after restarting VTR-PON. For a physical 4K output, also set the destination display to 3840 x 2160 in macOS. The ON AIR monitor fits the same composed video to its window; the return monitor remains at most 1080p.</source>
         <translation>変更はすぐに保存され、VTR-PONの再起動後に反映されます。実画面へ4Kで出力するには、macOS側でも出力先を3840 x 2160に設定してください。オンエアモニターは同じ合成映像を表示領域へ合わせ、返しモニターは最大1080pのままです。</translation>
     </message>
+<message id="output.destinations"><source>Output destinations</source><translation>出力先</translation></message>
+<message id="output.source"><source>Output source</source><translation>出力する映像</translation></message>
+<message id="output.on_air"><source>ON AIR</source><translation>オンエア</translation></message>
+<message id="output.on_air_composite"><source>ON AIR — Composite (with background)</source><translation>オンエア — 合成映像（背景あり）</translation></message>
+<message id="output.on_air_fill"><source>ON AIR — Fill</source><translation>オンエア — Fill</translation></message>
+<message id="output.on_air_key"><source>ON AIR — Key</source><translation>オンエア — Key</translation></message>
+<message id="output.on_air_alpha"><source>ON AIR — Alpha</source><translation>オンエア — Alpha</translation></message>
+<message id="output.return_monitor"><source>Return monitor</source><translation>返しモニター</translation></message>
+<message id="output.window"><source>Regular window output</source><translation>通常ウインドウ出力</translation></message>
+<message id="output.decklink"><source>DeckLink output</source><translation>DeckLink出力</translation></message>
+<message id="output.ndi"><source>NDI output</source><translation>NDI出力</translation></message>
+<message id="output.virtual_camera"><source>Virtual camera output</source><translation>仮想カメラ出力</translation></message>
+<message id="output.return_help"><source>These checkboxes are linked to each output settings page. Select a separate hardware channel and format in DeckLink settings. NDI adds a separate source named "Return Monitor" after the output name. The information band, timer and messages are included. NDI and DeckLink carry the ON AIR audio mix.</source><translation>各出力の設定項目と連動します。DeckLinkでは設定画面で返し専用のチャネルと映像形式を選択してください。NDIは出力名の末尾に「Return Monitor」を付けた別ソースで送信します。情報欄・タイマー・メッセージを含めて出力します。NDIとDeckLinkの音声はオンエアのミックスです。</translation></message>
+<message id="settings.switcher.roland.transport"><source>Connection</source><translation>接続方式</translation></message>
+<message id="switcher.trial.vr120_usb_help"><source>For input-to-ON AIR, disable AUX, PinP&amp;Key and DSK in Tally Settings. FTB linking is available via LAN only; the saved LAN FTB preference is retained.</source><translation>FTB連動はLAN接続で利用できます。保存済みのLAN用FTB設定は保持します。</translation></message>
 </context>
 </TS>

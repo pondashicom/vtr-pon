@@ -132,6 +132,8 @@ private:
   OperatorMonitorSettingsPage *operatorMonitorPage_ = nullptr;
   QWidget *virtualCameraPage_ = nullptr;
   QCheckBox *virtualCameraCheckBox_ = nullptr;
+  QComboBox *virtualCameraSource_ = nullptr;
+  QLabel *virtualCameraSourceLabel_ = nullptr;
   QLabel *virtualCameraDescription_ = nullptr;
   QLabel *virtualCameraStatus_ = nullptr;
   QLabel *virtualCameraSaveStatus_ = nullptr;
@@ -253,6 +255,9 @@ private:
   vtrpon::SwitcherControlSettings rolandModelSettings_;
   QLabel *rolandModelLabel_ = nullptr;
   QComboBox *rolandModelComboBox_ = nullptr;
+  QWidget *rolandTransportSettings_ = nullptr;
+  QLabel *rolandTransportLabel_ = nullptr;
+  QComboBox *rolandTransportComboBox_ = nullptr;
   QWidget *rolandLanSettings_ = nullptr;
   QLabel *rolandHostLabel_ = nullptr;
   QLineEdit *rolandHostEdit_ = nullptr;

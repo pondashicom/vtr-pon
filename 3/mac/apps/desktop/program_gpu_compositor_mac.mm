@@ -477,7 +477,7 @@ public:
                 Output frame;
                 { std::unique_lock lock(outputMutex, std::try_to_lock); if (lock) frame = output; }
                 if (frame.texture && frame.sequence != last && (decklink ? frame.decklinkGeneration : frame.generation) == generation) {
-                    const auto mask = decklink ? vtrpon::deckLinkOutputMask() : vtrpon::networkVideoOutputMask();
+                    const auto mask = decklink ? (vtrpon::deckLinkOutputMask() & 7u) : (vtrpon::networkVideoOutputMask() & 15u);
                     std::array<QByteArray, 2> pixels;
                     id<MTLTexture> sources[2] = {frame.texture, frame.owner->alpha};
                     for (unsigned i = 0; i < 2; ++i) if (mask & (i ? 14u : 1u)) {
@@ -508,7 +508,8 @@ public:
         if(image.isNull() || !cameraQueue || ((geometry.width!=1920 || geometry.height!=1080) && !scaled)) return;
         while(running) {
             next+=interval;
-            if(vtrpon::virtualCameraFrameDemand()) @autoreleasepool {
+            const auto cameraGeneration=vtrpon::virtualCameraSourceGeneration();
+            if(!vtrpon::virtualCameraReturnMonitor() && vtrpon::virtualCameraFrameDemand()) @autoreleasepool {
                 Output frame;
                 { std::unique_lock lock(outputMutex,std::try_to_lock); if(lock) frame=output; }
                 if(frame.texture && frame.sequence!=last) {
@@ -530,7 +531,7 @@ public:
                     }
                     [source getBytes:image.bits() bytesPerRow:image.bytesPerLine() fromRegion:MTLRegionMake2D(0,0,1920,1080) mipmapLevel:0];
                     // Only this output worker copies pixels; rendering never waits for IPC.
-                    vtrpon::publishVirtualCameraFrame(image,frame.sequence);
+                    vtrpon::publishVirtualCameraFrame(image,frame.sequence,false,cameraGeneration);
                     last=frame.sequence;
                 }
             }
@@ -552,7 +553,8 @@ public:
         }
         while (running) {
             next += interval;
-            if (vtrpon::operatorMonitorEnabled() && !image.isNull()) {
+            const auto cameraGeneration = vtrpon::virtualCameraSourceGeneration();
+            if (vtrpon::operatorMonitorReadbackNeeded() && !image.isNull()) {
                 @autoreleasepool {
                     Output frame;
                     { std::unique_lock lock(outputMutex, std::try_to_lock); if (lock) frame = output; }
@@ -579,7 +581,7 @@ public:
                         if (source.width == width && source.height == height) {
                             [source getBytes:image.bits() bytesPerRow:image.bytesPerLine()
                                 fromRegion:MTLRegionMake2D(0,0,width,height) mipmapLevel:0];
-                            vtrpon::publishOperatorMonitorFrame(image, frame.sequence);
+                            vtrpon::publishOperatorMonitorFrame(image, frame.sequence, frame.generation, frame.decklinkGeneration, frame.timecode, cameraGeneration);
                         }
                         last = frame.sequence;
                     }

@@ -67,7 +67,7 @@ int main(int argc, char **argv) {
     vtrpon::saveDeckLinkSettings(settings);
     CHECK(!vtrpon::deckLinkOutputGeneration() && vtrpon::savedDeckLinkSettings() == settings);
     qunsetenv("VTRPON_DECKLINK_TEST_NO_DEVICES");
-    CHECK(waitFor([] { return vtrpon::deckLinkState().channels.size() == 5 && vtrpon::deckLinkOutputGeneration(); }));
+    CHECK(waitFor([] { return vtrpon::deckLinkState().channels.size() == 6 && vtrpon::deckLinkOutputGeneration(); }));
     CHECK(vtrpon::deckLinkInputAllowed(path));
     Pipeline video(false), second(false), audio(true);
     auto receiver = std::make_unique<vtrpon::DeckLinkReceiver>(path, video.source, false);

@@ -102,7 +102,10 @@ bool runPlatformCapabilitiesRegression() {
   auto *displays = page.findChild<QComboBox *>("operatorMonitorDisplayCombo");
   auto *info = page.findChild<QCheckBox *>("operatorMonitorInformation");
   auto *timer = page.findChild<QCheckBox *>("operatorMonitorTimerEnabled");
-  CHECK(displays && displays->isEnabled() && info && info->isEnabled() && timer && timer->isEnabled());
+  CHECK(displays && !displays->isEnabled() && info && info->isEnabled() && timer && timer->isEnabled());
+  auto *window=page.findChild<QCheckBox *>("operatorMonitorWindowOutput"); CHECK(window);
+  window->setChecked(true); CHECK(displays->isEnabled());
+  window->setChecked(false); CHECK(!displays->isEnabled());
   info->setChecked(false); // This feature is now implemented; other imported values are kept.
   timer->setChecked(!monitor.timerEnabled);
   settings.sync();

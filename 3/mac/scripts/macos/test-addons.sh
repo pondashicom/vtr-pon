@@ -12,5 +12,5 @@ cmake -S "$vtrpon_source_dir" -B "$vtrpon_test_dir" -G Ninja \
   -DVTRPON_BUILD_ATEM_ADDON=OFF -DVTRPON_BUILD_NETWORK_VIDEO_ADDON=OFF -DVTRPON_BUILD_VST3_ADDON=OFF
 cmake --build "$vtrpon_test_dir" --parallel "$CMAKE_BUILD_PARALLEL_LEVEL" --target \
   mac-addon-test mac-addon-ui-test controller-shortcuts-headless-test language-catalog-test
-ctest --test-dir "$vtrpon_test_dir" -R '^(mac-addon-(package|processes|runtime-ui)|platform-capabilities(-ja)?|language-catalog)$' \
+ctest --test-dir "$vtrpon_test_dir" -R '^(mac-addon-(package|processes|runtime-ui|readiness(-ja)?)|platform-capabilities(-ja)?|language-catalog)$' \
   --output-on-failure --no-tests=error --output-junit "$vtrpon_test_dir/addon-results.xml"

@@ -39,7 +39,10 @@ private:
 class QImage;
 namespace vtrpon {
 bool operatorMonitorEnabled();
+bool operatorMonitorReadbackNeeded();
 // Called only by the auxiliary readback worker, never the render producer.
-bool publishOperatorMonitorFrame(const QImage &image, std::uint64_t sourceSequence);
+bool publishOperatorMonitorFrame(const QImage &image, std::uint64_t sourceSequence,
+    std::uint64_t ndiGeneration = 0, std::uint64_t deckLinkGeneration = 0,
+    std::int64_t timecode = 0, std::uint64_t cameraGeneration = 0);
 }
 #endif

@@ -159,6 +159,19 @@ int main(int argc,char **argv) {
     const auto runtimeCleanup=qScopeGuard([&] { runtime.requestShutdown();wait([&]{return runtime.shutdownComplete();}); });
     bool ok=check(wait([&]{return networkVideoState().inputRunning && networkVideoOutputMask()==15;}),"finder and all four output senders start");
     ok &= check(wait([&]{for(const auto &s:networkVideoState().sources)if(s.path==path)return true;return false;}),"external source discovered");
+    if (auto failDiscovery = reinterpret_cast<void(*)(int)>(library.resolve("vtrpon_ndi_fixture_discovery_failure"))) {
+        const auto checks = reinterpret_cast<unsigned(*)()>(library.resolve("vtrpon_ndi_fixture_discovery_checks"));
+        if (!check(checks != nullptr, "fixture exports discovery counter")) return 2;
+        failDiscovery(1);
+        ok &= check(wait([] { const auto s = networkVideoState(); return !s.inputRunning && s.error == "NDI source discovery could not be started."; }), "discovery failure marks input stopped and reports its error");
+        failDiscovery(0);
+        ok &= check(wait([] { const auto s = networkVideoState(); return s.inputRunning && s.error.isEmpty(); }), "successful discovery clears the previous discovery error");
+        ok &= check(wait([] { reportNetworkVideoOutputError("Test output path error"); return networkVideoState().error == "Test output path error"; }), "separate output error is reported");
+        const auto before = checks();
+        ok &= check(wait([&] { return checks() > before + 1; }), "two subsequent discovery queries complete");
+        ok &= check(networkVideoState().error == "Test output path error", "successful discovery preserves a separate output error");
+        ok &= check(wait([] { reportNetworkVideoOutputError({}); return networkVideoState().error.isEmpty(); }), "test output error is cleared explicitly");
+    }
     std::array<void *,4> receivers{};
     for(unsigned i=0;i<4;++i) {
         const auto name=networkVideoState().outputs[i].name.toUtf8();

@@ -32,6 +32,7 @@ const QJsonObject &defaults() {
       {"time/fontFamily", ""},
       {"time/fontSize", 12},
       {"operatorMonitor/screen", ""},
+      {"operatorMonitor/windowEnabled", false},
       {"operatorMonitor/information", false},
       {"operatorMonitor/remaining", true},
       {"operatorMonitor/file", true},
@@ -48,10 +49,12 @@ const QJsonObject &defaults() {
       {"video/softwareDecoding", false},
       {"video/programOutput4k", false},
       {"virtualCamera/enabled", false},
+      {"virtualCamera/returnMonitor", false},
       {"testPatterns/entries", QJsonValue(QJsonValue::Null)},
       {"networkVideo/outputEnabled", false},
       {"networkVideo/inputEnabled", false},
       {"networkVideo/outputName", ""},
+      {"networkVideo/returnMonitorEnabled", false},
       {"networkVideo/compositeEnabled", true},
       {"networkVideo/fillEnabled", false},
       {"networkVideo/keyEnabled", false},
@@ -70,6 +73,9 @@ const QJsonObject &defaults() {
       {"deckLink/keyChannel", ""},
       {"deckLink/fillMode", "0"},
       {"deckLink/keyMode", "0"},
+      {"deckLink/returnMonitorEnabled", false},
+      {"deckLink/returnMonitorChannel", ""},
+      {"deckLink/returnMonitorMode", "0"},
       {"player/backgroundColor", "#000000"},
       {"playlist/editActivationMode", 0},
       {"playlist/autoSelectNextItemAfterOnAir", false},
@@ -155,9 +161,9 @@ bool valid(const QJsonObject &values) {
         (it.value().toString().size() > 200 || it.value().toString().contains(QChar::Null))) return false;
     if ((it.key() == QLatin1StringView("networkVideo/fillFormat") || it.key() == QLatin1StringView("deckLink/fillFormat")) &&
         !QStringList{"straight", "premultiplied"}.contains(it.value().toString())) return false;
-    if ((it.key() == QLatin1StringView("deckLink/outputMode") || it.key() == QLatin1StringView("deckLink/inputMode") || it.key() == QLatin1StringView("deckLink/fillMode") || it.key() == QLatin1StringView("deckLink/keyMode")) &&
+    if ((it.key() == QLatin1StringView("deckLink/outputMode") || it.key() == QLatin1StringView("deckLink/inputMode") || it.key() == QLatin1StringView("deckLink/fillMode") || it.key() == QLatin1StringView("deckLink/keyMode") || it.key() == QLatin1StringView("deckLink/returnMonitorMode")) &&
         (!QRegularExpression(QStringLiteral("^(0|[1-9][0-9]{0,9})$")).match(it.value().toString()).hasMatch() || it.value().toString().toULongLong() > 0xffffffffULL)) return false;
-    if ((it.key() == QLatin1StringView("deckLink/outputChannel") || it.key() == QLatin1StringView("deckLink/fillChannel") || it.key() == QLatin1StringView("deckLink/keyChannel")) && !it.value().toString().isEmpty() &&
+    if ((it.key() == QLatin1StringView("deckLink/outputChannel") || it.key() == QLatin1StringView("deckLink/fillChannel") || it.key() == QLatin1StringView("deckLink/keyChannel") || it.key() == QLatin1StringView("deckLink/returnMonitorChannel")) && !it.value().toString().isEmpty() &&
         !QRegularExpression(QStringLiteral("^decklink://-?[0-9]+/[0-9]+/[0-9]+/0$")).match(it.value().toString()).hasMatch()) return false;
     if (it.key() == QLatin1StringView("appearance/controllerSkin") &&
         !QStringList{"hardware", "material-dark", "vtr-pon-clasic"}.contains(it.value().toString())) return false;

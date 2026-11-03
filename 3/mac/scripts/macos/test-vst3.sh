@@ -10,7 +10,7 @@ if [[ $# -gt 1 || ( "$vtrpon_timing" == "ON" && $# -ne 1 ) ]]; then
   echo "Usage: bash scripts/macos/test-vst3.sh [--timing] [installed-plugin.vst3]" >&2
   exit 2
 fi
-vtrpon_addon_source="${VTRPON_MAC_VST3_SOURCE_DIR:-$vtrpon_source_dir/../vtr-pon-vst3-addon-mac-dev}"
+vtrpon_addon_source="${VTRPON_MAC_VST3_SOURCE_DIR:-$vtrpon_source_dir/addons/vst3}"
 vtrpon_addon_build="${VTRPON_MAC_VST3_ADDON_BUILD_DIR:-$vtrpon_addon_source/build/macos-debug}"
 vtrpon_test_dir="${VTRPON_MAC_VST3_TEST_DIR:-$vtrpon_source_dir/build/macos-vst3-tests}"
 vtrpon_sdk_dir="${VTRPON_VST3_SDK_DIR:-$vtrpon_addon_source/build/external/vst3sdk}"

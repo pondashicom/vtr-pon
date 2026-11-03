@@ -94,6 +94,11 @@ public:
       model.takeProgramWhenOnAir = true; model.takeOnAirWhenProgramSelected = profile.receive; model.ftbFollowsProgram = profile.fade;
       setActiveRolandSettings(persisted, model);
       if (!saveSwitcherControlSettings(persisted) || loadSwitcherControlSettings() != persisted) return false;
+      if (rolandHasUsbMidiChoice(profile.model)) {
+        model.useUsbMidi = true;
+        setActiveRolandSettings(persisted, model);
+        if (!saveSwitcherControlSettings(persisted) || loadSwitcherControlSettings() != persisted) return false;
+      }
     }
     saveSwitcherControlSettings({});
     std::atomic<FakeSwitcher *> currentAdapter{nullptr};
@@ -262,6 +267,31 @@ public:
     old->programInputChanged(4);
     flush();
     expect(takes == 4 && controller.device_ != old, "LAN endpoint changes replace the adapter");
+    settings.rolandModel = RolandSwitcherModel::Vr120Hd;
+    RolandModelSettings dualTransport;
+    dualTransport.sourceNumber = 12; dualTransport.ftbFollowsProgram = true;
+    dualTransport.takeProgramWhenOnAir = dualTransport.takeOnAirWhenProgramSelected = true;
+    setActiveRolandSettings(settings, dualTransport);
+    controller.applySettings(settings); flush();
+    expect(controller.activeFtbFollowsProgram() && controller.startCheck(), "LAN FTB and report remain available");
+    old = controller.device_;
+    dualTransport.useUsbMidi = true; setActiveRolandSettings(settings, dualTransport);
+    controller.applySettings(settings); old->programInputChanged(12); flush();
+    expect(controller.device_ != old && takes == 4 && !controller.checkSession().active(),
+           "USB selection replaces the LAN adapter, stops its report and rejects retired notifications");
+    expect(!controller.activeFtbFollowsProgram() && activeRolandSettings(controller.settings()).ftbFollowsProgram,
+           "USB disables runtime FTB while preserving the LAN preference");
+    const int commandsBeforeFade = commandSequence.load();
+    controller.handleProgramFtbChanged(true); flush();
+    expect(commandSequence.load() == commandsBeforeFade, "USB FTB never reaches the adapter");
+    expect(controller.startCheck() && controller.checkSession().report()["transport"] == "USB MIDI" &&
+           !controller.checkSession().report()["capabilities"].toObject()["fade"].toBool(),
+           "USB report uses the selected connection and its capabilities");
+    old = controller.device_;
+    dualTransport.useUsbMidi = false; setActiveRolandSettings(settings, dualTransport);
+    controller.applySettings(settings); old->programInputChanged(12); flush();
+    expect(controller.device_ != old && takes == 4 && controller.activeFtbFollowsProgram() &&
+           !controller.checkSession().active(), "returning to LAN restores FTB and retires USB notifications and report");
     settings.atemEnabled = false;
     settings.rolandV8HdEnabled = false;
     controller.applySettings(settings);

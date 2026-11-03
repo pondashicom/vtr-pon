@@ -3,6 +3,7 @@
 #include "switcher_control.h"
 
 #include <QQueue>
+#include <QDeadlineTimer>
 #include <QTcpSocket>
 #include <QTimer>
 
@@ -56,7 +57,10 @@ private:
   unsigned char telnetVerb_ = 0;
   bool active_ = false;
   bool ready_ = false;
+  bool connecting_ = false;
   int lastInput_ = -1;
+  int localTarget_ = -1;
+  QDeadlineTimer localTargetDeadline_;
 };
 
 } // namespace vtrpon

@@ -33,7 +33,7 @@ public:
   ~RolandV8HdMidiSwitcher() override;
 
   bool open(QString *errorDetail = nullptr) override;
-  bool opensAsynchronously() const override { return model_ != RolandSwitcherModel::V8Hd; }
+  bool opensAsynchronously() const override { return true; }
   void close() override;
   bool setProgramInput(int sourceNumber,
                        QString *errorDetail = nullptr) override;
@@ -41,13 +41,20 @@ public:
 
 private:
   friend class RolandMidiTrialTest;
+  std::function<bool(const QByteArray &)> writeForTest_;
   RolandSwitcherModel model_ = RolandSwitcherModel::V8Hd;
   RolandModelSettings settings_;
   QTimer responseTimeout_;
   bool queryPending_ = false;
   bool modelReady_ = false;
-  bool legacyBaselineSeen_ = false;
-  void observeLegacyInput(int sourceNumber, bool statusReply = true);
+  bool baselineKnown_ = false;
+  void observeInput(int sourceNumber);
+  bool sendProgramQuery();
+  QByteArray currentQueryAddress() const;
+  bool panelModePending_ = false, fadeAssignPending_ = false;
+  int v1SdiFadeAssign_ = -1;
+  void markMidiReady();
+  RolandProgramQuery programQuery_;
   void resetReceiveState();
   int localTarget_ = 0;
   QDeadlineTimer localTargetDeadline_;
@@ -78,9 +85,6 @@ private:
   QByteArray makeDataSetMessage(quint8 address1, quint8 address2,
                                 quint8 address3,
                                 const QByteArray &data) const;
-  QByteArray makeDataRequestMessage(quint8 address1, quint8 address2,
-                                    quint8 address3, quint8 size1,
-                                    quint8 size2, quint8 size3) const;
   void requestTally();
   void parseDataSetMessage(const QByteArray &message);
   QString midiErrorText(unsigned int result) const;

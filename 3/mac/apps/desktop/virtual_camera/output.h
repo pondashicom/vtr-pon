@@ -9,6 +9,9 @@ class QImage;
 namespace vtrpon {
 #if defined(_WIN32) || defined(Q_OS_MACOS)
 bool virtualCameraEnabled();
+bool virtualCameraReturnMonitor();
+bool setVirtualCameraReturnMonitor(bool enabled);
+std::uint64_t virtualCameraSourceGeneration();
 bool setVirtualCameraEnabled(bool enabled);
 void reloadVirtualCameraEnabled();
 QString virtualCameraStatus();
@@ -35,12 +38,15 @@ private:
 };
 #else
 bool virtualCameraFrameDemand();
-bool publishVirtualCameraFrame(const QImage &image, uint64_t sequence);
+bool publishVirtualCameraFrame(const QImage &image, uint64_t sequence, bool returnMonitor, uint64_t generation);
 bool activateVirtualCameraExtension();
 void openVirtualCameraSettings();
 #endif
 #else
 inline bool virtualCameraEnabled() { return false; }
+inline bool virtualCameraReturnMonitor() { return false; }
+inline bool setVirtualCameraReturnMonitor(bool) { return false; }
+inline std::uint64_t virtualCameraSourceGeneration() { return 0; }
 inline bool setVirtualCameraEnabled(bool) { return false; }
 inline void reloadVirtualCameraEnabled() {}
 inline QString virtualCameraStatus() { return uiText(platformFeatureUnavailableTextId(PlatformFeature::VirtualCamera)); }

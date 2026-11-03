@@ -61,7 +61,8 @@ struct Mapping {
     }
     ~Mapping() { if(shared) munmap(shared,sizeof(vcam::MacShared)); if(fd>=0) close(fd); }
 };
-std::atomic_bool enabled{false};
+std::atomic_bool enabled{false}, returnMonitor{false};
+std::atomic<uint64_t> sourceGeneration{1};
 std::mutex mappingMutex;
 std::weak_ptr<Mapping> active;
 std::shared_ptr<Mapping> loadMapping() { std::unique_lock lock(mappingMutex,std::try_to_lock); return lock ? active.lock() : nullptr; }
@@ -69,6 +70,26 @@ void storeMapping(const std::shared_ptr<Mapping> &m) { std::lock_guard lock(mapp
 VTRCameraActivation *activationDelegate;
 }
 bool virtualCameraEnabled() { return enabled.load(); }
+bool virtualCameraReturnMonitor() { return returnMonitor.load(); }
+uint64_t virtualCameraSourceGeneration() { return sourceGeneration.load(); }
+void invalidateCameraSource() {
+    const auto generation = sourceGeneration.fetch_add(1) + 1;
+    // Source changes must not be dropped when a readback briefly owns the
+    // host-side pointer lock. This never acquires the receiver-owned mutex.
+    std::lock_guard lock(mappingMutex);
+    if (auto mapping = active.lock(); mapping && mapping->shared)
+        mapping->shared->sourceGeneration.store(generation);
+}
+bool setVirtualCameraReturnMonitor(bool value) {
+    auto s=makeControllerSettings(); s.sync();
+    if(s.status()!=QSettings::NoError || !s.isWritable()) return false;
+    const QString key=QStringLiteral("virtualCamera/returnMonitor");
+    const bool existed=s.contains(key); const auto old=s.value(key);
+    s.setValue(key,value); s.sync();
+    if(s.status()!=QSettings::NoError) { if(existed) s.setValue(key,old); else s.remove(key); s.sync(); return false; }
+    if(returnMonitor.exchange(value)!=value) invalidateCameraSource();
+    return true;
+}
 bool setVirtualCameraEnabled(bool value) {
     auto s=makeControllerSettings(); s.sync();
     if(s.status()!=QSettings::NoError || !s.isWritable()) return false;
@@ -76,24 +97,36 @@ bool setVirtualCameraEnabled(bool value) {
     const bool existed=s.contains(key); const auto old=s.value(key);
     s.setValue(key,value); s.sync();
     if(s.status()!=QSettings::NoError) { if(existed) s.setValue(key,old); else s.remove(key); s.sync(); return false; }
-    enabled.store(value); activationMessage.clear(); return true;
+    if(enabled.exchange(value)!=value) invalidateCameraSource();
+    activationMessage.clear(); return true;
 }
-void reloadVirtualCameraEnabled() { enabled.store(makeControllerSettings().value(QStringLiteral("virtualCamera/enabled"),false).toBool()); }
+void reloadVirtualCameraEnabled() {
+    auto s=makeControllerSettings();
+    const bool savedEnabled=s.value("virtualCamera/enabled",false).toBool();
+    const bool savedSource=s.value("virtualCamera/returnMonitor",false).toBool();
+    const bool enabledChanged=enabled.exchange(savedEnabled)!=savedEnabled;
+    const bool sourceChanged=returnMonitor.exchange(savedSource)!=savedSource;
+    if(enabledChanged || sourceChanged) invalidateCameraSource();
+}
 bool virtualCameraFrameDemand() {
     if(!enabled.load()) return false;
     auto m=loadMapping(); auto *s=m ? m->shared : nullptr;
     return s && s->enabled.load() && s->demand.load() && vcam::nowNs()-s->heartbeat.load()<1500000000ULL;
 }
-bool publishVirtualCameraFrame(const QImage &image,uint64_t sequence) {
-    if(!enabled.load() || image.size()!=QSize(vcam::width,vcam::height) || image.format()!=QImage::Format_ARGB32) return false;
+bool publishVirtualCameraFrame(const QImage &image,uint64_t /*sourceSequence*/,bool isReturn,uint64_t generation) {
+    const auto allowed=[&] { return enabled.load() && returnMonitor.load()==isReturn && generation==sourceGeneration.load(); };
+    if(!allowed() || image.size()!=QSize(vcam::width,vcam::height) || image.format()!=QImage::Format_ARGB32) return false;
     auto m=loadMapping(); auto *s=m ? m->shared : nullptr;
     if(!s || !s->enabled.load() || !s->demand.load() || pthread_mutex_trylock(&s->mutex)) return false;
-    // Recheck permission after obtaining the slot; OFF is never queued as old video.
-    if(enabled.load() && s->enabled.load()) {
+    bool published=false;
+    if(allowed() && s->enabled.load()) {
         for(unsigned y=0;y<vcam::height;++y) std::memcpy(s->pixels+y*vcam::stride,image.constScanLine(y),vcam::stride);
-        s->sequence=sequence; s->publishedNs=vcam::nowNs();
+        if(allowed()) {
+            // Publication order spans both sources; source frame counters may restart.
+            ++s->sequence; s->frameGeneration=generation; s->publishedNs=vcam::nowNs(); published=true;
+        }
     }
-    pthread_mutex_unlock(&s->mutex); return true;
+    pthread_mutex_unlock(&s->mutex); return published;
 }
 QString virtualCameraStatus() {
     if(!activationMessage.isEmpty()) return activationMessage;
@@ -177,6 +210,7 @@ public:
         if(now<retryAt) return;
         stopAt=0; mapping=std::make_shared<Mapping>();
         if(!mapping->shared) { mapping.reset(); retryAt=now+1000000000ULL; return; }
+        mapping->shared->sourceGeneration.store(sourceGeneration.load());
         const int fd=mapping->fd;
         process.setChildProcessModifier([fd] { if(dup2(fd,STDIN_FILENO)<0) _exit(126); });
         const auto sender=QDir(QCoreApplication::applicationDirPath()).absoluteFilePath(QStringLiteral("../Helpers/vtr-pon-camera-output.app/Contents/MacOS/vtr-pon-camera-output"));

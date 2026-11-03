@@ -19,6 +19,7 @@ RolandVr50HdLanSwitcher::RolandVr50HdLanSwitcher(
   reconnectTimer_->setInterval(3000);
   pollTimer_->setInterval(receiveInputChanges_ ? 250 : 2000);
   connect(socket_, &QTcpSocket::connected, this, [this] {
+    connecting_ = false;
     deadline_->stop();
     enqueue({QByteArrayLiteral("VER;"), Reply::Version});
   });
@@ -30,8 +31,9 @@ RolandVr50HdLanSwitcher::RolandVr50HdLanSwitcher(
     fail(QStringLiteral("VR-50HD MK II LAN disconnected."));
   });
   connect(deadline_, &QTimer::timeout, this, [this] {
-    fail(QStringLiteral("VR-50HD MK II LAN response timed out (%1).")
-             .arg(QString::fromLatin1(pending_.body)));
+    fail(connecting_ ? QStringLiteral("VR-50HD MK II LAN TCP connection timed out.") :
+        QStringLiteral("VR-50HD MK II LAN response timed out (%1).")
+            .arg(QString::fromLatin1(pending_.body)));
   });
   connect(reconnectTimer_, &QTimer::timeout, this,
           &RolandVr50HdLanSwitcher::connectSocket);
@@ -59,6 +61,7 @@ bool RolandVr50HdLanSwitcher::open(QString *errorDetail) {
 void RolandVr50HdLanSwitcher::close() {
   active_ = false;
   ready_ = false;
+  connecting_ = false; localTarget_ = -1;
   deadline_->stop();
   pollTimer_->stop();
   reconnectTimer_->stop();
@@ -74,6 +77,7 @@ void RolandVr50HdLanSwitcher::close() {
 void RolandVr50HdLanSwitcher::connectSocket() {
   if (!active_) return;
   reconnectTimer_->stop();
+  connecting_ = true;
   deadline_->start();
   socket_->connectToHost(QHostAddress(host_), port_);
 }
@@ -83,6 +87,7 @@ void RolandVr50HdLanSwitcher::fail(const QString &detail) {
   // Start before abort(), which can synchronously emit disconnected().
   reconnectTimer_->start();
   ready_ = false;
+  connecting_ = false; localTarget_ = -1;
   deadline_->stop();
   pollTimer_->stop();
   commands_.clear(); // Never replay old ON AIR/FTB operations after reconnect.
@@ -194,7 +199,10 @@ void RolandVr50HdLanSwitcher::consumeByte(unsigned char byte) {
     if (pending_.reply == Reply::Ack) {
       emit diagnosticEvent(QStringLiteral("RX"), QStringLiteral("ACK"));
       // A local input command must not be echoed back as another ON AIR take.
-      if (pending_.programIndex >= 0) lastInput_ = pending_.programIndex;
+      if (pending_.programIndex >= 0) {
+        lastInput_ = localTarget_ = pending_.programIndex;
+        localTargetDeadline_.setRemainingTime(5000);
+      }
       completeCommand();
     }
   } else if (inFrame_) {
@@ -234,6 +242,17 @@ void RolandVr50HdLanSwitcher::handleFrame(const QByteArray &frame) {
   if (pending_.reply != Reply::Status && !ready_) return;
   emit diagnosticEvent(QStringLiteral("RX"), QString::fromLatin1(frame));
   const int input = value[0] - '0';
+  if (localTarget_ >= 0) {
+    if (input == localTarget_) localTarget_ = -1;
+    else if (localTargetDeadline_.hasExpired()) {
+      localTarget_ = -1;
+      emit diagnosticEvent(QStringLiteral("OBSERVATION"), QStringLiteral("Requested input was not observed before another source became active."));
+    }
+    if (localTarget_ >= 0 || input == lastInput_) {
+      if (pending_.reply == Reply::Status) completeCommand();
+      return;
+    }
+  }
   const int previous = lastInput_;
   lastInput_ = input; // STILL is a valid observed state, never a selectable PC input.
   if (pending_.reply == Reply::Status) completeCommand();

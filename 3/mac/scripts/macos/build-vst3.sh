@@ -3,7 +3,7 @@ set -euo pipefail
 vtrpon_script_dir="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
 vtrpon_source_dir="$(CDPATH= cd -- "$vtrpon_script_dir/../.." && pwd)"
 source "$vtrpon_script_dir/activate.sh"
-vtrpon_addon_source="${VTRPON_MAC_VST3_SOURCE_DIR:-$vtrpon_source_dir/../vtr-pon-vst3-addon-mac-dev}"
+vtrpon_addon_source="${VTRPON_MAC_VST3_SOURCE_DIR:-$vtrpon_source_dir/addons/vst3}"
 vtrpon_addon_build="${VTRPON_MAC_VST3_ADDON_BUILD_DIR:-$vtrpon_addon_source/build/macos-debug}"
 vtrpon_sdk_dir="${1:-$vtrpon_addon_source/build/external/vst3sdk}"
 cmake -S "$vtrpon_addon_source" -B "$vtrpon_addon_build" -G Ninja \

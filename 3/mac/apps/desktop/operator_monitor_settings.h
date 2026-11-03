@@ -9,6 +9,7 @@ inline constexpr std::array<const char *, 5> operatorMonitorFields{
     "remaining", "file", "modes", "rate", "pages"};
 struct OperatorMonitorSettings {
   QString screen;
+  bool windowEnabled = false;
   bool information = false;
   std::array<bool, 5> fields{true, true, true, true, true};
   bool timerEnabled = false;
@@ -21,6 +22,7 @@ struct OperatorMonitorSettings {
 inline OperatorMonitorSettings loadOperatorMonitorSettings(const QSettings &settings) {
   OperatorMonitorSettings value;
   value.screen = settings.value("operatorMonitor/screen", "").toString();
+  value.windowEnabled = settings.value("operatorMonitor/windowEnabled", false).toBool();
   value.information = settings.value("operatorMonitor/information", false).toBool();
   value.timerEnabled = settings.value("operatorMonitor/timerEnabled", false).toBool();
   value.timerDurationSeconds = qBound(1, settings.value("operatorMonitor/timerDurationSeconds", 300).toInt(), 59999);
@@ -37,6 +39,7 @@ inline OperatorMonitorSettings loadOperatorMonitorSettings(const QSettings &sett
 }
 inline bool saveOperatorMonitorSettings(QSettings &settings, const OperatorMonitorSettings &value) {
   settings.setValue("operatorMonitor/screen", value.screen);
+  settings.setValue("operatorMonitor/windowEnabled", value.windowEnabled);
   settings.setValue("operatorMonitor/information", value.information);
   settings.setValue("operatorMonitor/timerEnabled", value.timerEnabled);
   settings.setValue("operatorMonitor/timerDurationSeconds", value.timerDurationSeconds);
