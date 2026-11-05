@@ -548,7 +548,7 @@ if(WIN32)
   qt_add_library(vtrpon-operator-monitor-output STATIC
     apps/desktop/operator_monitor_output.cpp
     apps/desktop/operator_monitor_output.h)
-  target_link_libraries(vtrpon-operator-monitor-output PRIVATE Qt6::Core d3d11)
+  target_link_libraries(vtrpon-operator-monitor-output PRIVATE Qt6::Gui d3d11)
   target_compile_definitions(vtrpon-operator-monitor-output PRIVATE NOMINMAX WIN32_LEAN_AND_MEAN)
   if(BUILD_TESTING)
     qt_add_executable(operator-monitor-isolation-test
@@ -1711,7 +1711,40 @@ foreach(decklink_consumer IN ITEMS vtr-pon program-playout-transition-test deck-
   endif()
 endforeach()
 
+if(WIN32)
+  target_link_libraries(vtrpon-operator-monitor-output PRIVATE
+    vtrpon-network-video vtrpon-decklink vtrpon-virtual-camera-output)
+endif()
+
 if(WIN32 AND BUILD_TESTING)
+  qt_add_library(return-output-ndi-fixture SHARED tests/return_output_mock_ndi.cpp)
+  target_include_directories(return-output-ndi-fixture PRIVATE apps/desktop)
+  target_compile_definitions(return-output-ndi-fixture PRIVATE VTRPON_NETWORK_VIDEO_ADDON_BUILD)
+  set_target_properties(return-output-ndi-fixture PROPERTIES
+    OUTPUT_NAME "vtr-pon-network-video-addon"
+    # Preserve the isolated relative layout with both Ninja and Visual Studio.
+    RUNTIME_OUTPUT_DIRECTORY "$<1:${CMAKE_BINARY_DIR}/return-output-test-only/network-video-addons>")
+  qt_add_executable(return-output-routing-test tests/return_output_routing_test.cpp
+    apps/desktop/controller_scaling.cpp apps/desktop/language_text.cpp
+    apps/desktop/controller_settings_io.cpp apps/desktop/roland_switcher_profiles.cpp)
+  target_include_directories(return-output-routing-test PRIVATE apps/desktop)
+  target_link_libraries(return-output-routing-test PRIVATE
+    Qt6::Widgets Qt6::Network vtrpon-operator-monitor-output vtrpon-network-video vtrpon-decklink
+    vtrpon-virtual-camera-output PkgConfig::GSTREAMER d3d11)
+  target_compile_definitions(return-output-routing-test PRIVATE NOMINMAX WIN32_LEAN_AND_MEAN)
+  if(MSVC)
+    target_compile_options(return-output-routing-test PRIVATE /utf-8)
+  endif()
+  set_target_properties(return-output-routing-test PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "$<1:${CMAKE_BINARY_DIR}/return-output-test-only>")
+  add_dependencies(return-output-routing-test return-output-ndi-fixture release_translations)
+  add_test(NAME return-output-routing COMMAND return-output-routing-test)
+  add_test(NAME return-output-settings COMMAND playlist-panel-drag-drop-test --return-output-settings-only)
+  set_tests_properties(return-output-settings PROPERTIES TIMEOUT 30 RUN_SERIAL TRUE
+    ENVIRONMENT "QT_QPA_PLATFORM=windows")
+  set_tests_properties(return-output-routing PROPERTIES TIMEOUT 45 RUN_SERIAL TRUE
+    ENVIRONMENT "QT_QPA_PLATFORM_PLUGIN_PATH=$<TARGET_FILE_DIR:Qt6::Core>/../plugins/platforms")
+
   # The fixture is SDK-free and built solely for this test, never installed.
   add_library(decklink-host-test-addon SHARED
     tests/decklink/mock_addon.cpp)

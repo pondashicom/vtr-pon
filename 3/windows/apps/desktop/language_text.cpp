@@ -7,6 +7,33 @@
 namespace {
 
 constexpr auto kUiTextIds = std::to_array<const char *>({
+    //% "Output destinations"
+    QT_TRID_NOOP("output.destinations"),
+    //% "Output source"
+    QT_TRID_NOOP("output.source"),
+    //% "ON AIR"
+    QT_TRID_NOOP("output.on_air"),
+    //% "ON AIR — Composite (with background)"
+    QT_TRID_NOOP("output.on_air_composite"),
+    //% "ON AIR — Fill"
+    QT_TRID_NOOP("output.on_air_fill"),
+    //% "ON AIR — Key"
+    QT_TRID_NOOP("output.on_air_key"),
+    //% "ON AIR — Alpha"
+    QT_TRID_NOOP("output.on_air_alpha"),
+    //% "Return monitor"
+    QT_TRID_NOOP("output.return_monitor"),
+    //% "Regular window output"
+    QT_TRID_NOOP("output.window"),
+    //% "DeckLink output"
+    QT_TRID_NOOP("output.decklink"),
+    //% "NDI output"
+    QT_TRID_NOOP("output.ndi"),
+    //% "Virtual camera output"
+    QT_TRID_NOOP("output.virtual_camera"),
+    //% "These checkboxes are linked to each output settings page. Select a separate hardware channel and format in DeckLink settings. NDI adds a separate source named \"Return Monitor\" after the output name. The information band, timer and messages are included. NDI and DeckLink carry the ON AIR audio mix."
+    QT_TRID_NOOP("output.return_help"),
+
     //% "ATEM Integration"
     QT_TRID_NOOP("settings.category.atem"),
     //% "Roland Integration"
@@ -249,7 +276,7 @@ constexpr auto kUiTextIds = std::to_array<const char *>({
     QT_TRID_NOOP("decklink.pair_unsynchronized"),
     //% "DeckLink"
     QT_TRID_NOOP("decklink.title"),
-    //% "Choose the output channel and format for Composite, Fill and Key, then enable each output. DeckLink input channels appear in the INPUT dropdown. Input format changes apply to newly added items."
+    //% "Select a separate output channel and format for ON AIR Composite, Fill, Key and the return monitor. ON AIR and the return monitor can run at the same time. Input channels appear in INPUT; input format changes apply to newly added items."
     QT_TRID_NOOP("decklink.description"),
     //% "Enable DeckLink input"
     QT_TRID_NOOP("decklink.enable_input"),
@@ -503,7 +530,7 @@ constexpr auto kUiTextIds = std::to_array<const char *>({
     QT_TRID_NOOP("addons.runtime.retry"),
     //% "Could not open the browser. Open this URL manually:"
     QT_TRID_NOOP("addons.runtime.browser_failed"),
-    //% "Select the ON AIR outputs to send over NDI. Enable input to find sources on the LAN."
+    //% "Select ON AIR and return monitor outputs to send over NDI. Both can be sent as separate sources at the same time. Enable input to find sources on the LAN."
     QT_TRID_NOOP("network_video.description"),
     //% "Output video"
     QT_TRID_NOOP("network_video.outputs"),
@@ -567,7 +594,7 @@ constexpr auto kUiTextIds = std::to_array<const char *>({
     QT_TRID_NOOP("virtual_camera.title"),
     //% "Enable virtual camera output"
     QT_TRID_NOOP("virtual_camera.enable"),
-    //% "1920 x 1080 / 30 fps. Sends ON AIR while enabled, including OFF AIR. Shows the standby text only while disabled. Install the camera DLL once before use."
+    //% "1920 x 1080 / 30 fps. Select ON AIR or the return monitor. Return output includes the information band, timer and messages. Shows standby text while disabled. Install the camera DLL once before use."
     QT_TRID_NOOP("virtual_camera.description"),
     //% "Could not save the virtual camera setting. Check settings file write permissions."
     QT_TRID_NOOP("virtual_camera.save_failed"),

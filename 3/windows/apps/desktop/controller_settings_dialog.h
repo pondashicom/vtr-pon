@@ -132,6 +132,8 @@ private:
   OperatorMonitorSettingsPage *operatorMonitorPage_ = nullptr;
   QWidget *virtualCameraPage_ = nullptr;
   QCheckBox *virtualCameraCheckBox_ = nullptr;
+  QComboBox *virtualCameraSource_ = nullptr;
+  QLabel *virtualCameraSourceLabel_ = nullptr;
   QLabel *virtualCameraDescription_ = nullptr;
   QLabel *virtualCameraStatus_ = nullptr;
   QLabel *virtualCameraSaveStatus_ = nullptr;

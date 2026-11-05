@@ -2,8 +2,8 @@ int32_t VTRPON_DECKLINK_CALL channels(void *handle, VtrPonDeckLinkChannel *out, 
     const auto status = check(handle, err, errCap); if (status) return status;
     if (!count || (!out && cap)) return VtrPonDeckLinkInvalidArgument;
     if (std::getenv("VTRPON_DECKLINK_TEST_NO_DEVICES")) { *count = 0; return VtrPonDeckLinkOk; }
-    *count = 5; if (cap < 5) return VtrPonDeckLinkBufferTooSmall;
-    for (uint32_t i = 0; i < 5; ++i) {
+    *count = 6; if (cap < 6) return VtrPonDeckLinkBufferTooSmall;
+    for (uint32_t i = 0; i < 6; ++i) {
         out[i] = {}; out[i].structSize = sizeof(out[i]); out[i].deviceIndex = i == 2 ? 1 : 0;
         out[i].direction = i == 1 || i > 2 ? 2 : 1; out[i].connection = 1; out[i].persistentId = i == 2 ? 101 : 100;
         out[i].subDeviceIndex = i > 2 ? i - 1 : i == 2 ? 1 : 0; out[i].stableId = 1;
@@ -46,7 +46,7 @@ int32_t VTRPON_DECKLINK_CALL openOutput(void *handle, const VtrPonDeckLinkStream
     const auto status = check(handle, err, cap); if (status) return status;
     if (!options || options->structSize != sizeof(*options) || options->persistentId != 100 || options->connection != 1 || (options->modeId != 1000 && options->modeId != 1001)) return VtrPonDeckLinkInvalidArgument;
     auto &c = *static_cast<Context *>(handle);
-    if (c.output || (options->subDeviceIndex != 0 && options->subDeviceIndex != 2 && options->subDeviceIndex != 3)) return VtrPonDeckLinkInvalidArgument;
+    if (c.output || (options->subDeviceIndex != 0 && options->subDeviceIndex != 2 && options->subDeviceIndex != 3 && options->subDeviceIndex != 4)) return VtrPonDeckLinkInvalidArgument;
     c.route = options->subDeviceIndex ? options->subDeviceIndex - 1 : 0;
     uint64_t expected = 0;
     if (!outputs[c.route].active.compare_exchange_strong(expected, 1)) return VtrPonDeckLinkBackendError;

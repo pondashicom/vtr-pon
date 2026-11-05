@@ -17,7 +17,7 @@ struct OutputStats {
     std::atomic<uint64_t> video{0}, audio{0}, time{0}, color{0}, active{0}, group{0}, opens{0};
     std::atomic<uint32_t> expected{0xffc8280a};
 };
-std::array<OutputStats, 3> outputs;
+std::array<OutputStats, 4> outputs;
 struct Context {
     std::thread::id owner = std::this_thread::get_id(); bool snapshot = false, input = false, output = false;
     uint64_t frame = 0; unsigned route = 0; int64_t group = 0, epoch = 0; uint32_t mode = 0; bool running = false;
@@ -101,7 +101,11 @@ const VtrPonDeckLinkMediaApi *VTRPON_DECKLINK_CALL vtrpon_decklink_get_media_api
     return version == 1 ? &mediaApi : nullptr;
 }
 const VtrPonDeckLinkOutputApi *VTRPON_DECKLINK_CALL vtrpon_decklink_get_output_api(uint32_t version) { return version == 1 ? &outputApi : nullptr; }
-extern "C" __declspec(dllexport) void __cdecl vtrpon_decklink_test_expect(unsigned route, uint32_t color) { if (route < 3) outputs[route].expected = color; }
+extern "C" __declspec(dllexport) void __cdecl vtrpon_decklink_test_expect(unsigned route, uint32_t color) { if (route < 4) outputs[route].expected = color; }
+extern "C" __declspec(dllexport) void __cdecl vtrpon_decklink_test_return_output(uint64_t *out) {
+    out[0] = outputs[3].video; out[1] = outputs[3].audio; out[2] = outputs[3].time;
+    out[3] = outputs[3].color; out[4] = outputs[3].active;
+}
 extern "C" __declspec(dllexport) void __cdecl vtrpon_decklink_test_outputs(uint64_t *out) {
     for (unsigned i = 0; i < 3; ++i) {
         out[i*6] = outputs[i].video; out[i*6+1] = outputs[i].audio; out[i*6+2] = outputs[i].time;

@@ -57,8 +57,13 @@ Then run the
 release-relevant tests:
 
 ```bat
-ctest --test-dir build --output-on-failure -R "^(update-catalog|update-window|addon-package|operator-monitor-isolation|controller-settings-storage|controller-operations|playlist-item-operations|program-playout-transition|document-import-queue|deck-source-session|dual-deck-player-contract|aux-playback|edit-pfl-audio|language-catalog|playlist-item-playout-state-machine|timed-still-playout-clock|playlist-document-io|media-import-queue|playlist-panel-drag-drop|edit-panel-duration-control|image-add-contract|powerpoint-import-contract|pdf-import-contract|virtual-camera-lifecycle)$"
+ctest --test-dir build --output-on-failure --output-junit "%CD%\build\release-tests.xml"
 ```
+
+This includes return monitor routing/settings and the native Windows Roland
+protocol/WinMM tests. When using the Visual Studio generator instead of Ninja,
+build with `--config RelWithDebInfo` and test with `-C RelWithDebInfo` in the
+same normal `build/` directory.
 
 The test results check code paths and build dependencies. They do not establish
 visible output, physical audio, device compatibility, or the installed app's

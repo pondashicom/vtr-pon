@@ -1,6 +1,7 @@
 #include "addon_management_page.h"
 
 #include "addon_package.h"
+#include "addon_runtime_guidance.h"
 #include "controller_scaling.h"
 #include "language_text.h"
 #include "settings_style.h"
@@ -89,6 +90,7 @@ AddonManagementPage::AddonManagementPage(QWidget *parent) : QWidget(parent) {
   catalogRow->addWidget(refreshButton_);
   layout->addLayout(catalogRow);
   const auto ids = vtrpon::addons::ids();
+  const auto runtimeTargets = vtrpon::addonRuntimeTargets();
   for (int i = 0; i < int(rows_.size()); ++i) {
     auto &row = rows_[i];
     row.id = ids.at(i);
@@ -106,6 +108,24 @@ AddonManagementPage::AddonManagementPage(QWidget *parent) : QWidget(parent) {
     row.status->setWordWrap(true);
     vtrpon::setSettingsRole(row.status, "status");
     groupLayout->addWidget(row.status);
+    for (const auto &target : runtimeTargets) {
+      if (target.id != row.id) continue;
+      row.runtime = new vtrpon::AddonRuntimeStatusWidget(target.kind, target.file, group);
+      groupLayout->addWidget(row.runtime);
+      if (target.kind != vtrpon::AddonRuntimeKind::Atem) {
+        auto *operation = new QLabel(group);
+        operation->setObjectName(QStringLiteral("addonOperationalStatus%1").arg(i));
+        operation->setWordWrap(true); operation->setTextFormat(Qt::PlainText);
+        vtrpon::setSettingsRole(operation, "status"); groupLayout->addWidget(operation);
+        auto *timer = new QTimer(operation);
+        const auto update = [operation, runtime = row.runtime, id = row.id] {
+          operation->setVisible(!runtime->isHidden());
+          operation->setText(vtrpon::addonOperationalStatus(id));
+        };
+        connect(timer, &QTimer::timeout, operation, update); timer->start(500); update();
+      }
+      break;
+    }
     auto *actions = new QHBoxLayout;
     row.install = new QPushButton(group);
     row.install->setObjectName(QStringLiteral("addonInstall%1").arg(i));
@@ -229,8 +249,10 @@ void AddonManagementPage::retranslate() {
   rows_[1].description->setText(vtrpon::uiText("settings.addons.ndi"));
   rows_[2].description->setText(vtrpon::uiText("settings.addons.vst3"));
   rows_[3].description->setText(vtrpon::uiText("decklink.description"));
-  for (auto &row : rows_)
+  for (auto &row : rows_) {
     row.uninstall->setText(vtrpon::uiText("settings.addons.uninstall"));
+    if (row.runtime) row.runtime->retranslate();
+  }
   reload();
 }
 
@@ -241,6 +263,7 @@ void AddonManagementPage::changeEvent(QEvent *event) {
 
 void AddonManagementPage::showEvent(QShowEvent *event) {
   QWidget::showEvent(event);
+  for (auto &row : rows_) if (row.runtime) row.runtime->check();
   if (!catalogRequested_) {
     catalogRequested_ = true;
     refreshCatalog();

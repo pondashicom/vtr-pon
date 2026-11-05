@@ -40,14 +40,14 @@ struct Publication {
     std::deque<Audio> audio;
     size_t audioBytes = 0;
 };
-constexpr std::array<unsigned, 3> groupMasks{1u, 6u, 8u};
+constexpr std::array<unsigned, 4> groupMasks{1u, 6u, 8u, 16u};
 struct Shared {
     std::mutex mutex;
     std::condition_variable wake;
     NetworkVideoSettings settings;
     NetworkVideoState state;
     QStringList ownNames, localHostNames;
-    std::array<Publication, 3> publications;
+    std::array<Publication, 4> publications;
     qint64 nextAudioTimecode = 0;
     std::atomic<unsigned> outputMask{0};
     std::atomic_bool stopping{false};
@@ -79,7 +79,7 @@ bool ownSource(const Shared &data, const QString &name) {
 
     for (const auto &host : data.localHostNames) {
         const auto prefix = host + QStringLiteral(" (");
-        for (int i = 0; i < 4; ++i)
+        for (int i = 0; i < 5; ++i)
             if (name.startsWith(prefix, Qt::CaseInsensitive)
                 && name.mid(prefix.size()) == networkVideoOutputName(data.settings, NetworkVideoKind(i)) + QLatin1Char(')')) return true;
     }
@@ -133,7 +133,7 @@ QString networkVideoOutputName(const NetworkVideoSettings &settings, NetworkVide
     for (const auto &host : hosts) hostLength = std::max(hostLength, host.size());
     const qsizetype limit = std::clamp<qsizetype>(253 - hostLength - 24, 16, 200);
     name = name.left(limit);
-    static const std::array<QString, 4> suffixes{QString{}, QStringLiteral(" Fill"), QStringLiteral(" Key"), QStringLiteral(" Alpha")};
+    static const std::array<QString, 5> suffixes{QString{}, QStringLiteral(" Fill"), QStringLiteral(" Key"), QStringLiteral(" Alpha"), QStringLiteral(" Return Monitor")};
     return name + suffixes[size_t(kind)];
 }
 QString networkVideoAddonPath() {
@@ -154,7 +154,8 @@ NetworkVideoSettings savedNetworkVideoSettings() {
         settings.value("networkVideo/fillEnabled", false).toBool(),
         settings.value("networkVideo/keyEnabled", false).toBool(),
         settings.value("networkVideo/alphaEnabled", false).toBool(),
-        settings.value("networkVideo/fillFormat", "straight").toString() == QLatin1StringView("premultiplied")};
+        settings.value("networkVideo/fillFormat", "straight").toString() == QLatin1StringView("premultiplied"),
+        settings.value("networkVideo/returnMonitorEnabled", false).toBool()};
 }
 void applyNetworkVideoSettings(const NetworkVideoSettings &settings) {
     if (!networkVideoAddonInstalled()) return;
@@ -182,7 +183,9 @@ void saveNetworkVideoSettings(const NetworkVideoSettings &settings) {
     store.setValue("networkVideo/keyEnabled", settings.keyEnabled);
     store.setValue("networkVideo/alphaEnabled", settings.alphaEnabled);
     store.setValue("networkVideo/fillFormat", settings.premultipliedFill ? "premultiplied" : "straight");
-    applyNetworkVideoSettings(settings);
+    store.setValue("networkVideo/returnMonitorEnabled", settings.returnMonitorEnabled);
+    store.sync();
+    if (store.status() == QSettings::NoError) applyNetworkVideoSettings(settings);
 }
 NetworkVideoState networkVideoState() {
     auto &data = shared(); std::lock_guard lock(data.mutex); return data.state;
@@ -205,7 +208,7 @@ struct SenderWorker {
 void setOutputError(const SenderWorker &worker, const QString &error) {
     auto &data = shared(); std::lock_guard lock(data.mutex);
     if (worker.generation != data.generation.load()) return;
-    for (unsigned i = 0; i < 4; ++i) if (worker.mask & (1u << i)) {
+    for (unsigned i = 0; i < 5; ++i) if (worker.mask & (1u << i)) {
         auto &output = data.state.outputs[i];
         output.error = error; output.running = false; output.ready = false;
     }
@@ -215,7 +218,7 @@ void setOutputError(const SenderWorker &worker, const QString &error) {
         [](const auto &output) { return output.running; });
 }
 QByteArray outputPixels(const Video &video, NetworkVideoKind kind, bool premultiplied) {
-    if (kind == NetworkVideoKind::Composite) return video.composite;
+    if (kind == NetworkVideoKind::Composite || kind == NetworkVideoKind::ReturnMonitor) return video.composite;
     QByteArray pixels = video.alpha;
     auto *bytes = reinterpret_cast<unsigned char *>(pixels.data());
     for (qsizetype i = 0; i < pixels.size(); i += 4) {
@@ -236,14 +239,14 @@ void runSender(const std::shared_ptr<SenderWorker> &worker) {
         && worker->generation == data.generation.load(); };
     while (active()) {
         Addon addon;
-        std::array<void *, 4> senders{};
+        std::array<void *, 5> senders{};
         struct Cleanup {
-            Addon &addon; std::array<void *, 4> &senders;
+            Addon &addon; std::array<void *, 5> &senders;
             ~Cleanup() { for (auto *sender : senders) if (sender) addon.api->destroySender(addon.context, sender); }
         } cleanup{addon, senders};
         QString error = addon.error;
         if (addon.context) {
-            for (unsigned i = 0; i < 4 && error.isEmpty() && active(); ++i) if (worker->mask & (1u << i)) {
+            for (unsigned i = 0; i < 5 && error.isEmpty() && active(); ++i) if (worker->mask & (1u << i)) {
                 const auto name = networkVideoOutputName(worker->settings, NetworkVideoKind(i)).toUtf8();
                 senders[i] = addon.api->createSender(addon.context, name.constData());
                 if (!senders[i]) { error = QStringLiteral("NDI output could not be started."); break; }
@@ -271,7 +274,7 @@ void runSender(const std::shared_ptr<SenderWorker> &worker) {
         {
             std::lock_guard lock(data.mutex);
             if (!active()) break;
-            for (unsigned i = 0; i < 4; ++i) if (worker->mask & (1u << i)) {
+            for (unsigned i = 0; i < 5; ++i) if (worker->mask & (1u << i)) {
                 data.state.outputs[i].ready = true; data.state.outputs[i].error.clear();
             }
             data.outputMask.fetch_or(worker->mask);
@@ -292,13 +295,13 @@ void runSender(const std::shared_ptr<SenderWorker> &worker) {
             if (video.generation == worker->generation && Clock::now() - video.captured < std::chrono::milliseconds(200)) {
                 // Prepare the entire Fill/Key pair before submitting either.
                 // One queue and one drop decision guarantee a common source frame.
-                std::array<QByteArray, 4> pixels;
-                for (unsigned i = 0; i < 4; ++i) if (senders[i])
+                std::array<QByteArray, 5> pixels;
+                for (unsigned i = 0; i < 5; ++i) if (senders[i])
                     pixels[i] = outputPixels(video, NetworkVideoKind(i), worker->settings.premultipliedFill);
                 if (!active()) break;
-                for (unsigned i = 0; i < 4; ++i) if (senders[i] && !pixels[i].isEmpty()) {
+                for (unsigned i = 0; i < 5; ++i) if (senders[i] && !pixels[i].isEmpty()) {
                     const VtrPonNetworkVideoFrame frame{reinterpret_cast<const uint8_t *>(pixels[i].constData()),
-                        video.width, video.height, video.width * 4, 60, 1, i == 3, video.timecode};
+                        video.width, video.height, video.width * 4, i == 4 ? 24 : 60, 1, i == 3, video.timecode};
                     addon.api->sendVideo(addon.context, senders[i], &frame);
                     std::lock_guard lock(data.mutex);
                     if (worker->generation == data.generation.load()) {
@@ -313,7 +316,7 @@ void runSender(const std::shared_ptr<SenderWorker> &worker) {
                 if (audio.generation != worker->generation || Clock::now() - audio.captured >= std::chrono::milliseconds(200)) continue;
                 const VtrPonNetworkAudioFrame frame{reinterpret_cast<const float *>(audio.pcm.constData()),
                     48000, 2, int(audio.pcm.size() / (2 * sizeof(float))), audio.timecode};
-                for (unsigned i = 0; i < 4; ++i)
+                for (unsigned i = 0; i < 5; ++i)
                     if (senders[i] && i != 2) addon.api->sendAudio(addon.context, senders[i], &frame);
             }
         }
@@ -354,9 +357,9 @@ public:
             data.localHostNames = hosts; data.ownNames = names;
             while (data.ownNames.size() > 128) data.ownNames.removeFirst();
         }
-        std::array<std::shared_ptr<SenderWorker>, 3> senders;
+        std::array<std::shared_ptr<SenderWorker>, 4> senders;
         struct StopOnExit {
-            std::array<std::shared_ptr<SenderWorker>, 3> &senders;
+            std::array<std::shared_ptr<SenderWorker>, 4> &senders;
             ~StopOnExit() { for (auto &sender : senders) if (sender) sender->stop.store(true); shared().wake.notify_all(); }
         } stopOnExit{senders};
         std::unique_ptr<Addon> finder;
@@ -410,7 +413,9 @@ public:
                 sources.removeIf([&](const auto &source) { return ownSource(data, source.name); });
                 if (generation == data.generation.load()) {
                     data.state.sources = sources; data.state.inputRunning = found;
-                    if (!found) data.state.error = QStringLiteral("NDI source discovery could not be started.");
+                    const auto discoveryError = QStringLiteral("NDI source discovery could not be started.");
+                    if (!found) data.state.error = discoveryError;
+                    else if (data.state.error == discoveryError) data.state.error.clear();
                 }
                 nextDiscovery = Clock::now() + std::chrono::seconds(1);
             }
@@ -439,8 +444,16 @@ void publishNetworkVideo(QByteArray composite, QByteArray alpha, int width, int 
     auto &data = shared(); std::unique_lock lock(data.mutex, std::try_to_lock);
     if (!lock || generation != data.publishing.load()) return;
     const auto mask = data.outputMask.load();
-    for (unsigned group = 0; group < groupMasks.size(); ++group) if (mask & groupMasks[group])
+    for (unsigned group = 0; group < groupMasks.size(); ++group) if (mask & groupMasks[group] & 15u)
         data.publications[group].video = {composite, alpha, timecode, width, height, generation, Clock::now()};
+    data.wake.notify_all();
+}
+void publishNetworkReturnMonitor(QByteArray pixels, int width, int height, quint64 generation, qint64 timecode) {
+    if (!generation || width <= 0 || height <= 0 || width > 1920 || height > 1080
+        || pixels.size() != qsizetype(width) * height * 4) return;
+    auto &data = shared(); std::unique_lock lock(data.mutex, std::try_to_lock);
+    if (!lock || generation != data.publishing.load() || !(data.outputMask.load() & 16u)) return;
+    data.publications[3].video = {std::move(pixels), {}, timecode, width, height, generation, Clock::now()};
     data.wake.notify_all();
 }
 void publishNetworkAudio(GstBuffer *buffer, qint64 timecode) {

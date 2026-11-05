@@ -3,6 +3,20 @@
 <TS version="2.1" language="en_US">
 <context>
     <name></name>
+    <message id="output.destinations"><source>Output destinations</source><translation>Output destinations</translation></message>
+    <message id="output.source"><source>Output source</source><translation>Output source</translation></message>
+    <message id="output.on_air"><source>ON AIR</source><translation>ON AIR</translation></message>
+    <message id="output.on_air_composite"><source>ON AIR — Composite (with background)</source><translation>ON AIR — Composite (with background)</translation></message>
+    <message id="output.on_air_fill"><source>ON AIR — Fill</source><translation>ON AIR — Fill</translation></message>
+    <message id="output.on_air_key"><source>ON AIR — Key</source><translation>ON AIR — Key</translation></message>
+    <message id="output.on_air_alpha"><source>ON AIR — Alpha</source><translation>ON AIR — Alpha</translation></message>
+    <message id="output.return_monitor"><source>Return monitor</source><translation>Return monitor</translation></message>
+    <message id="output.window"><source>Regular window output</source><translation>Regular window output</translation></message>
+    <message id="output.decklink"><source>DeckLink output</source><translation>DeckLink output</translation></message>
+    <message id="output.ndi"><source>NDI output</source><translation>NDI output</translation></message>
+    <message id="output.virtual_camera"><source>Virtual camera output</source><translation>Virtual camera output</translation></message>
+    <message id="output.return_help"><source>These checkboxes are linked to each output settings page. Select a separate hardware channel and format in DeckLink settings. NDI adds a separate source named "Return Monitor" after the output name. The information band, timer and messages are included. NDI and DeckLink carry the ON AIR audio mix.</source><translation>These checkboxes are linked to each output settings page. Select a separate hardware channel and format in DeckLink settings. NDI adds a separate source named "Return Monitor" after the output name. The information band, timer and messages are included. NDI and DeckLink carry the ON AIR audio mix.</translation></message>
+
     <message id="midi.title"><source>MIDI Control</source><translation>MIDI Control</translation></message>
     <message id="midi.description"><source>Select an input, select an action, then click MIDI Learn and operate your controller. Save to apply. MIDI actions are suspended while Settings or another modal dialog is open. Volume uses absolute or relative CC; Pickup waits for the hardware to reach the on-screen value. CC 0 is silence and CC 127 is +6 dB by default, following the on-screen fader scale.</source><translation>Select an input, select an action, then click MIDI Learn and operate your controller. Save to apply. MIDI actions are suspended while Settings or another modal dialog is open. Volume uses absolute or relative CC; Pickup waits for the hardware to reach the on-screen value. CC 0 is silence and CC 127 is +6 dB by default, following the on-screen fader scale.</translation></message>
     <message id="midi.enable"><source>Enable MIDI control</source><translation>Enable MIDI control</translation></message>
@@ -226,6 +240,78 @@
         <source>%1 VST stopped because of a plug-in error. Playback continues with original audio.</source>
         <translation>%1 VST stopped because of a plug-in error. Playback continues with original audio.</translation>
     </message>
+    <message id="addons.runtime.startup_title">
+        <source>Some add-ons need attention</source>
+        <translation>Some add-ons need attention</translation>
+    </message>
+    <message id="addons.runtime.startup_description">
+        <source>The following add-ons are missing required software or could not be checked. Follow the instructions below. You can close this notice and continue using VTR-PON. To check again later, open Settings → Add-ons.</source>
+        <translation>The following add-ons are missing required software or could not be checked. Follow the instructions below. You can close this notice and continue using VTR-PON. To check again later, open Settings → Add-ons.</translation>
+    </message>
+    <message id="addons.runtime.initialized">
+        <source>Initialization check passed for %1. Actual input and output status is shown separately.</source>
+        <translation>Initialization check passed for %1. Actual input and output status is shown separately.</translation>
+    </message>
+    <message id="addons.runtime.initialization_failed">
+        <source>Unavailable: %1 could not be initialized. Complete the vendor software setup and check again.</source>
+        <translation>Unavailable: %1 could not be initialized. Complete the vendor software setup and check again.</translation>
+    </message>
+    <message id="addons.runtime.no_devices">
+        <source>Device not detected: %1 initialized, but no DeckLink device was found. Check the device connection and driver permissions.</source>
+        <translation>Device not detected: %1 initialized, but no DeckLink device was found. Check the device connection and driver permissions.</translation>
+    </message>
+    <message id="addons.runtime.ndi_setup">
+        <source>If NDI does not work, open NDI Tools and complete any first-run setup or registration it requests, then restart VTR-PON and check again. Initialization alone does not verify network discovery or media transfer.</source>
+        <translation>If NDI does not work, open NDI Tools and complete any first-run setup or registration it requests, then restart VTR-PON and check again. Initialization alone does not verify network discovery or media transfer.</translation>
+    </message>
+    <message id="addons.runtime.decklink_setup">
+        <source>If DeckLink does not work, open Desktop Video Setup and complete any first-run setup or registration it requests. Check that the device is recognized and OS driver permissions are allowed, then restart VTR-PON and check again. Detecting a device does not verify capture or playback.</source>
+        <translation>If DeckLink does not work, open Desktop Video Setup and complete any first-run setup or registration it requests. Check that the device is recognized and OS driver permissions are allowed, then restart VTR-PON and check again. Detecting a device does not verify capture or playback.</translation>
+    </message>
+    <message id="addons.runtime.operation_off">
+        <source>Current operation: Off</source>
+        <translation>Current operation: Off</translation>
+    </message>
+    <message id="addons.runtime.operation_error">
+        <source>Current operation: Error — %1</source>
+        <translation>Current operation: Error — %1</translation>
+    </message>
+    <message id="addons.runtime.operation_running">
+        <source>Current operation: Sending output</source>
+        <translation>Current operation: Sending output</translation>
+    </message>
+    <message id="addons.runtime.operation_starting">
+        <source>Current operation: Starting / waiting for output</source>
+        <translation>Current operation: Starting / waiting for output</translation>
+    </message>
+    <message id="addons.runtime.operation_input">
+        <source>Current operation: Input enabled; %1 sources found</source>
+        <translation>Current operation: Input enabled; %1 sources found</translation>
+    </message>
+    <message id="addons.runtime.operation_devices">
+        <source>Current operation: %1 DeckLink channels detected</source>
+        <translation>Current operation: %1 DeckLink channels detected</translation>
+    </message>
+    <message id="addons.runtime.operation_no_devices">
+        <source>Current operation: No DeckLink device detected</source>
+        <translation>Current operation: No DeckLink device detected</translation>
+    </message>
+    <message id="addons.runtime.operation_checking">
+        <source>Current operation: Checking</source>
+        <translation>Current operation: Checking</translation>
+    </message>
+    <message id="addons.runtime.operation_unavailable">
+        <source>Current operation: Unavailable</source>
+        <translation>Current operation: Unavailable</translation>
+    </message>
+    <message id="addons.runtime.operation_input_starting">
+        <source>Current operation: Starting input discovery</source>
+        <translation>Current operation: Starting input discovery</translation>
+    </message>
+    <message id="addons.runtime.operation_partial">
+        <source>Current operation: %1 of %2 outputs running; waiting for the rest</source>
+        <translation>Current operation: %1 of %2 outputs running; waiting for the rest</translation>
+    </message>
     <message id="addons.runtime.checking">
         <source>Checking %1...</source>
         <translation>Checking %1...</translation>
@@ -274,10 +360,7 @@
         <source>Could not open the browser. Open this URL manually:</source>
         <translation>Could not open the browser. Open this URL manually:</translation>
     </message>
-    <message id="network_video.description">
-        <source>Select the ON AIR outputs to send over NDI. Enable input to find sources on the LAN.</source>
-        <translation>Select the ON AIR outputs to send over NDI. Enable input to find sources on the LAN.</translation>
-    </message>
+    <message id="network_video.description"><source>Select ON AIR and return monitor outputs to send over NDI. Both can be sent as separate sources at the same time. Enable input to find sources on the LAN.</source><translation>Select ON AIR and return monitor outputs to send over NDI. Both can be sent as separate sources at the same time. Enable input to find sources on the LAN.</translation></message>
     <message id="network_video.outputs">
         <source>Output video</source>
         <translation>Output video</translation>
@@ -406,10 +489,7 @@
         <source>Enable virtual camera output</source>
         <translation>Enable virtual camera output</translation>
     </message>
-    <message id="virtual_camera.description">
-        <source>1920 x 1080 / 30 fps. Sends ON AIR while enabled, including OFF AIR. Shows the standby text only while disabled. Install the camera DLL once before use.</source>
-        <translation>1920 x 1080 / 30 fps. Sends ON AIR while enabled, including OFF AIR. Shows the standby text only while disabled. Install the camera DLL once before use.</translation>
-    </message>
+    <message id="virtual_camera.description"><source>1920 x 1080 / 30 fps. Select ON AIR or the return monitor. Return output includes the information band, timer and messages. Shows standby text while disabled. Install the camera DLL once before use.</source><translation>1920 x 1080 / 30 fps. Select ON AIR or the return monitor. Return output includes the information band, timer and messages. Shows standby text while disabled. Install the camera DLL once before use.</translation></message>
     <message id="virtual_camera.save_failed">
         <source>Could not save the virtual camera setting. Check settings file write permissions.</source>
         <translation>Could not save the virtual camera setting. Check settings file write permissions.</translation>
@@ -4840,10 +4920,7 @@ Adjust the slider to find a comfortable text size.</translation>
         <source>DeckLink</source>
         <translation>DeckLink</translation>
     </message>
-    <message id="decklink.description">
-        <source>Choose the output channel and format for Composite, Fill and Key, then enable each output. DeckLink input channels appear in the INPUT dropdown. Input format changes apply to newly added items.</source>
-        <translation>Choose the output channel and format for Composite, Fill and Key, then enable each output. DeckLink input channels appear in the INPUT dropdown. Input format changes apply to newly added items.</translation>
-    </message>
+    <message id="decklink.description"><source>Select a separate output channel and format for ON AIR Composite, Fill, Key and the return monitor. ON AIR and the return monitor can run at the same time. Input channels appear in INPUT; input format changes apply to newly added items.</source><translation>Select a separate output channel and format for ON AIR Composite, Fill, Key and the return monitor. ON AIR and the return monitor can run at the same time. Input channels appear in INPUT; input format changes apply to newly added items.</translation></message>
     <message id="decklink.enable_input">
         <source>Enable DeckLink input</source>
         <translation>Enable DeckLink input</translation>

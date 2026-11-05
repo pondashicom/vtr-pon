@@ -166,16 +166,21 @@ ViewMenuController::ViewMenuController(QMenuBar *menuBar,
   operatorMonitorAction_->setObjectName(QStringLiteral("operatorMonitorAction"));
   operatorMonitorAction_->setCheckable(true);
   operatorMonitorProcess_ = new QProcess(this);
+  operatorMonitorFeed_ = std::make_unique<OperatorMonitorControlFeed>();
   auto *operatorInfoTimer = new QTimer(this);
   connect(operatorInfoTimer, &QTimer::timeout, this, [this] {
-    if (operatorMonitorProcess_->state() == QProcess::Running)
-      publishOperatorMonitorPresentation();
+    if (!operatorMonitorClosing_) publishOperatorMonitorPresentation();
   });
   operatorInfoTimer->start(100);
   operatorMonitorProcess_->setStandardOutputFile(QProcess::nullDevice());
   operatorMonitorProcess_->setStandardErrorFile(QProcess::nullDevice());
   const auto resetMonitor = [this] {
     setOperatorMonitorEnabled(false);
+    if (!operatorMonitorClosing_) {
+      auto settings = makeControllerSettings();
+      settings.setValue("operatorMonitor/windowEnabled", false);
+      operatorMonitorSettings_.windowEnabled = false;
+    }
     const QSignalBlocker blocker(operatorMonitorAction_);
     operatorMonitorAction_->setChecked(false);
     operatorMonitorAction_->setEnabled(!operatorMonitorClosing_);
@@ -200,9 +205,12 @@ ViewMenuController::ViewMenuController(QMenuBar *menuBar,
   });
   connect(operatorMonitorAction_, &QAction::toggled, this, [this](bool enabled) {
     if (operatorMonitorClosing_) return;
+    auto settings = makeControllerSettings();
+    settings.setValue("operatorMonitor/windowEnabled", enabled);
+    operatorMonitorSettings_.windowEnabled = enabled;
     if (!enabled) {
       setOperatorMonitorEnabled(false);
-      operatorMonitorAction_->setEnabled(false);
+      operatorMonitorAction_->setEnabled(operatorMonitorProcess_->state() == QProcess::NotRunning);
       operatorMonitorProcess_->kill(); // Only the disposable receiver is stopped.
       return;
     }
@@ -217,6 +225,7 @@ ViewMenuController::ViewMenuController(QMenuBar *menuBar,
          QString::number(QCoreApplication::applicationPid()),
          uiText("menu.view.operator_monitor")});
   });
+  operatorMonitorAction_->setChecked(operatorMonitorSettings_.windowEnabled);
 #endif
 
   connect(programAlwaysOnTopAction_, &QAction::toggled, this,
@@ -303,6 +312,10 @@ void ViewMenuController::reloadOperatorMonitorSettings() {
   auto settings = makeControllerSettings();
   const auto previous = operatorMonitorSettings_;
   operatorMonitorSettings_ = loadOperatorMonitorSettings(settings);
+#ifdef _WIN32
+  if (operatorMonitorAction_ && !operatorMonitorClosing_)
+    operatorMonitorAction_->setChecked(operatorMonitorSettings_.windowEnabled);
+#endif
   operatorTimer_.configure(operatorMonitorSettings_, operatorTimerClock_.elapsed());
   if (operatorTimerSettingsDialog_ &&
       (previous.timerDurationSeconds != operatorMonitorSettings_.timerDurationSeconds ||

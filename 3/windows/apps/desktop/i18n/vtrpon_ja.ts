@@ -3,6 +3,20 @@
 <TS version="2.1" language="ja_JP">
 <context>
     <name></name>
+    <message id="output.destinations"><source>Output destinations</source><translation>出力先</translation></message>
+    <message id="output.source"><source>Output source</source><translation>出力する映像</translation></message>
+    <message id="output.on_air"><source>ON AIR</source><translation>オンエア</translation></message>
+    <message id="output.on_air_composite"><source>ON AIR — Composite (with background)</source><translation>オンエア — 合成映像（背景あり）</translation></message>
+    <message id="output.on_air_fill"><source>ON AIR — Fill</source><translation>オンエア — Fill</translation></message>
+    <message id="output.on_air_key"><source>ON AIR — Key</source><translation>オンエア — Key</translation></message>
+    <message id="output.on_air_alpha"><source>ON AIR — Alpha</source><translation>オンエア — Alpha</translation></message>
+    <message id="output.return_monitor"><source>Return monitor</source><translation>返しモニター</translation></message>
+    <message id="output.window"><source>Regular window output</source><translation>通常ウインドウ出力</translation></message>
+    <message id="output.decklink"><source>DeckLink output</source><translation>DeckLink出力</translation></message>
+    <message id="output.ndi"><source>NDI output</source><translation>NDI出力</translation></message>
+    <message id="output.virtual_camera"><source>Virtual camera output</source><translation>仮想カメラ出力</translation></message>
+    <message id="output.return_help"><source>These checkboxes are linked to each output settings page. Select a separate hardware channel and format in DeckLink settings. NDI adds a separate source named "Return Monitor" after the output name. The information band, timer and messages are included. NDI and DeckLink carry the ON AIR audio mix.</source><translation>各出力の設定項目と連動します。DeckLinkでは設定画面で返し専用のチャネルと映像形式を選択してください。NDIは出力名の末尾に「Return Monitor」を付けた別ソースで送信します。情報欄・タイマー・メッセージを含めて出力します。NDIとDeckLinkの音声はオンエアのミックスです。</translation></message>
+
     <message id="midi.title"><source>MIDI Control</source><translation>MIDI制御</translation></message>
     <message id="midi.description"><source>Select an input, select an action, then click MIDI Learn and operate your controller. Save to apply. MIDI actions are suspended while Settings or another modal dialog is open. Volume uses absolute or relative CC; Pickup waits for the hardware to reach the on-screen value. CC 0 is silence and CC 127 is +6 dB by default, following the on-screen fader scale.</source><translation>入力機器と機能を選び、「MIDI Learn」を押して機器を操作します。保存して適用します。設定画面などのダイアログを開いている間はMIDIによる操作を停止します。音量は絶対値または相対値のCCを使用します。ピックアップは画面の値に追いつくまで音量を変えません。初期値ではCCの0が無音、127が+6 dBです。画面のフェーダーと同じ目盛りで動きます。</translation></message>
     <message id="midi.enable"><source>Enable MIDI control</source><translation>MIDI制御を有効にする</translation></message>
@@ -226,6 +240,78 @@
         <source>%1 VST stopped because of a plug-in error. Playback continues with original audio.</source>
         <translation>%1のVSTに異常が発生したため停止しました。元の音声で再生を継続します。</translation>
     </message>
+    <message id="addons.runtime.startup_title">
+        <source>Some add-ons need attention</source>
+        <translation>アドオンの動作環境に注意が必要です</translation>
+    </message>
+    <message id="addons.runtime.startup_description">
+        <source>The following add-ons are missing required software or could not be checked. Follow the instructions below. You can close this notice and continue using VTR-PON. To check again later, open Settings → Add-ons.</source>
+        <translation>次のアドオンに、必要なソフトの不足や確認できない項目があります。各案内に従って確認してください。この画面を閉じてもVTR-PONの操作を続けられます。後から「設定 → アドオン」で再確認できます。</translation>
+    </message>
+    <message id="addons.runtime.initialized">
+        <source>Initialization check passed for %1. Actual input and output status is shown separately.</source>
+        <translation>利用準備：%1 の初期化を確認しました。実際の入出力の状態は別途表示します。</translation>
+    </message>
+    <message id="addons.runtime.initialization_failed">
+        <source>Unavailable: %1 could not be initialized. Complete the vendor software setup and check again.</source>
+        <translation>利用不可：%1 を初期化できません。外部ソフトの初回設定を完了してから再確認してください。</translation>
+    </message>
+    <message id="addons.runtime.no_devices">
+        <source>Device not detected: %1 initialized, but no DeckLink device was found. Check the device connection and driver permissions.</source>
+        <translation>機器未検出：%1 の初期化は成功しましたが、DeckLink機器が見つかりません。接続とドライバーの許可を確認してください。</translation>
+    </message>
+    <message id="addons.runtime.ndi_setup">
+        <source>If NDI does not work, open NDI Tools and complete any first-run setup or registration it requests, then restart VTR-PON and check again. Initialization alone does not verify network discovery or media transfer.</source>
+        <translation>NDIが動作しない場合は、NDI Toolsを一度起動し、求められた初期設定・利用登録を完了してからVTR-PONを再起動し、再確認してください。初期化の成功だけでは、ネットワーク上のソース検出や映像・音声の送受信は確認できません。</translation>
+    </message>
+    <message id="addons.runtime.decklink_setup">
+        <source>If DeckLink does not work, open Desktop Video Setup and complete any first-run setup or registration it requests. Check that the device is recognized and OS driver permissions are allowed, then restart VTR-PON and check again. Detecting a device does not verify capture or playback.</source>
+        <translation>DeckLinkが動作しない場合は、Desktop Video Setupを一度起動し、求められた初期設定・利用登録を完了してください。機器の認識とOSのドライバー許可を確認してからVTR-PONを再起動し、再確認してください。機器の検出だけでは、映像・音声の入出力は確認できません。</translation>
+    </message>
+    <message id="addons.runtime.operation_off">
+        <source>Current operation: Off</source>
+        <translation>現在の動作：OFF</translation>
+    </message>
+    <message id="addons.runtime.operation_error">
+        <source>Current operation: Error — %1</source>
+        <translation>現在の動作：エラー — %1</translation>
+    </message>
+    <message id="addons.runtime.operation_running">
+        <source>Current operation: Sending output</source>
+        <translation>現在の動作：出力中</translation>
+    </message>
+    <message id="addons.runtime.operation_starting">
+        <source>Current operation: Starting / waiting for output</source>
+        <translation>現在の動作：出力の開始待ち</translation>
+    </message>
+    <message id="addons.runtime.operation_input">
+        <source>Current operation: Input enabled; %1 sources found</source>
+        <translation>現在の動作：入力有効・%1 ソース検出</translation>
+    </message>
+    <message id="addons.runtime.operation_devices">
+        <source>Current operation: %1 DeckLink channels detected</source>
+        <translation>現在の動作：DeckLinkの入出力 %1 チャンネル検出</translation>
+    </message>
+    <message id="addons.runtime.operation_no_devices">
+        <source>Current operation: No DeckLink device detected</source>
+        <translation>現在の動作：DeckLink機器未検出</translation>
+    </message>
+    <message id="addons.runtime.operation_checking">
+        <source>Current operation: Checking</source>
+        <translation>現在の動作：確認中</translation>
+    </message>
+    <message id="addons.runtime.operation_unavailable">
+        <source>Current operation: Unavailable</source>
+        <translation>現在の動作：利用不可</translation>
+    </message>
+    <message id="addons.runtime.operation_input_starting">
+        <source>Current operation: Starting input discovery</source>
+        <translation>現在の動作：入力の開始待ち</translation>
+    </message>
+    <message id="addons.runtime.operation_partial">
+        <source>Current operation: %1 of %2 outputs running; waiting for the rest</source>
+        <translation>現在の動作：%1 / %2 出力中（残りは開始待ち）</translation>
+    </message>
     <message id="addons.runtime.checking">
         <source>Checking %1...</source>
         <translation>%1 を確認しています…</translation>
@@ -274,10 +360,7 @@
         <source>Could not open the browser. Open this URL manually:</source>
         <translation>ブラウザーを開けませんでした。次のURLをブラウザーで開いてください。</translation>
     </message>
-    <message id="network_video.description">
-        <source>Select the ON AIR outputs to send over NDI. Enable input to find sources on the LAN.</source>
-        <translation>NDIで送出するオンエア映像を選択します。入力を有効にするとLAN内のソースを検索します。</translation>
-    </message>
+    <message id="network_video.description"><source>Select ON AIR and return monitor outputs to send over NDI. Both can be sent as separate sources at the same time. Enable input to find sources on the LAN.</source><translation>NDIへ送るオンエア映像と返しモニターを選択します。両方を別ソースで同時に送信できます。入力を有効にするとLAN上のソースを検索します。</translation></message>
     <message id="network_video.outputs">
         <source>Output video</source>
         <translation>出力する映像</translation>
@@ -406,10 +489,7 @@
         <source>Enable virtual camera output</source>
         <translation>仮想カメラ出力をONにする</translation>
     </message>
-    <message id="virtual_camera.description">
-        <source>1920 x 1080 / 30 fps. Sends ON AIR while enabled, including OFF AIR. Shows the standby text only while disabled. Install the camera DLL once before use.</source>
-        <translation>1920×1080／30fps。有効な間はオフエアでもオンエア映像を出力し、無効な間だけ待機文字を表示します。初回はカメラDLLのインストールが必要です。</translation>
-    </message>
+    <message id="virtual_camera.description"><source>1920 x 1080 / 30 fps. Select ON AIR or the return monitor. Return output includes the information band, timer and messages. Shows standby text while disabled. Install the camera DLL once before use.</source><translation>1920 x 1080 / 30 fps。オンエアまたは返しモニターを選択します。返しには情報欄・タイマー・メッセージを含めます。OFFの間は待機文字を表示します。使用前にカメラDLLの登録が必要です。</translation></message>
     <message id="virtual_camera.save_failed">
         <source>Could not save the virtual camera setting. Check settings file write permissions.</source>
         <translation>仮想カメラの設定を保存できませんでした。設定ファイルの書き込み権限を確認してください。</translation>
@@ -4840,10 +4920,7 @@ Adjust the slider to find a comfortable text size.</source>
         <source>DeckLink</source>
         <translation>DeckLink</translation>
     </message>
-    <message id="decklink.description">
-        <source>Choose the output channel and format for Composite, Fill and Key, then enable each output. DeckLink input channels appear in the INPUT dropdown. Input format changes apply to newly added items.</source>
-        <translation>通常映像・フィル・キーの出力先と映像形式を選び、各出力を有効にしてください。DeckLink 入力は入力のプルダウンに表示されます。入力形式の変更は新しく追加する項目に適用されます。</translation>
-    </message>
+    <message id="decklink.description"><source>Select a separate output channel and format for ON AIR Composite, Fill, Key and the return monitor. ON AIR and the return monitor can run at the same time. Input channels appear in INPUT; input format changes apply to newly added items.</source><translation>オンエアの合成映像・Fill・Keyと返しモニターに、それぞれ別の出力チャネルと映像形式を選択します。オンエアと返しモニターを同時に出力できます。入力チャネルはINPUTに表示され、入力形式の変更は新規登録する項目から適用されます。</translation></message>
     <message id="decklink.enable_input">
         <source>Enable DeckLink input</source>
         <translation>DeckLink 入力を有効にする</translation>

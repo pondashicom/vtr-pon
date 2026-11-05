@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "auditedOn": "2026-09-26",
-  "payloadVersion": "3.0.0-beta.2",
+  "payloadVersion": "3.0.0-beta.3",
   "components": {
     "qtbase": {
       "version": "6.8.3",

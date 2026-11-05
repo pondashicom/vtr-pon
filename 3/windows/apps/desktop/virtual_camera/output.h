@@ -2,10 +2,13 @@
 #include <memory>
 #include <QString>
 struct ID3D11RenderTargetView;
+class QImage;
 namespace vtrpon {
 #ifdef _WIN32
 bool virtualCameraEnabled();
 bool setVirtualCameraEnabled(bool enabled);
+bool virtualCameraReturnMonitor();
+bool setVirtualCameraReturnMonitor(bool enabled);
 void reloadVirtualCameraEnabled();
 QString virtualCameraStatus();
 class VirtualCameraRuntime final {
@@ -21,6 +24,7 @@ public:
     VirtualCameraOutput();
     ~VirtualCameraOutput();
     void publish(ID3D11RenderTargetView* target);
+    void publishReturnMonitor(const QImage &image);
 private:
 #ifdef VTRPON_VCAM_TEST
     friend struct VirtualCameraOutputTestAccess;

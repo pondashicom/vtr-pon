@@ -1252,7 +1252,11 @@ ControllerSettingsDialog::ControllerSettingsDialog(
   timePageLayout->addStretch();
   pageStack->addWidget(timePage);
   operatorMonitorPage_ = new OperatorMonitorSettingsPage(pageStack);
-  operatorMonitorPage_->changed = [this] { emit operatorMonitorSettingsChanged(); };
+  operatorMonitorPage_->changed = [this] {
+    if (networkVideoPage_) networkVideoPage_->reload();
+    if (deckLinkPage_) deckLinkPage_->reload();
+    emit operatorMonitorSettingsChanged();
+  };
   operatorMonitorPage_->timerSettingsRequested = [this] {
     accept();
     emit operatorTimerSettingsRequested();
@@ -1291,6 +1295,16 @@ ControllerSettingsDialog::ControllerSettingsDialog(
   virtualCameraCheckBox_->setObjectName(QStringLiteral("virtualCameraEnabled"));
   virtualCameraCheckBox_->setChecked(vtrpon::virtualCameraEnabled());
   virtualCameraLayout->addWidget(virtualCameraCheckBox_);
+  auto *virtualCameraSourceForm = new QFormLayout;
+  virtualCameraSourceLabel_ = new QLabel(virtualCameraPage_);
+  vtrpon::setSettingsRole(virtualCameraSourceLabel_, "fieldLabel");
+  virtualCameraSource_ = new QComboBox(virtualCameraPage_);
+  virtualCameraSource_->setObjectName(QStringLiteral("virtualCameraOutputSource"));
+  virtualCameraSource_->addItems({QString(), QString()});
+  virtualCameraSource_->setCurrentIndex(vtrpon::virtualCameraReturnMonitor() ? 1 : 0);
+  virtualCameraSourceLabel_->setBuddy(virtualCameraSource_);
+  virtualCameraSourceForm->addRow(virtualCameraSourceLabel_, virtualCameraSource_);
+  virtualCameraLayout->addLayout(virtualCameraSourceForm);
   virtualCameraDescription_ = new QLabel(virtualCameraPage_);
   vtrpon::setSettingsRole(virtualCameraDescription_, "description");
   virtualCameraDescription_->setWordWrap(true);
@@ -1309,25 +1323,37 @@ ControllerSettingsDialog::ControllerSettingsDialog(
   connect(virtualCameraCheckBox_, &QCheckBox::toggled, this, [this](bool enabled) {
     if (vtrpon::setVirtualCameraEnabled(enabled)) {
       virtualCameraSaveStatus_->clear();
+      operatorMonitorPage_->reload();
+      emit operatorMonitorSettingsChanged();
       return;
     }
     const QSignalBlocker blocker(virtualCameraCheckBox_);
     virtualCameraCheckBox_->setChecked(vtrpon::virtualCameraEnabled());
     virtualCameraSaveStatus_->setText(vtrpon::uiText("virtual_camera.save_failed"));
   });
+  connect(virtualCameraSource_, &QComboBox::currentIndexChanged, this, [this](int index) {
+    const bool ok = vtrpon::setVirtualCameraReturnMonitor(index == 1);
+    virtualCameraSaveStatus_->setText(ok ? QString() : vtrpon::uiText("virtual_camera.save_failed"));
+    if (ok) { operatorMonitorPage_->reload(); emit operatorMonitorSettingsChanged(); }
+    else { const QSignalBlocker blocker(virtualCameraSource_); virtualCameraSource_->setCurrentIndex(vtrpon::virtualCameraReturnMonitor() ? 1 : 0); }
+  });
   auto *virtualCameraTimer = new QTimer(this);
   connect(virtualCameraTimer, &QTimer::timeout, this, [this] {
     virtualCameraStatus_->setText(vtrpon::virtualCameraStatus());
     const QSignalBlocker blocker(virtualCameraCheckBox_);
     virtualCameraCheckBox_->setChecked(vtrpon::virtualCameraEnabled());
+    const QSignalBlocker sourceBlocker(virtualCameraSource_);
+    virtualCameraSource_->setCurrentIndex(vtrpon::virtualCameraReturnMonitor() ? 1 : 0);
   });
   virtualCameraTimer->start(500);
   if (vtrpon::networkVideoAddonInstalled()) {
     networkVideoPage_ = new NetworkVideoSettingsPage(pageStack);
+    networkVideoPage_->changed = [this] { operatorMonitorPage_->reload(); emit operatorMonitorSettingsChanged(); };
     pageStack->insertWidget(4, networkVideoPage_);
   }
   if (vtrpon::deckLinkAddonInstalled()) {
     deckLinkPage_ = new DeckLinkSettingsPage(pageStack);
+    deckLinkPage_->changed = [this] { operatorMonitorPage_->reload(); emit operatorMonitorSettingsChanged(); };
     pageStack->insertWidget(4, deckLinkPage_);
   }
   const auto addNavigationItem = [this](const char *id, QWidget *page,
@@ -1623,6 +1649,10 @@ void ControllerSettingsDialog::retranslateUi() {
   if (deckLinkPage_) deckLinkPage_->retranslate();
   addonManagementPage_->retranslate();
   virtualCameraCheckBox_->setText(vtrpon::uiText("virtual_camera.enable"));
+  virtualCameraSourceLabel_->setText(vtrpon::uiText("output.source"));
+  virtualCameraSource_->setItemText(0, vtrpon::uiText("output.on_air"));
+  virtualCameraSource_->setItemText(1, vtrpon::uiText("output.return_monitor"));
+  virtualCameraSource_->setAccessibleName(virtualCameraSourceLabel_->text());
   virtualCameraDescription_->setText(vtrpon::uiText("virtual_camera.description"));
   if (!virtualCameraSaveStatus_->text().isEmpty())
     virtualCameraSaveStatus_->setText(vtrpon::uiText("virtual_camera.save_failed"));

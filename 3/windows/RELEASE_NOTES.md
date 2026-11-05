@@ -1,6 +1,19 @@
 # Windows release notes
 
-## Unreleased
+## VTR-PON 3.0.0-beta.3 — distribution candidate (2026-11-05)
+
+- Add return monitor output to NDI, DeckLink and the virtual camera. NDI uses a
+  separate source; DeckLink requires a separate hardware channel for concurrent
+  ON AIR and return output. The virtual camera selects ON AIR or return monitor
+  video and does not carry audio.
+- Show add-on runtime readiness, initialization failures and operational status
+  in Settings. Preserve vendor diagnostic details and warn at startup when an
+  enabled feature needs an unavailable runtime.
+- Fix Roland LAN authentication, acknowledgement handling, state polling,
+  initial black states and delayed local-control echoes. Correct MIDI tally
+  handling and treat V-8HD Program Change as memory recall rather than input state.
+- Harden Windows WinMM receive-buffer handling, reject data from old connection
+  generations, and avoid combining ports from different devices of the same model.
 
 - Add optional USB MIDI control for V-160HD, V-80HD, V-1-4K, VR-6HD, and
   VR-120HD. Choose LAN or USB MIDI under **Settings → Roland integration →
@@ -9,6 +22,13 @@
   and output ports; additional models remain trial support pending hardware checks.
 - VR-120HD FTB linking is available over LAN only. Selecting USB MIDI disables
   FTB linking and preserves the saved LAN FTB preference.
+
+The normal Windows RelWithDebInfo build passed all 52 CTest cases and eight
+Python release-source tests on 2026-11-05. The installer and ZIP are generated
+as a new distribution candidate. Automated tests use simulated devices;
+physical Roland, NDI and DeckLink devices, visible
+media, physical audio, long-running use and clean-PC installation require
+separate acceptance. The beta.2 download record below remains historical.
 
 ## VTR-PON 3.0.0-beta.2 — released 2026-10-25
 

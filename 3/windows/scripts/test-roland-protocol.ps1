@@ -65,9 +65,15 @@ $vtrponPreviousPath = $env:PATH
 try {
     $env:PATH = (Join-Path $QtPrefix "bin") + ";" + $env:PATH
     if ($GStreamerBin) { $env:PATH = $GStreamerBin + ";" + $env:PATH }
+    if ($BuildApplication) { $env:PATH = (Join-Path $vtrponSourceRoot "build") + ";" + $env:PATH }
     Test-NativeDll "Qt6Core.dll"
     Test-NativeDll "Qt6Network.dll"
-    if ($BuildApplication) { Test-NativeDll "libgstreamer-1.0-0.dll"; Test-NativeDll "libgstapp-1.0-0.dll" }
+    if ($BuildApplication) {
+        Test-NativeDll "Qt6Widgets.dll"
+        Test-NativeDll "gstreamer-1.0-0.dll"
+        Test-NativeDll "gstapp-1.0-0.dll"
+        Test-NativeDll "gstvideo-1.0-0.dll"
+    }
     Invoke-NativeBuild -Tool cmake -ToolArguments @(
         "-S", (Join-Path $vtrponSourceRoot "tests/roland-protocol"),
         "-B", $BuildDirectory, "-G", "Ninja",

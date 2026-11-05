@@ -4,6 +4,7 @@
 #include "output.cpp"
 #include "test_mapping.h"
 #include <QCoreApplication>
+#include <QTemporaryDir>
 #include <cstdio>
 namespace vtrpon {
 struct VirtualCameraOutputTestAccess {
@@ -13,6 +14,9 @@ struct VirtualCameraOutputTestAccess {
 
 int main(int argc,char** argv) {
     QCoreApplication app(argc,argv);
+    QTemporaryDir settingsDirectory;
+    if (!settingsDirectory.isValid()) return 1;
+    app.setProperty("vtrpon.settingsFile", settingsDirectory.filePath("settings.ini"));
     if(app.arguments().contains(QStringLiteral("--identity"))) {
         vtrpon::VirtualCameraRuntime runtime;
         const auto deadline=GetTickCount64()+15000;
@@ -114,6 +118,32 @@ int main(int argc,char** argv) {
         }while(impl.busyDrops==drops && GetTickCount64()<deadline);
         if(impl.busyDrops==drops || s->latest!=latest) return 1;
     }
+    // Switching sources invalidates ON AIR readbacks. Only the composed return
+    // frame may publish until ON AIR is explicitly selected again.
+    if (!vtrpon::setVirtualCameraReturnMonitor(true) || s->latest != -1) return 1;
+    output.publish(target.Get()); context->Flush();
+    if (s->latest != -1) return 1;
+    QImage returnImage(1920, 1080, QImage::Format_RGB32); returnImage.fill(Qt::green);
+    for (int y = 864; y < 1080; ++y)
+        std::fill_n(reinterpret_cast<uint32_t *>(returnImage.scanLine(y)), 1920, 0xffffffffu);
+    vtrpon::VirtualCameraOutput returnOutput;
+    bool gotReturn = false;
+    const auto returnDeadline = GetTickCount64() + 3000;
+    do {
+        s->heartbeat = GetTickCount64(); s->consumerHeartbeat = s->heartbeat;
+        output.publish(target.Get()); context->Flush(); // This source is blocked.
+        returnOutput.publishReturnMonitor(returnImage);
+        if (vtrpon::vcam::copyLatest(*memory.mapping, copy.data())) {
+            if (std::abs(int(copy[270*1920+960]) - 173) > 3 || std::abs(int(copy[970*1920+960]) - 235) > 3) {
+                std::puts("FAIL return source pixels"); return 1;
+            }
+            gotReturn = true; break;
+        }
+        Sleep(5);
+    } while (GetTickCount64() < returnDeadline);
+    if (!gotReturn || !vtrpon::setVirtualCameraReturnMonitor(false) || s->latest != -1) return 1;
+    returnOutput.publishReturnMonitor(returnImage); // Disabled return cannot overwrite ON AIR.
+    if (s->latest != -1 || !verify(black,16,128,128)) return 1;
     // A publisher lease keeps both mapped data and producer election alive.
     if(!memory.mapping->lockProducer()) return 1;
     auto publisherLease=vtrpon::shared.load();
@@ -124,6 +154,6 @@ int main(int argc,char** argv) {
     publisherLease.reset();
     if(!contender.lockProducer()) return 1;
     contender.close();
-    std::puts("PASS: GPU NV12, reconnect freshness, actual busy-reader drop and publisher mapping lease");
+    std::puts("PASS: GPU NV12, separate return composition, source switching, reconnect freshness, busy-reader drop and publisher mapping lease");
     return 0;
 }

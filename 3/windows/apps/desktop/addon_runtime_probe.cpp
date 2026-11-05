@@ -1,4 +1,5 @@
 #include "addon_runtime_api.h"
+#include "addon_runtime_initialization.h"
 #include "decklink_media_api.h"
 #include "network_video_addon_api.h"
 #include "switcher_addon_api.h"
@@ -38,6 +39,8 @@ int main(int argc, char **argv) {
     QLibrary library(args[4]);
     if (!library.load()) return report("addon_error", library.errorString());
     const char *id = nullptr;
+    const VtrPonDeckLinkApi *deckLinkApi = nullptr;
+    const VtrPonNetworkVideoApi *networkVideoApi = nullptr;
     if (atem) {
         const auto get = reinterpret_cast<VtrPonGetSwitcherAddonApiFn>(library.resolve("vtrpon_switcher_addon_get_api"));
         const auto *api = get ? get(VTRPON_SWITCHER_ADDON_ABI_VERSION) : nullptr;
@@ -46,7 +49,7 @@ int main(int argc, char **argv) {
     } else if (decklink) {
         const auto get = reinterpret_cast<VtrPonGetDeckLinkApi>(library.resolve("vtrpon_decklink_get_api"));
         const auto getMedia = reinterpret_cast<VtrPonGetDeckLinkMediaApi>(library.resolve("vtrpon_decklink_get_media_api"));
-        const auto *api = get ? get(1) : nullptr; const auto *media = getMedia ? getMedia(1) : nullptr;
+        const auto *api = get ? get(1) : nullptr; deckLinkApi = api; const auto *media = getMedia ? getMedia(1) : nullptr;
         if (api && media && api->abiVersion == 1 && api->structSize >= sizeof(*api) && media->abiVersion == 1 && media->structSize >= sizeof(*media) &&
             !api->flags && !media->flags && api->create && api->destroy && api->listDevices && api->listModes &&
             media->listChannels && media->openInput && media->readInput && media->closeInput && media->openOutput &&
@@ -54,6 +57,7 @@ int main(int argc, char **argv) {
     } else {
         const auto get = reinterpret_cast<VtrPonGetNetworkVideoApi>(library.resolve("vtrpon_network_video_get_api"));
         const auto *api = get ? get(VTRPON_NETWORK_VIDEO_ABI) : nullptr;
+        networkVideoApi = api;
         if (api && api->abiVersion == VTRPON_NETWORK_VIDEO_ABI
             && api->structSize >= sizeof(VtrPonNetworkVideoApi)) id = api->addonId;
     }
@@ -66,9 +70,19 @@ int main(int argc, char **argv) {
     detail[sizeof(detail) - 1] = '\0';
     const auto text = QString::fromUtf8(detail);
     switch (status) {
-    case VtrPonAddonRuntimeReady: return report("ready");
+    case VtrPonAddonRuntimeReady: {
+        if (atem) return report("ready", text);
+        const auto result = decklink ? vtrpon::checkDeckLinkInitialization(deckLinkApi)
+            : vtrpon::checkNetworkVideoInitialization(networkVideoApi);
+        QStringList details;
+        if (!text.isEmpty()) details << text;
+        if (!result.detail.isEmpty()) details << result.detail;
+        const auto detail = details.join(QLatin1Char('\n'));
+        return report(result.status, detail.left(2048));
+    }
     case VtrPonAddonRuntimeMissing: return report("missing", text);
     case VtrPonAddonRuntimeIncompatible: return report("incompatible", text);
+    case VtrPonAddonRuntimeError: return report(atem ? "error" : "initialization_failed", text);
     default: return report("error", text);
     }
 }

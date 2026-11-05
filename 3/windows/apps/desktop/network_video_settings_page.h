@@ -13,9 +13,11 @@
 #include <QScrollArea>
 #include <QTimer>
 #include <QVBoxLayout>
+#include <functional>
 
 class NetworkVideoSettingsPage final : public QWidget {
 public:
+    std::function<void()> changed;
     explicit NetworkVideoSettingsPage(QWidget *parent = nullptr) : QWidget(parent) {
         setObjectName(QStringLiteral("networkVideoSettingsPage"));
         vtrpon::setSettingsRole(this, "page");
@@ -51,7 +53,7 @@ public:
         nameLabel_->setBuddy(name_); form->addRow(nameLabel_, name_); layout->addLayout(form);
         outputsLabel_ = new QLabel(this);
         vtrpon::setSettingsRole(outputsLabel_, "fieldLabel"); layout->addWidget(outputsLabel_);
-        const std::array<const char *, 4> objects{"networkVideoCompositeEnabled", "networkVideoFillEnabled", "networkVideoKeyEnabled", "networkVideoAlphaEnabled"};
+        const std::array<const char *, 5> objects{"networkVideoCompositeEnabled", "networkVideoFillEnabled", "networkVideoKeyEnabled", "networkVideoAlphaEnabled", "networkVideoReturnMonitorEnabled"};
         for (unsigned i = 0; i < kinds_.size(); ++i) {
             kinds_[i] = new QCheckBox(this); kinds_[i]->setObjectName(QString::fromLatin1(objects[i]));
             layout->addWidget(kinds_[i]);
@@ -92,7 +94,7 @@ public:
         const QSignalBlocker output(output_), input(input_), name(name_);
         output_->setChecked(settings.outputEnabled); input_->setChecked(settings.inputEnabled);
         name_->setText(settings.outputName);
-        const std::array<bool, 4> enabled{settings.compositeEnabled, settings.fillEnabled, settings.keyEnabled, settings.alphaEnabled};
+        const std::array<bool, 5> enabled{settings.compositeEnabled, settings.fillEnabled, settings.keyEnabled, settings.alphaEnabled, settings.returnMonitorEnabled};
         for (unsigned i = 0; i < kinds_.size(); ++i) {
             const QSignalBlocker block(kinds_[i]); kinds_[i]->setChecked(enabled[i]);
         }
@@ -109,7 +111,7 @@ public:
         nameLabel_->setText(vtrpon::uiText("network_video.source_name"));
         name_->setAccessibleName(nameLabel_->text());
         outputsLabel_->setText(vtrpon::uiText("network_video.outputs"));
-        const std::array<const char *, 4> labels{"network_video.composite", "network_video.fill", "network_video.key", "network_video.alpha"};
+        const std::array<const char *, 5> labels{"output.on_air_composite", "output.on_air_fill", "output.on_air_key", "output.on_air_alpha", "output.return_monitor"};
         for (unsigned i = 0; i < kinds_.size(); ++i) kinds_[i]->setText(vtrpon::uiText(labels[i]));
         details_->setText(vtrpon::uiText("network_video.details"));
         fillLabel_->setText(vtrpon::uiText("network_video.fill_format"));
@@ -121,13 +123,14 @@ private:
     void save() {
         vtrpon::saveNetworkVideoSettings({output_->isChecked(), input_->isChecked(), name_->text(),
             kinds_[0]->isChecked(), kinds_[1]->isChecked(), kinds_[2]->isChecked(), kinds_[3]->isChecked(),
-            fillFormat_->currentIndex() == 1});
+            fillFormat_->currentIndex() == 1, kinds_[4]->isChecked()});
+        if (changed) changed();
         updateControls(); refreshStatus();
     }
     void refreshStatus() {
         const auto state = vtrpon::networkVideoState();
         QString text;
-        const std::array<QString, 4> names{QStringLiteral("Composite"), QStringLiteral("Fill"), QStringLiteral("Key"), QStringLiteral("Alpha")};
+        const std::array<QString, 5> names{vtrpon::uiText("output.on_air_composite"), vtrpon::uiText("output.on_air_fill"), vtrpon::uiText("output.on_air_key"), vtrpon::uiText("output.on_air_alpha"), vtrpon::uiText("output.return_monitor")};
         if (!output_->isChecked()) text = vtrpon::uiText("network_video.output_disabled");
         else for (unsigned i = 0; i < kinds_.size(); ++i) if (kinds_[i]->isChecked()) {
             if (!text.isEmpty()) text += QLatin1Char('\n');
@@ -148,7 +151,7 @@ private:
         fillLabel_->setEnabled(fillFormat_->isEnabled());
         alphaHelp_->setVisible(kinds_[1]->isChecked() || kinds_[2]->isChecked() || kinds_[3]->isChecked());
     }
-    std::array<QCheckBox *, 4> kinds_{};
+    std::array<QCheckBox *, 5> kinds_{};
     QLabel *outputsLabel_, *fillLabel_, *alphaHelp_;
     QToolButton *details_;
     QWidget *detailsBody_;

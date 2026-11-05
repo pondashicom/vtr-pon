@@ -1,8 +1,10 @@
 # VTR-PON3 for Windows
 
-This source tree is at `3/windows`. Windows **3.0.0-beta.2** was released on
-2026-10-25 with Roland, VST3 and PDF changes; see [release notes](RELEASE_NOTES.md).
-The [distribution record](release/distribution-3.0.0-beta.2.json) lists the official
+This source tree is at `3/windows` and prepares Windows **3.0.0-beta.3**,
+including return monitor outputs, add-on diagnostics and Roland fixes;
+see [release notes](RELEASE_NOTES.md).
+The previous **3.0.0-beta.2** was released on 2026-10-25. Its
+[distribution record](release/distribution-3.0.0-beta.2.json) lists that release's
 installer, ZIP and checksums, with their corresponding source commit.
 Mac sources and their release status are in [3/mac](../mac/README.md).
 
@@ -14,6 +16,8 @@ VTR-PON3 is a Windows 11 x64 application for preparing and playing media in live
 - Playlists with save and restore, Start/End modes, repeat, NEXT, and GOTO. Independent EDIT controls provide media checking, In/Out points, and pre-fader listening (PFL).
 - Video and audio files, timed still images, PDF and PowerPoint documents, UVC cameras, and built-in test patterns.
 - ITEM and MASTER audio controls, BGM, a return monitor, a virtual camera, and Roland switcher control with per-model trial profiles and operation reports.
+- Return monitor output to NDI, DeckLink or the virtual camera, with separate output settings. NDI and DeckLink require their compatible add-ons and vendor runtimes.
+- Add-on runtime and initialization diagnostics in Settings, including startup warnings for enabled functions whose runtime is unavailable.
 
 Media support depends on the file's codecs; test the exact files and devices you intend to use before a live production. A second display is recommended for the fullscreen ON AIR output. Native PowerPoint playback and PPTX conversion require desktop Microsoft PowerPoint. See the [installation and first-use guide](INSTALL.ja.md) and [release notes](RELEASE_NOTES.md).
 

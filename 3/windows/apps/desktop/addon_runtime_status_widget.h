@@ -14,6 +14,8 @@
 #include <QTimer>
 #include <QUrl>
 #include <QVBoxLayout>
+#include <functional>
+#include <utility>
 
 namespace vtrpon {
 enum class AddonRuntimeKind { Atem, NetworkVideo, DeckLink };
@@ -37,6 +39,9 @@ public:
         setSettingsRole(message_, "status");
         message_->setWordWrap(true); message_->setTextFormat(Qt::PlainText);
         layout->addWidget(message_);
+        setupHelp_ = new QLabel(this); setupHelp_->setObjectName(QStringLiteral("addonRuntimeSetupHelp"));
+        setSettingsRole(setupHelp_, "description"); setupHelp_->setWordWrap(true);
+        setupHelp_->setTextFormat(Qt::PlainText); layout->addWidget(setupHelp_);
         details_ = new QLabel(this); details_->setObjectName(QStringLiteral("addonRuntimeDetails"));
         setSettingsRole(details_, "description");
         details_->setWordWrap(true); details_->setTextFormat(Qt::PlainText);
@@ -74,6 +79,10 @@ public:
             if (process_->state() == QProcess::NotRunning) process_->deleteLater();
         }
     }
+    QString runtimeState() const { return state_; }
+    void setStateChangedHandler(std::function<void()> handler) {
+        stateChanged_ = std::move(handler);
+    }
     QUrl downloadUrl() const {
         return QUrl(kind_ == AddonRuntimeKind::Atem
             ? QStringLiteral("https://www.blackmagicdesign.com/jp/support/family/atem-live-production-switchers")
@@ -82,9 +91,16 @@ public:
     void retranslate() {
         const auto software = kind_ == AddonRuntimeKind::Atem
             ? QStringLiteral("ATEM Switchers Software") : kind_ == AddonRuntimeKind::DeckLink ? QStringLiteral("Blackmagic Desktop Video (x64)") : QStringLiteral("NDI Runtime 6 (x64)");
-        const auto key = QByteArray("addons.runtime.") + state_.toLatin1();
+        const auto key = QByteArray("addons.runtime.") +
+            (state_ == QLatin1StringView("ready") && kind_ != AddonRuntimeKind::Atem
+                ? QByteArray("initialized") : state_.toLatin1());
         message_->setText(uiText(key.constData()).arg(software));
         details_->setText(detail_); details_->setVisible(!detail_.isEmpty());
+        const bool setupRelevant = kind_ == AddonRuntimeKind::NetworkVideo || kind_ == AddonRuntimeKind::DeckLink;
+        setupHelp_->setText(uiText(kind_ == AddonRuntimeKind::DeckLink
+            ? "addons.runtime.decklink_setup" : "addons.runtime.ndi_setup"));
+        setupHelp_->setVisible(setupRelevant && state_ != QLatin1StringView("checking")
+            && state_ != QLatin1StringView("addon_missing"));
         download_->setText(uiText("addons.runtime.download"));
         download_->setAccessibleDescription(software);
         download_->setToolTip(downloadUrl().toString());
@@ -121,7 +137,8 @@ public:
                     const auto object = QJsonDocument::fromJson(output_).object();
                     const auto status = object.value(QStringLiteral("status")).toString();
                     const QStringList allowed{QStringLiteral("ready"), QStringLiteral("missing"), QStringLiteral("incompatible"),
-                        QStringLiteral("addon_missing"), QStringLiteral("addon_error"), QStringLiteral("check_unavailable"), QStringLiteral("error")};
+                        QStringLiteral("addon_missing"), QStringLiteral("addon_error"), QStringLiteral("check_unavailable"), QStringLiteral("error"),
+                        QStringLiteral("initialization_failed"), QStringLiteral("no_devices")};
                     if (exit == QProcess::NormalExit && code == 0 && output_.size() <= 16384 && allowed.contains(status))
                         setResult(status, object.value(QStringLiteral("detail")).toString().left(2048));
                     else setResult(QStringLiteral("error"));
@@ -131,7 +148,10 @@ public:
         output_.clear(); setResult(QStringLiteral("checking")); timeout_.start(); process_->start();
     }
 private:
-    void setResult(const QString &state, const QString &detail = {}) { state_ = state; detail_ = detail; retranslate(); }
+    void setResult(const QString &state, const QString &detail = {}) {
+        state_ = state; detail_ = detail; retranslate();
+        if (stateChanged_) stateChanged_();
+    }
     void finish() {
         timeout_.stop();
         if (process_) { process_->deleteLater(); process_ = nullptr; }
@@ -139,10 +159,11 @@ private:
     }
     AddonRuntimeKind kind_;
     QString addonFile_, probeProgram_, state_ = QStringLiteral("checking"), detail_;
-    QLabel *message_, *details_;
+    QLabel *message_, *details_, *setupHelp_;
     QPushButton *download_, *retry_;
     QProcess *process_ = nullptr;
     QTimer timeout_;
     QByteArray output_;
+    std::function<void()> stateChanged_;
 };
 }

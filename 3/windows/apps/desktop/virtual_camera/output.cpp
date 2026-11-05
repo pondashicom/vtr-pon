@@ -7,6 +7,7 @@
 #include <d3d11.h>
 #include <wrl.h>
 #include <QDebug>
+#include <QImage>
 #include <atomic>
 #include <mutex>
 #include <thread>
@@ -18,6 +19,8 @@ using namespace Microsoft::WRL;
 namespace vtrpon {
 namespace {
 std::atomic_bool enabled{false};
+std::atomic_bool returnMonitor{false};
+std::mutex sourceMutex;
 // A publisher retains the mapping (and producer lock) through its final copy.
 // Failed/unconfirmed compositor shutdown cannot leave a dangling mapped pointer.
 class PublishedMapping {
@@ -28,6 +31,9 @@ public:
         std::unique_lock lock(mutex_,std::try_to_lock);
         return lock.owns_lock()?value_:nullptr;
     }
+    std::shared_ptr<vcam::Mapping> loadForControl() {
+        std::lock_guard lock(mutex_); return value_;
+    }
     void store(std::shared_ptr<vcam::Mapping> value) {
         { std::lock_guard lock(mutex_); value_.swap(value); }
     }
@@ -37,6 +43,32 @@ QString status;
 void report(QString message) { std::lock_guard lock(statusMutex); status=message; qInfo().noquote()<<"Virtual camera:"<<message; }
 }
 bool virtualCameraEnabled() { return enabled.load(); }
+bool virtualCameraReturnMonitor() { return returnMonitor.load(); }
+bool setVirtualCameraReturnMonitor(bool value) {
+    if (returnMonitor.load() == value) return true;
+    auto settings = makeControllerSettings();
+    settings.sync();
+    if (settings.status() != QSettings::NoError || !settings.isWritable()) return false;
+    const QString key = QStringLiteral("virtualCamera/returnMonitor");
+    const bool existed = settings.contains(key);
+    const QVariant previous = settings.value(key);
+    settings.setValue(key, value);
+    settings.sync();
+    if (settings.status() != QSettings::NoError) {
+        if (existed) settings.setValue(key, previous); else settings.remove(key);
+        settings.sync(); return false;
+    }
+    // Serialize the final publication with source selection. Old GPU readbacks
+    // cannot become the first frame of the newly selected source.
+    std::lock_guard lock(sourceMutex);
+    returnMonitor.store(value);
+    auto mapping = shared.loadForControl();
+    if (mapping && mapping->data) {
+        InterlockedIncrement(&mapping->data->generation);
+        InterlockedExchange(&mapping->data->latest, -1);
+    }
+    return true;
+}
 bool setVirtualCameraEnabled(bool value) {
     auto settings=makeControllerSettings();
     settings.sync();
@@ -58,6 +90,16 @@ bool setVirtualCameraEnabled(bool value) {
 }
 void reloadVirtualCameraEnabled() {
     enabled.store(makeControllerSettings().value(QStringLiteral("virtualCamera/enabled"),false).toBool());
+    // Reload also invalidates pending frames when importing saved settings.
+    const bool value = makeControllerSettings().value("virtualCamera/returnMonitor", false).toBool();
+    std::lock_guard lock(sourceMutex);
+    if (returnMonitor.exchange(value) != value) {
+        auto mapping = shared.loadForControl();
+        if (mapping && mapping->data) {
+            InterlockedIncrement(&mapping->data->generation);
+            InterlockedExchange(&mapping->data->latest, -1);
+        }
+    }
 }
 QString virtualCameraStatus() { std::lock_guard lock(statusMutex); return status; }
 class VirtualCameraRuntime::Impl {
@@ -155,6 +197,11 @@ VirtualCameraRuntime::~VirtualCameraRuntime()=default;
 
 class VirtualCameraOutput::Impl {
 public:
+    bool returnSource = false;
+    ComPtr<ID3D11Device> returnDevice;
+    ComPtr<ID3D11DeviceContext> returnContext;
+    ComPtr<ID3D11Texture2D> returnTexture;
+    ComPtr<ID3D11RenderTargetView> returnTarget;
     ComPtr<ID3D11Device> device;
     ComPtr<ID3D11DeviceContext> context;
     ComPtr<ID3D11VideoDevice> videoDevice;
@@ -212,7 +259,7 @@ public:
     void publish(ID3D11RenderTargetView* target) {
         auto mapping=shared.load();
         auto* s=mapping?mapping->data:nullptr;
-        if(!s || !enabled.load() || !vcam::read(s->live)) {
+        if(!s || !enabled.load() || !vcam::read(s->live) || returnSource != returnMonitor.load()) {
             for(auto& slot:staging) slot.pending=false;
             return;
         }
@@ -250,6 +297,10 @@ public:
             if(hr==DXGI_ERROR_WAS_STILL_DRAWING) continue;
             if(FAILED(hr)) { failed=true; report(QStringLiteral("NV12 readback failed.")); return; }
             if(pending.generation==generation && pending.serial>published) {
+                std::unique_lock sourceLock(sourceMutex, std::try_to_lock);
+                if (!sourceLock || returnSource != returnMonitor.load() || generation != vcam::read(s->generation)) {
+                    context->Unmap(pending.texture.Get(),0); pending.pending=false; continue;
+                }
                 bool written=false;
                 for(unsigned i=0;i<3;++i) {
                     const auto index=static_cast<unsigned>((pending.serial+i)%3);
@@ -299,4 +350,33 @@ public:
 VirtualCameraOutput::VirtualCameraOutput():impl_(std::make_unique<Impl>()) {}
 VirtualCameraOutput::~VirtualCameraOutput()=default;
 void VirtualCameraOutput::publish(ID3D11RenderTargetView* target) { impl_->publish(target); }
+void VirtualCameraOutput::publishReturnMonitor(const QImage &image) {
+    auto &p = *impl_;
+    if (!virtualCameraEnabled() || !virtualCameraReturnMonitor()
+        || image.size() != QSize(vcam::width, vcam::height)
+        || (image.format() != QImage::Format_RGB32 && image.format() != QImage::Format_ARGB32)) return;
+    p.returnSource = true;
+    if (!p.returnDevice) {
+        D3D_FEATURE_LEVEL feature{};
+        auto hr = D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr,
+            D3D11_CREATE_DEVICE_BGRA_SUPPORT | D3D11_CREATE_DEVICE_VIDEO_SUPPORT, nullptr, 0, D3D11_SDK_VERSION,
+            &p.returnDevice, &feature, &p.returnContext);
+        if (FAILED(hr)) { report(QStringLiteral("Return monitor: D3D11 device creation failed.")); return; }
+    }
+    if (!p.returnTexture) {
+        D3D11_TEXTURE2D_DESC desc{};
+        desc.Width = image.width(); desc.Height = image.height();
+        desc.MipLevels = desc.ArraySize = 1; desc.SampleDesc.Count = 1;
+        desc.Format = DXGI_FORMAT_B8G8R8A8_UNORM; desc.BindFlags = D3D11_BIND_RENDER_TARGET;
+        if (FAILED(p.returnDevice->CreateTexture2D(&desc, nullptr, &p.returnTexture))
+            || FAILED(p.returnDevice->CreateRenderTargetView(p.returnTexture.Get(), nullptr, &p.returnTarget))) {
+            p.returnTexture.Reset(); report(QStringLiteral("Return monitor: camera texture creation failed.")); return;
+        }
+    }
+    p.returnContext->UpdateSubresource(p.returnTexture.Get(), 0, nullptr,
+        image.constBits(), image.bytesPerLine(), 0);
+    p.publish(p.returnTarget.Get());
+    // This independent device has no swap chain/present to submit its commands.
+    p.returnContext->Flush();
+}
 }

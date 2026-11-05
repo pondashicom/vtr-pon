@@ -67,7 +67,7 @@ int main(int argc, char **argv) {
     vtrpon::saveDeckLinkSettings(settings);
     CHECK(!vtrpon::deckLinkOutputGeneration() && vtrpon::savedDeckLinkSettings() == settings);
     qunsetenv("VTRPON_DECKLINK_TEST_NO_DEVICES");
-    CHECK(waitFor([] { return vtrpon::deckLinkState().channels.size() == 5 && vtrpon::deckLinkOutputGeneration(); }));
+    CHECK(waitFor([] { return vtrpon::deckLinkState().channels.size() == 6 && vtrpon::deckLinkOutputGeneration(); }));
     CHECK(vtrpon::deckLinkInputAllowed(path));
     Pipeline video(false), second(false), audio(true);
     auto receiver = std::make_unique<vtrpon::DeckLinkReceiver>(path, video.source, false);
@@ -227,6 +227,32 @@ int main(int argc, char **argv) {
     }
     CHECK(waitFor([&] { stats(counts); return counts[1] == 0; }));
     qunsetenv("VTRPON_DECKLINK_TEST_SLOW_CLOSE");
+    // ON AIR and return use independent frames on different hardware channels.
+    const auto returnStats = reinterpret_cast<void (__cdecl *)(uint64_t *)>(mock.resolve("vtrpon_decklink_test_return_output")); CHECK(returnStats);
+    settings.outputEnabled = settings.compositeEnabled = settings.returnMonitorEnabled = true;
+    settings.fillEnabled = settings.keyEnabled = false;
+    settings.outputChannel = path; settings.outputMode = 1001;
+    settings.returnMonitorChannel = "decklink://100/4/1/0"; settings.returnMonitorMode = 1001;
+    expectColor(3, 0xff00ff00u); vtrpon::saveDeckLinkSettings(settings);
+    CHECK(vtrpon::savedDeckLinkSettings() == settings);
+    CHECK(waitFor([] { return vtrpon::deckLinkOutputMask() == 9u; }));
+    QByteArray green(64 * 36 * 4, '\0');
+    for (qsizetype i = 0; i < green.size(); i += 4) { green[i+1] = char(255); green[i+3] = char(255); }
+    uint64_t returnRecords[5]{};
+    CHECK(waitFor([&] {
+        output.publish(view.Get()); context->Flush();
+        vtrpon::publishDeckLinkReturnMonitor(green, 64, 36, vtrpon::deckLinkOutputGeneration());
+        returnStats(returnRecords); outputStats(routed);
+        return returnRecords[0] && returnRecords[3] == 0xff00ff00u && routed[3] == 0xffc8280a;
+    }));
+    const auto returnGeneration = vtrpon::deckLinkOutputGeneration();
+    settings.returnMonitorChannel = path; vtrpon::saveDeckLinkSettings(settings);
+    CHECK(waitFor([] { const auto s = vtrpon::deckLinkState(); return vtrpon::deckLinkOutputMask() == 1u && !s.outputs[3].error.isEmpty() && s.outputs[0].running; }));
+    settings.returnMonitorChannel = "decklink://100/4/1/0"; vtrpon::saveDeckLinkSettings(settings);
+    CHECK(waitFor([] { return vtrpon::deckLinkOutputMask() == 9u; }));
+    returnStats(returnRecords); const auto prior = returnRecords[0];
+    vtrpon::publishDeckLinkReturnMonitor(green, 64, 36, returnGeneration);
+    std::this_thread::sleep_for(std::chrono::milliseconds(40)); returnStats(returnRecords); CHECK(returnRecords[0] == prior);
     runtime.requestShutdown(); CHECK(waitFor([&] { return runtime.shutdownComplete(); }));
     std::puts("DeckLink capture sharing, GPU Composite/Fill/Key routing, straight/premultiplied/transparent pixels, paired timestamps, audio routing, synchronization fallback, duplicate/format rejection, fault isolation, absent hardware, reconnection and shutdown passed.");
     return 0;

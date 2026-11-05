@@ -24,7 +24,7 @@ public:
     quint64 serial = 0, published = 0;
     void publish(ID3D11RenderTargetView *target, ID3D11RenderTargetView *alpha, qint64 timecode) {
         const auto generation = deckLinkOutputGeneration();
-        const unsigned requested = deckLinkOutputMask();
+        const unsigned requested = deckLinkOutputMask() & 7u;
         if (!generation || !target || !requested) {
             readbacks = {}; context.Reset(); device.Reset(); width = height = mask = 0;
             return;

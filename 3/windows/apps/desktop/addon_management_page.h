@@ -9,6 +9,7 @@ class QNetworkAccessManager;
 class QNetworkReply;
 class QShowEvent;
 namespace vtrpon::addons { struct Package; }
+namespace vtrpon { class AddonRuntimeStatusWidget; }
 
 class AddonManagementPage final : public QWidget {
   Q_OBJECT
@@ -33,6 +34,7 @@ private:
     QLabel *title = nullptr;
     QLabel *description = nullptr;
     QLabel *status = nullptr;
+    vtrpon::AddonRuntimeStatusWidget *runtime = nullptr;
     QPushButton *install = nullptr;
     QPushButton *uninstall = nullptr;
     QString availableVersion;

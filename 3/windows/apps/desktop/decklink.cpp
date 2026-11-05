@@ -28,7 +28,7 @@ struct Shared {
     std::mutex mutex;
     DeckLinkSettings settings;
     DeckLinkState state;
-    Video video;
+    Video video, returnVideo;
     std::deque<Audio> audio;
     size_t audioBytes = 0;
     std::atomic_bool stopping{false}, done{true};
@@ -91,11 +91,11 @@ public:
 // hardware before unloading the library, including exceptional worker exits.
 struct OutputBundle {
     Addon &addon;
-    std::array<void *, 3> contexts{};
-    std::array<bool, 3> open{};
-    std::array<VtrPonDeckLinkMode, 3> modes{};
-    std::array<DeckLinkState::Output, 3> states{};
-    std::array<Clock::time_point, 3> retry{};
+    std::array<void *, 4> contexts{};
+    std::array<bool, 4> open{};
+    std::array<VtrPonDeckLinkMode, 4> modes{};
+    std::array<DeckLinkState::Output, 4> states{};
+    std::array<Clock::time_point, 4> retry{};
     QString warning;
     bool synchronized = false;
     explicit OutputBundle(Addon &a) : addon(a) {}
@@ -104,7 +104,7 @@ struct OutputBundle {
         open[i] = false; states[i].running = false;
     }
     ~OutputBundle() {
-        for (unsigned i = 0; i < 3; ++i) close(i);
+        for (unsigned i = 0; i < 4; ++i) close(i);
         for (auto *context : contexts) if (context) { char detail[1024]{}; addon.api->destroy(context, detail, sizeof(detail)); }
     }
     int prepare(unsigned i, char *detail) {
@@ -118,15 +118,16 @@ struct OutputBundle {
     }
 };
 QByteArray outputPixels(const Video &video, unsigned kind, const VtrPonDeckLinkMode &mode, bool premultiplied) {
-    const auto &bytes = kind ? video.alpha : video.bytes;
+    const bool alphaOutput = kind == 1 || kind == 2;
+    const auto &bytes = alphaOutput ? video.alpha : video.bytes;
     if (bytes.isEmpty()) return {};
     QImage image(reinterpret_cast<const uchar *>(bytes.constData()), video.width, video.height, video.width * 4,
-        kind ? QImage::Format_ARGB32_Premultiplied : QImage::Format_ARGB32);
+        alphaOutput ? QImage::Format_ARGB32_Premultiplied : QImage::Format_ARGB32);
     if (image.width() != mode.width || image.height() != mode.height)
         image = image.scaled(mode.width, mode.height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     if (image.isNull()) return {};
     QByteArray result(reinterpret_cast<const char *>(image.constBits()), qsizetype(image.sizeInBytes()));
-    if (!kind) return result;
+    if (!alphaOutput) return result;
     auto *pixels = reinterpret_cast<unsigned char *>(result.data());
     for (qsizetype i = 0; i < result.size(); i += 4) {
         const unsigned alpha = pixels[i + 3];
@@ -168,19 +169,19 @@ void runtimeLoop() {
                  appliedSettings.premultipliedFill != settings.premultipliedFill));
             // Keep unchanged channels scheduling their last frame while the GPU
             // switches generations. Editing Fill/Key must not restart Composite.
-            for (unsigned i = 0; i < 3; ++i) {
+            for (unsigned i = 0; i < 4; ++i) {
                 const bool changed = !applied || ((previousMask ^ enabled) & (1u << i)) ||
                     appliedSettings.channel(i) != settings.channel(i) || appliedSettings.mode(i) != settings.mode(i) ||
-                    (i > 0 && pairChanged) || (i == 1 && appliedSettings.premultipliedFill != settings.premultipliedFill);
+                    ((i == 1 || i == 2) && pairChanged) || (i == 1 && appliedSettings.premultipliedFill != settings.premultipliedFill);
                 if (changed) { o.close(i); o.states[i] = {}; o.retry[i] = now; }
             }
             if (pairChanged) { o.warning.clear(); o.synchronized = false; }
             appliedSettings = settings; applied = generation;
-            std::lock_guard lock(data.mutex); data.video = {}; data.audio.clear(); data.audioBytes = 0;
+            std::lock_guard lock(data.mutex); data.video = {}; data.returnVideo = {}; data.audio.clear(); data.audioBytes = 0;
         }
-        std::array<VtrPonDeckLinkStreamOptions, 3> options{};
-        std::array<QString, 3> invalid{};
-        for (unsigned i = 0; i < 3; ++i) if (enabled & (1u << i)) {
+        std::array<VtrPonDeckLinkStreamOptions, 4> options{};
+        std::array<QString, 4> invalid{};
+        for (unsigned i = 0; i < 4; ++i) if (enabled & (1u << i)) {
             const auto found = std::find_if(channels.cbegin(), channels.cend(), [&](const auto &c) { return !c.input && c.path == settings.channel(i); });
             if (found == channels.cend() || !deckLinkSourceOptions(settings.channel(i), &options[i])) invalid[i] = QStringLiteral("Select an available DeckLink output channel and video format.");
             else {
@@ -189,19 +190,23 @@ void runtimeLoop() {
                 else { o.modes[i] = *mode; options[i].modeId = mode->modeId; }
             }
         }
-        for (unsigned i = 0; i < 3; ++i) for (unsigned j = i + 1; j < 3; ++j)
+        for (unsigned i = 0; i < 4; ++i) for (unsigned j = i + 1; j < 4; ++j)
             if ((enabled & (1u << i)) && (enabled & (1u << j)) && options[i].structSize && options[j].structSize &&
                 options[i].persistentId == options[j].persistentId && options[i].subDeviceIndex == options[j].subDeviceIndex)
-                invalid[i] = invalid[j] = QStringLiteral("Each enabled output must use a different DeckLink hardware channel.");
+                {
+                    // A return-channel conflict must not interrupt an existing ON AIR output.
+                    const auto error = QStringLiteral("Each enabled output must use a different DeckLink hardware channel.");
+                    invalid[j] = error; if (j != 3) invalid[i] = error;
+                }
         if (pair && settings.fillMode != settings.keyMode) invalid[1] = invalid[2] = QStringLiteral("Fill and Key must use the same video format.");
         if (pair && (!invalid[1].isEmpty() || !invalid[2].isEmpty())) {
             const auto failure = !invalid[1].isEmpty() ? invalid[1] : invalid[2]; invalid[1] = invalid[2] = failure;
         }
         auto fail = [&](unsigned i, const QString &failure) {
             o.close(i); o.states[i].error = failure; o.retry[i] = now + std::chrono::seconds(1);
-            if (pair && i > 0) { const unsigned other = 3 - i; o.close(other); o.states[other].error = failure; o.retry[other] = o.retry[i]; o.synchronized = false; }
+            if (pair && (i == 1 || i == 2)) { const unsigned other = 3 - i; o.close(other); o.states[other].error = failure; o.retry[other] = o.retry[i]; o.synchronized = false; }
         };
-        for (unsigned i = 0; i < 3; ++i) if (!invalid[i].isEmpty()) { if (o.open[i]) fail(i, invalid[i]); else o.states[i].error = invalid[i]; }
+        for (unsigned i = 0; i < 4; ++i) if (!invalid[i].isEmpty()) { if (o.open[i]) fail(i, invalid[i]); else o.states[i].error = invalid[i]; }
         auto openSingle = [&](unsigned i) {
             char detail[1024]{}; options[i].outputStartTime100ns = mediaTimecode100ns();
             int result = o.prepare(i, detail);
@@ -237,22 +242,25 @@ void runtimeLoop() {
         } else if (!pair) {
             for (unsigned i = 1; i <= 2; ++i) if ((enabled & (1u << i)) && !o.open[i] && invalid[i].isEmpty() && now >= o.retry[i]) openSingle(i);
         }
-        Video video; std::deque<Audio> audio;
-        unsigned mask = 0; for (unsigned i = 0; i < 3; ++i) if (o.open[i]) mask |= 1u << i;
+        if ((enabled & 8u) && !o.open[3] && invalid[3].isEmpty() && now >= o.retry[3]) openSingle(3);
+        Video video, returnVideo; std::deque<Audio> audio;
+        unsigned mask = 0; for (unsigned i = 0; i < 4; ++i) if (o.open[i]) mask |= 1u << i;
         data.outputMask = mask; data.publishing = mask ? applied : 0;
         if (mask) {
-            { std::lock_guard lock(data.mutex); video = std::move(data.video); data.video = {}; audio.swap(data.audio); data.audioBytes = 0; }
-            std::array<QByteArray, 3> pixels;
+            { std::lock_guard lock(data.mutex); video = std::move(data.video); data.video = {}; returnVideo = std::move(data.returnVideo); data.returnVideo = {}; audio.swap(data.audio); data.audioBytes = 0; }
+            std::array<QByteArray, 4> pixels;
             if (video.generation == applied && now - video.captured < std::chrono::milliseconds(200))
                 for (unsigned i = 0; i < 3; ++i) if (o.open[i]) pixels[i] = outputPixels(video, i, o.modes[i], settings.premultipliedFill);
+            if (o.open[3] && returnVideo.generation == applied && now - returnVideo.captured < std::chrono::milliseconds(200))
+                pixels[3] = outputPixels(returnVideo, 3, o.modes[3], false);
             // Prepare every image before submitting either Fill/Key member.
-            for (unsigned i = 0; i < 3; ++i) if (o.open[i] && !pixels[i].isEmpty()) {
+            for (unsigned i = 0; i < 4; ++i) if (o.open[i] && !pixels[i].isEmpty()) {
                 char detail[1024]{};
-                const auto result = addon->media->sendVideo(o.contexts[i], reinterpret_cast<const uint8_t *>(pixels[i].constData()), o.modes[i].width, o.modes[i].height, video.time100ns, detail, sizeof(detail));
+                const auto result = addon->media->sendVideo(o.contexts[i], reinterpret_cast<const uint8_t *>(pixels[i].constData()), o.modes[i].width, o.modes[i].height, i == 3 ? returnVideo.time100ns : video.time100ns, detail, sizeof(detail));
                 if (result) fail(i, *detail ? QString::fromUtf8(detail) : QStringLiteral("DeckLink video output failed."));
                 else ++o.states[i].sentFrames;
             }
-            for (unsigned i = 0; i < 3; ++i) if (o.open[i]) {
+            for (unsigned i = 0; i < 4; ++i) if (o.open[i]) {
                 char detail[1024]{}; int result = 0;
                 if (i != 2) for (const auto &pcm : audio) if (!result)
                     result = addon->media->sendAudio(o.contexts[i], reinterpret_cast<const float *>(pcm.bytes.constData()), uint32_t(pcm.bytes.size() / 8), pcm.time100ns, detail, sizeof(detail));
@@ -261,7 +269,7 @@ void runtimeLoop() {
             }
         }
         mask = 0; QStringList failures; quint64 sent = 0;
-        for (unsigned i = 0; i < 3; ++i) { if (o.open[i]) mask |= 1u << i; if (!o.states[i].error.isEmpty()) failures.append(o.states[i].error); sent += o.states[i].sentFrames; }
+        for (unsigned i = 0; i < 4; ++i) { if (o.open[i]) mask |= 1u << i; if (!o.states[i].error.isEmpty()) failures.append(o.states[i].error); sent += o.states[i].sentFrames; }
         data.outputMask = mask; data.publishing = mask ? applied : 0;
         { std::lock_guard lock(data.mutex); data.state.outputs = o.states; data.state.outputRunning = mask != 0; data.state.outputError = failures.join(QLatin1Char('\n'));
           data.state.sentFrames = sent; data.state.syncWarning = o.warning; data.state.pairSynchronized = o.synchronized; }
@@ -386,7 +394,9 @@ DeckLinkSettings savedDeckLinkSettings() {
         s.value("deckLink/compositeEnabled", true).toBool(), s.value("deckLink/fillEnabled", false).toBool(), s.value("deckLink/keyEnabled", false).toBool(),
         s.value("deckLink/fillFormat", "straight").toString() == QLatin1StringView("premultiplied"),
         s.value("deckLink/fillChannel").toString(), s.value("deckLink/keyChannel").toString(),
-        s.value("deckLink/fillMode", "0").toString().toUInt(), s.value("deckLink/keyMode", "0").toString().toUInt()};
+        s.value("deckLink/fillMode", "0").toString().toUInt(), s.value("deckLink/keyMode", "0").toString().toUInt(),
+        s.value("deckLink/returnMonitorEnabled", false).toBool(), s.value("deckLink/returnMonitorChannel").toString(),
+        s.value("deckLink/returnMonitorMode", "0").toString().toUInt()};
 }
 void applyDeckLinkSettings(const DeckLinkSettings &settings) {
     auto &data = shared(); std::lock_guard lock(data.mutex); if (data.settings == settings) return;
@@ -403,6 +413,9 @@ void saveDeckLinkSettings(const DeckLinkSettings &settings) {
     s.setValue("deckLink/fillFormat", settings.premultipliedFill ? "premultiplied" : "straight");
     s.setValue("deckLink/fillChannel", settings.fillChannel); s.setValue("deckLink/keyChannel", settings.keyChannel);
     s.setValue("deckLink/fillMode", QString::number(settings.fillMode)); s.setValue("deckLink/keyMode", QString::number(settings.keyMode));
+    s.setValue("deckLink/returnMonitorEnabled", settings.returnMonitorEnabled);
+    s.setValue("deckLink/returnMonitorChannel", settings.returnMonitorChannel);
+    s.setValue("deckLink/returnMonitorMode", QString::number(settings.returnMonitorMode));
     s.sync(); if (s.status() == QSettings::NoError) applyDeckLinkSettings(settings);
 }
 DeckLinkState deckLinkState() { auto &s = shared(); std::lock_guard lock(s.mutex); return s.state; }
@@ -425,11 +438,19 @@ void publishDeckLinkVideo(QByteArray bytes, int width, int height, quint64 gener
     publishDeckLinkVideo(std::move(bytes), {}, width, height, generation, time100ns);
 }
 void publishDeckLinkVideo(QByteArray bytes, QByteArray alpha, int width, int height, quint64 generation, qint64 time100ns) {
-    auto &s = shared(); const auto mask = s.outputMask.load(); const auto size = qsizetype(width) * height * 4;
+    auto &s = shared(); const auto mask = s.outputMask.load() & 7u; const auto size = qsizetype(width) * height * 4;
     if (!generation || generation != s.publishing || width <= 0 || width > 4096 || height <= 0 || height > 2160 ||
         ((mask & 1u) && bytes.size() != size) || ((mask & 6u) && alpha.size() != size)) return;
     std::unique_lock lock(s.mutex, std::try_to_lock);
     if (lock.owns_lock() && generation == s.publishing) { s.video = {std::move(bytes), std::move(alpha), width, height, generation, Clock::now(), time100ns ? time100ns : mediaTimecode100ns()}; s.state.readbackError.clear(); }
+}
+void publishDeckLinkReturnMonitor(QByteArray pixels, int width, int height, quint64 generation, qint64 time100ns) {
+    auto &s = shared();
+    if (!generation || width <= 0 || height <= 0 || width > 1920 || height > 1080
+        || pixels.size() != qsizetype(width) * height * 4) return;
+    std::unique_lock lock(s.mutex, std::try_to_lock);
+    if (lock && generation == s.publishing && (s.outputMask.load() & 8u))
+        s.returnVideo = {std::move(pixels), {}, width, height, generation, Clock::now(), time100ns ? time100ns : mediaTimecode100ns()};
 }
 void publishDeckLinkAudio(GstBuffer *buffer, qint64 time100ns) {
     auto &s = shared(); if (!s.publishing || !buffer) return;

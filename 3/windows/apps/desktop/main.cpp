@@ -1,5 +1,6 @@
 #include "application_log.h"
 #include "addon_package.h"
+#include "addon_runtime_guidance.h"
 #include "virtual_camera/output.h"
 #include "controller_settings.h"
 #include "video_output_settings.h"
@@ -382,5 +383,6 @@ int main(int argc, char *argv[])
         new vtrpon::ControllerWindowScaling(controlWindow);
     });
     vtrpon::logStartupSnapshot(QStringLiteral("controller-ready"));
+    new vtrpon::AddonRuntimeStartupWarning(controlWindow);
     return app.exec();
 }
