@@ -509,6 +509,23 @@ if(BUILD_TESTING)
   endif()
   set_tests_properties(update-window PROPERTIES TIMEOUT 30)
 
+  qt_add_executable(activity-notice-test
+    tests/activity_notice_test.cpp
+    apps/desktop/update_notification.cpp
+    apps/desktop/update_catalog.cpp)
+  target_include_directories(activity-notice-test PRIVATE apps/desktop)
+  target_link_libraries(activity-notice-test PRIVATE Qt6::Widgets Qt6::Network)
+  set_target_properties(activity-notice-test PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/activity-notice-check")
+  file(GENERATE OUTPUT "${CMAKE_BINARY_DIR}/activity-notice-check/vtr-pon-distribution.txt"
+    CONTENT "VTR-PON3\n")
+  add_test(NAME activity-notice COMMAND activity-notice-test)
+  set_tests_properties(activity-notice PROPERTIES TIMEOUT 30
+    ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
+  if(MSVC)
+    target_compile_options(activity-notice-test PRIVATE /utf-8)
+  endif()
+
   # This fixture contains Windows PE payloads; native Mac coverage is below.
   if(NOT APPLE)
     qt_add_executable(addon-package-test tests/addon_package_test.cpp)

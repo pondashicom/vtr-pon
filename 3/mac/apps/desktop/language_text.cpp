@@ -416,7 +416,7 @@ constexpr auto kUiTextIds = std::to_array<const char *>({
     QT_TRID_NOOP("settings.privacy.title"),
     //% "Send a usage notice"
     QT_TRID_NOOP("settings.privacy.activity_consent"),
-    //% "When enabled, VTR-PON sends its version to pondashi.com at most once per UTC day during automatic or manual update checks. No install ID or media information is sent. The activity database keeps only daily counts by version; the web host may keep standard access logs. You can turn this off at any time."
+    //% "When enabled, VTR-PON sends its version and OS/CPU platform to pondashi.com at most once per UTC day during automatic or manual update checks. No install ID or media information is sent. The activity database keeps only daily counts by version and platform; the web host may keep standard access logs. You can turn this off at any time."
     QT_TRID_NOOP("settings.privacy.activity_description"),
     //% "Still Capture"
     QT_TRID_NOOP("input.still.title"),

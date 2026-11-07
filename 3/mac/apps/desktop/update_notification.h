@@ -30,12 +30,16 @@ public:
                 const QUrl &updatesUrl, QObject *parent = nullptr);
   UpdateChecker(const QString &currentVersion, Completion completion,
                 const UpdateTarget &target, QObject *parent = nullptr);
+  UpdateChecker(const QString &currentVersion, Completion completion,
+                const UpdateTarget &target, const QUrl &activityUrl,
+                QObject *parent = nullptr);
   void check(bool manual);
 
 private:
   void sendActivityNoticeIfDue();
   QString currentVersion_;
   UpdateTarget target_;
+  QUrl activityUrl_;
   Completion completion_;
   QNetworkAccessManager network_;
   QPointer<QNetworkReply> reply_;

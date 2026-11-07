@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "applicationSourceCommit": "58ebb9b561c9f2c55bc990b73b4f1a399a2a0474",
+  "applicationSourceCommit": "2eb7875296f574cb5cb8bcbbaa686c7328589817",
   "publicSourceBaseUrl": null,
   "distributionMode": "Deliver the complete source sidecar with the binary; public hosting not configured",
   "components": [
@@ -100,7 +100,7 @@
         "source_url": "https://ffmpeg.org/releases/ffmpeg-8.1.tar.xz",
         "source_sha256": "b072aed6871998cce9b36e7774033105ca29e33632be5b6347f3206898e0756a",
         "runtime_license": "LGPL version 2.1 or later",
-        "configuration": "--prefix=<source-root>/build/mac-runtime-selection-check/ffmpeg-lgpl/install --arch=aarch64 --target-os=darwin --cc=/usr/bin/clang --enable-pic --enable-shared --disable-static --disable-gpl --disable-nonfree --disable-version3 --disable-autodetect --disable-programs --disable-doc --disable-debug --disable-network --disable-audiotoolbox --disable-videotoolbox --disable-everything --enable-avcodec --enable-avformat --enable-avfilter --enable-avutil --enable-swresample --enable-swscale --enable-decoder='aac,aac_fixed,alac,ac3,eac3,dca,flac,mp1,mp2,mp3,opus,vorbis,wmav1,wmav2,wmapro,wmavoice,adpcm_ima_wav,adpcm_ms' --enable-decoder='h264,hevc,prores,mpeg2video,mpeg4,mjpeg,rawvideo,vp8,vp9,vc1,msmpeg4v2,msmpeg4v3' --enable-decoder='pcm_s16le,pcm_s24le,pcm_s32le,pcm_f32le,pcm_f64le,pcm_u8,pcm_s16be,pcm_s24be,pcm_s32be,pcm_f32be' --enable-parser='aac,aac_latm,ac3,dca,h264,hevc,mjpeg,mpeg4video,mpegaudio,mpegvideo,opus,vc1,vorbis,vp8,vp9' --enable-filter='abuffer,abuffersink,buffer,buffersink,aresample,format,scale,volume,yadif' --extra-cflags='-mmacosx-version-min=15.0' --extra-ldflags='-mmacosx-version-min=15.0'",
+        "configuration": "--prefix=/Users/satsuzuk/Projects/vtr-pon-mac-dev/build/mac-runtime-selection-check/ffmpeg-lgpl/install --arch=aarch64 --target-os=darwin --cc=/usr/bin/clang --enable-pic --enable-shared --disable-static --disable-gpl --disable-nonfree --disable-version3 --disable-autodetect --disable-programs --disable-doc --disable-debug --disable-network --disable-audiotoolbox --disable-videotoolbox --disable-everything --enable-avcodec --enable-avformat --enable-avfilter --enable-avutil --enable-swresample --enable-swscale --enable-decoder='aac,aac_fixed,alac,ac3,eac3,dca,flac,mp1,mp2,mp3,opus,vorbis,wmav1,wmav2,wmapro,wmavoice,adpcm_ima_wav,adpcm_ms' --enable-decoder='h264,hevc,prores,mpeg2video,mpeg4,mjpeg,rawvideo,vp8,vp9,vc1,msmpeg4v2,msmpeg4v3' --enable-decoder='pcm_s16le,pcm_s24le,pcm_s32le,pcm_f32le,pcm_f64le,pcm_u8,pcm_s16be,pcm_s24be,pcm_s32be,pcm_f32be' --enable-parser='aac,aac_latm,ac3,dca,h264,hevc,mjpeg,mpeg4video,mpegaudio,mpegvideo,opus,vc1,vorbis,vp8,vp9' --enable-filter='abuffer,abuffersink,buffer,buffersink,aresample,format,scale,volume,yadif' --extra-cflags='-mmacosx-version-min=15.0' --extra-ldflags='-mmacosx-version-min=15.0'",
         "libraries": {
           "libavfilter.11.14.100.dylib": "9db3352ac734cc64878bec979e4507407f94307e4cedc67b3ed12bef5b3b336d",
           "libswresample.6.3.100.dylib": "ff0e11beadd82559197413b25dd280becb351f64a8b70976ec8725916235fa12",
@@ -256,10 +256,10 @@
             "type": "pkgconfig",
             "version": "62.28.100",
             "compile_args": [
-              "-I<source-root>/build/mac-runtime-selection-check/ffmpeg-lgpl/install/include"
+              "-I/Users/satsuzuk/Projects/vtr-pon-mac-dev/build/mac-runtime-selection-check/ffmpeg-lgpl/install/include"
             ],
             "link_args": [
-              "<source-root>/build/mac-runtime-selection-check/ffmpeg-lgpl/install/lib/libavcodec.dylib"
+              "/Users/satsuzuk/Projects/vtr-pon-mac-dev/build/mac-runtime-selection-check/ffmpeg-lgpl/install/lib/libavcodec.dylib"
             ],
             "include_directories": [],
             "sources": [],
@@ -275,10 +275,10 @@
             "type": "pkgconfig",
             "version": "11.14.100",
             "compile_args": [
-              "-I<source-root>/build/mac-runtime-selection-check/ffmpeg-lgpl/install/include"
+              "-I/Users/satsuzuk/Projects/vtr-pon-mac-dev/build/mac-runtime-selection-check/ffmpeg-lgpl/install/include"
             ],
             "link_args": [
-              "<source-root>/build/mac-runtime-selection-check/ffmpeg-lgpl/install/lib/libavfilter.dylib"
+              "/Users/satsuzuk/Projects/vtr-pon-mac-dev/build/mac-runtime-selection-check/ffmpeg-lgpl/install/lib/libavfilter.dylib"
             ],
             "include_directories": [],
             "sources": [],
@@ -294,10 +294,10 @@
             "type": "pkgconfig",
             "version": "62.12.100",
             "compile_args": [
-              "-I<source-root>/build/mac-runtime-selection-check/ffmpeg-lgpl/install/include"
+              "-I/Users/satsuzuk/Projects/vtr-pon-mac-dev/build/mac-runtime-selection-check/ffmpeg-lgpl/install/include"
             ],
             "link_args": [
-              "<source-root>/build/mac-runtime-selection-check/ffmpeg-lgpl/install/lib/libavformat.dylib"
+              "/Users/satsuzuk/Projects/vtr-pon-mac-dev/build/mac-runtime-selection-check/ffmpeg-lgpl/install/lib/libavformat.dylib"
             ],
             "include_directories": [],
             "sources": [],
@@ -313,10 +313,10 @@
             "type": "pkgconfig",
             "version": "60.26.100",
             "compile_args": [
-              "-I<source-root>/build/mac-runtime-selection-check/ffmpeg-lgpl/install/include"
+              "-I/Users/satsuzuk/Projects/vtr-pon-mac-dev/build/mac-runtime-selection-check/ffmpeg-lgpl/install/include"
             ],
             "link_args": [
-              "<source-root>/build/mac-runtime-selection-check/ffmpeg-lgpl/install/lib/libavutil.dylib"
+              "/Users/satsuzuk/Projects/vtr-pon-mac-dev/build/mac-runtime-selection-check/ffmpeg-lgpl/install/lib/libavutil.dylib"
             ],
             "include_directories": [],
             "sources": [],
@@ -920,7 +920,7 @@
       "id": "vtr-pon",
       "version": "d7a21084ab6a7d3f2accd0fb93bca93c37d83b15",
       "downloads": [],
-      "sourceRepository": "https://github.com/pondashicom/vtr-pon"
+      "sourceRepository": "https://github.com/pondashicom/vtr-pon-dev"
     },
     {
       "id": "webp",
@@ -3755,5 +3755,14 @@
   },
   "publicSourceDeliveryVerified": false,
   "publicApplicationSourceUrl": "https://github.com/pondashicom/vtr-pon/tree/main/3/mac",
-  "applicationWorktreeSnapshot": true
+  "applicationWorktreeSnapshot": true,
+  "applicationWorktreeChanges": [
+    "CMakeLists.txt",
+    "apps/desktop/update_notification.cpp",
+    "apps/desktop/update_notification.h",
+    "apps/desktop/language_text.cpp",
+    "apps/desktop/i18n/vtrpon_ja.ts",
+    "apps/desktop/i18n/vtrpon_en.ts",
+    "tests/activity_notice_test.cpp"
+  ]
 }

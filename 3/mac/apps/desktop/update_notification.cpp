@@ -42,7 +42,12 @@ UpdateChecker::UpdateChecker(const QString &currentVersion,
 
 UpdateChecker::UpdateChecker(const QString &currentVersion, Completion completion,
                              const UpdateTarget &target, QObject *parent)
-    : QObject(parent), currentVersion_(currentVersion), target_(target),
+    : UpdateChecker(currentVersion, std::move(completion), target, kActivityUrl, parent) {}
+
+UpdateChecker::UpdateChecker(const QString &currentVersion, Completion completion,
+                             const UpdateTarget &target, const QUrl &activityUrl,
+                             QObject *parent)
+    : QObject(parent), currentVersion_(currentVersion), target_(target), activityUrl_(activityUrl),
       completion_(std::move(completion)) {}
 
 void UpdateChecker::check(bool manual) {
@@ -114,14 +119,15 @@ void UpdateChecker::sendActivityNoticeIfDue() {
   const QString today = QDateTime::currentDateTimeUtc().date().toString(Qt::ISODate);
   if (settings.value(QStringLiteral("privacy/activityLastSentUtcDay")).toString() == today)
     return;
-  QNetworkRequest request(kActivityUrl);
+  QNetworkRequest request(activityUrl_);
   request.setAttribute(QNetworkRequest::RedirectPolicyAttribute,
                        QNetworkRequest::ManualRedirectPolicy);
   request.setHeader(QNetworkRequest::ContentTypeHeader,
                     QStringLiteral("application/json"));
   request.setTransferTimeout(5000);
   auto *activityReply = network_.post(request,
-      QJsonDocument(QJsonObject{{QStringLiteral("version"), currentVersion_}})
+      QJsonDocument(QJsonObject{{QStringLiteral("version"), currentVersion_},
+                               {QStringLiteral("platform"), target_.platform}})
           .toJson(QJsonDocument::Compact));
   activityPending_ = true;
   connect(activityReply, &QNetworkReply::finished, this,

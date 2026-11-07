@@ -1,8 +1,9 @@
 {
   "schemaVersion": 1,
-  "sourceArchive": "VTR-PON-3.0.0-beta.2-macos-arm64-corresponding-source.zip",
-  "sourceArchiveSha256": null,
-  "sourceArchivePrepared": false,
+  "sourceArchive": "VTR-PON-3.0.0-beta.3-macos-arm64-corresponding-source.zip",
+  "sourceArchiveSha256": "254d054ad77581346aa3448490d305dc45a39af9ef7d18c4871076ff5ae1d4b0",
+  "sourceArchivePrepared": true,
+  "sourceFileCount": 2145,
   "publicSourceUrl": null,
   "publicSourceDeliveryVerified": false,
   "releaseReady": false
