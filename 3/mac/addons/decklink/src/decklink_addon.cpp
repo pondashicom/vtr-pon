@@ -6,6 +6,7 @@
 #include "media_contract.h"
 #include "decklink_platform.h"
 #include "DeckLinkAPIVersion.h"
+#include "output_color.h"
 #include "runtime_diagnostics.h"
 #include <algorithm>
 #include <cstring>

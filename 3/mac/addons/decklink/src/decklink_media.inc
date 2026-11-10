@@ -103,8 +103,7 @@ struct OutputState {
     bool internalReference = false;
     bool videoEnabled = false, audioEnabled = false;
     ComPtr<IDeckLinkVideoConversion> converter;
-    int width = 0, height = 0, rowBytes = 0;
-    BMDPixelFormat pixel = bmdFormat8BitBGRA;
+    int width = 0, height = 0;
     BMDTimeValue duration = 0, nextVideo = 0, nextAudio = 0;
     BMDTimeScale scale = 0;
     std::vector<uint8_t> latest;
@@ -312,18 +311,16 @@ int32_t pump(OutputState &s, char *error, uint32_t cap) {
         while (!s.video.empty() && s.video.front().time <= cutoff) {
             s.latest = std::move(s.video.front().bytes); s.video.pop_front();
         }
-        ComPtr<IDeckLinkMutableVideoFrame> source, frame;
+        ComPtr<IDeckLinkMutableVideoFrame> source;
+        ComPtr<IDeckLinkVideoFrame> frame;
         if (outputFailed(s.output->CreateVideoFrame(s.width, s.height, s.width * 4, bmdFormat8BitBGRA, bmdFrameFlagDefault, &source), "CreateVideoFrame(BGRA)", error, cap)) return VtrPonDeckLinkBackendError;
         ComPtr<IDeckLinkVideoBuffer> buffer; void *bytes = nullptr;
         if (outputFailed(source.As(std::addressof(buffer)), "QueryInterface(VideoBuffer)", error, cap) || outputFailed(buffer->StartAccess(bmdBufferAccessWrite), "StartAccess", error, cap)) return VtrPonDeckLinkBackendError;
         const auto hr = buffer->GetBytes(&bytes);
         if (SUCCEEDED(hr) && bytes) std::memcpy(bytes, s.latest.data(), s.latest.size());
         buffer->EndAccess(bmdBufferAccessWrite); if (outputFailed(hr, "GetBytes", error, cap) || !bytes) return VtrPonDeckLinkBackendError;
-        frame = source;
-        if (s.pixel != bmdFormat8BitBGRA) {
-            if (outputFailed(s.output->CreateVideoFrame(s.width, s.height, s.rowBytes, s.pixel, bmdFrameFlagDefault, &frame), "CreateVideoFrame(YUV)", error, cap) ||
-                outputFailed(s.converter->ConvertFrame(source.Get(), frame.Get()), "ConvertFrame", error, cap)) return VtrPonDeckLinkBackendError;
-        }
+        if (outputFailed(vtrpon::decklink::convertOutputFrame(s.converter.Get(), source.Get(), frame.GetAddressOf()),
+                "ConvertOutputFrame(YCbCr 4:2:2)", error, cap)) return VtrPonDeckLinkBackendError;
         if (outputFailed(s.output->ScheduleVideoFrame(frame.Get(), s.nextVideo, s.duration, s.scale), "ScheduleVideoFrame", error, cap)) return VtrPonDeckLinkBackendError;
         s.nextVideo += s.duration;
     }
@@ -377,23 +374,23 @@ int32_t openOutputImpl(void *handle, const VtrPonDeckLinkStreamOptions *options,
         if (s->width <= 0 || s->width > 4096 || s->height <= 0 || s->height > 2160 || FAILED(mode->GetFrameRate(&s->duration, &s->scale)) || s->duration <= 0 || s->scale <= 0) return VtrPonDeckLinkInvalidArgument;
         if (s->duration > 1000000000 || s->scale > 1000000000 || s->scale < s->duration * 10 || s->scale > s->duration * 240) return VtrPonDeckLinkInvalidArgument;
         bool supported = false; BMDDisplayMode actual{};
-        auto supports = [&](BMDPixelFormat pixel) { return SUCCEEDED(s->output->DoesSupportVideoMode(static_cast<BMDVideoConnection>(options->connection),
-            mode->GetDisplayMode(), pixel, bmdNoVideoOutputConversion, bmdSupportedVideoModeDefault, &actual, &supported)) && supported && actual == mode->GetDisplayMode(); };
-        if (!supports(s->pixel)) {
-            s->pixel = bmdFormat8BitYUV;
-            s->converter.Attach(CreateVideoConversionInstance());
-            if (!supports(s->pixel) || !s->converter) {
-                message(error, cap, "Selected output mode or pixel format is unsupported."); return VtrPonDeckLinkBackendError;
-            }
+        if (outputFailed(s->output->DoesSupportVideoMode(static_cast<BMDVideoConnection>(options->connection),
+                mode->GetDisplayMode(), vtrpon::decklink::outputPixelFormat, bmdNoVideoOutputConversion,
+                bmdSupportedVideoModeDefault, &actual, &supported), "DoesSupportVideoMode(YCbCr 4:2:2)", error, cap))
+            return VtrPonDeckLinkBackendError;
+        if (!supported || actual != mode->GetDisplayMode()) {
+            message(error, cap, "Selected output mode does not support YCbCr 4:2:2.");
+            return VtrPonDeckLinkBackendError;
         }
-        // A previous application may have left SDI in RGB 4:4:4 mode. Keep the
-        // hardware setting aligned with the actual scheduled frame format.
-        const auto colorResult = config->SetFlag(bmdDeckLinkConfig444SDIVideoOutput, s->pixel == bmdFormat8BitBGRA);
-        if (FAILED(colorResult) && colorResult != E_NOTIMPL) {
-            message(error, cap, "Output color format could not be configured."); return VtrPonDeckLinkBackendError;
+        s->converter.Attach(CreateVideoConversionInstance());
+        if (!s->converter) {
+            message(error, cap, "Output color conversion could not be created."); return VtrPonDeckLinkBackendError;
         }
-        if (outputFailed(s->output->RowBytesForPixelFormat(s->pixel, s->width, &s->rowBytes), "RowBytesForPixelFormat", error, cap) ||
-            outputFailed(s->output->EnableVideoOutput(mode->GetDisplayMode(), groupId ? bmdVideoOutputSynchronizeToPlaybackGroup : bmdVideoOutputFlagDefault), "EnableVideoOutput", error, cap)) return VtrPonDeckLinkBackendError;
+        if (outputFailed(vtrpon::decklink::configureOutputColor(config.Get()),
+                "ConfigureOutputColor(YCbCr 4:2:2)", error, cap)) {
+            return VtrPonDeckLinkBackendError;
+        }
+        if (outputFailed(s->output->EnableVideoOutput(mode->GetDisplayMode(), groupId ? bmdVideoOutputSynchronizeToPlaybackGroup : bmdVideoOutputFlagDefault), "EnableVideoOutput", error, cap)) return VtrPonDeckLinkBackendError;
         s->videoEnabled = true;
         if (outputFailed(s->output->EnableAudioOutput(bmdAudioSampleRate48kHz, bmdAudioSampleType32bitInteger, 2, bmdAudioOutputStreamTimestamped), "EnableAudioOutput", error, cap)) return VtrPonDeckLinkBackendError;
         s->audioEnabled = true;
