@@ -35,6 +35,7 @@
 #include <QToolButton>
 #include <QFile>
 #include <QDir>
+#include <gst/app/gstappsink.h>
 #include <gst/gst.h>
 #include <Windows.h>
 #include <TlHelp32.h>
@@ -201,11 +202,10 @@ bool uvcDeviceDiscoveryRegression(const QString &captureName = {}) {
 bool uvcBandwidthProtection(const QString &first, const QString &second) {
   UvcSourceSessionManager manager(false);
   QHash<QString, int> frames;
-  QString failure;
   QObject::connect(&manager, &UvcSourceSessionManager::thumbnailReady, &manager,
-                   [&](const QString &path, const QImage &image) { if (!image.isNull()) ++frames[path]; });
-  QObject::connect(&manager, &UvcSourceSessionManager::sourceError, &manager,
-                   [&](const QString &path, const QString &detail) { if (path == second) failure = detail; });
+                   [&](const QString &path, const QImage &image) {
+    if (image.size() == QSize(120, 68)) ++frames[path];
+  });
   struct Cleanup {
     UvcSourceSessionManager &manager;
     ~Cleanup() {
@@ -243,7 +243,17 @@ bool uvcBandwidthProtection(const QString &first, const QString &second) {
     }
     if (G_VALUE_TYPE(&value)) g_value_unset(&value);
     gst_iterator_free(elements);
-    return found;
+    if (!found) return false; // An upscaled 1080p output cannot establish input quality.
+    auto *sample = gst_app_sink_try_pull_sample(GST_APP_SINK(source.appSink), GST_SECOND);
+    if (!sample) return false;
+    auto *caps = gst_sample_get_caps(sample);
+    const auto *frame = caps ? gst_caps_get_structure(caps, 0) : nullptr;
+    int width = 0, height = 0;
+    const bool delivered = gst_sample_get_buffer(sample) && frame &&
+        gst_structure_get_int(frame, "width", &width) && gst_structure_get_int(frame, "height", &height) &&
+        width == 1920 && height == 1080;
+    gst_sample_unref(sample);
+    return delivered;
   };
   UvcSourceSessionManager::ProgramSource bound, stillBound;
   CHECK(awaitShutdown([&] { return manager.bindProgramDeck(0, first, bound); }, 8000) && fullHd(bound),
@@ -252,15 +262,10 @@ bool uvcBandwidthProtection(const QString &first, const QString &second) {
   CHECK(awaitShutdown([&] { return frames[second] >= before + 3; }),
         "the other camera's thumbnail continues while the deck uses full resolution");
   manager.setEditPreviewPath(second);
-  CHECK(awaitShutdown([&] { return manager.sourceOffline(second) || manager.sourceAvailable(second); }, 8000),
-        "the second camera's full-size request completes or reports the driver error");
-  if (manager.sourceOffline(second)) {
-    CHECK(failure.contains(QStringLiteral("0x800718cf")), "a rejected full-size request reports USB bandwidth exhaustion");
-  } else {
-    UvcSourceSessionManager::ProgramSource other;
-    CHECK(manager.bindProgramDeck(1, second, other) && fullHd(other), "a successful second full-size request is 1080p30");
-    manager.releaseProgramDeck(1);
-  }
+  UvcSourceSessionManager::ProgramSource other;
+  CHECK(manager.bindProgramDeck(1, second, other) && fullHd(other),
+        "the other camera delivers native 1080p30 while the first deck is bound");
+  manager.releaseProgramDeck(1);
   before = frames[first];
   CHECK(awaitShutdown([&] { return frames[first] >= before + 4; }) &&
         manager.bindProgramDeck(0, first, stillBound) && stillBound.pipeline == bound.pipeline && fullHd(stillBound),
@@ -268,12 +273,12 @@ bool uvcBandwidthProtection(const QString &first, const QString &second) {
   manager.setEditPreviewPath({});
   before = frames[second];
   CHECK(awaitShutdown([&] { return manager.sourceAvailable(second) && frames[second] >= before + 4; }, 8000),
-        "returning the second input to thumbnail size recovers it with the deck still bound");
+        "leaving edit keeps the second camera thumbnail live with the first deck bound");
   manager.releaseProgramDeck(0);
   CHECK(awaitShutdown([&] { return manager.sourceAvailable(first); }, 8000),
         "released deck returns to live thumbnail capture");
   CHECK(awaitShutdown([&] { return manager.bindProgramDeck(0, second, bound); }, 8000) && fullHd(bound),
-        "the second camera also promotes from its thumbnail to native 1080p30");
+        "standby reuses the second camera at native 1080p30");
   before = frames[first];
   CHECK(awaitShutdown([&] { return frames[first] >= before + 4; }), "first thumbnail continues to update");
   std::cout << "USB thumbnails and 1080p30 verified for both cameras, protected deck retained, frames="
@@ -294,23 +299,33 @@ bool uvcCaptureRoleRegression() {
   } cleanup{manager};
   UvcFaultTest::unexpectedCaptureMode.store(false);
   UvcFaultTest::observedCaptureWidth.store(0);
-  UvcFaultTest::expectedCaptureWidth.store(160);
+  UvcFaultTest::expectedCaptureWidth.store(1920);
+  const int opened = UvcFaultTest::createdSources.load();
+  QSize editSize;
+  int thumbnails = 0;
+  QObject listener;
+  QObject::connect(&manager, &UvcSourceSessionManager::thumbnailReady, &listener,
+                   [&](const QString &, const QImage &frame) {
+    if (frame.size() == QSize(120, 68)) ++thumbnails;
+  });
+  QObject::connect(&manager, &UvcSourceSessionManager::editPreviewReady, &listener,
+                   [&](const QString &, const QImage &frame) { editSize = frame.size(); });
   manager.setAvailableDevicePaths({path});
   manager.setRegisteredDevicePaths({path});
   manager.setPreviewDevicePaths({path});
-  const auto receiving = [&](int width) { return manager.sourceAvailable(path) && UvcFaultTest::observedCaptureWidth.load() == width; };
-  CHECK(awaitShutdown([&] { return receiving(160); }), "thumbnail starts in its low-resolution mode");
-  UvcFaultTest::expectedCaptureWidth.store(1920);
+  CHECK(awaitShutdown([&] { return manager.sourceAvailable(path) && thumbnails >= 2; }) &&
+            UvcFaultTest::observedCaptureWidth.load() == 1920,
+        "small playlist thumbnails use the full camera field of view from the first frames");
   manager.setEditPreviewPath(path);
-  CHECK(awaitShutdown([&] { return receiving(1920); }), "edit uses the normal camera mode");
+  CHECK(awaitShutdown([&] { return editSize == QSize(640, 360); }), "edit receives its own scaled frame");
   UvcSourceSessionManager::ProgramSource source;
-  CHECK(manager.bindProgramDeck(0, path, source), "deck shares the edit producer");
+  CHECK(manager.bindProgramDeck(0, path, source), "standby shares the edit producer");
   manager.setEditPreviewPath({});
-  CHECK(receiving(1920), "clearing edit preserves a bound deck");
-  UvcFaultTest::expectedCaptureWidth.store(160);
   manager.releaseProgramDeck(0);
-  CHECK(awaitShutdown([&] { return receiving(160); }), "last full-quality consumer releases the camera");
-  CHECK(!UvcFaultTest::unexpectedCaptureMode.load(), "every producer negotiates the intended size from its first caps event");
+  const int previous = thumbnails;
+  CHECK(awaitShutdown([&] { return thumbnails >= previous + 3; }) &&
+            UvcFaultTest::createdSources.load() == opened + 1 && !UvcFaultTest::unexpectedCaptureMode.load(),
+        "changing consumers never reopens the camera or switches its input format");
   return true;
 }
 

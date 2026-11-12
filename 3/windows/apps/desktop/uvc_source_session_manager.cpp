@@ -152,26 +152,35 @@ bool isUsbCamera(const QString &path)
         path.contains(QStringLiteral("#{e5323777-f976-4f5b-9b55-b94699c46e44}\\"));
 }
 
-// The open device now exposes its native modes, including fixed frame rates.
-GstCaps *thumbnailCaptureCaps(GstPad *pad)
+struct CameraModeRequest {
+    GstElement *filter;
+    int width;
+    int height;
+
+    ~CameraModeRequest() { gst_object_unref(filter); }
+};
+
+// Compare the open camera's native modes. KS drivers may list VGA before HD.
+GstCaps *cameraCaptureCaps(GstPad *pad, const CameraModeRequest &request)
 {
     GstCaps *modes = gst_pad_query_caps(pad, nullptr);
     GstCaps *best = nullptr;
-    std::tuple<qint64, bool, double> bestScore;
+    std::tuple<qint64, double, bool> bestScore;
     for (guint i = 0; i < gst_caps_get_size(modes); ++i) {
         const GstStructure *mode = gst_caps_get_structure(modes, i);
         const bool jpeg = gst_structure_has_name(mode, "image/jpeg");
         if (!jpeg && !gst_structure_has_name(mode, "video/x-raw")) continue;
         GstCaps *candidate = gst_caps_copy_nth(modes, i);
         GstStructure *choice = gst_caps_get_structure(candidate, 0);
-        gst_structure_fixate_field_nearest_int(choice, "width", kThumbnailWidth);
-        gst_structure_fixate_field_nearest_int(choice, "height", kThumbnailHeight);
-        gst_structure_fixate_field_nearest_fraction(choice, "framerate", kThumbnailFps, 1);
+        gst_structure_fixate_field_nearest_int(choice, "width", request.width);
+        gst_structure_fixate_field_nearest_int(choice, "height", request.height);
+        gst_structure_fixate_field_nearest_fraction(choice, "framerate", G_MAXINT, 1);
         int width, height, n, d;
         if (gst_structure_get_int(choice, "width", &width) && gst_structure_get_int(choice, "height", &height) &&
             gst_structure_get_fraction(choice, "framerate", &n, &d) && n > 0 && d > 0) {
-            const auto sizeDifference = std::abs(qint64(width) - kThumbnailWidth) + std::abs(qint64(height) - kThumbnailHeight);
-            const auto score = std::make_tuple(sizeDifference, !jpeg, std::abs(double(n) / d - kThumbnailFps));
+            const auto sizeDifference = std::abs(qint64(width) - request.width) + std::abs(qint64(height) - request.height);
+            const double fps = double(n) / d;
+            const auto score = std::make_tuple(sizeDifference, -fps, !jpeg);
             if (!best || score < bestScore) {
                 gst_caps_replace(&best, candidate);
                 bestScore = score;
@@ -183,13 +192,14 @@ GstCaps *thumbnailCaptureCaps(GstPad *pad)
     return best;
 }
 
-GstPadProbeReturn selectThumbnailMode(GstPad *pad, GstPadProbeInfo *info, gpointer filter)
+GstPadProbeReturn selectCameraMode(GstPad *pad, GstPadProbeInfo *info, gpointer data)
 {
     if (GST_EVENT_TYPE(GST_PAD_PROBE_INFO_EVENT(info)) != GST_EVENT_STREAM_START) return GST_PAD_PROBE_OK;
     // GstBaseSrc pushes STREAM_START before negotiating. Choose the mode on
     // that same thread so a default full-size read cannot race this filter.
-    if (auto *caps = thumbnailCaptureCaps(pad)) {
-        g_object_set(filter, "caps", caps, nullptr);
+    const auto &request = *static_cast<const CameraModeRequest *>(data);
+    if (auto *caps = cameraCaptureCaps(pad, request)) {
+        g_object_set(request.filter, "caps", caps, nullptr);
         gst_caps_unref(caps);
     }
     return GST_PAD_PROBE_REMOVE;
@@ -289,7 +299,6 @@ public:
         QPointer<UvcSourceSessionManager> owner;
         QString devicePath;
         bool useKs = false;
-        bool thumbnailOnly = false;
         QByteArray fullSizeJpeg;
         QString usbHub;
         bool bandwidthError = false;
@@ -508,10 +517,6 @@ public:
                 if (errorDetail) *errorDetail = session->errorDetail;
                 return false;
             }
-            if (session->thumbnailOnly != wantsThumbnailOnly(devicePath)) {
-                retireForRoleChange(session);
-                return false;
-            }
             return true;
         }
         if (startups_.contains(devicePath)) return true;
@@ -520,8 +525,7 @@ public:
         job->session->owner = owner_;
         job->session->devicePath = devicePath;
         job->session->useKs = pendingKs_.remove(devicePath);
-        job->session->thumbnailOnly = wantsThumbnailOnly(devicePath);
-        if (!job->session->thumbnailOnly) job->session->fullSizeJpeg = fullSizeJpeg_.value(devicePath);
+        job->session->fullSizeJpeg = fullSizeJpeg_.value(devicePath);
         const auto context = std::shared_ptr<GstContext>(
             programContext_ ? gst_context_ref(programContext_) : nullptr,
             [](GstContext *value) { if (value) gst_context_unref(value); });
@@ -606,7 +610,6 @@ public:
             return;
         }
         updateProgramValves(devicePath);
-        if (const auto session = sessions_.value(devicePath)) wakeBandwidthRetries(*session);
         releaseUnusedSessions();
     }
 
@@ -875,7 +878,8 @@ private:
             : session->useKs
             ? QStringLiteral("vtrponksvideosrc name=%1-source do-timestamp=true ! decodebin ! ")
             : QStringLiteral("mfvideosrc name=%1-source do-timestamp=true ! decodebin ! ");
-        if (session->thumbnailOnly)
+        const bool selectNativeMode = session->useKs && session->fullSizeJpeg.isEmpty();
+        if (selectNativeMode)
             input.replace(QStringLiteral("! decodebin"), QStringLiteral("! capsfilter name=%1-camera-mode ! decodebin"));
         else if (!session->fullSizeJpeg.isEmpty())
             input.replace(QStringLiteral("! decodebin"), QStringLiteral("! capsfilter caps=\"%1\" ! decodebin")
@@ -1012,16 +1016,18 @@ private:
         editCallbacks.new_sample = &Impl::onNewEditSample;
         gst_app_sink_set_callbacks(GST_APP_SINK(session->editSink),
                                    &editCallbacks, session.get(), nullptr);
-        if (session->thumbnailOnly) {
+        if (selectNativeMode) {
             auto *pad = gst_element_get_static_pad(session->source, "src");
             auto *filter = gst_bin_get_by_name(GST_BIN(pipeline), (sessionName + QStringLiteral("-camera-mode")).toUtf8().constData());
             if (!pad || !filter) {
                 if (pad) gst_object_unref(pad);
                 if (filter) gst_object_unref(filter);
-                *errorDetail = QStringLiteral("Could not configure the camera thumbnail input.");
+                *errorDetail = QStringLiteral("Could not configure the camera input format.");
                 return false;
             }
-            gst_pad_add_probe(pad, GST_PAD_PROBE_TYPE_EVENT_DOWNSTREAM, selectThumbnailMode, filter, gst_object_unref);
+            auto *request = new CameraModeRequest{filter, outputWidth, outputHeight};
+            gst_pad_add_probe(pad, GST_PAD_PROBE_TYPE_EVENT_DOWNSTREAM, selectCameraMode, request,
+                              [](gpointer data) { delete static_cast<CameraModeRequest *>(data); });
             gst_object_unref(pad);
         }
         if (gst_element_set_state(session->pipeline, GST_STATE_PLAYING)
@@ -1040,32 +1046,9 @@ private:
     }
 #endif
 
-    bool wantsThumbnailOnly(const QString &path) const
+    bool waitingToRetry(const QString &path) const
     {
-        return isUsbCamera(path) && path != editDevicePath_ &&
-            !deckDevicePaths_.values().contains(path) && !deckRequests_.values().contains(path);
-    }
-
-    bool waitingToRetry(const QString &path)
-    {
-        const auto blocked = bandwidthBlockedHubs_.constFind(path);
-        if (blocked != bandwidthBlockedHubs_.cend() && blocked->thumbnailOnly != wantsThumbnailOnly(path)) {
-            bandwidthBlockedHubs_.remove(path);
-            fullSizeJpeg_.remove(path);
-            retryAfterMs_.remove(path);
-        }
         return retryAfterMs_.value(path) > monotonicMs();
-    }
-
-    void retireForRoleChange(const std::shared_ptr<Session> &session)
-    {
-        const QString &path = session->devicePath;
-        if (session->useKs) pendingKs_.insert(path);
-        fullSizeJpeg_.remove(path);
-        healthyDevicePaths_.remove(path);
-        sessions_.remove(path);
-        wakeBandwidthRetries(*session);
-        retireSession(session);
     }
 
     void releaseUnusedSessions()
@@ -1082,11 +1065,6 @@ private:
             const bool bound = deckDevicePaths_.values().contains(devicePath);
             const bool probing = registeredDevicePaths_.contains(devicePath) &&
                 !healthyDevicePaths_.contains(devicePath) && existing->errorGeneration == 0;
-            if (!bound && !existing->errorGeneration && usedDevicePaths.contains(devicePath) &&
-                existing->thumbnailOnly != wantsThumbnailOnly(devicePath)) {
-                retireForRoleChange(existing);
-                continue;
-            }
             if (bound || (!deckLinkSuppressed(devicePath) && existing->errorGeneration == 0 &&
                           (usedDevicePaths.contains(devicePath) || probing))) {
                 continue;
@@ -1224,10 +1202,6 @@ private:
                 retireSession(job->session);
                 continue;
             }
-            if (job->session->thumbnailOnly != wantsThumbnailOnly(path)) {
-                retireForRoleChange(job->session);
-                continue;
-            }
             job->session->openedMs = monotonicMs();
             qInfo().noquote() << "UVC_CAPTURE opened" << path
                              << "success=" << job->succeeded
@@ -1281,7 +1255,7 @@ private:
                     auto *caps = gst_pad_get_current_caps(pad);
                     if (caps) {
                         auto *text = gst_caps_to_string(caps);
-                        qInfo().noquote() << "UVC_CAPTURE negotiated" << (session->thumbnailOnly ? "thumbnail" : "full")
+                        qInfo().noquote() << "UVC_CAPTURE negotiated" << "shared"
                                           << session->devicePath << text;
                         g_free(text);
                         gst_caps_unref(caps);
@@ -1323,7 +1297,7 @@ private:
     {
         const QString &path = session->devicePath;
         bool bandwidthRetry = false;
-        if (session->bandwidthError && !session->thumbnailOnly && session->fullSizeJpeg.isEmpty()) {
+        if (session->bandwidthError && session->fullSizeJpeg.isEmpty()) {
             const auto jpeg = sameSizeJpeg(session->source);
             if (!jpeg.isEmpty()) {
                 fullSizeJpeg_.insert(path, jpeg);
@@ -1343,7 +1317,7 @@ private:
         reportSourceFailure(path, session->bandwidthError
             ? QStringLiteral("USB camera bandwidth is insufficient (0x800718cf).") : detail);
         if (session->bandwidthError && !bandwidthRetry) {
-            bandwidthBlockedHubs_.insert(path, {session->usbHub, session->thumbnailOnly});
+            bandwidthBlockedHubs_.insert(path, session->usbHub);
             retryAfterMs_.insert(path, monotonicMs() + kBandwidthRetryIntervalMs);
         }
     }
@@ -1352,7 +1326,7 @@ private:
     {
         if (released.usbHub.isEmpty() || deckDevicePaths_.values().contains(released.devicePath)) return;
         for (auto it = bandwidthBlockedHubs_.cbegin(); it != bandwidthBlockedHubs_.cend(); ++it)
-            if (it->hub == released.usbHub && it.key() != released.devicePath) retryAfterMs_.remove(it.key());
+            if (it.value() == released.usbHub && it.key() != released.devicePath) retryAfterMs_.remove(it.key());
     }
 
     void updateProgramValves(const QString &devicePath)
@@ -1511,8 +1485,7 @@ private:
     QSet<QString> failedDevicePaths_;
     QSet<QString> pendingKs_;
     QHash<QString, QByteArray> fullSizeJpeg_;
-    struct BandwidthFailure { QString hub; bool thumbnailOnly; };
-    QHash<QString, BandwidthFailure> bandwidthBlockedHubs_;
+    QHash<QString, QString> bandwidthBlockedHubs_;
     QHash<QString, qint64> retryAfterMs_;
     QHash<QString, std::shared_ptr<Startup>> startups_;
     bool discoveryReady_ = false;
