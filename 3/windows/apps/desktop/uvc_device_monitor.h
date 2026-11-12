@@ -6,8 +6,6 @@
 #include <QTimer>
 #include <memory>
 
-template<class Device> class AsyncDeviceMonitor;
-
 struct UvcDevice {
   QString displayName;
   QString devicePath;
@@ -37,7 +35,8 @@ signals:
 private:
   void refreshDevices();
 
-  std::shared_ptr<AsyncDeviceMonitor<UvcDevice>> worker_;
+  class Discovery;
+  std::shared_ptr<Discovery> worker_;
   bool shutdownRequested_ = false;
   QTimer refreshTimer_;
   QList<UvcDevice> devices_;

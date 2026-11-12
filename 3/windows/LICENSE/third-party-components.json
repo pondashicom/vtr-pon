@@ -696,6 +696,7 @@
     }
   },
   "projectBinaries": [
+    "gstvtrponks.dll",
     "vtr-pon.exe",
     "vtr-pon-pfl-output.exe",
     "vtr-pon-operator-monitor.exe",

@@ -1,4 +1,5 @@
 #include "decklink.h"
+#include "capture_device_path.h"
 #include "controller_settings.h"
 #include "test_pattern_store.h"
 #include "virtual_camera/output.h"
@@ -2117,7 +2118,7 @@ private:
     const bool stillAvailable =
         std::any_of(availableDevices.cbegin(), availableDevices.cend(),
                     [&](const UvcDevice &device) {
-                      return device.devicePath == devicePath &&
+                      return vtrpon::sameCaptureDevicePath(device.devicePath, devicePath) &&
                              device.displayName == displayName;
                     });
     if (!stillAvailable) {
@@ -2243,7 +2244,7 @@ private:
       const quint64 itemId = playlistModel_->itemIdAt(row);
       const auto item = playlistModel_->itemState(itemId);
       if (item && item->sourceType == PlaylistSourceType::Uvc &&
-          item->filePath == devicePath) {
+          vtrpon::sameCaptureDevicePath(item->filePath, devicePath)) {
         playlistPanel_->setItemThumbnail(itemId, image, errorDetail);
       }
     }

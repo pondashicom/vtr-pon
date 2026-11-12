@@ -1,4 +1,5 @@
 #include "playlist_model.h"
+#include "capture_device_path.h"
 #include "live_audio_source.h"
 #include "playlist_play_sequence.h"
 #include "playlist_media_availability.h"
@@ -1094,9 +1095,11 @@ void PlaylistModel::setFileMediaOffline(quint64 itemId) {
 }
 
 void PlaylistModel::setUvcDeviceAvailable(const QString &devicePath, bool available) {
+  const QString canonicalPath = vtrpon::canonicalCaptureDevicePath(devicePath);
   QList<quint64> changed;
   for (const auto &item : std::as_const(itemsById_)) {
-    if (item.sourceType != PlaylistSourceType::Uvc || item.filePath != devicePath ||
+    if (item.sourceType != PlaylistSourceType::Uvc ||
+        vtrpon::canonicalCaptureDevicePath(item.filePath) != canonicalPath ||
         itemMediaOffline(item.id) == !available) continue;
     if (available) mediaAvailability_->setOffline(item.id, false);
     else mediaAvailability_->setOffline(item.id, true);

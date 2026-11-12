@@ -30,6 +30,8 @@ public:
     UvcSourceSessionManager &operator=(const UvcSourceSessionManager &) = delete;
 
     void setProgramContext(GstContext *context);
+    // Windows camera symbolic links share a case-insensitive identity. Signals
+    // use a canonical spelling; callers retain their saved device-path spelling.
     bool ensureSource(const QString &devicePath,
                       QString *errorDetail = nullptr);
     bool bindProgramDeck(int deckIndex, const QString &devicePath,

@@ -12,6 +12,10 @@ inline std::atomic_bool dropFrames{false};
 inline std::atomic_bool holdStop{false};
 inline std::atomic_bool stopEntered{false};
 inline std::atomic_int liveSources{0};
+inline std::atomic_int createdSources{0};
+inline std::atomic_int expectedCaptureWidth{0};
+inline std::atomic_int observedCaptureWidth{0};
+inline std::atomic_bool unexpectedCaptureMode{false};
 struct Source { GstBin parent; };
 struct SourceClass { GstBinClass parent; };
 G_DEFINE_TYPE(Source, fault_uvc_source, GST_TYPE_BIN)
@@ -48,10 +52,34 @@ inline void fault_uvc_source_class_init(SourceClass *klass) {
 }
 inline void fault_uvc_source_init(Source *self) {
     ++liveSources;
+    ++createdSources;
     auto *source = gst_element_factory_make("videotestsrc", nullptr);
     g_object_set(source, "is-live", TRUE, "do-timestamp", TRUE, nullptr);
     gst_bin_add(GST_BIN(self), source);
     auto *pad = gst_element_get_static_pad(source, "src");
+    if (expectedCaptureWidth.load()) {
+        auto *filter = gst_element_factory_make("capsfilter", nullptr);
+        auto *modes = gst_caps_from_string("video/x-raw,format=NV12,width=1920,height=1080,framerate=30/1;"
+                                           "video/x-raw,format=NV12,width=160,height=120,framerate=10/1");
+        g_object_set(filter, "caps", modes, nullptr);
+        gst_caps_unref(modes);
+        gst_bin_add(GST_BIN(self), filter);
+        gst_element_link(source, filter);
+        gst_pad_add_probe(pad, GST_PAD_PROBE_TYPE_EVENT_DOWNSTREAM, [](GstPad *, GstPadProbeInfo *info, gpointer) {
+            auto *event = GST_PAD_PROBE_INFO_EVENT(info);
+            if (GST_EVENT_TYPE(event) == GST_EVENT_CAPS) {
+                GstCaps *caps = nullptr;
+                gst_event_parse_caps(event, &caps);
+                int width = 0;
+                gst_structure_get_int(gst_caps_get_structure(caps, 0), "width", &width);
+                if (width != expectedCaptureWidth.load()) unexpectedCaptureMode.store(true);
+                observedCaptureWidth.store(width);
+            }
+            return GST_PAD_PROBE_OK;
+        }, nullptr, nullptr);
+        gst_object_unref(pad);
+        pad = gst_element_get_static_pad(filter, "src");
+    }
     gst_pad_add_probe(pad, GST_PAD_PROBE_TYPE_BUFFER,
         [](GstPad *, GstPadProbeInfo *, gpointer) {
             return dropFrames.load() ? GST_PAD_PROBE_DROP : GST_PAD_PROBE_OK;

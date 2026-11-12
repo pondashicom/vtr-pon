@@ -1,4 +1,5 @@
 #include "decklink.h"
+#include "capture_device_path.h"
 #include "edit_session_controller.h"
 #include "live_audio_source.h"
 #include "wasapi_raw_audio_source.h"
@@ -490,25 +491,25 @@ EditSessionController::EditSessionController(EditPanel *panel,
           });
   connect(uvcSessions, &UvcSourceSessionManager::thumbnailReady, this,
           [this](const QString &path, const QImage &image) {
-            if (panel_ && path == liveDevicePath_ && !livePreviewReady_ && !image.isNull())
+            if (panel_ && vtrpon::sameCaptureDevicePath(path, liveDevicePath_) && !livePreviewReady_ && !image.isNull())
               panel_->setLiveFrame(image);
           });
   connect(uvcSessions, &UvcSourceSessionManager::editPreviewReady, this,
           [this](const QString &path, const QImage &image) {
-            if (panel_ && path == liveDevicePath_ && !image.isNull()) {
+            if (panel_ && vtrpon::sameCaptureDevicePath(path, liveDevicePath_) && !image.isNull()) {
               livePreviewReady_ = true;
               panel_->setLiveFrame(image);
             }
           });
   connect(uvcSessions, &UvcSourceSessionManager::sourceError, this,
           [this](const QString &path, const QString &) {
-            if (panel_ && path == liveDevicePath_) {
+            if (panel_ && vtrpon::sameCaptureDevicePath(path, liveDevicePath_)) {
               panel_->setLiveFrame({});
             }
           });
   connect(uvcSessions, &UvcSourceSessionManager::sourceSuspended, this,
           [this](const QString &path) {
-            if (path != liveDevicePath_) return;
+            if (!vtrpon::sameCaptureDevicePath(path, liveDevicePath_)) return;
             liveAudio_->stop();
             liveAudioNeedsStart_ = true;
             livePreviewReady_ = false;
@@ -517,7 +518,7 @@ EditSessionController::EditSessionController(EditPanel *panel,
           });
   connect(uvcAudioMappings, &UvcAudioMappingStore::mappingChanged, this,
           [this](const QString &path, const QString &) {
-            if (path != liveDevicePath_) return;
+            if (!vtrpon::sameCaptureDevicePath(path, liveDevicePath_)) return;
             liveAudio_->stop();
             liveAudioNeedsStart_ = true;
             timer_.start();

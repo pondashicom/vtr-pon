@@ -1,4 +1,5 @@
 #include "decklink.h"
+#include "capture_device_path.h"
 #include "program_playout_controller.h"
 #include "live_audio_source.h"
 #include "network_video_source.h"
@@ -181,7 +182,7 @@ ProgramPlayoutController::ProgramPlayoutController(
                                         : std::nullopt;
               if (selected &&
                   selected->sourceType == PlaylistSourceType::Uvc &&
-                  selected->filePath == uvcDevicePath) {
+                  vtrpon::sameCaptureDevicePath(selected->filePath, uvcDevicePath)) {
                 scheduleSelectedItemCue();
               }
             });

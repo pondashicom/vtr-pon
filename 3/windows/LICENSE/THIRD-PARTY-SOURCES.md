@@ -6,7 +6,8 @@
 
 - ファイル名・版・ハッシュ・適用条件: [third-party-components.json](third-party-components.json)
 - ソース URL・アーカイブ名・SHA-256: [third-party-sources.json](third-party-sources.json)
-- VTR-PON による第三者 DLL の改変はありません。Qt のソースは Qt 6.8.3 の公式配布ソースです。Qt PDF のソースと内包コードは `qtwebengine` に含まれます。
+- カメラ入力の `gstvtrponks.dll` は GStreamer 1.28.5 の winks を変更して作成します。変更後の C ソース、ビルド定義、許諾文は配布物の `LICENSE/third-party/vtrponks-source/` に収録します。
+- Qt のソースは Qt 6.8.3 の公式配布ソースです。Qt PDF のソースと内包コードは `qtwebengine` に含まれます。
 - GStreamer と依存ライブラリは Cerbero 1.28.5 のレシピ・パッチを含めて対応ソースとします。下表の `cerbero` アーカイブに `recipes/`、設定、ビルド用スクリプト、README が入っています。上流 tarball と該当するレシピ・パッチを併せて取得してください。
 - 特に FFmpeg は `ffmpeg-7.1.tar.xz` と Cerbero の `recipes/ffmpeg.recipe`、`recipes/ffmpeg/0001-Add-Meson-build.patch`、`recipes/ffmpeg/fix-textrels.patch` が対象です。配布 DLL は Meson で構築され、nonfree / version3 は無効、GPL オプションは無効です。DLL 自身が返す設定文字列もファイル一覧に保持しています。
 - GStreamer のインストールに残る `share/versions.txt` は一部古いため、この表の版決定には単独では使っていません。

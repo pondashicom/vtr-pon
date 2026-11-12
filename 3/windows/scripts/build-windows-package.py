@@ -238,6 +238,7 @@ def main() -> int:
          stage / "virtual-camera/install.ps1")
     shutil.copytree(ROOT / "assets/testpatterns", stage / "assets/testpatterns")
     shutil.copytree(ROOT / "LICENSE", stage / "LICENSE")
+    shutil.copytree(ROOT / "third-party/winks", stage / "LICENSE/third-party/vtrponks-source")
     if release_ready:
         (stage / "LICENSE/release-source.json").write_text(
             json.dumps(source_record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -282,6 +283,7 @@ def main() -> int:
     for source in sorted(plugin_paths):
         roots.append(copy(source,
                           stage / "gstreamer/lib/gstreamer-1.0" / source.name))
+    roots.append(copy(build / "gstvtrponks.dll", stage / "gstvtrponks.dll"))
     roots.append(copy(scanner,
                       stage / "gstreamer/libexec/gstreamer-1.0" / scanner.name))
 

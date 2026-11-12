@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.24)
 
 project(VTRPON LANGUAGES CXX)
 if(WIN32)
+  enable_language(C)
   enable_language(RC)
 endif()
 
@@ -849,6 +850,9 @@ if(BUILD_TESTING)
       PkgConfig::GSTREAMER PkgConfig::GSTREAMER_APP PkgConfig::GSTREAMER_D3D11
       d3d11 d3dcompiler dwmapi dxgi gdi32 ole32 oleaut32 user32 winmm pdh psapi)
     add_test(NAME program-playout-transition COMMAND program-playout-transition-test)
+    add_test(NAME uvc-device-discovery
+      COMMAND program-playout-transition-test --uvc-device-discovery-only)
+    set_tests_properties(uvc-device-discovery PROPERTIES TIMEOUT 15)
     add_test(NAME document-import-queue
       COMMAND program-playout-transition-test --document-import-queue-only)
     add_test(NAME switcher-control
@@ -1435,6 +1439,7 @@ if(MSVC)
       /DELAYLOAD:gstpbutils-1.0-0.dll)
     set_tests_properties(program-audio-output program-audio-meter program-audio-bridge
       deck-source-session dual-deck-player-contract aux-playback program-playout-transition
+      uvc-device-discovery
       document-import-queue
       media-thumbnailer media-import-queue playlist-panel-drag-drop
       powerpoint-import-contract pdf-import-contract pdf-import-video-smoke
@@ -1521,6 +1526,16 @@ foreach(raw_audio_consumer IN ITEMS
     target_link_libraries(${raw_audio_consumer} PRIVATE vtrpon-wasapi-raw-audio)
   endif()
 endforeach()
+
+# UVC discovery reads MF descriptions without activating capture sources.
+if(WIN32)
+  foreach(uvc_discovery_consumer IN ITEMS
+      vtr-pon program-playout-transition-test playlist-panel-drag-drop-test)
+    if(TARGET ${uvc_discovery_consumer})
+      target_link_libraries(${uvc_discovery_consumer} PRIVATE mf)
+    endif()
+  endforeach()
+endif()
 
 # Native initialization/error/stop checks avoid physical devices by default.
 if(WIN32 AND BUILD_TESTING)
@@ -1766,12 +1781,33 @@ if(WIN32 AND BUILD_TESTING)
   set_tests_properties(decklink-media-host PROPERTIES TIMEOUT 60 RUN_SERIAL TRUE)
 endif()
 
+if(WIN32)
+  add_subdirectory(third-party/winks)
+  if(BUILD_TESTING)
+    add_library(uvc-first-read-test-plugin MODULE EXCLUDE_FROM_ALL tests/uvc_read_error_plugin.c)
+    target_link_libraries(uvc-first-read-test-plugin PRIVATE PkgConfig::GSTREAMER)
+    set_target_properties(uvc-first-read-test-plugin PROPERTIES
+      AUTOMOC OFF AUTOUIC OFF PREFIX "" OUTPUT_NAME gstmediafoundation
+      LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/uvc-investigation/first-read-plugin"
+      RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/uvc-investigation/first-read-plugin")
+  endif()
+  foreach(capture_consumer vtr-pon program-playout-transition-test deck-source-session-test
+      dual-deck-player-contract-test network-video-test decklink-test)
+    if(TARGET ${capture_consumer})
+      target_link_libraries(${capture_consumer} PRIVATE cfgmgr32)
+      add_dependencies(${capture_consumer} gstvtrponks)
+    endif()
+  endforeach()
+endif()
+
 if(WIN32 AND CMAKE_CONFIGURATION_TYPES)
   # Keep the established development launch path stable with VS/multi-config
   # builds. Only host-owned runtime files are copied; add-ons stay separate.
   add_custom_command(TARGET vtr-pon POST_BUILD
     COMMAND "${CMAKE_COMMAND}" -E copy_if_different
       "$<TARGET_FILE:vtr-pon>" "${CMAKE_BINARY_DIR}/vtr-pon.exe"
+    COMMAND "${CMAKE_COMMAND}" -E copy_if_different
+      "$<TARGET_FILE:gstvtrponks>" "${CMAKE_BINARY_DIR}/gstvtrponks.dll"
     COMMAND "${CMAKE_COMMAND}" -E copy_if_different
       "$<TARGET_FILE:vtr-pon-addon-manager>" "${CMAKE_BINARY_DIR}/vtr-pon-addon-manager.exe"
     COMMAND "${CMAKE_COMMAND}" -E copy_if_different

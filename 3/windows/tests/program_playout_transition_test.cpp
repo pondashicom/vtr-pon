@@ -132,6 +132,188 @@ bool createVideo(const QString &path, bool audio = false, bool av = false) {
   return ok;
 }
 
+bool uvcDeviceDiscoveryRegression(const QString &captureName = {}) {
+  const bool gstWasInitialized = gst_is_initialized();
+  UvcDeviceMonitor monitor;
+  std::unique_ptr<UvcSourceSessionManager> capture;
+  struct Cleanup {
+    UvcDeviceMonitor &monitor;
+    std::unique_ptr<UvcSourceSessionManager> &capture;
+    ~Cleanup() {
+      monitor.requestShutdown();
+      if (capture) capture->requestShutdown();
+      if (!awaitShutdown([&] {
+            return monitor.shutdownComplete() && (!capture || capture->shutdownComplete());
+          }, 8000)) std::abort();
+    }
+  } cleanup{monitor, capture};
+  CHECK(awaitShutdown([&] { return monitor.isAvailable() || !monitor.errorDetail().isEmpty(); }, 5000),
+        "metadata-only discovery finishes without opening cameras");
+  if (!monitor.isAvailable()) std::cerr << monitor.errorDetail().toStdString() << '\n';
+  CHECK(monitor.isAvailable(), "native camera metadata is available");
+  QElapsedTimer refreshes;
+  refreshes.start();
+  CHECK(awaitShutdown([&] { return refreshes.elapsed() >= 2200; }, 3000),
+        "metadata discovery refreshes without a capture provider");
+  CHECK((gst_is_initialized() != FALSE) == gstWasInitialized,
+        "listing cameras does not initialize GStreamer");
+  const auto devices = monitor.devices();
+  QSet<QString> paths;
+  QString selected;
+  for (const auto &device : devices) {
+    CHECK(!device.displayName.isEmpty() && !device.devicePath.isEmpty(),
+          "discovery retains camera names and exact device paths");
+    CHECK(!paths.contains(device.devicePath.toCaseFolded()), "camera paths are unique");
+    paths.insert(device.devicePath.toCaseFolded());
+    std::cout << "DISCOVERED_CAMERA " << device.displayName.toStdString() << '\n';
+    if (device.displayName == captureName) selected = device.devicePath;
+  }
+  std::cout << "DISCOVERY_ONLY_READY count=" << devices.size()
+            << " gstInitialized=" << gst_is_initialized() << std::endl;
+  if (captureName.isEmpty()) return true;
+  CHECK(!selected.isEmpty(), "the selected physical camera exists in metadata discovery");
+  gst_init(nullptr, nullptr);
+  capture = std::make_unique<UvcSourceSessionManager>(false);
+  QSet<QString> available;
+  for (const auto &device : devices) available.insert(device.devicePath);
+  capture->setAvailableDevicePaths(available);
+  struct CaptureResult { int frames = 0; QString failure; };
+  const auto result = std::make_shared<CaptureResult>();
+  QObject::connect(capture.get(), &UvcSourceSessionManager::thumbnailReady, capture.get(),
+                   [result, selected](const QString &path, const QImage &image) {
+    if (path == selected && !image.isNull()) ++result->frames;
+  });
+  QObject::connect(capture.get(), &UvcSourceSessionManager::sourceError, capture.get(),
+                   [result](const QString &, const QString &detail) { result->failure = detail; });
+  std::cout << "SELECTED_CAMERA_START " << captureName.toStdString() << std::endl;
+  capture->setPreviewDevicePaths({selected});
+  CHECK(awaitShutdown([&] {
+    return !result->failure.isEmpty() || (capture->sourceAvailable(selected) && result->frames >= 3);
+  }, 8000), "the selected camera supplies live frames");
+  if (!result->failure.isEmpty()) std::cerr << result->failure.toStdString() << '\n';
+  CHECK(result->failure.isEmpty() && result->frames >= 3, "only the selected camera is needed for capture");
+  std::cout << "SELECTED_CAMERA_FRAMES " << captureName.toStdString()
+            << " frames=" << result->frames << std::endl;
+  return true;
+}
+
+// Opt-in hardware case for two 1080p30 USB cameras on one root hub.
+bool uvcBandwidthProtection(const QString &first, const QString &second) {
+  UvcSourceSessionManager manager(false);
+  QHash<QString, int> frames;
+  QString failure;
+  QObject::connect(&manager, &UvcSourceSessionManager::thumbnailReady, &manager,
+                   [&](const QString &path, const QImage &image) { if (!image.isNull()) ++frames[path]; });
+  QObject::connect(&manager, &UvcSourceSessionManager::sourceError, &manager,
+                   [&](const QString &path, const QString &detail) { if (path == second) failure = detail; });
+  struct Cleanup {
+    UvcSourceSessionManager &manager;
+    ~Cleanup() {
+      manager.releaseProgramDeck(1);
+      manager.releaseProgramDeck(0);
+      manager.requestShutdown();
+      if (!awaitShutdown([&] { return manager.shutdownComplete(); })) std::abort();
+    }
+  } cleanup{manager};
+  manager.setAvailableDevicePaths({first, second});
+  manager.setRegisteredDevicePaths({first, second});
+  manager.setPreviewDevicePaths({first, second});
+  CHECK(awaitShutdown([&] { return frames[first] >= 3 && frames[second] >= 3; }, 8000),
+        "both thumbnail-only cameras deliver new frames");
+  const auto fullHd = [](const UvcSourceSessionManager::ProgramSource &source) {
+    GstIterator *elements = gst_bin_iterate_sources(GST_BIN(source.pipeline));
+    GValue value = G_VALUE_INIT;
+    bool found = false;
+    while (gst_iterator_next(elements, &value) == GST_ITERATOR_OK) {
+      auto *element = GST_ELEMENT(g_value_get_object(&value));
+      if (g_object_class_find_property(G_OBJECT_GET_CLASS(element), "device-path")) {
+        auto *pad = gst_element_get_static_pad(element, "src");
+        auto *caps = gst_pad_get_current_caps(pad);
+        if (caps) {
+          const auto *format = gst_caps_get_structure(caps, 0);
+          int w, h, n, d;
+          found = gst_structure_get_int(format, "width", &w) && gst_structure_get_int(format, "height", &h) &&
+                  gst_structure_get_fraction(format, "framerate", &n, &d) && w == 1920 && h == 1080 && n == 30 * d;
+          gst_caps_unref(caps);
+        }
+        gst_object_unref(pad);
+      }
+      g_value_reset(&value);
+      if (found) break;
+    }
+    if (G_VALUE_TYPE(&value)) g_value_unset(&value);
+    gst_iterator_free(elements);
+    return found;
+  };
+  UvcSourceSessionManager::ProgramSource bound, stillBound;
+  CHECK(awaitShutdown([&] { return manager.bindProgramDeck(0, first, bound); }, 8000) && fullHd(bound),
+        "standby receives 1080p30 from the camera before binding");
+  int before = frames[second];
+  CHECK(awaitShutdown([&] { return frames[second] >= before + 3; }),
+        "the other camera's thumbnail continues while the deck uses full resolution");
+  manager.setEditPreviewPath(second);
+  CHECK(awaitShutdown([&] { return manager.sourceOffline(second) || manager.sourceAvailable(second); }, 8000),
+        "the second camera's full-size request completes or reports the driver error");
+  if (manager.sourceOffline(second)) {
+    CHECK(failure.contains(QStringLiteral("0x800718cf")), "a rejected full-size request reports USB bandwidth exhaustion");
+  } else {
+    UvcSourceSessionManager::ProgramSource other;
+    CHECK(manager.bindProgramDeck(1, second, other) && fullHd(other), "a successful second full-size request is 1080p30");
+    manager.releaseProgramDeck(1);
+  }
+  before = frames[first];
+  CHECK(awaitShutdown([&] { return frames[first] >= before + 4; }) &&
+        manager.bindProgramDeck(0, first, stillBound) && stillBound.pipeline == bound.pipeline && fullHd(stillBound),
+        "a competing request does not interrupt or downgrade the bound camera");
+  manager.setEditPreviewPath({});
+  before = frames[second];
+  CHECK(awaitShutdown([&] { return manager.sourceAvailable(second) && frames[second] >= before + 4; }, 8000),
+        "returning the second input to thumbnail size recovers it with the deck still bound");
+  manager.releaseProgramDeck(0);
+  CHECK(awaitShutdown([&] { return manager.sourceAvailable(first); }, 8000),
+        "released deck returns to live thumbnail capture");
+  CHECK(awaitShutdown([&] { return manager.bindProgramDeck(0, second, bound); }, 8000) && fullHd(bound),
+        "the second camera also promotes from its thumbnail to native 1080p30");
+  before = frames[first];
+  CHECK(awaitShutdown([&] { return frames[first] >= before + 4; }), "first thumbnail continues to update");
+  std::cout << "USB thumbnails and 1080p30 verified for both cameras, protected deck retained, frames="
+            << frames[first] << "/" << frames[second] << std::endl;
+  return true;
+}
+
+bool uvcCaptureRoleRegression() {
+  const QString path = QStringLiteral("\\\\?\\usb#role-test#{e5323777-f976-4f5b-9b55-b94699c46e44}\\global");
+  UvcSourceSessionManager manager(false);
+  struct Cleanup {
+    UvcSourceSessionManager &manager;
+    ~Cleanup() {
+      manager.requestShutdown();
+      if (!awaitShutdown([&] { return manager.shutdownComplete(); })) std::abort();
+      UvcFaultTest::expectedCaptureWidth.store(0);
+    }
+  } cleanup{manager};
+  UvcFaultTest::unexpectedCaptureMode.store(false);
+  UvcFaultTest::observedCaptureWidth.store(0);
+  UvcFaultTest::expectedCaptureWidth.store(160);
+  manager.setAvailableDevicePaths({path});
+  manager.setRegisteredDevicePaths({path});
+  manager.setPreviewDevicePaths({path});
+  const auto receiving = [&](int width) { return manager.sourceAvailable(path) && UvcFaultTest::observedCaptureWidth.load() == width; };
+  CHECK(awaitShutdown([&] { return receiving(160); }), "thumbnail starts in its low-resolution mode");
+  UvcFaultTest::expectedCaptureWidth.store(1920);
+  manager.setEditPreviewPath(path);
+  CHECK(awaitShutdown([&] { return receiving(1920); }), "edit uses the normal camera mode");
+  UvcSourceSessionManager::ProgramSource source;
+  CHECK(manager.bindProgramDeck(0, path, source), "deck shares the edit producer");
+  manager.setEditPreviewPath({});
+  CHECK(receiving(1920), "clearing edit preserves a bound deck");
+  UvcFaultTest::expectedCaptureWidth.store(160);
+  manager.releaseProgramDeck(0);
+  CHECK(awaitShutdown([&] { return receiving(160); }), "last full-quality consumer releases the camera");
+  CHECK(!UvcFaultTest::unexpectedCaptureMode.load(), "every producer negotiates the intended size from its first caps event");
+  return true;
+}
+
 bool uvcInitialFailureRegression() {
   PlaylistModel model;
   UvcSourceSessionManager manager(false);
@@ -160,6 +342,155 @@ bool uvcInitialFailureRegression() {
   manager.setRegisteredDevicePaths({path});
   CHECK(manager.sourceOffline(path),
         "an item restored after discovery knows its camera is absent");
+  return true;
+}
+
+bool uvcIdentityAndDemandRegression() {
+  UvcSourceSessionManager manager(false);
+  struct Cleanup {
+    UvcSourceSessionManager &manager;
+    ~Cleanup() {
+      manager.requestShutdown();
+      if (!awaitShutdown([&] { return manager.shutdownComplete(); })) std::abort();
+    }
+  } cleanup{manager};
+  const QString camera = QStringLiteral("\\\\?\\usb#vid_a16f&pid_0304#identity-camera\\global");
+  const QString alias = camera.toUpper();
+  const QString unused = QStringLiteral("\\\\?\\usb#vid_056e&pid_701e#unused-camera\\global");
+  const int sourcesBefore = UvcFaultTest::liveSources.load();
+  const int createdBefore = UvcFaultTest::createdSources.load();
+  PlaylistModel model;
+  PlaylistItemRegistration item;
+  item.sourceType = PlaylistSourceType::Uvc;
+  item.mediaType = PlaylistMediaType::Video;
+  item.filePath = alias;
+  item.displayName = QStringLiteral("Camera stored with upper-case identifier");
+  const auto first = model.addItems({item});
+  item.filePath = camera;
+  const auto second = model.addItemsAtomically({item});
+  CHECK(first.size() == 1 && second.size() == 1, "camera aliases register as separate playlist items");
+  auto snapshot = model.snapshot();
+  snapshot.items[0].filePath = alias;
+  PlaylistModel restored;
+  CHECK(restored.restoreSnapshot(snapshot), "a saved camera identifier can be restored");
+  CHECK(model.itemState(first[0])->filePath == alias &&
+        restored.itemState(first[0])->filePath == alias,
+        "saved camera spellings remain intact for existing audio mapping keys");
+  QObject::connect(&manager, &UvcSourceSessionManager::sourceAvailabilityChanged,
+                   &model, &PlaylistModel::setUvcDeviceAvailable);
+  QObject::connect(&manager, &UvcSourceSessionManager::sourceAvailabilityChanged,
+                   &restored, &PlaylistModel::setUvcDeviceAvailable);
+  int frames = 0;
+  int errors = 0;
+  QObject::connect(&manager, &UvcSourceSessionManager::thumbnailReady, &manager,
+                   [&](const QString &path, const QImage &image) {
+    if (path.compare(camera, Qt::CaseInsensitive) == 0 && !image.isNull()) ++frames;
+  });
+  QObject::connect(&manager, &UvcSourceSessionManager::sourceError, &manager,
+                   [&](const QString &, const QString &) { ++errors; });
+  manager.setAvailableDevicePaths({camera, unused});
+  manager.setRegisteredDevicePaths({alias, camera, unused});
+  CHECK(!manager.sourceOffline(alias), "discovery recognizes the connected Windows camera regardless of letter case");
+  manager.setPreviewDevicePaths({alias, camera});
+  CHECK(awaitShutdown([&] { return frames >= 2 && manager.sourceAvailable(alias); }, 6000),
+        "both identifier spellings receive fresh camera frames");
+  CHECK(errors == 0 && !manager.sourceOffline(camera) && !model.itemMediaOffline(first[0]),
+        "restoring an upper-case camera identifier never produces MEDIA OFFLINE");
+  CHECK(UvcFaultTest::liveSources.load() == sourcesBefore + 1 &&
+        UvcFaultTest::createdSources.load() == createdBefore + 1 && manager.latestThumbnail(unused).isNull(),
+        "aliases share one capture and an unused registered camera is not opened");
+  UvcSourceSessionManager::ProgramSource a, b;
+  CHECK(manager.bindProgramDeck(0, alias, a) && manager.bindProgramDeck(1, camera, b) &&
+        a.pipeline == b.pipeline, "both decks share the same physical input for case aliases");
+  GError *error = g_error_new_literal(GST_RESOURCE_ERROR, GST_RESOURCE_ERROR_READ,
+                                     "Injected camera read failure");
+  gst_element_post_message(a.pipeline, gst_message_new_error(GST_OBJECT(a.pipeline), error,
+                                                           "controlled input failure, not an OS reproduction"));
+  g_error_free(error);
+  CHECK(awaitShutdown([&] { return model.itemMediaOffline(first[0]) && model.itemMediaOffline(second[0]); }),
+        "an injected input error marks all aliases offline together");
+  CHECK(restored.itemMediaOffline(first[0]) && restored.itemMediaOffline(second[0]),
+        "restored aliases receive the same failure notification");
+  manager.releaseProgramDeck(0);
+  manager.releaseProgramDeck(1);
+  manager.setPreviewDevicePaths({});
+  const int framesBeforeRecovery = frames;
+  CHECK(awaitShutdown([&] {
+    return frames > framesBeforeRecovery && !model.itemMediaOffline(first[0]) &&
+           !model.itemMediaOffline(second[0]) && !manager.sourceIsRetiring(camera) &&
+           UvcFaultTest::liveSources.load() == sourcesBefore;
+  }, 7000), "a previously used hidden input recovers with a fresh frame and releases its probe");
+  CHECK(!restored.itemMediaOffline(first[0]) && !restored.itemMediaOffline(second[0]) && errors == 1,
+        "recovery clears all restored aliases without repeated false errors");
+  CHECK(model.onAirItemId() == 0 && restored.onAirItemId() == 0,
+        "recovering a camera never starts ON AIR automatically");
+  manager.setPreviewDevicePaths({alias, camera});
+  const int beforeReopen = frames;
+  CHECK(awaitShutdown([&] { return frames > beforeReopen; }), "the stopped input can reopen with fresh frames");
+  CHECK(UvcFaultTest::liveSources.load() == sourcesBefore + 1 &&
+        UvcFaultTest::createdSources.load() == createdBefore + 3 && manager.latestThumbnail(unused).isNull(),
+        "reopening keeps one capture and never opens the unrelated camera");
+  PlaylistItemRegistration ndi = item;
+  ndi.filePath = QStringLiteral("ndi://Camera/CaseSensitiveSource");
+  const auto ndiIds = model.addItems({ndi});
+  CHECK(ndiIds.size() == 1 && model.itemState(ndiIds[0])->filePath == ndi.filePath,
+        "network input identifiers retain their case-sensitive spelling");
+  return true;
+}
+
+bool uvcSlowOpeningRegression() {
+  UvcSourceSessionManager manager(false);
+  struct Cleanup {
+    UvcSourceSessionManager &manager;
+    ~Cleanup() {
+      UvcFaultTest::holdOpen.store(false);
+      UvcFaultTest::dropFrames.store(false);
+      manager.requestShutdown();
+      if (!awaitShutdown([&] { return manager.shutdownComplete(); })) std::abort();
+    }
+  } cleanup{manager};
+  const QString path = QStringLiteral("slow-opening-camera");
+  int errors = 0;
+  QObject::connect(&manager, &UvcSourceSessionManager::sourceError,
+                   &manager, [&](const QString &, const QString &) { ++errors; });
+  UvcFaultTest::openEntered.store(false);
+  UvcFaultTest::holdOpen.store(true);
+  UvcFaultTest::dropFrames.store(true);
+  manager.setAvailableDevicePaths({path});
+  manager.setPreviewDevicePaths({path});
+  CHECK(awaitShutdown([] { return UvcFaultTest::openEntered.load(); }),
+        "slow camera opening reaches the driver worker");
+  QElapsedTimer opening;
+  opening.start();
+  CHECK(awaitShutdown([&] { return opening.elapsed() >= 5500; }, 7000),
+        "camera opening can exceed the frame timeout within the opening deadline");
+  CHECK(errors == 0 && !manager.sourceOffline(path),
+        "a pending open is governed by the opening deadline");
+  UvcFaultTest::holdOpen.store(false);
+  CHECK(awaitShutdown([&] { return manager.sourceIsPlaying(path) || errors != 0; }),
+        "slow camera opening completes");
+  QElapsedTimer frameWait;
+  frameWait.start();
+  CHECK(awaitShutdown([&] { return frameWait.elapsed() >= 300; }),
+        "first frames may arrive after opening has completed");
+  CHECK(errors == 0 && !manager.sourceOffline(path),
+        "slow opening does not consume the first-frame deadline");
+  UvcFaultTest::dropFrames.store(false);
+  CHECK(awaitShutdown([&] { return manager.sourceAvailable(path); }, 3000),
+        "slow camera becomes available when its first frame arrives");
+  CHECK(errors == 0, "successful slow opening never reports an input failure");
+  manager.setPreviewDevicePaths({});
+  CHECK(awaitShutdown([&] { return !manager.sourceIsRetiring(path); }),
+        "slow camera stops before checking a silent input");
+  const QString silentPath = QStringLiteral("silent-opening-camera");
+  UvcFaultTest::dropFrames.store(true);
+  manager.setAvailableDevicePaths({path, silentPath});
+  manager.setPreviewDevicePaths({silentPath});
+  CHECK(awaitShutdown([&] { return manager.sourceIsPlaying(silentPath); }),
+        "silent input finishes opening");
+  CHECK(awaitShutdown([&] { return manager.sourceOffline(silentPath); }, 6500),
+        "an opened input that never sends its first frame still times out");
+  CHECK(errors == 1, "the silent input reports exactly one failure");
   return true;
 }
 
@@ -2065,6 +2396,29 @@ int main(int argc, char **argv) {
   QCoreApplication::setApplicationName(QStringLiteral("Playout"));
   QSettings::setDefaultFormat(QSettings::IniFormat);
   QSettings::setPath(QSettings::IniFormat, QSettings::UserScope, directory.path());
+  if (app.arguments().size() == 4 && app.arguments().at(1) == QStringLiteral("--uvc-bandwidth-protection")) {
+    gst_init(nullptr, nullptr);
+    return uvcBandwidthProtection(app.arguments().at(2).toCaseFolded(), app.arguments().at(3).toCaseFolded()) ? 0 : 1;
+  }
+  if (app.arguments().contains(QStringLiteral("--uvc-device-discovery-only")))
+    return uvcDeviceDiscoveryRegression() ? 0 : 1;
+  if (app.arguments().size() == 3 &&
+      app.arguments().at(1) == QStringLiteral("--uvc-device-discovery-camera"))
+    return uvcDeviceDiscoveryRegression(app.arguments().at(2)) ? 0 : 1;
+  if (app.arguments().contains(QStringLiteral("--uvc-slow-opening-only"))) {
+    gst_init(nullptr, nullptr);
+    if (!require(UvcFaultTest::install(), "fault test camera registered")) return 1;
+    return uvcSlowOpeningRegression() ? 0 : 1;
+  }
+  if (app.arguments().contains(QStringLiteral("--uvc-identity-only"))) {
+    gst_init(nullptr, nullptr);
+    if (!require(UvcFaultTest::install(), "fault test camera registered")) return 1;
+    return uvcIdentityAndDemandRegression() ? 0 : 1;
+  }
+  if (app.arguments().contains(QStringLiteral("--uvc-capture-role-only"))) {
+    gst_init(nullptr, nullptr);
+    return UvcFaultTest::install() && uvcCaptureRoleRegression() ? 0 : 1;
+  }
   if (app.arguments().contains(QStringLiteral("--switcher-only"))) {
     gst_init(nullptr, nullptr);
     if (!require(substituteProgramSink(), "test audio sink registered")) return 1;
@@ -2217,6 +2571,9 @@ int main(int argc, char **argv) {
     return ProgramPlayoutTransitionTest(false).uvcFailureRegression(path, app.arguments().at(2), app.arguments().at(3)) ? 0 : 1;
   if (!require(UvcFaultTest::install(), "fault test camera registered")) return 1;
   if (!uvcInitialFailureRegression()) return 1;
+  if (!uvcCaptureRoleRegression()) return 1;
+  if (!uvcIdentityAndDemandRegression()) return 1;
+  if (!uvcSlowOpeningRegression()) return 1;
   if (!uvcBoundedShutdownRegression()) return 1;
   if (app.arguments().contains(QStringLiteral("--uvc-shutdown-only"))) return 0;
   if (!ProgramPlayoutTransitionTest(false).uvcFailureRegression(path)) return 1;
