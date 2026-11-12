@@ -73,6 +73,9 @@ inline void fault_uvc_source_init(Source *self) {
     auto *source = gst_element_factory_make("videotestsrc", nullptr);
     g_object_set(source, "is-live", TRUE, "do-timestamp", TRUE, "pattern", pattern.load(), nullptr);
     self->modeFilter = gst_element_factory_make("capsfilter", nullptr);
+    // Normal capture is the default; retain thumbnail-only to catch regressions
+    // that switch to a smaller native mode instead of scaling the shared input.
+    g_object_set(self, "thumbnail-only", FALSE, nullptr);
     gst_bin_add_many(GST_BIN(self), source, self->modeFilter, nullptr);
     gst_element_link(source, self->modeFilter);
     auto *pad = gst_element_get_static_pad(self->modeFilter, "src");

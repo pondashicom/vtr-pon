@@ -13,8 +13,6 @@
 #include <cstring>
 #include <memory>
 #include <mutex>
-#include <cmath>
-#include <tuple>
 #include <vector>
 
 namespace {
@@ -150,7 +148,7 @@ struct VideoState {
         delegate = nil; output = nil; session = nil; queue = nullptr;
     }
 };
-struct MacVideoSource { GstBin parent; GstElement *appSource; gchar *device; gboolean thumbnailOnly; VideoState *capture; };
+struct MacVideoSource { GstBin parent; GstElement *appSource; gchar *device; VideoState *capture; };
 struct MacVideoSourceClass { GstBinClass parent; };
 G_DEFINE_TYPE(MacVideoSource, mac_video_source, GST_TYPE_BIN)
 
@@ -182,8 +180,9 @@ bool openVideo(MacVideoSource *self) {
             postCaptureError(GST_ELEMENT(self), QStringLiteral("Could not configure the selected camera input and BGRA output.")); return false;
         }
         [state.session addInput:input]; [state.session addOutput:state.output];
-        // Query presets only after attaching the selected camera. Thumbnail
-        // capture selects a native device format before any frames are read.
+        // All consumers share the normal capture format. Smaller native modes
+        // can crop the camera's field of view; scale thumbnails downstream.
+        // Query presets only after attaching the selected camera.
         if ([state.session canSetSessionPreset:AVCaptureSessionPreset1920x1080])
             state.session.sessionPreset = AVCaptureSessionPreset1920x1080;
         if (![selected lockForConfiguration:&nativeError]) {
@@ -193,32 +192,6 @@ bool openVideo(MacVideoSource *self) {
         @try {
             selected.activeVideoMinFrameDuration = kCMTimeInvalid;
             selected.activeVideoMaxFrameDuration = kCMTimeInvalid;
-            if (self->thumbnailOnly) {
-                AVCaptureDeviceFormat *best = nil;
-                CMTime duration = kCMTimeInvalid;
-                std::tuple<qint64, double> bestScore;
-                for (AVCaptureDeviceFormat *format in selected.formats) {
-                    const auto size = CMVideoFormatDescriptionGetDimensions(format.formatDescription);
-                    if (size.width <= 0 || size.height <= 0) continue;
-                    for (AVFrameRateRange *range in format.videoSupportedFrameRateRanges) {
-                        if (range.minFrameRate <= 0 || range.maxFrameRate < range.minFrameRate) continue;
-                        const double fps = std::clamp(10.0, range.minFrameRate, range.maxFrameRate);
-                        const auto score = std::make_tuple(std::abs(qint64(size.width) - 120) +
-                            std::abs(qint64(size.height) - 68), std::abs(fps - 10.0));
-                        if (!best || score < bestScore) {
-                            best = format; bestScore = score;
-                            duration = CMTimeMakeWithSeconds(1.0 / fps, 1000000000);
-                            if (fps == range.minFrameRate) duration = range.maxFrameDuration;
-                            else if (fps == range.maxFrameRate) duration = range.minFrameDuration;
-                        }
-                    }
-                }
-                if (!best) @throw [NSException exceptionWithName:@"VtrPonCameraFormat"
-                    reason:@"The selected camera has no usable thumbnail capture format." userInfo:nil];
-                selected.activeFormat = best;
-                selected.activeVideoMinFrameDuration = duration;
-                selected.activeVideoMaxFrameDuration = duration;
-            }
         } @catch (NSException *exception) {
             [selected unlockForConfiguration];
             [state.session commitConfiguration]; state.clear();
@@ -227,7 +200,7 @@ bool openVideo(MacVideoSource *self) {
         [selected unlockForConfiguration];
         [state.session commitConfiguration];
         const auto size = CMVideoFormatDescriptionGetDimensions(selected.activeFormat.formatDescription);
-        qInfo() << "MAC_CAMERA configured" << path << (self->thumbnailOnly ? "thumbnail" : "full")
+        qInfo() << "MAC_CAMERA configured" << path << "shared"
                 << size.width << size.height << "frameDuration=" << CMTimeGetSeconds(selected.activeVideoMinFrameDuration);
         state.queue = dispatch_queue_create("com.pondashi.vtrpon.capture", DISPATCH_QUEUE_SERIAL);
         state.delegate = [[VtrPonCaptureDelegate alloc] initWithSource:self->appSource];
@@ -259,15 +232,13 @@ GstStateChangeReturn videoChangeState(GstElement *element, GstStateChange change
 }
 void mac_video_source_class_init(MacVideoSourceClass *klass) {
     auto *object = G_OBJECT_CLASS(klass);
-    object->set_property = [](GObject *value, guint id, const GValue *data, GParamSpec *) {
+    object->set_property = [](GObject *value, guint, const GValue *data, GParamSpec *) {
         auto *self = reinterpret_cast<MacVideoSource *>(value);
-        if (id == 2) self->thumbnailOnly = g_value_get_boolean(data);
-        else { g_free(self->device); self->device = g_value_dup_string(data); }
+        g_free(self->device); self->device = g_value_dup_string(data);
     };
-    object->get_property = [](GObject *value, guint id, GValue *data, GParamSpec *) {
+    object->get_property = [](GObject *value, guint, GValue *data, GParamSpec *) {
         auto *self = reinterpret_cast<MacVideoSource *>(value);
-        if (id == 2) g_value_set_boolean(data, self->thumbnailOnly);
-        else g_value_set_string(data, self->device);
+        g_value_set_string(data, self->device);
     };
     object->finalize = [](GObject *value) {
         auto *self = reinterpret_cast<MacVideoSource *>(value);
@@ -276,8 +247,6 @@ void mac_video_source_class_init(MacVideoSourceClass *klass) {
         G_OBJECT_CLASS(mac_video_source_parent_class)->finalize(value);
     };
     g_object_class_install_property(object, 1, g_param_spec_string("device", "Device", "AVFoundation unique identity", "", G_PARAM_READWRITE));
-    g_object_class_install_property(object, 2, g_param_spec_boolean("thumbnail-only", "Thumbnail only",
-        "Choose a small native capture format before opening", FALSE, G_PARAM_READWRITE));
     gst_element_class_set_static_metadata(GST_ELEMENT_CLASS(klass), "VTR-PON Mac camera", "Source/Video", "Camera capture by persistent ID", "VTR-PON");
     GST_ELEMENT_CLASS(klass)->change_state = videoChangeState;
 }

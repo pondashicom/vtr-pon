@@ -7,6 +7,8 @@
 #include "live_audio_source.h"
 #include "uvc_fault_test_source.h"
 #include "live_audio_test_source.h"
+#include "live_edit_audio.h"
+#include "mac_playlist_accessibility.h"
 #include <QApplication>
 #include <QElapsedTimer>
 #include <QSettings>
@@ -161,10 +163,13 @@ bool captureDemandChecks() {
     } cleanup{manager};
     const QString camera = "avfoundation:demand-camera", unused = "avfoundation:hidden-camera";
     int errors = 0, frames = 0;
+    QSize editSize;
     QObject::connect(&manager, &UvcSourceSessionManager::sourceError, &manager,
         [&](const QString &, const QString &) { ++errors; });
     QObject::connect(&manager, &UvcSourceSessionManager::thumbnailReady, &manager,
-        [&](const QString &path, const QImage &image) { if (path == camera && !image.isNull()) ++frames; });
+        [&](const QString &path, const QImage &image) { if (path == camera && image.size() == QSize(120, 68)) ++frames; });
+    QObject::connect(&manager, &UvcSourceSessionManager::editPreviewReady, &manager,
+        [&](const QString &path, const QImage &image) { if (path == camera) editSize = image.size(); });
     manager.setAvailableDevicePaths({camera, unused});
     manager.setRegisteredDevicePaths({camera, unused});
     const int before = UvcFaultTest::createdSources.load();
@@ -181,12 +186,12 @@ bool captureDemandChecks() {
     if (!check(errors == 0 && !manager.sourceOffline(camera), "first-frame deadline starts after opening completes")) return false;
     UvcFaultTest::dropFrames.store(false);
     if (!check(waitFor([&] { return manager.sourceAvailable(camera) && frames >= 2; }), "slow input becomes healthy on new frames")) return false;
-    if (!check(UvcFaultTest::createdSources.load() == before + 1 && UvcFaultTest::thumbnailOpens.load() == 1 &&
-               UvcFaultTest::thumbnailFrameWidth.load() == 160,
-               "only the visible camera opens and starts in thumbnail mode")) return false;
+    if (!check(UvcFaultTest::createdSources.load() == before + 1 && UvcFaultTest::fullOpens.load() == 1 &&
+               UvcFaultTest::thumbnailOpens.load() == 0 && UvcFaultTest::fullFrameWidth.load() == 1920,
+               "small playlist thumbnails use normal camera capture from the first frames")) return false;
     manager.setEditPreviewPath(camera);
-    if (!check(waitFor([&] { return manager.sourceAvailable(camera) && UvcFaultTest::fullOpens.load() == 1; }),
-               "EDIT promotes the producer to full quality")) return false;
+    if (!check(waitFor([&] { return editSize == QSize(640, 360); }),
+               "EDIT receives a scaled frame from the shared capture")) return false;
     UvcSourceSessionManager::ProgramSource a, b;
     if (!check(manager.bindProgramDeck(0, camera, a) && manager.bindProgramDeck(1, camera, b) && a.pipeline == b.pipeline,
                "both decks and EDIT share the full-quality producer")) return false;
@@ -213,12 +218,18 @@ bool captureDemandChecks() {
     if (source) gst_object_unref(source);
     if (!check(full && UvcFaultTest::fullFrameWidth.load() == 1920, "camera itself supplies 1080p before deck attachment")) return false;
     manager.setEditPreviewPath({}); manager.releaseProgramDeck(0);
-    const int fullCount = UvcFaultTest::createdSources.load(), oldFrames = frames;
-    if (!check(waitFor([&] { return frames >= oldFrames + 3; }) && UvcFaultTest::createdSources.load() == fullCount,
-               "another bound deck prevents downgrade and keeps receiving new frames")) return false;
+    const int oldFrames = frames;
+    if (!check(waitFor([&] { return frames >= oldFrames + 3; }) && UvcFaultTest::createdSources.load() == before + 1,
+               "releasing one deck keeps the shared capture and new thumbnails")) return false;
     manager.releaseProgramDeck(1);
-    if (!check(waitFor([&] { return manager.sourceAvailable(camera) && UvcFaultTest::thumbnailOpens.load() == 2; }),
-               "last full-quality consumer releases the camera back to thumbnail mode")) return false;
+    const int previous = frames;
+    UvcSourceSessionManager::ProgramSource standby;
+    if (!check(waitFor([&] { return frames >= previous + 3; }) &&
+               UvcFaultTest::createdSources.load() == before + 1 && UvcFaultTest::thumbnailOpens.load() == 0 &&
+               UvcFaultTest::fullFrameWidth.load() == 1920 && manager.bindProgramDeck(0, camera, standby) &&
+               standby.pipeline == a.pipeline,
+               "playlist, EDIT and standby retain one capture and its native format")) return false;
+    manager.releaseProgramDeck(0);
     // A used input still recovers while hidden; an unused registered input stays closed.
     manager.reportSourceFailure(camera, "Injected read failure");
     manager.setPreviewDevicePaths({});
@@ -226,16 +237,20 @@ bool captureDemandChecks() {
     if (!check(waitFor([&] { return frames > recoveryFrames && manager.sourceAvailable(camera) &&
         UvcFaultTest::liveSources.load() == 0; }, 7000), "hidden failed input recovers on a new frame and releases its probe")) return false;
     if (!check(errors == 1 && manager.latestThumbnail(unused).isNull() &&
-        UvcFaultTest::createdSources.load() == before + 4, "recovery never activates the unrelated hidden camera")) return false;
-    // A role change while opening must discard the outdated result before binding.
+        UvcFaultTest::createdSources.load() == before + 2, "recovery never activates the unrelated hidden camera")) return false;
+    // Changing consumers while opening must reuse the same pending capture.
     UvcFaultTest::holdOpen.store(true); UvcFaultTest::openEntered.store(false);
     manager.setPreviewDevicePaths({camera});
     if (!waitFor([] { return UvcFaultTest::openEntered.load(); })) return false;
     manager.setEditPreviewPath(camera);
+    UvcSourceSessionManager::ProgramSource pending;
+    if (!check(!manager.bindProgramDeck(0, camera, pending), "standby waits for the pending capture's first frame")) return false;
     UvcFaultTest::holdOpen.store(false);
-    if (!check(waitFor([&] { return manager.sourceAvailable(camera) && UvcFaultTest::fullOpens.load() == 2; }),
-               "role changes during opening discard the low-quality startup")) return false;
-    return check(errors == 1, "role changes do not report false offline errors");
+    if (!check(waitFor([&] { return manager.bindProgramDeck(0, camera, pending); }) &&
+               UvcFaultTest::createdSources.load() == before + 3 && UvcFaultTest::fullOpens.load() == 3 &&
+               UvcFaultTest::thumbnailOpens.load() == 0 && UvcFaultTest::fullFrameWidth.load() == 1920,
+               "consumer changes during opening retain the original normal capture")) return false;
+    return check(errors == 1, "consumer changes do not report false offline errors");
 }
 
 bool sharedVideoChecks() {
@@ -440,15 +455,188 @@ bool audioChecks() {
     ok &= check(audioOutput.stop(), "master output shuts down");
     return ok;
 }
+
+bool editAudioSwitchChecks() {
+    if (!check(substituteLiveAudioSource("vtrponcoreaudiosrc"), "EDIT audio fixture")) return false;
+    auto feed = std::make_shared<EditPflFeed>();
+    LiveEditAudio audio(feed);
+    struct Cleanup {
+        LiveEditAudio &audio;
+        ~Cleanup() {
+            holdTestAudioStop.store(false);
+            audio.stop();
+            waitFor([&] { return audio.shutdownComplete(); });
+        }
+    } cleanup{audio};
+    PlaylistItemSettings settings;
+    QString error;
+    if (!check(audio.start("coreaudio-input:first", settings, &error), "first EDIT audio starts")) return false;
+    if (!check(waitFor([] { return testAudioOpens.load() == 1; }), "EDIT audio reaches the capture worker")) return false;
+    // Duplicate camera items may carry different nominal gain and EQ settings.
+    settings.nominalVolumeTenthsDb = -120;
+    settings.nominalEqTenthsDb[0] = 30;
+    for (int i = 0; i < 12; ++i) {
+        if (!check(audio.start("coreaudio-input:first", settings, &error), "same camera audio is reusable")) return false;
+    }
+    if (!check(testAudioOpens.load() == 1 && testAudioSources.load() == 1 && error.isEmpty(),
+               "duplicate items never stop or reopen the same EDIT input")) return false;
+    holdTestAudioStop.store(true); testAudioStopEntered.store(false);
+    audio.stop();
+    if (!check(waitFor([] { return testAudioStopEntered.load(); }) && !audio.readyToStart(),
+               "switching cameras remains pending while the previous audio stops")) return false;
+    int ticks = 0;
+    QTimer timer; timer.setInterval(5); QObject::connect(&timer, &QTimer::timeout, [&] { ++ticks; }); timer.start();
+    pump(180);
+    if (!check(ticks > 5 && !audio.readyToStart() && testAudioOpens.load() == 1,
+               "waiting for audio stop keeps GUI responsive and does not open a competing input")) return false;
+    holdTestAudioStop.store(false);
+    if (!check(waitFor([&] { return audio.readyToStart(); }) &&
+               audio.start("coreaudio-input:second", settings, &error), "next audio starts after confirmed stop")) return false;
+    if (!check(waitFor([] { return testAudioOpens.load() == 2; }) && error.isEmpty(),
+               "audio switching completes without a false UVC error")) return false;
+    audio.stop();
+    return check(waitFor([&] { return audio.shutdownComplete(); }) && testAudioSources.load() == 0,
+                 "EDIT audio switch releases every capture");
+}
+
+bool playlistAccessibilityChecks() {
+    QListWidget list;
+    vtrpon::installMacPlaylistAccessibility(&list);
+    list.setSelectionMode(QAbstractItemView::SingleSelection);
+    list.addItems({"Camera A", "Camera A duplicate", "Camera B"});
+    auto *accessible = QAccessible::queryAccessibleInterface(&list);
+    if (!check(accessible && accessible->role() == QAccessible::List && !accessible->tableInterface(),
+               "playlist exposes stable list items without Cocoa synthetic table cells")) return false;
+    auto *selection = accessible->selectionInterface();
+    if (!check(selection && selection->select(accessible->child(1)), "accessible duplicate camera item is selectable")) return false;
+    auto *previous = accessible->child(1);
+    for (int n = 0; n < 100; ++n) {
+        const auto selected = selection->selectedItems();
+        if (!check(selected.size() == 1 && selected.front() == previous && previous->isValid() &&
+                   previous->text(QAccessible::Name) == "Camera A duplicate", "selected item remains valid across repeated accessibility reads")) return false;
+    }
+    delete list.takeItem(1);
+    if (!check(!previous->isValid(), "removed camera item invalidates its stable interface safely")) return false;
+    auto *next = accessible->child(1);
+    if (!check(next && next->text(QAccessible::Name) == "Camera B", "remaining camera keeps its accessible identity")) return false;
+    next->actionInterface()->doAction(QAccessibleActionInterface::pressAction());
+    if (!check(list.currentRow() == 1 && selection->selectedItems() == QList<QAccessibleInterface *>{next},
+               "accessibility actions select the real playlist item")) return false;
+    list.clear();
+    return check(!previous->isValid() && !next->isValid() && accessible->childCount() == 0 && selection->selectedItems().isEmpty(),
+                 "cleared playlist has no stale selected children");
+}
+
+bool hardwareCameraChecks(const QString &first, const QString &second, const QString &audioId) {
+    UvcSourceSessionManager manager(false);
+    int errors = 0;
+    QHash<QString, int> thumbnails, edits;
+    QObject::connect(&manager, &UvcSourceSessionManager::sourceError, &manager,
+        [&](const QString &path, const QString &error) { ++errors; qWarning() << "HARDWARE error" << path << error; });
+    QObject::connect(&manager, &UvcSourceSessionManager::thumbnailReady, &manager,
+        [&](const QString &path, const QImage &image) { if (image.size() == QSize(120, 68)) ++thumbnails[path]; });
+    QObject::connect(&manager, &UvcSourceSessionManager::editPreviewReady, &manager,
+        [&](const QString &path, const QImage &image) { if (image.size() == QSize(640, 360)) ++edits[path]; });
+    auto feed = std::make_shared<EditPflFeed>();
+    LiveEditAudio audio(feed);
+    struct Cleanup {
+        UvcSourceSessionManager &manager; LiveEditAudio &audio;
+        ~Cleanup() {
+            audio.stop(); manager.releaseProgramDeck(0); manager.releaseProgramDeck(1);
+            manager.requestShutdown();
+            waitFor([&] { return manager.shutdownComplete() && audio.shutdownComplete(); }, 15000);
+        }
+    } cleanup{manager, audio};
+    manager.setAvailableDevicePaths({first, second});
+    manager.setRegisteredDevicePaths({first, second});
+    manager.setPreviewDevicePaths({first, second});
+    if (!check(waitFor([&] { return manager.sourceAvailable(first) && manager.sourceAvailable(second) &&
+        thumbnails[first] >= 5 && thumbnails[second] >= 5; }, 15000), "both USB cameras deliver new small thumbnails simultaneously")) return false;
+    UvcSourceSessionManager::ProgramSource a, duplicate, b;
+    if (!check(manager.bindProgramDeck(0, first, a) && manager.bindProgramDeck(1, first, duplicate) &&
+        a.pipeline == duplicate.pipeline, "duplicate camera entries share one native capture across both decks")) return false;
+    manager.releaseProgramDeck(1);
+    if (!check(manager.bindProgramDeck(1, second, b) && a.pipeline != b.pipeline, "two USB cameras bind independent normal-quality deck inputs")) return false;
+    const auto native1080 = [](GstElement *pipeline) {
+        auto *iterator = gst_bin_iterate_sources(GST_BIN(pipeline));
+        GValue value = G_VALUE_INIT;
+        bool found = false;
+        while (gst_iterator_next(iterator, &value) == GST_ITERATOR_OK) {
+            auto *source = GST_ELEMENT(g_value_get_object(&value));
+            auto *pad = gst_element_get_static_pad(source, "src");
+            auto *caps = pad ? gst_pad_get_current_caps(pad) : nullptr;
+            int width = 0, height = 0;
+            if (caps) {
+                const auto *structure = gst_caps_get_structure(caps, 0);
+                found |= gst_structure_get_int(structure, "width", &width) &&
+                    gst_structure_get_int(structure, "height", &height) && width == 1920 && height == 1080;
+                gst_caps_unref(caps);
+            }
+            if (pad) gst_object_unref(pad);
+            g_value_reset(&value);
+        }
+        if (G_VALUE_TYPE(&value)) g_value_unset(&value);
+        gst_iterator_free(iterator);
+        return found;
+    };
+    if (!check(native1080(a.pipeline) && native1080(b.pipeline), "both physical cameras supply native 1920x1080 before output scaling")) return false;
+    PlaylistItemSettings settings;
+    if (!check(audio.start(audioId, settings, nullptr), "real mapped microphone starts for EDIT")) return false;
+    GstClockTime previous[2] = {GST_CLOCK_TIME_NONE, GST_CLOCK_TIME_NONE};
+    int delivered[2] = {}, ticks = 0;
+    QTimer heartbeat; heartbeat.setInterval(10); QObject::connect(&heartbeat, &QTimer::timeout, [&] { ++ticks; }); heartbeat.start();
+    // Alternate EDIT / duplicate items while both deck sinks and both thumbnail
+    // branches continuously receive physical frames for about thirty seconds.
+    for (int round = 0; round < 60; ++round) {
+        manager.setEditPreviewPath(round % 2 ? first : second);
+        settings.nominalVolumeTenthsDb = round % 2 ? 0 : -120;
+        if (!check(audio.start(audioId, settings, nullptr), "duplicate item reuses the real microphone")) return false;
+        pump(500);
+        for (int deck = 0; deck < 2; ++deck) {
+            auto *sink = deck == 0 ? a.appSink : b.appSink;
+            auto *sample = gst_app_sink_try_pull_sample(GST_APP_SINK(sink), 0);
+            if (!check(sample != nullptr, "each physical camera keeps delivering deck frames")) return false;
+            GstVideoInfo info{}; auto *buffer = gst_sample_get_buffer(sample);
+            const auto pts = buffer ? GST_BUFFER_PTS(buffer) : GST_CLOCK_TIME_NONE;
+            const bool valid = buffer && gst_video_info_from_caps(&info, gst_sample_get_caps(sample)) &&
+                info.width == 1920 && info.height == 1080 && GST_CLOCK_TIME_IS_VALID(pts) &&
+                (!GST_CLOCK_TIME_IS_VALID(previous[deck]) || pts > previous[deck]);
+            gst_sample_unref(sample);
+            if (!check(valid, "each deck receives new 1080p frames with advancing timestamps")) return false;
+            previous[deck] = pts; ++delivered[deck];
+        }
+        QString error; audio.processBus(&error);
+        if (!error.isEmpty()) qWarning() << "HARDWARE EDIT audio error" << error;
+        if (!check(error.isEmpty(), "real EDIT microphone reports no input error")) return false;
+    }
+    qInfo() << "HARDWARE results" << delivered[0] << delivered[1] << "thumbnails" << thumbnails << "edits" << edits << "GUI ticks" << ticks;
+    return check(errors == 0 && ticks > 500 && thumbnails[first] > 100 && thumbnails[second] > 100 &&
+        edits[first] > 20 && edits[second] > 20, "two cameras and repeated duplicate audio selections remain live without input errors");
+}
 }
 int main(int argc, char **argv) {
     QApplication app(argc, argv); gst_init(&argc, &argv);
     QTemporaryDir directory; if (!directory.isValid()) return 2;
     app.setProperty("vtrpon.settingsFile", directory.filePath("capture.ini"));
+    if (app.arguments().contains("--accessibility-window")) {
+        QListWidget list;
+        vtrpon::installMacPlaylistAccessibility(&list);
+        list.setWindowTitle("VTR-PON Mac playlist accessibility regression");
+        list.setAccessibleName("Camera playlist regression");
+        list.addItems({"C615 first item", "C615 duplicate item", "GENERAL WEBCAM item"});
+        list.setCurrentRow(0);
+        list.resize(600, 300); list.show();
+        QTimer::singleShot(60000, &app, &QApplication::quit);
+        return app.exec();
+    }
+    if (app.arguments().size() == 5 && app.arguments().at(1) == "--hardware")
+        return hardwareCameraChecks(app.arguments().at(2), app.arguments().at(3), app.arguments().at(4)) ? 0 : 1;
     const bool native = app.arguments().contains("--native");
     const bool frames = app.arguments().contains("--frames");
     const bool demand = app.arguments().contains("--demand");
-    const bool ok = demand ? captureDemandChecks() : frames ? frameCapsChecks() : native ? nativeChecks() : (sharedVideoChecks() && audioChecks());
-    qInfo() << "Mac capture" << (demand ? "demand" : frames ? "frames" : native ? "native" : "shared") << (ok ? "PASS" : "FAIL");
+    const bool editAudio = app.arguments().contains("--edit-audio");
+    const bool accessibility = app.arguments().contains("--accessibility");
+    const bool ok = accessibility ? playlistAccessibilityChecks() : editAudio ? editAudioSwitchChecks() : demand ? captureDemandChecks() : frames ? frameCapsChecks() : native ? nativeChecks() : (sharedVideoChecks() && audioChecks());
+    qInfo() << "Mac capture" << (editAudio ? "edit-audio" : demand ? "demand" : frames ? "frames" : native ? "native" : "shared") << (ok ? "PASS" : "FAIL");
     return ok ? 0 : 1;
 }

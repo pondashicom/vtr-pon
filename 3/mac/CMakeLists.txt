@@ -1888,7 +1888,9 @@ if(APPLE)
       apps/desktop/program_audio_bridge.cpp apps/desktop/audio_delay.cpp
       apps/desktop/program_gpu_compositor_mac.mm)
     target_sources(mac-capture-test PRIVATE apps/desktop/program_audio_output.cpp
-      apps/desktop/audio_effects.cpp apps/desktop/audio_equalizer.cpp)
+      apps/desktop/audio_effects.cpp apps/desktop/audio_equalizer.cpp
+      apps/desktop/edit_pfl_output.cpp apps/desktop/edit_pfl_output.h
+      apps/desktop/language_text.cpp)
     target_link_libraries(mac-capture-test PRIVATE vtrpon-vst-bridge)
     target_include_directories(mac-capture-test PRIVATE apps/desktop)
     target_link_libraries(mac-capture-test PRIVATE Qt6::Widgets vtrpon-mac-capture
@@ -1902,6 +1904,10 @@ if(APPLE)
     set_tests_properties(mac-capture-shared PROPERTIES TIMEOUT 60 RUN_SERIAL TRUE)
     add_test(NAME mac-capture-demand COMMAND mac-capture-test --demand)
     set_tests_properties(mac-capture-demand PROPERTIES TIMEOUT 40 RUN_SERIAL TRUE ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
+    add_test(NAME mac-capture-edit-audio COMMAND mac-capture-test --edit-audio)
+    set_tests_properties(mac-capture-edit-audio PROPERTIES TIMEOUT 30 RUN_SERIAL TRUE ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
+    add_test(NAME mac-capture-accessibility COMMAND mac-capture-test --accessibility)
+    set_tests_properties(mac-capture-accessibility PROPERTIES TIMEOUT 15 ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
   endif()
   target_sources(vtr-pon PRIVATE apps/desktop/mac_media_runtime.cpp)
   if(BUILD_TESTING)

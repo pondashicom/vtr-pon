@@ -1,6 +1,7 @@
 #include "playlist_input_widgets.h"
 #include "playlist_view_roles.h"
 #include "controller_scaling.h"
+#include "mac_playlist_accessibility.h"
 #include <QApplication>
 #include <QContextMenuEvent>
 #include <QCursor>
@@ -716,7 +717,11 @@ private:
 
 QListWidget *createPlaylistListWidget(QWidget *parent)
 {
-    return new PlaylistListWidget(parent);
+    auto *list = new PlaylistListWidget(parent);
+#ifdef Q_OS_MACOS
+    vtrpon::installMacPlaylistAccessibility(list);
+#endif
+    return list;
 }
 
 QTabBar *createPlaylistTabBar(QWidget *parent)

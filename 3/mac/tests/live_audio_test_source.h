@@ -7,6 +7,8 @@
 namespace {
 std::atomic_bool holdTestAudioOpen{false};
 std::atomic_bool testAudioOpenEntered{false};
+std::atomic_bool holdTestAudioStop{false}, testAudioStopEntered{false};
+std::atomic_int testAudioOpens{0};
 std::atomic_int testAudioSources{0};
 void (*testAudioSourceConfigure)(GstElement *) = nullptr;
 // Process-local capture substitute: no microphone or physical output is opened.
@@ -16,8 +18,13 @@ G_DEFINE_TYPE(TestLiveAudioSource, test_live_audio_source, GST_TYPE_BIN)
 
 GstStateChangeReturn testLiveAudioChangeState(GstElement *element, GstStateChange transition) {
     if (transition == GST_STATE_CHANGE_NULL_TO_READY) {
+        ++testAudioOpens;
         testAudioOpenEntered.store(true);
         while (holdTestAudioOpen.load()) QThread::msleep(5);
+    }
+    if (transition == GST_STATE_CHANGE_READY_TO_NULL) {
+        testAudioStopEntered.store(true);
+        while (holdTestAudioStop.load()) QThread::msleep(5);
     }
     const auto *id = static_cast<const char *>(g_object_get_data(G_OBJECT(element), "endpoint-id"));
     if (transition == GST_STATE_CHANGE_NULL_TO_READY && id && g_str_equal(id, "missing-input"))

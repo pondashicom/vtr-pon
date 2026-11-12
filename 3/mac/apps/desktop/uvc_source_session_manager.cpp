@@ -110,7 +110,6 @@ public:
     struct Session {
         QPointer<UvcSourceSessionManager> owner;
         QString devicePath;
-        bool thumbnailOnly = false;
         GstElement *pipeline = nullptr;
         GstElement *source = nullptr;
         std::shared_ptr<vtrpon::NetworkVideoReceiver> networkReceiver;
@@ -326,10 +325,6 @@ public:
                 if (errorDetail) *errorDetail = session->errorDetail;
                 return false;
             }
-            if (session->thumbnailOnly != wantsThumbnailOnly(devicePath)) {
-                retireForRoleChange(session);
-                return false;
-            }
             return true;
         }
         if (startups_.contains(devicePath)) return true;
@@ -337,14 +332,12 @@ public:
         job->session = std::make_shared<Session>();
         job->session->owner = owner_;
         job->session->devicePath = devicePath;
-        job->session->thumbnailOnly = wantsThumbnailOnly(devicePath);
         const auto context = std::shared_ptr<GstContext>(
             programContext_ ? gst_context_ref(programContext_) : nullptr,
             [](GstContext *value) { if (value) gst_context_unref(value); });
         const auto name = QStringLiteral("uvc-session-%1").arg(nextSessionId_++);
         startups_.insert(devicePath, job);
-        qInfo().noquote() << "UVC_CAPTURE opening" << name << devicePath
-                         << (job->session->thumbnailOnly ? "thumbnail" : "full");
+        qInfo().noquote() << "UVC_CAPTURE opening" << name << devicePath << "shared";
         try {
             std::thread([job, context, name, width = outputWidth_, height = outputHeight_] {
                 try {
@@ -398,8 +391,7 @@ public:
             }
             return false;
         }
-        // A low-resolution producer must never be attached to a deck while
-        // its full-quality replacement is still waiting for its first frame.
+        // Wait for the shared camera's first frame before attaching a deck.
         if (devicePath.startsWith(QLatin1StringView("avfoundation:")) &&
             !session->lastFrameMs.load(std::memory_order_acquire)) return false;
         const QString previousDevicePath =
@@ -790,10 +782,6 @@ private:
                 "device-path",
 #endif
                 encodedPath.constData(), nullptr);
-#ifdef __APPLE__
-        if (!network)
-            g_object_set(session->source, "thumbnail-only", session->thumbnailOnly, nullptr);
-#endif
         if (programContext) {
             gst_element_set_context(session->pipeline, programContext);
         }
@@ -827,19 +815,6 @@ private:
     }
 #endif
 
-    bool wantsThumbnailOnly(const QString &path) const
-    {
-        return path.startsWith(QLatin1StringView("avfoundation:")) && path != editDevicePath_ &&
-            !deckDevicePaths_.values().contains(path) && !deckRequests_.values().contains(path);
-    }
-
-    void retireForRoleChange(const std::shared_ptr<Session> &session)
-    {
-        healthyDevicePaths_.remove(session->devicePath);
-        sessions_.remove(session->devicePath);
-        retireSession(session);
-    }
-
     void releaseUnusedSessions()
     {
         QSet<QString> usedDevicePaths = previewDevicePaths_;
@@ -856,11 +831,6 @@ private:
             const bool probing = registeredDevicePaths_.contains(devicePath) &&
                 requestedDevicePaths_.contains(devicePath) && failedDevicePaths_.contains(devicePath) &&
                 !healthyDevicePaths_.contains(devicePath) && existing->errorGeneration == 0;
-            if (!bound && !existing->errorGeneration && usedDevicePaths.contains(devicePath) &&
-                existing->thumbnailOnly != wantsThumbnailOnly(devicePath)) {
-                retireForRoleChange(existing);
-                continue;
-            }
             if (bound || (!deckLinkSuppressed(devicePath) && existing->errorGeneration == 0 &&
                           (usedDevicePaths.contains(devicePath) || probing))) {
                 continue;
@@ -994,10 +964,6 @@ private:
             startups_.remove(path);
             if (shutDown_ || job->invalidated) {
                 retireSession(job->session);
-                continue;
-            }
-            if (job->session->thumbnailOnly != wantsThumbnailOnly(path)) {
-                retireForRoleChange(job->session);
                 continue;
             }
             qInfo().noquote() << "UVC_CAPTURE opened" << path << "success=" << job->succeeded
