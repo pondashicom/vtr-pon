@@ -37,11 +37,11 @@ bool frameCapsChecks() {
         "appsrc name=input is-live=true format=time block=false ! tee name=t "
         "t. ! queue ! videoconvert ! videoscale ! video/x-raw,format=BGRA,width=1920,height=1080 ! "
         "appsink name=program sync=false async=false max-buffers=2 drop=true wait-on-eos=false "
-        "t. ! queue ! videorate drop-only=true ! videoscale ! videoconvert ! "
-        "video/x-raw,format=RGBA,width=160,height=90,framerate=3/1 ! "
+        "t. ! queue ! videorate drop-only=true max-rate=3 ! videoscale ! videoconvert ! "
+        "video/x-raw,format=RGBA,width=160,height=90 ! "
         "appsink name=thumbnail sync=false async=false max-buffers=2 drop=true wait-on-eos=false "
-        "t. ! queue ! videorate drop-only=true ! videoscale ! videoconvert ! "
-        "video/x-raw,format=RGBA,width=640,height=360,framerate=15/1 ! "
+        "t. ! queue ! videorate drop-only=true max-rate=15 ! videoscale ! videoconvert ! "
+        "video/x-raw,format=RGBA,width=640,height=360 ! "
         "appsink name=edit sync=false async=false max-buffers=2 drop=true wait-on-eos=false", nullptr);
     if (!check(pipeline != nullptr, "camera frame fan-out pipeline creates")) return false;
     auto *source = gst_bin_get_by_name(GST_BIN(pipeline), "input");
@@ -144,6 +144,98 @@ bool nativeChecks() {
     videoMonitor.requestShutdown(); audioMonitor.requestShutdown();
     ok &= check(waitFor([&] { return videoMonitor.shutdownComplete() && audioMonitor.shutdownComplete(); }), "native monitor workers stop without UI waits");
     return ok;
+}
+
+bool captureDemandChecks() {
+    if (!check(UvcFaultTest::install("vtrponavfvideosrc"), "process-local demand fixture")) return false;
+    UvcSourceSessionManager manager(false);
+    struct Cleanup {
+        UvcSourceSessionManager &manager;
+        ~Cleanup() {
+            UvcFaultTest::holdOpen.store(false); UvcFaultTest::dropFrames.store(false);
+            UvcFaultTest::holdStop.store(false);
+            manager.releaseProgramDeck(0); manager.releaseProgramDeck(1);
+            manager.requestShutdown();
+            waitFor([&] { return manager.shutdownComplete(); });
+        }
+    } cleanup{manager};
+    const QString camera = "avfoundation:demand-camera", unused = "avfoundation:hidden-camera";
+    int errors = 0, frames = 0;
+    QObject::connect(&manager, &UvcSourceSessionManager::sourceError, &manager,
+        [&](const QString &, const QString &) { ++errors; });
+    QObject::connect(&manager, &UvcSourceSessionManager::thumbnailReady, &manager,
+        [&](const QString &path, const QImage &image) { if (path == camera && !image.isNull()) ++frames; });
+    manager.setAvailableDevicePaths({camera, unused});
+    manager.setRegisteredDevicePaths({camera, unused});
+    const int before = UvcFaultTest::createdSources.load();
+    pump(350);
+    if (!check(UvcFaultTest::createdSources.load() == before, "registration never opens cameras in hidden tabs")) return false;
+    UvcFaultTest::holdOpen.store(true); UvcFaultTest::openEntered.store(false); UvcFaultTest::dropFrames.store(true);
+    manager.setPreviewDevicePaths({camera});
+    if (!check(waitFor([] { return UvcFaultTest::openEntered.load(); }), "slow opening enters the isolated worker")) return false;
+    pump(5500);
+    if (!check(errors == 0 && !manager.sourceOffline(camera), "opening longer than five seconds is still pending")) return false;
+    UvcFaultTest::holdOpen.store(false);
+    if (!check(waitFor([&] { return manager.sourceIsPlaying(camera) || errors; }), "delayed opening completes")) return false;
+    pump(350);
+    if (!check(errors == 0 && !manager.sourceOffline(camera), "first-frame deadline starts after opening completes")) return false;
+    UvcFaultTest::dropFrames.store(false);
+    if (!check(waitFor([&] { return manager.sourceAvailable(camera) && frames >= 2; }), "slow input becomes healthy on new frames")) return false;
+    if (!check(UvcFaultTest::createdSources.load() == before + 1 && UvcFaultTest::thumbnailOpens.load() == 1 &&
+               UvcFaultTest::thumbnailFrameWidth.load() == 160,
+               "only the visible camera opens and starts in thumbnail mode")) return false;
+    manager.setEditPreviewPath(camera);
+    if (!check(waitFor([&] { return manager.sourceAvailable(camera) && UvcFaultTest::fullOpens.load() == 1; }),
+               "EDIT promotes the producer to full quality")) return false;
+    UvcSourceSessionManager::ProgramSource a, b;
+    if (!check(manager.bindProgramDeck(0, camera, a) && manager.bindProgramDeck(1, camera, b) && a.pipeline == b.pipeline,
+               "both decks and EDIT share the full-quality producer")) return false;
+    // Inspect source caps, not the scaled thumbnail or deck output.
+    GstElement *source = nullptr;
+    auto *elements = gst_bin_iterate_sources(GST_BIN(a.pipeline));
+    GValue value = G_VALUE_INIT;
+    while (gst_iterator_next(elements, &value) == GST_ITERATOR_OK) {
+        auto *element = GST_ELEMENT(g_value_get_object(&value));
+        if (g_object_class_find_property(G_OBJECT_GET_CLASS(element), "thumbnail-only")) {
+            source = GST_ELEMENT(gst_object_ref(element)); break;
+        }
+        g_value_reset(&value);
+    }
+    if (G_VALUE_TYPE(&value)) g_value_unset(&value);
+    gst_iterator_free(elements);
+    auto *pad = source ? gst_element_get_static_pad(source, "src") : nullptr;
+    auto *caps = pad ? gst_pad_get_current_caps(pad) : nullptr;
+    int width = 0, height = 0;
+    const bool full = caps && gst_structure_get_int(gst_caps_get_structure(caps, 0), "width", &width) &&
+        gst_structure_get_int(gst_caps_get_structure(caps, 0), "height", &height) && width == 1920 && height == 1080;
+    if (caps) gst_caps_unref(caps);
+    if (pad) gst_object_unref(pad);
+    if (source) gst_object_unref(source);
+    if (!check(full && UvcFaultTest::fullFrameWidth.load() == 1920, "camera itself supplies 1080p before deck attachment")) return false;
+    manager.setEditPreviewPath({}); manager.releaseProgramDeck(0);
+    const int fullCount = UvcFaultTest::createdSources.load(), oldFrames = frames;
+    if (!check(waitFor([&] { return frames >= oldFrames + 3; }) && UvcFaultTest::createdSources.load() == fullCount,
+               "another bound deck prevents downgrade and keeps receiving new frames")) return false;
+    manager.releaseProgramDeck(1);
+    if (!check(waitFor([&] { return manager.sourceAvailable(camera) && UvcFaultTest::thumbnailOpens.load() == 2; }),
+               "last full-quality consumer releases the camera back to thumbnail mode")) return false;
+    // A used input still recovers while hidden; an unused registered input stays closed.
+    manager.reportSourceFailure(camera, "Injected read failure");
+    manager.setPreviewDevicePaths({});
+    const int recoveryFrames = frames;
+    if (!check(waitFor([&] { return frames > recoveryFrames && manager.sourceAvailable(camera) &&
+        UvcFaultTest::liveSources.load() == 0; }, 7000), "hidden failed input recovers on a new frame and releases its probe")) return false;
+    if (!check(errors == 1 && manager.latestThumbnail(unused).isNull() &&
+        UvcFaultTest::createdSources.load() == before + 4, "recovery never activates the unrelated hidden camera")) return false;
+    // A role change while opening must discard the outdated result before binding.
+    UvcFaultTest::holdOpen.store(true); UvcFaultTest::openEntered.store(false);
+    manager.setPreviewDevicePaths({camera});
+    if (!waitFor([] { return UvcFaultTest::openEntered.load(); })) return false;
+    manager.setEditPreviewPath(camera);
+    UvcFaultTest::holdOpen.store(false);
+    if (!check(waitFor([&] { return manager.sourceAvailable(camera) && UvcFaultTest::fullOpens.load() == 2; }),
+               "role changes during opening discard the low-quality startup")) return false;
+    return check(errors == 1, "role changes do not report false offline errors");
 }
 
 bool sharedVideoChecks() {
@@ -355,7 +447,8 @@ int main(int argc, char **argv) {
     app.setProperty("vtrpon.settingsFile", directory.filePath("capture.ini"));
     const bool native = app.arguments().contains("--native");
     const bool frames = app.arguments().contains("--frames");
-    const bool ok = frames ? frameCapsChecks() : native ? nativeChecks() : (sharedVideoChecks() && audioChecks());
-    qInfo() << "Mac capture" << (frames ? "frames" : native ? "native" : "shared") << (ok ? "PASS" : "FAIL");
+    const bool demand = app.arguments().contains("--demand");
+    const bool ok = demand ? captureDemandChecks() : frames ? frameCapsChecks() : native ? nativeChecks() : (sharedVideoChecks() && audioChecks());
+    qInfo() << "Mac capture" << (demand ? "demand" : frames ? "frames" : native ? "native" : "shared") << (ok ? "PASS" : "FAIL");
     return ok ? 0 : 1;
 }

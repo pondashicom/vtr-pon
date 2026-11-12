@@ -110,6 +110,7 @@ public:
     struct Session {
         QPointer<UvcSourceSessionManager> owner;
         QString devicePath;
+        bool thumbnailOnly = false;
         GstElement *pipeline = nullptr;
         GstElement *source = nullptr;
         std::shared_ptr<vtrpon::NetworkVideoReceiver> networkReceiver;
@@ -132,6 +133,7 @@ public:
         QString errorDetail;
         std::atomic<qint64> lastFrameMs{0};
         qint64 startedMs = monotonicMs();
+        qint64 openedMs = 0;
     };
 
     struct Startup {
@@ -287,6 +289,7 @@ public:
         }
         return false;
 #else
+        requestedDevicePaths_.insert(devicePath);
         if (discoveryReady_ && !availableDevicePaths_.contains(devicePath)) {
             if (errorDetail) *errorDetail = QStringLiteral("The UVC device is disconnected or disabled.");
             return false;
@@ -323,6 +326,10 @@ public:
                 if (errorDetail) *errorDetail = session->errorDetail;
                 return false;
             }
+            if (session->thumbnailOnly != wantsThumbnailOnly(devicePath)) {
+                retireForRoleChange(session);
+                return false;
+            }
             return true;
         }
         if (startups_.contains(devicePath)) return true;
@@ -330,11 +337,14 @@ public:
         job->session = std::make_shared<Session>();
         job->session->owner = owner_;
         job->session->devicePath = devicePath;
+        job->session->thumbnailOnly = wantsThumbnailOnly(devicePath);
         const auto context = std::shared_ptr<GstContext>(
             programContext_ ? gst_context_ref(programContext_) : nullptr,
             [](GstContext *value) { if (value) gst_context_unref(value); });
         const auto name = QStringLiteral("uvc-session-%1").arg(nextSessionId_++);
         startups_.insert(devicePath, job);
+        qInfo().noquote() << "UVC_CAPTURE opening" << name << devicePath
+                         << (job->session->thumbnailOnly ? "thumbnail" : "full");
         try {
             std::thread([job, context, name, width = outputWidth_, height = outputHeight_] {
                 try {
@@ -342,6 +352,7 @@ public:
                 } catch (...) {
                     job->session->errorDetail = QStringLiteral("The UVC input worker failed while opening the device.");
                 }
+                job->session->openedMs = monotonicMs();
                 {
                     std::lock_guard lock(job->completionMutex);
                     if (!job->abandoned) {
@@ -387,6 +398,10 @@ public:
             }
             return false;
         }
+        // A low-resolution producer must never be attached to a deck while
+        // its full-quality replacement is still waiting for its first frame.
+        if (devicePath.startsWith(QLatin1StringView("avfoundation:")) &&
+            !session->lastFrameMs.load(std::memory_order_acquire)) return false;
         const QString previousDevicePath =
             deckDevicePaths_.value(deckIndex);
         if (!previousDevicePath.isEmpty()
@@ -469,6 +484,7 @@ public:
             healthyDevicePaths_.remove(path);
             failedDevicePaths_.remove(path);
             retryAfterMs_.remove(path);
+            requestedDevicePaths_.remove(path);
         }
         registeredDevicePaths_ = paths;
         for (auto it = preferredDeckLinkPaths_.begin(); it != preferredDeckLinkPaths_.end();) {
@@ -680,17 +696,17 @@ private:
             "leaky-type=downstream wait-on-eos=false sync=true qos=false "
             "async=false enable-last-sample=false "
             "%1-tee. ! queue max-size-buffers=1 max-size-bytes=0 "
-            "max-size-time=0 leaky=downstream ! videorate drop-only=true ! "
+            "max-size-time=0 leaky=downstream ! videorate drop-only=true max-rate=%6 ! "
             "videoscale add-borders=true ! videoconvert ! "
             "video/x-raw,format=RGBA,width=%4,height=%5,"
-            "pixel-aspect-ratio=1/1,framerate=%6/1 ! "
+            "pixel-aspect-ratio=1/1 ! "
             "appsink name=%1-thumbnail-sink max-buffers=1 drop=true "
             "wait-on-eos=false sync=false enable-last-sample=false "
             "%1-tee. ! valve name=%1-edit-valve drop=true ! "
             "queue max-size-buffers=1 max-size-bytes=0 max-size-time=0 leaky=downstream ! "
-            "videorate drop-only=true ! videoscale add-borders=true ! videoconvert ! "
+            "videorate drop-only=true max-rate=%9 ! videoscale add-borders=true ! videoconvert ! "
             "video/x-raw,format=RGBA,width=%7,height=%8,"
-            "pixel-aspect-ratio=1/1,framerate=%9/1 ! "
+            "pixel-aspect-ratio=1/1 ! "
             "appsink name=%1-edit-sink max-buffers=1 drop=true async=false "
             "wait-on-eos=false sync=false enable-last-sample=false"))
                 .arg(sessionName)
@@ -774,6 +790,10 @@ private:
                 "device-path",
 #endif
                 encodedPath.constData(), nullptr);
+#ifdef __APPLE__
+        if (!network)
+            g_object_set(session->source, "thumbnail-only", session->thumbnailOnly, nullptr);
+#endif
         if (programContext) {
             gst_element_set_context(session->pipeline, programContext);
         }
@@ -807,10 +827,24 @@ private:
     }
 #endif
 
+    bool wantsThumbnailOnly(const QString &path) const
+    {
+        return path.startsWith(QLatin1StringView("avfoundation:")) && path != editDevicePath_ &&
+            !deckDevicePaths_.values().contains(path) && !deckRequests_.values().contains(path);
+    }
+
+    void retireForRoleChange(const std::shared_ptr<Session> &session)
+    {
+        healthyDevicePaths_.remove(session->devicePath);
+        sessions_.remove(session->devicePath);
+        retireSession(session);
+    }
+
     void releaseUnusedSessions()
     {
         QSet<QString> usedDevicePaths = previewDevicePaths_;
         if (!editDevicePath_.isEmpty()) usedDevicePaths.insert(editDevicePath_);
+        for (const auto &path : deckRequests_) usedDevicePaths.insert(path);
         for (auto it = deckDevicePaths_.cbegin();
              it != deckDevicePaths_.cend(); ++it) {
             usedDevicePaths.insert(it.value());
@@ -820,7 +854,13 @@ private:
             const auto existing = sessions_.value(devicePath);
             const bool bound = deckDevicePaths_.values().contains(devicePath);
             const bool probing = registeredDevicePaths_.contains(devicePath) &&
+                requestedDevicePaths_.contains(devicePath) && failedDevicePaths_.contains(devicePath) &&
                 !healthyDevicePaths_.contains(devicePath) && existing->errorGeneration == 0;
+            if (!bound && !existing->errorGeneration && usedDevicePaths.contains(devicePath) &&
+                existing->thumbnailOnly != wantsThumbnailOnly(devicePath)) {
+                retireForRoleChange(existing);
+                continue;
+            }
             if (bound || (!deckLinkSuppressed(devicePath) && existing->errorGeneration == 0 &&
                           (usedDevicePaths.contains(devicePath) || probing))) {
                 continue;
@@ -956,6 +996,12 @@ private:
                 retireSession(job->session);
                 continue;
             }
+            if (job->session->thumbnailOnly != wantsThumbnailOnly(path)) {
+                retireForRoleChange(job->session);
+                continue;
+            }
+            qInfo().noquote() << "UVC_CAPTURE opened" << path << "success=" << job->succeeded
+                             << "elapsedMs=" << job->session->openedMs - job->session->startedMs;
             sessions_.insert(path, job->session);
             updateEditValve(path);
             if (!job->succeeded) {
@@ -992,13 +1038,15 @@ private:
             // GStreamer error and source discovery report actual disconnects.
             const bool network = vtrpon::isNetworkVideoSource(session->devicePath);
             if (detail.isEmpty() && (!network || !lastFrame) &&
-                monotonicMs() - (lastFrame ? lastFrame : session->startedMs) > kFrameTimeoutMs)
+                monotonicMs() - (lastFrame ? lastFrame : session->openedMs) > kFrameTimeoutMs)
                 detail = network
                     ? QStringLiteral("No video frames have arrived from the NDI input for 5 seconds.")
                     : QStringLiteral("No video frames have arrived from the UVC input for 5 seconds.");
             if (!detail.isEmpty()) {
                 reportSourceFailure(session->devicePath, detail);
             } else if (lastFrame && !healthyDevicePaths_.contains(session->devicePath)) {
+                qInfo().noquote() << "UVC_CAPTURE first frame" << session->devicePath
+                                 << "afterOpenMs=" << lastFrame - session->openedMs;
                 healthyDevicePaths_.insert(session->devicePath);
                 failedDevicePaths_.remove(session->devicePath);
                 retryAfterMs_.remove(session->devicePath);
@@ -1010,11 +1058,16 @@ private:
                     !previewDevicePaths_.contains(session->devicePath)) releaseUnusedSessions();
             }
         }
-        QSet<QString> retryPaths = registeredDevicePaths_;
-        retryPaths.unite(previewDevicePaths_);
+        releaseUnusedSessions();
+        QSet<QString> retryPaths = previewDevicePaths_;
+        if (!editDevicePath_.isEmpty()) retryPaths.insert(editDevicePath_);
+        for (const auto &path : deckRequests_) retryPaths.insert(path);
+        // Registration alone must not activate a hidden, never-used camera.
+        for (const auto &path : registeredDevicePaths_)
+            if (requestedDevicePaths_.contains(path) && failedDevicePaths_.contains(path))
+                retryPaths.insert(path);
         for (const auto &path : retryPaths) {
             if (sessions_.contains(path) || startups_.contains(path) ||
-                (healthyDevicePaths_.contains(path) && !previewDevicePaths_.contains(path)) ||
                 (discoveryReady_ && !availableDevicePaths_.contains(path)) ||
                 retryAfterMs_.value(path) > monotonicMs()) continue;
             QString detail;
@@ -1147,6 +1200,7 @@ private:
     QHash<QString, QString> preferredDeckLinkPaths_;
     QString editDevicePath_;
     QSet<QString> previewDevicePaths_;
+    QSet<QString> requestedDevicePaths_;
     QSet<QString> registeredDevicePaths_;
     QSet<QString> availableDevicePaths_;
     QSet<QString> healthyDevicePaths_;

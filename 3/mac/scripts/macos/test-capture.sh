@@ -13,4 +13,4 @@ cmake -S "$vtrpon_source_dir" -B "$vtrpon_test_dir" -G Ninja \
 cmake --build "$vtrpon_test_dir" --target mac-capture-test --parallel "$CMAKE_BUILD_PARALLEL_LEVEL"
 # Requires a logged-in GUI for Metal. Sources in the shared test are software
 # fixtures registered only in the test process; no camera/mic/output is opened.
-ctest --test-dir "$vtrpon_test_dir" -R '^mac-capture-(native|frames|shared)$' --output-on-failure
+ctest --test-dir "$vtrpon_test_dir" -R '^mac-capture-(native|frames|shared|demand)$' --output-on-failure
